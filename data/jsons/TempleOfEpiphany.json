@@ -1,0 +1,16 @@
+{
+    "name": "Temple of Epiphany",
+    "cost": 0,
+    "type": "Land",
+    "entersTapped": true,
+    "effects": [
+        {
+            "type": "ManaAbility",
+            "description": "{T}: Add {U} or {R}."
+        },
+        {
+            "type": "TriggeredAbility",
+            "description": "When Temple of Epiphany enters the battlefield, scry 1."
+        }
+    ]
+}

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libDandanLib.a CMakeFiles/DandanLib.dir/Card.cpp.o
+/usr/bin/ranlib libDandanLib.a
