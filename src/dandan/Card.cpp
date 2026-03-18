@@ -1,4 +1,5 @@
 #include "dandan/Card.h"
+#include "dandan/IAbility.h"
 
 NLOHMANN_JSON_SERIALIZE_ENUM(Card::Type, {{Card::Type::Land, "Land"},
                                           {Card::Type::Creature, "Creature"},
@@ -11,12 +12,25 @@ NLOHMANN_JSON_SERIALIZE_ENUM(Card::Type, {{Card::Type::Land, "Land"},
 void from_json(const nlohmann::json &j, Card &c)
 {
     c.m_name = j.at("name").get<std::string>();
-    c.m_cost = j.at("cost").get<int>();
+    if (j.at("cost").is_string())
+    {
+        c.m_cost = std::stoi(j.at("cost").get<std::string>());
+    }
+    else
+    {
+        c.m_cost = j.at("cost").get<int>();
+    }
     c.m_type = j.at("type").get<Card::Type>();
 }
 void to_json(nlohmann::json &j, const Card &c)
 {
-    j = nlohmann::json{{"name", c.m_name}, {"cost", c.m_cost}, {"type", c.m_type}};
+    j = nlohmann::json{{"name", c.m_name}, {"cost", c.m_cost}, {"type", c.m_type}, {"effects", nlohmann::json::array()}};
+    for (auto *ability : c.m_abilities)
+    {
+        nlohmann::json a;
+        ability->to_json(a, *ability);
+        j["effects"].push_back(a);
+    }
 }
 
 std::string_view Card::TypeToString(Type type) const

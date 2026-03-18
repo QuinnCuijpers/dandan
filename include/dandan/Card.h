@@ -1,6 +1,8 @@
 #ifndef CARD_H
 #define CARD_H
 
+#include "IAbility.h"
+
 #include <nlohmann/json.hpp>
 
 #include <iostream>
@@ -33,6 +35,7 @@ private:
     std::string m_name{"unknown"};
     int m_cost{0};
     Type m_type{Type::Land};
+    std::vector<IAbility *> m_abilities;
 
     std::string_view TypeToString(Type type) const;
 };

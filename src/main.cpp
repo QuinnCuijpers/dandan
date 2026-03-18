@@ -8,7 +8,7 @@
 int main()
 {
     const std::filesystem::path jsonPath =
-        std::filesystem::path{DANDAN_SOURCE_DIR} / "data" / "jsons" / "Island.json";
+        std::filesystem::path{DANDAN_SOURCE_DIR} / "data" / "jsons" / "ShivanReef.json";
 
     std::ifstream jsonFile{jsonPath};
     if (!jsonFile.is_open())
