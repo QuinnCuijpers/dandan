@@ -25,10 +25,10 @@ void from_json(const nlohmann::json &j, Card &c)
 void to_json(nlohmann::json &j, const Card &c)
 {
     j = nlohmann::json{{"name", c.m_name}, {"cost", c.m_cost}, {"type", c.m_type}, {"effects", nlohmann::json::array()}};
-    for (auto *ability : c.m_abilities)
+    for (const auto &ability : c.m_abilities)
     {
         nlohmann::json a;
-        ability->to_json(a, *ability);
+        ability.get()->to_json(a, *ability.get());
         j["effects"].push_back(a);
     }
 }
