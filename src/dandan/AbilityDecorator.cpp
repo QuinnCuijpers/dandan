@@ -1,4 +1,5 @@
-#include "dandan/IManaDecorator.h"
+#include "dandan/IAbilityDecorator.h"
+#include <iostream>
 
 void WithDamage::resolve()
 {

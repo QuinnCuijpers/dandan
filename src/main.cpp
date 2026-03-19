@@ -1,6 +1,7 @@
 #include "dandan/Card.h"
-#include "dandan/IManaDecorator.h"
+#include "dandan/IAbilityDecorator.h"
 #include "dandan/ManaAbility.h"
+
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
