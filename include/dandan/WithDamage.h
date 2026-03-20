@@ -11,12 +11,7 @@ public:
 
     void to_json(nlohmann::json &j, const IAbility &ability) override;
 
-    void from_json(const nlohmann::json &j, IAbility &ability) override {
-        // auto &decorator{dynamic_cast<WithDamage &>(ability)};
-        // decorator.m_damage = j.at("WithDamage").at("damage").get<int>();
-        // decorator.m_ability = std::make_unique<ManaAbility>();
-        // decorator.m_ability->from_json(j.at("WithDamage").at("ability"), *decorator.m_ability);
-    };
+    void from_json(const nlohmann::json &j, IAbility &ability) override;
 
 private:
     int m_damage;

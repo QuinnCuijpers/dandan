@@ -1,5 +1,7 @@
 #include "dandan/Card.h"
 #include "dandan/IAbility.h"
+#include "dandan/ManaAbility.h"
+#include "dandan/WithDamage.h"
 #include <nlohmann/json.hpp>
 
 NLOHMANN_JSON_SERIALIZE_ENUM(Card::Type, {{Card::Type::Land, "Land"},
@@ -22,7 +24,29 @@ void from_json(const nlohmann::json &j, Card &c)
         c.m_cost = j.at("cost").get<int>();
     }
     c.m_type = j.at("type").get<Card::Type>();
+
+    // TODO: Improve by using a factory pattern to create abilities based on the "type" field in the JSON
+    for (const auto &ability_json : j.at("effects"))
+    {
+        const std::string type = ability_json.at("type").get<std::string>();
+        std::unique_ptr<IAbility> ability;
+        if (type == "ManaAbility")
+        {
+            ability = std::make_unique<ManaAbility>();
+        }
+        else if (type == "WithDamage")
+        {
+            ability = std::make_unique<WithDamage>(nullptr, 0); // Placeholder, will be set in from_json
+        }
+        else
+        {
+            throw std::runtime_error("Unknown ability type: " + type);
+        }
+        ability->from_json(ability_json, *ability);
+        c.m_abilities.push_back(std::move(ability));
+    }
 }
+
 void to_json(nlohmann::json &j, const Card &c)
 {
     j = nlohmann::json{{"name", c.m_name}, {"cost", c.m_cost}, {"type", c.m_type}, {"effects", nlohmann::json::array()}};

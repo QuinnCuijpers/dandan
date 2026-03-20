@@ -24,6 +24,7 @@ public:
         MaxType
     };
 
+    Card() = default;
     Card(std::string_view name, int cost, Type type, std::vector<std::unique_ptr<IAbility>> abilities = {})
         : m_name{name}, m_cost{cost}, m_type{type}, m_abilities{std::move(abilities)} {}
 
