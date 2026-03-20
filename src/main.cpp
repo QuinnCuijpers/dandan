@@ -12,8 +12,6 @@
 int main()
 {
 
-    // TODO: Improve JSON format by using class_name to key the resultant object
-
     // if (!jsonFile.is_open())
     // {
     //     std::cerr << "Failed to open JSON file: " << jsonPath << '\n';

@@ -21,6 +21,7 @@ void ManaAbility::from_json(const nlohmann::json &j, IAbility &ability)
 
 void ManaAbility::to_json(nlohmann::json &j, const IAbility &ability)
 {
-    j = nlohmann::json{{"ManaAbility", nlohmann::json()}};
-    j["ManaAbility"]["color"] = ManaTypeToString(m_color);
+    const auto &manaAbility = dynamic_cast<const ManaAbility &>(ability);
+    j = nlohmann::json{{"type", "ManaAbility"}, {"data", nlohmann::json()}};
+    j["data"]["color"] = manaAbility.m_color;
 }

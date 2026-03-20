@@ -2,9 +2,10 @@
     "cost": 0,
     "effects": [
         {
-            "ManaAbility": {
+            "data": {
                 "color": "Blue"
-            }
+            },
+            "type": "ManaAbility"
         }
     ],
     "name": "Island",

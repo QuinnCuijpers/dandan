@@ -12,8 +12,8 @@ void WithDamage::resolve()
 void WithDamage::to_json(nlohmann::json &j, const IAbility &ability)
 {
     const auto &decorator{dynamic_cast<const WithDamage &>(ability)};
-    j = nlohmann::json{{"WithDamage", nlohmann::json()}};
-    j["WithDamage"]["damage"] = m_damage;
-    j["WithDamage"]["ability"] = nlohmann::json();
-    decorator.m_ability->to_json(j["WithDamage"]["ability"], *decorator.m_ability);
+    j = nlohmann::json{{"type", "WithDamage"}, {"data", nlohmann::json()}};
+    j["data"]["damage"] = decorator.m_damage;
+    j["data"]["ability"] = nlohmann::json();
+    decorator.m_ability->to_json(j["data"]["ability"], *decorator.m_ability);
 }

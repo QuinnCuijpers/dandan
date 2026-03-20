@@ -2,19 +2,22 @@
     "cost": 0,
     "effects": [
         {
-            "ManaAbility": {
+            "data": {
                 "color": "Colorless"
-            }
+            },
+            "type": "ManaAbility"
         },
         {
-            "WithDamage": {
+            "data": {
                 "ability": {
-                    "ManaAbility": {
+                    "data": {
                         "color": "Red"
-                    }
+                    },
+                    "type": "ManaAbility"
                 },
                 "damage": 1
-            }
+            },
+            "type": "WithDamage"
         }
     ],
     "name": "Shivan Reef",
