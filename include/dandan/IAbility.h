@@ -1,7 +1,7 @@
 #ifndef IABILITY_H
 #define IABILITY_H
 
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 class IAbility
 {

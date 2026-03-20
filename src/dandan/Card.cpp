@@ -1,5 +1,6 @@
 #include "dandan/Card.h"
 #include "dandan/IAbility.h"
+#include <nlohmann/json.hpp>
 
 NLOHMANN_JSON_SERIALIZE_ENUM(Card::Type, {{Card::Type::Land, "Land"},
                                           {Card::Type::Creature, "Creature"},

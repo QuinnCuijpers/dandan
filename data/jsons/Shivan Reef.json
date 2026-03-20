@@ -1,0 +1,22 @@
+{
+    "cost": 0,
+    "effects": [
+        {
+            "ManaAbility": {
+                "color": "Colorless"
+            }
+        },
+        {
+            "WithDamage": {
+                "ability": {
+                    "ManaAbility": {
+                        "color": "Red"
+                    }
+                },
+                "damage": 1
+            }
+        }
+    ],
+    "name": "Shivan Reef",
+    "type": "Land"
+}

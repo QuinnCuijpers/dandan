@@ -1,5 +1,5 @@
 #include "dandan/Card.h"
-#include "dandan/IAbilityDecorator.h"
+#include "dandan/WithDamage.h"
 #include "dandan/ManaAbility.h"
 
 #include <nlohmann/json.hpp>
@@ -11,10 +11,9 @@
 
 int main()
 {
-    // const std::filesystem::path jsonPath =
-    //     std::filesystem::path{DANDAN_SOURCE_DIR} / "data" / "jsons" / "ShivanReef.json";
 
-    // std::ifstream jsonFile{jsonPath};
+    // TODO: Improve JSON format by using class_name to key the resultant object
+
     // if (!jsonFile.is_open())
     // {
     //     std::cerr << "Failed to open JSON file: " << jsonPath << '\n';
@@ -55,4 +54,42 @@ int main()
     {
         ability.get()->resolve();
     }
+
+    namespace fs = std::filesystem;
+    const fs::path json_dir = fs::path{DANDAN_SOURCE_DIR} / "data" / "jsons";
+
+    std::error_code ec;
+    fs::create_directories(json_dir, ec);
+    if (ec)
+    {
+        std::cerr << "Failed to create directory: " << json_dir << " (" << ec.message() << ")\n";
+        return 1;
+    }
+
+    const auto card_path = [json_dir](std::string_view card_name)
+    {
+        fs::path filename{std::string(card_name)};
+        filename.replace_extension(".json");
+        return json_dir / filename;
+    };
+
+    const fs::path island_json_path = card_path(Island.get_name());
+    std::ofstream island_json_file{island_json_path};
+    if (!island_json_file.is_open())
+    {
+        std::cerr << "Failed to open file: " << island_json_path << '\n';
+        return 1;
+    }
+    const nlohmann::json island_json = Island;
+    island_json_file << island_json.dump(4) << '\n';
+
+    const fs::path shivan_reef_json_path = card_path(shivan_reef.get_name());
+    std::ofstream shivan_reef_json_file{shivan_reef_json_path};
+    if (!shivan_reef_json_file.is_open())
+    {
+        std::cerr << "Failed to open file: " << shivan_reef_json_path << '\n';
+        return 1;
+    }
+    const nlohmann::json shivan_reef_json = shivan_reef;
+    shivan_reef_json_file << shivan_reef_json.dump(4) << '\n';
 }

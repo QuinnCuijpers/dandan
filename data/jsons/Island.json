@@ -1,5 +1,12 @@
 {
-    "name": "Island",
     "cost": 0,
+    "effects": [
+        {
+            "ManaAbility": {
+                "color": "Blue"
+            }
+        }
+    ],
+    "name": "Island",
     "type": "Land"
 }

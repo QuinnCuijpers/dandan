@@ -2,7 +2,6 @@
 #define MANAABILITY_H
 
 #include "IAbility.h"
-#include <nlohmann/json.hpp>
 #include <iostream>
 
 class ManaAbility : public IAbility
@@ -42,23 +41,11 @@ public:
         }
     }
 
-    void resolve() override
-    {
-        std::cout << "Resolving ManaAbility\n";
-        std::cout << "Adding mana " << ManaTypeToString(m_color) << " to mana pool\n";
-    }
+    void resolve() override;
 
-    void from_json(const nlohmann::json &j, IAbility &ability) override
-    {
-        auto &manaAbility = dynamic_cast<ManaAbility &>(ability);
-        manaAbility.m_color = j.at("color").get<ManaType>();
-    }
+    void from_json(const nlohmann::json &j, IAbility &ability) override;
 
-    void to_json(nlohmann::json &j, const IAbility &ability) override
-    {
-        const auto &manaAbility = dynamic_cast<const ManaAbility &>(ability);
-        j = nlohmann::json{{"color", manaAbility.m_color}};
-    }
+    void to_json(nlohmann::json &j, const IAbility &ability) override;
 
 private:
     ManaType m_color{COLORLESS};

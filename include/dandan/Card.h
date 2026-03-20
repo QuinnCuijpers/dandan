@@ -3,12 +3,11 @@
 
 #include "IAbility.h"
 
-#include <nlohmann/json.hpp>
-
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
+#include <memory>
 
 class Card
 {
@@ -33,8 +32,10 @@ public:
     Type get_type() const { return m_type; }
     const std::vector<std::unique_ptr<IAbility>> &get_abilities() const { return m_abilities; }
 
+    // TODO: Improve JSON format
     friend void from_json(const nlohmann::json &j, Card &c);
     friend void to_json(nlohmann::json &j, const Card &c);
+
     friend std::ostream &operator<<(std::ostream &os, const Card &c)
     {
         os << "Card{name: " << c.m_name << ", cost: " << c.m_cost << ", type: " << c.TypeToString(c.m_type) << '}';
