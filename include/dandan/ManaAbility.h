@@ -20,26 +20,7 @@ public:
     ManaAbility() = default;
     ManaAbility(ManaType color) : m_color(color) {}
 
-    std::string_view ManaTypeToString(ManaType type) const
-    {
-        switch (type)
-        {
-        case COLORLESS:
-            return "Colorless";
-        case WHITE:
-            return "White";
-        case BLUE:
-            return "Blue";
-        case BLACK:
-            return "Black";
-        case RED:
-            return "Red";
-        case GREEN:
-            return "Green";
-        default:
-            return "Unknown";
-        }
-    }
+    std::string_view ManaTypeToString(ManaType type) const;
 
     void resolve() override;
 

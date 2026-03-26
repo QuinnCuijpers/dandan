@@ -1,0 +1,41 @@
+{
+    "cost": 0,
+    "effects": [
+        {
+            "data": {
+                "event": {
+                    "data": null,
+                    "type": "EntersBattlefieldEvent"
+                },
+                "replacement_effect": {
+                    "data": null,
+                    "type": "EntersTappedEffect"
+                }
+            },
+            "type": "ReplacementAbility"
+        },
+        {
+            "data": {
+                "effect": {
+                    "data": {
+                        "scry_amount": 1
+                    },
+                    "type": "ScryEffect"
+                },
+                "on": {
+                    "data": null,
+                    "type": "EntersBattlefieldEvent"
+                }
+            },
+            "type": "TriggeredAbility"
+        },
+        {
+            "data": {
+                "color": "Red"
+            },
+            "type": "ManaAbility"
+        }
+    ],
+    "name": "Temple of Epiphany",
+    "type": "Land"
+}

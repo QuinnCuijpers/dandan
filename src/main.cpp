@@ -1,6 +1,8 @@
 #include "dandan/Card.h"
 #include "dandan/WithDamage.h"
 #include "dandan/ManaAbility.h"
+#include "dandan/ReplacementAbility.h"
+#include "dandan/TriggeredAbility.h"
 
 #include <nlohmann/json.hpp>
 
@@ -9,95 +11,91 @@
 #include <iostream>
 #include <vector>
 
-int main()
+namespace
 {
-    namespace fs = std::filesystem;
-    const fs::path json_dir = fs::path{DANDAN_SOURCE_DIR} / "data" / "jsons";
-
-    const fs::path jsonPath = json_dir / "Shivan Reef.json";
-    std::ifstream jsonFile{jsonPath};
-    if (!jsonFile.is_open())
+    std::filesystem::path project_root()
     {
-        std::cerr << "Failed to open JSON file: " << jsonPath << '\n';
-        return 1;
+        return std::filesystem::path{DANDAN_SOURCE_DIR};
+    }
+
+    std::filesystem::path resolve_from_project_root(const std::filesystem::path &path)
+    {
+        if (path.is_absolute())
+        {
+            return path;
+        }
+        return project_root() / path;
+    }
+} // namespace
+
+Card read_Card_from_json(const std::filesystem::path &json_path)
+{
+    const auto resolved_path = resolve_from_project_root(json_path);
+    std::ifstream json_file{resolved_path};
+    if (!json_file.is_open())
+    {
+        throw std::runtime_error("Failed to open JSON file: " + resolved_path.string());
     }
 
     nlohmann::json j;
     try
     {
-        jsonFile >> j;
+        json_file >> j;
     }
     catch (const nlohmann::json::parse_error &e)
     {
-        std::cerr << "Failed to parse JSON file: " << jsonPath << " (" << e.what() << ")\n";
-        return 1;
+        throw std::runtime_error("Failed to parse JSON file: " + resolved_path.string() + " (" + e.what() + ")");
     }
 
-    Card shivan_reef = j.get<Card>();
-    std::cout << shivan_reef.get_name() << '\n';
-    std::cout << shivan_reef.get_cost() << '\n';
-    std::cout << shivan_reef.TypeToString(shivan_reef.get_type()) << '\n';
-    for (const auto &ability : shivan_reef.get_abilities())
+    return j.get<Card>();
+}
+
+void write_card_to_json(const Card &card, const std::filesystem::path &json_path)
+{
+    const auto resolved_path = resolve_from_project_root(json_path);
+    std::filesystem::create_directories(resolved_path.parent_path());
+
+    std::ofstream json_file{resolved_path};
+    if (!json_file.is_open())
+    {
+        throw std::runtime_error("Failed to open JSON file for writing: " + resolved_path.string());
+    }
+
+    nlohmann::json j = card;
+    json_file << j.dump(4) << '\n';
+}
+
+std::filesystem::path get_card_path(const std::filesystem::path &json_dir, std::string_view card_name)
+{
+    std::filesystem::path filename{std::string(card_name)};
+    filename.replace_extension(".json");
+    return resolve_from_project_root(json_dir) / filename;
+}
+
+void print_card_info(const Card &card)
+{
+    std::cout << "Card: " << card.get_name() << '\n';
+    std::cout << "Cost: " << card.get_cost() << '\n';
+    std::cout << "Type: " << card.TypeToString(card.get_type()) << '\n';
+    std::cout << "Abilities:\n";
+    for (const auto &ability : card.get_abilities())
     {
         ability->resolve();
     }
+}
 
-    // std::vector<std::unique_ptr<IAbility>> abilities;
-    // abilities.push_back(std::make_unique<ManaAbility>(ManaAbility::ManaType::COLORLESS));
-    // abilities.push_back(std::make_unique<WithDamage>(std::make_unique<ManaAbility>(ManaAbility::ManaType::RED), 1));
+int main()
+{
+    std::vector<std::unique_ptr<IAbility>> abilities;
+    abilities.push_back(std::make_unique<ManaAbility>(ManaAbility::BLUE));
+    abilities.push_back(std::make_unique<ReplacementAbility>(std::make_unique<EntersBattlefieldEvent>(),
+                                                             std::make_unique<EntersTappedEffect>()));
+    abilities.push_back(
+        std::make_unique<TriggeredAbility>(
+            std::make_unique<EntersBattlefieldEvent>(),
+            std::make_unique<PeekEffect>(3)));
+    Card halimar_depths{"Halimar Depths", 0, Card::Land, std::move(abilities)};
 
-    // Card shivan_reef{"Shivan Reef", 0, Card::Type::Land, std::move(abilities)};
-
-    // std::cout << "Card: " << shivan_reef.get_name() << '\n';
-    // std::cout << "Cost: " << shivan_reef.get_cost() << '\n';
-    // std::cout << "Type: " << shivan_reef.TypeToString(shivan_reef.get_type()) << '\n';
-    // std::cout << "Abilities:\n";
-    // for (const auto &ability : shivan_reef.get_abilities())
-    // {
-    //     ability.get()->resolve();
-    // }
-
-    // std::vector<std::unique_ptr<IAbility>> island_abilities;
-    // island_abilities.push_back(std::make_unique<ManaAbility>(ManaAbility::ManaType::BLUE));
-    // Card Island{"Island", 0, Card::Type::Land, std::move(island_abilities)};
-    // std::cout << Island << '\n';
-    // for (const auto &ability : Island.get_abilities())
-    // {
-    //     ability.get()->resolve();
-    // }
-
-    // std::error_code ec;
-    // fs::create_directories(json_dir, ec);
-    // if (ec)
-    // {
-    //     std::cerr << "Failed to create directory: " << json_dir << " (" << ec.message() << ")\n";
-    //     return 1;
-    // }
-
-    // const auto card_path = [json_dir](std::string_view card_name)
-    // {
-    //     fs::path filename{std::string(card_name)};
-    //     filename.replace_extension(".json");
-    //     return json_dir / filename;
-    // };
-
-    // const fs::path island_json_path = card_path(Island.get_name());
-    // std::ofstream island_json_file{island_json_path};
-    // if (!island_json_file.is_open())
-    // {
-    //     std::cerr << "Failed to open file: " << island_json_path << '\n';
-    //     return 1;
-    // }
-    // const nlohmann::json island_json = Island;
-    // island_json_file << island_json.dump(4) << '\n';
-
-    // const fs::path shivan_reef_json_path = card_path(shivan_reef.get_name());
-    // std::ofstream shivan_reef_json_file{shivan_reef_json_path};
-    // if (!shivan_reef_json_file.is_open())
-    // {
-    //     std::cerr << "Failed to open file: " << shivan_reef_json_path << '\n';
-    //     return 1;
-    // }
-    // const nlohmann::json shivan_reef_json = shivan_reef;
-    // shivan_reef_json_file << shivan_reef_json.dump(4) << '\n';
+    const auto card_json_path = get_card_path("data/jsons", halimar_depths.get_name());
+    write_card_to_json(halimar_depths, card_json_path);
 }

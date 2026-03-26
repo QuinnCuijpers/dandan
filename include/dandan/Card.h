@@ -33,7 +33,6 @@ public:
     Type get_type() const { return m_type; }
     const std::vector<std::unique_ptr<IAbility>> &get_abilities() const { return m_abilities; }
 
-    // TODO: Improve JSON format
     friend void from_json(const nlohmann::json &j, Card &c);
     friend void to_json(nlohmann::json &j, const Card &c);
 

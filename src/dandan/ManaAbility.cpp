@@ -26,3 +26,24 @@ void ManaAbility::to_json(nlohmann::json &j, const IAbility &ability)
     j = nlohmann::json{{"type", "ManaAbility"}, {"data", nlohmann::json()}};
     j["data"]["color"] = manaAbility.m_color;
 }
+
+std::string_view ManaAbility::ManaTypeToString(ManaType type) const
+{
+    switch (type)
+    {
+    case COLORLESS:
+        return "Colorless";
+    case WHITE:
+        return "White";
+    case BLUE:
+        return "Blue";
+    case BLACK:
+        return "Black";
+    case RED:
+        return "Red";
+    case GREEN:
+        return "Green";
+    default:
+        return "Unknown";
+    }
+}
