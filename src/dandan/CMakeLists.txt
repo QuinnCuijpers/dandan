@@ -1,15 +1,12 @@
 add_library(DandanLib)
 
-target_sources(
-    DandanLib PRIVATE Card.cpp
-                        ManaAbility.cpp
-                        WithDamage.cpp
-                        ReplacementAbility.cpp
-                        EntersBattlefieldEvent.cpp
-                        EntersTappedEffect.cpp
-                        PeekEffect.cpp
-                        ScryEffect.cpp
-                        TriggeredAbility.cpp
+target_sources(DandanLib PUBLIC
+    FILE_SET HEADERS
+    BASE_DIRS ${CMAKE_SOURCE_DIR}/include
 )
 
-target_link_libraries(DandanLib PRIVATE nlohmann_json::nlohmann_json)
+add_subdirectory(core)
+add_subdirectory(abilities)
+
+target_link_libraries(DandanLib PRIVATE DandanCore DandanAbilities nlohmann_json::nlohmann_json)
+target_include_directories(DandanLib PUBLIC ${CMAKE_SOURCE_DIR}/include)

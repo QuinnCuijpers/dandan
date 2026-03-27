@@ -1,0 +1,26 @@
+{
+    "cost": 0,
+    "effects": [
+        {
+            "data": {
+                "event": {
+                    "data": null,
+                    "type": "EntersBattlefieldEvent"
+                },
+                "replacement_effect": {
+                    "data": null,
+                    "type": "EntersTappedEffect"
+                }
+            },
+            "type": "ReplacementAbility"
+        },
+        {
+            "data": {
+                "color": "Blue"
+            },
+            "type": "ManaAbility"
+        }
+    ],
+    "name": "Remote Isle",
+    "type": "Land"
+}

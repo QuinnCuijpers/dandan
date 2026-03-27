@@ -1,9 +1,4 @@
-#include "dandan/Card.h"
-#include "dandan/WithDamage.h"
-#include "dandan/ManaAbility.h"
-#include "dandan/ReplacementAbility.h"
-#include "dandan/TriggeredAbility.h"
-
+#include "dandan/dandan.h"
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
@@ -28,7 +23,7 @@ namespace
     }
 } // namespace
 
-Card read_Card_from_json(const std::filesystem::path &json_path)
+dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
 {
     const auto resolved_path = resolve_from_project_root(json_path);
     std::ifstream json_file{resolved_path};
@@ -47,10 +42,10 @@ Card read_Card_from_json(const std::filesystem::path &json_path)
         throw std::runtime_error("Failed to parse JSON file: " + resolved_path.string() + " (" + e.what() + ")");
     }
 
-    return j.get<Card>();
+    return j.get<dandan::core::Card>();
 }
 
-void write_card_to_json(const Card &card, const std::filesystem::path &json_path)
+void write_card_to_json(const dandan::Card &card, const std::filesystem::path &json_path)
 {
     const auto resolved_path = resolve_from_project_root(json_path);
     std::filesystem::create_directories(resolved_path.parent_path());
@@ -72,7 +67,7 @@ std::filesystem::path get_card_path(const std::filesystem::path &json_dir, std::
     return resolve_from_project_root(json_dir) / filename;
 }
 
-void print_card_info(const Card &card)
+void print_card_info(const dandan::Card &card)
 {
     std::cout << "Card: " << card.get_name() << '\n';
     std::cout << "Cost: " << card.get_cost() << '\n';
@@ -86,16 +81,23 @@ void print_card_info(const Card &card)
 
 int main()
 {
-    std::vector<std::unique_ptr<IAbility>> abilities;
-    abilities.push_back(std::make_unique<ManaAbility>(ManaAbility::BLUE));
-    abilities.push_back(std::make_unique<ReplacementAbility>(std::make_unique<EntersBattlefieldEvent>(),
-                                                             std::make_unique<EntersTappedEffect>()));
-    abilities.push_back(
-        std::make_unique<TriggeredAbility>(
-            std::make_unique<EntersBattlefieldEvent>(),
-            std::make_unique<PeekEffect>(3)));
-    Card halimar_depths{"Halimar Depths", 0, Card::Land, std::move(abilities)};
+    std::vector<std::unique_ptr<dandan::IAbility>> abilities;
 
-    const auto card_json_path = get_card_path("data/jsons", halimar_depths.get_name());
-    write_card_to_json(halimar_depths, card_json_path);
+    abilities.push_back(
+        std::make_unique<dandan::ReplacementAbility>(
+            std::make_unique<dandan::EntersBattlefieldEvent>(),
+            std::make_unique<dandan::EntersTappedEffect>()));
+
+    abilities.push_back(
+        std::make_unique<dandan::ManaAbility>(
+            dandan::ManaAbility::BLUE));
+
+    // abilities.push_back(
+    //     std::make_unique<dandan::ActivatedAbility>(
+    //         ICost, IEffect));
+
+    dandan::Card remote_isle{"Remote Isle", 0, dandan::Card::Land, std::move(abilities)};
+
+    const auto card_json_path = get_card_path("data/jsons", remote_isle.get_name());
+    write_card_to_json(remote_isle, card_json_path);
 }

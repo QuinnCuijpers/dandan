@@ -4,4 +4,3 @@ project(dandan)
 add_subdirectory(external/json)
 
 add_subdirectory(src)
-add_subdirectory(include)
