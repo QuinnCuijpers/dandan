@@ -1,8 +1,9 @@
+#include "dandan/effects/PeekEffect.h"
 #include "dandan/abilities/TriggeredAbility.h"
 #include <nlohmann/json.hpp>
 #include <iostream>
 
-namespace dandan::abilities
+namespace dandan::effects
 {
 
     void PeekEffect::apply()

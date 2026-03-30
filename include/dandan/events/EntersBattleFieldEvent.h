@@ -1,18 +1,10 @@
-#ifndef EVENTS_H
-#define EVENTS_H
+#ifndef ENTERS_BATTLE_FIELD_EVENT_H
+#define ENTERS_BATTLE_FIELD_EVENT_H
 
-#include <optional>
-#include <nlohmann/json_fwd.hpp>
+#include "IEvent.h"
 
-namespace dandan::abilities
+namespace dandan::events
 {
-
-    class IEvent
-    {
-    public:
-        virtual ~IEvent() = default;
-        virtual void to_json(nlohmann::json &j, const IEvent &event) const = 0;
-    };
 
     class EntersBattlefieldEvent : public IEvent
     {

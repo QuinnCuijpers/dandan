@@ -1,7 +1,8 @@
+#include "dandan/effects/ScryEffect.h"
 #include "dandan/abilities/TriggeredAbility.h"
 #include <nlohmann/json.hpp>
 
-namespace dandan::abilities
+namespace dandan::effects
 {
 
     void ScryEffect::apply()

@@ -5,10 +5,6 @@ PRIVATE
     ManaAbility.cpp
     WithDamage.cpp
     ReplacementAbility.cpp
-    EntersBattlefieldEvent.cpp
-    EntersTappedEffect.cpp
-    PeekEffect.cpp
-    ScryEffect.cpp
     TriggeredAbility.cpp
 )
 

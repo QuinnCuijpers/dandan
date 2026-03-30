@@ -1,15 +1,18 @@
-#include "dandan/abilities/ReplacementAbility.h"
+#include "dandan/effects/EntersTappedEffect.h"
+#include "dandan/events/IEvent.h"
+#include "dandan/events/EntersBattleFieldEvent.h"
 #include <nlohmann/json.hpp>
 
-namespace dandan::abilities
+namespace dandan::effects
 {
 
-    std::unique_ptr<IEvent> EntersTappedEffect::replace(IEvent &event)
+    std::unique_ptr<events::IEvent> EntersTappedEffect::replace(events::IEvent &event)
     {
-        if (auto *enters_battlefield_event = dynamic_cast<EntersBattlefieldEvent *>(&event))
+
+        if (auto *enters_battlefield_event = dynamic_cast<events::EntersBattlefieldEvent *>(&event))
         {
             enters_battlefield_event->setTapped(true);
-            return std::make_unique<EntersBattlefieldEvent>(*enters_battlefield_event);
+            return std::make_unique<events::EntersBattlefieldEvent>(*enters_battlefield_event);
         }
         return nullptr;
     }

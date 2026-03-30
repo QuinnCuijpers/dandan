@@ -1,7 +1,9 @@
-#include "dandan/abilities/Events.h"
+#include "dandan/events/EntersBattleFieldEvent.h"
+#include "dandan/events/IEvent.h"
+
 #include <nlohmann/json.hpp>
 
-namespace dandan::abilities
+namespace dandan::events
 {
 
     void EntersBattlefieldEvent::to_json(nlohmann::json &j, const IEvent &event) const
