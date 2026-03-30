@@ -2,6 +2,7 @@ add_library(DandanAbilities OBJECT)
 
 target_sources(DandanAbilities 
 PRIVATE
+    ActivatedAbility.cpp
     ManaAbility.cpp
     WithDamage.cpp
     ReplacementAbility.cpp

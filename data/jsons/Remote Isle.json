@@ -19,6 +19,28 @@
                 "color": "Blue"
             },
             "type": "ManaAbility"
+        },
+        {
+            "data": {
+                "cost": {
+                    "data": {
+                        "generic_mana_cost": {
+                            "data": {
+                                "generic_mana_amount": 2
+                            },
+                            "type": "GernericManaCost"
+                        }
+                    },
+                    "type": "CyclingCost"
+                },
+                "effect": {
+                    "data": {
+                        "amount": 1
+                    },
+                    "type": "DrawEffect"
+                }
+            },
+            "type": "ReplacementAbility"
         }
     ],
     "name": "Remote Isle",

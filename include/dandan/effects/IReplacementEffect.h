@@ -7,6 +7,7 @@
 
 namespace dandan::effects
 {
+    // TODO: implement a singular base effect interface/ abstract class
     class IReplacementEffect
     {
     public:

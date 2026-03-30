@@ -92,11 +92,13 @@ int main()
         std::make_unique<dandan::ManaAbility>(
             dandan::ManaAbility::BLUE));
 
-    // abilities.push_back(
-    //     std::make_unique<dandan::ActivatedAbility>(
-    //         ICost, IEffect));
+    abilities.push_back(
+        std::make_unique<dandan::ActivatedAbility>(
+            std::make_unique<dandan::CyclingCost>(), std::make_unique<dandan::DrawEffect>()));
 
     dandan::Card remote_isle{"Remote Isle", 0, dandan::Card::Land, std::move(abilities)};
+
+    print_card_info(remote_isle);
 
     const auto card_json_path = get_card_path("data/jsons", remote_isle.get_name());
     write_card_to_json(remote_isle, card_json_path);

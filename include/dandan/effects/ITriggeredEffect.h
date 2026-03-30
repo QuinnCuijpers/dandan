@@ -5,6 +5,7 @@
 
 namespace dandan::effects
 {
+    // TODO: Implement a single Effect super type
     class ITriggeredEffect
     {
     public:

@@ -1,13 +1,13 @@
 #include "dandan/abilities/ReplacementAbility.h"
 #include <nlohmann/json.hpp>
+#include <iostream>
 
 namespace dandan::abilities
 {
 
     void ReplacementAbility::resolve()
     {
-        // This ability doesn't resolve in the traditional sense, as it modifies events rather than triggering on them.
-        // The actual replacement logic is handled in the event processing system, where the replace method of the IReplacementEffect is called.
+        std::cout << "Resolving ReplacementAbility\n";
     }
 
     void ReplacementAbility::from_json(const nlohmann::json &j, IAbility &ability)

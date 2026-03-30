@@ -2,6 +2,7 @@ add_library(DandanEffects OBJECT)
 
 target_sources(DandanEffects 
 PRIVATE
+    DrawEffect.cpp
     EntersTappedEffect.cpp
     PeekEffect.cpp
     ScryEffect.cpp

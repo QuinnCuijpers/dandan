@@ -2,11 +2,14 @@
 #define DECK_H
 
 #include <deque>
-#include "Card.h"
+#include "dandan/core/Card.h"
 
-class Deck
+namespace dandan::core
 {
-private:
-    std::deque<Card> cards;
-};
+    class Deck
+    {
+    private:
+        std::deque<Card> cards;
+    };
+}
 #endif
