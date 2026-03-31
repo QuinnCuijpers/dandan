@@ -25,11 +25,11 @@ namespace dandan::abilities
 
         std::string_view ManaTypeToString(ManaType type) const;
 
+        static ManaType ManaTypeFromString(const std::string_view &str);
+
+        ManaType getColor() const { return m_color; }
+
         void resolve() override;
-
-        void from_json(const nlohmann::json &j, IAbility &ability) override;
-
-        void to_json(nlohmann::json &j, const IAbility &ability) override;
 
     private:
         ManaType m_color{COLORLESS};

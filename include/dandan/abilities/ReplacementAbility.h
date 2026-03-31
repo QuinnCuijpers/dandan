@@ -19,9 +19,8 @@ namespace dandan::abilities
 
         void resolve() override;
 
-        void from_json(const nlohmann::json &j, IAbility &ability) override;
-
-        void to_json(nlohmann::json &j, const IAbility &ability) override;
+        const dandan::events::IEvent *getEvent() const { return m_event.get(); }
+        const dandan::effects::IReplacementEffect *getReplaceEffect() const { return m_replace_effect.get(); }
 
     private:
         std::unique_ptr<dandan::events::IEvent> m_event;

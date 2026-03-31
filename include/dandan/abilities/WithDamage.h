@@ -9,15 +9,17 @@ namespace dandan::abilities
     class WithDamage : public IAbilityDecorator
     {
     public:
+        WithDamage(std::unique_ptr<IAbility> ability) : IAbilityDecorator(std::move(ability)) {};
         WithDamage(std::unique_ptr<IAbility> ability, int damage) : IAbilityDecorator(std::move(ability)), m_damage{damage} {}
+
+        int getDamage() const { return m_damage; }
+
+        const IAbility *getInnerAbility() const { return m_ability.get(); }
+
         void resolve() override;
 
-        void to_json(nlohmann::json &j, const IAbility &ability) override;
-
-        void from_json(const nlohmann::json &j, IAbility &ability) override;
-
     private:
-        int m_damage;
+        int m_damage{1};
     };
 }
 

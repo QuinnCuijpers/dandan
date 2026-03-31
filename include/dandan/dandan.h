@@ -20,6 +20,7 @@ namespace dandan
     using abilities::ManaAbility;
     using abilities::ReplacementAbility;
     using abilities::TriggeredAbility;
+    using abilities::WithDamage;
 
     using core::Card;
 

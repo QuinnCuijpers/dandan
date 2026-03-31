@@ -1,20 +1,18 @@
 #ifndef DANDAN_SCRY_EFFECT_H
 #define DANDAN_SCRY_EFFECT_H
 
-#include "ITriggeredEffect.h"
+#include "IEffect.h"
 
 namespace dandan::effects
 {
 
-    class ScryEffect : public ITriggeredEffect
+    struct ScryEffect : public IEffect
     {
-    public:
-        void apply() override;
-        void from_json(const nlohmann::json &j, ITriggeredEffect &effect) override;
-        void to_json(nlohmann::json &j, const ITriggeredEffect &effect) override;
-
-    private:
         int m_scry_amount{1};
+
+        ScryEffect(int scry_amount) : m_scry_amount(scry_amount) {}
+
+        void apply() override;
     };
 }
 

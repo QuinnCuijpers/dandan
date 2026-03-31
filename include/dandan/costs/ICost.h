@@ -11,9 +11,6 @@ namespace dandan::costs
     public:
         virtual ~ICost() = default;
         virtual void evaluate() = 0;
-
-        virtual void from_json(const nlohmann::json &j, ICost &cost) = 0;
-        virtual void to_json(nlohmann::json &j, const ICost &cost) = 0;
     };
 }
 

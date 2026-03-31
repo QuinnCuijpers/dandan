@@ -42,7 +42,7 @@ dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
         throw std::runtime_error("Failed to parse JSON file: " + resolved_path.string() + " (" + e.what() + ")");
     }
 
-    return j.get<dandan::core::Card>();
+    return j.get<dandan::Card>();
 }
 
 void write_card_to_json(const dandan::Card &card, const std::filesystem::path &json_path)
@@ -83,23 +83,19 @@ int main()
 {
     std::vector<std::unique_ptr<dandan::IAbility>> abilities;
 
-    abilities.push_back(
-        std::make_unique<dandan::ReplacementAbility>(
-            std::make_unique<dandan::EntersBattlefieldEvent>(),
-            std::make_unique<dandan::EntersTappedEffect>()));
+    abilities.push_back(std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::COLORLESS));
 
     abilities.push_back(
-        std::make_unique<dandan::ManaAbility>(
-            dandan::ManaAbility::BLUE));
+        std::make_unique<dandan::WithDamage>(
+            std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::RED)));
 
-    abilities.push_back(
-        std::make_unique<dandan::ActivatedAbility>(
-            std::make_unique<dandan::CyclingCost>(), std::make_unique<dandan::DrawEffect>()));
+    dandan::Card test{"Test", 0, dandan::Card::Land, std::move(abilities)};
 
-    dandan::Card remote_isle{"Remote Isle", 0, dandan::Card::Land, std::move(abilities)};
+    print_card_info(test);
 
-    print_card_info(remote_isle);
+    const auto card_json_path = get_card_path("data/jsons", test.get_name());
+    write_card_to_json(test, card_json_path);
 
-    const auto card_json_path = get_card_path("data/jsons", remote_isle.get_name());
-    write_card_to_json(remote_isle, card_json_path);
+    const auto loaded_card = read_Card_from_json(card_json_path);
+    print_card_info(loaded_card);
 }

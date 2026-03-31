@@ -1,6 +1,5 @@
 {
-    "cost": 0,
-    "effects": [
+    "abilities": [
         {
             "data": {
                 "color": "Blue"
@@ -8,6 +7,7 @@
             "type": "ManaAbility"
         }
     ],
+    "cost": 0,
     "name": "Island",
     "type": "Land"
 }
