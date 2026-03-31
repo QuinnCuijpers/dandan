@@ -1,6 +1,5 @@
 {
-    "cost": 0,
-    "effects": [
+    "abilities": [
         {
             "data": {
                 "color": "Colorless"
@@ -20,6 +19,7 @@
             "type": "WithDamage"
         }
     ],
+    "cost": 0,
     "name": "Shivan Reef",
     "type": "Land"
 }

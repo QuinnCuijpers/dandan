@@ -50,4 +50,22 @@ namespace dandan::abilities
             return "Unknown";
         }
     }
+
+    ManaAbility::ManaType ManaAbility::ManaTypeFromString(const std::string_view &str)
+    {
+        if (str == "Colorless")
+            return COLORLESS;
+        else if (str == "White")
+            return WHITE;
+        else if (str == "Blue")
+            return BLUE;
+        else if (str == "Black")
+            return BLACK;
+        else if (str == "Red")
+            return RED;
+        else if (str == "Green")
+            return GREEN;
+        else
+            throw std::runtime_error("Invalid mana type string: " + std::string(str));
+    }
 }

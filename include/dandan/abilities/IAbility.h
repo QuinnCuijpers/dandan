@@ -3,7 +3,8 @@
 
 #include <nlohmann/json_fwd.hpp>
 
-namespace dandan::abilities {
+namespace dandan::abilities
+{
     class IAbility
     {
     public:
