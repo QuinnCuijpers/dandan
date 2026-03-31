@@ -6,14 +6,9 @@
 
 namespace dandan::effects
 {
-    class EntersTappedEffect : public IReplacementEffect
+    struct EntersTappedEffect : public IReplacementEffect
     {
-    public:
         std::unique_ptr<dandan::events::IEvent> replace(dandan::events::IEvent &event) override;
-
-        void from_json(const nlohmann::json &j, IReplacementEffect &effect) override;
-
-        void to_json(nlohmann::json &j, const IReplacementEffect &effect) override;
     };
 }
 

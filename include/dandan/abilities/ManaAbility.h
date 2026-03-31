@@ -31,10 +31,6 @@ namespace dandan::abilities
 
         void resolve() override;
 
-        void from_json(const nlohmann::json &j, IAbility &ability) override;
-
-        void to_json(nlohmann::json &j, const IAbility &ability) override;
-
     private:
         ManaType m_color{COLORLESS};
     };

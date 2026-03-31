@@ -6,20 +6,18 @@
 
 namespace dandan::costs
 {
+    // TODO: should arguably be done as a wrapper around a GenericManaCost, but for now this is simpler to implement and test
     class CyclingCost : public ICost
     {
     public:
-        CyclingCost() = default;
-        CyclingCost(GenericManaCost mc) : m_generic_mana_cost{mc} {}
+        CyclingCost(std::unique_ptr<ICost> mc) : m_inner_cost{std::move(mc)} {};
+
         void evaluate() override;
 
-        void from_json(const nlohmann::json &j, ICost &cost) override;
-        void to_json(nlohmann::json &j, const ICost &cost) override;
-
-        GenericManaCost getGenericAmount() const { return m_generic_mana_cost; }
+        const ICost *getInnerCost() const { return m_inner_cost.get(); }
 
     private:
-        GenericManaCost m_generic_mana_cost{2};
+        std::unique_ptr<ICost> m_inner_cost{};
     };
 }
 

@@ -7,17 +7,15 @@
 
 namespace dandan::effects
 {
-    class DrawEffect : public IEffect
+    struct DrawEffect : public IEffect
     {
     public:
-        DrawEffect() = default;
-        void apply() override;
-
-        void from_json(const nlohmann::json &j, IEffect &effect) override;
-        void to_json(nlohmann::json &j, const IEffect &effect) override;
-
-    private:
         int m_amount{1};
+
+        DrawEffect() = default;
+        explicit DrawEffect(int amount) : m_amount(amount) {}
+
+        void apply() override;
     };
 
 }

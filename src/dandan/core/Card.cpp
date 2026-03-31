@@ -27,24 +27,10 @@ namespace dandan::core
         }
         c.m_type = j.at("type").get<Card::Type>();
 
-        // TODO: Improve by using a factory pattern to create abilities based on the "type" field in the JSON
+        auto factory{dandan::serialization::JsonFactory<abilities::IAbility>{}};
         for (const auto &ability_json : j.at("abilities"))
         {
-            const std::string type = ability_json.at("type").get<std::string>();
-            std::unique_ptr<abilities::IAbility> ability;
-            if (type == "ManaAbility")
-            {
-                ability = std::make_unique<abilities::ManaAbility>();
-            }
-            else if (type == "WithDamage")
-            {
-                ability = std::make_unique<abilities::WithDamage>(nullptr, 0); // Placeholder, will be set in from_json
-            }
-            else
-            {
-                throw std::runtime_error("Unknown ability type: " + type);
-            }
-            ability->from_json(ability_json, *ability);
+            auto ability = factory.create_product(ability_json);
             c.m_abilities.push_back(std::move(ability));
         }
     }

@@ -4,6 +4,9 @@ target_sources(DandanSerialize
     PRIVATE
         JsonAbilityFactory.cpp
         JsonCostFactory.cpp
+        JsonEventFactory.cpp
+        JsonEffectFactory.cpp
+        JsonReplaceFactory.cpp
 )
 
 target_sources(

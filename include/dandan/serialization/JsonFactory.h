@@ -12,7 +12,7 @@ namespace dandan::serialization
     public:
         static nlohmann::json create_json(const T *obj);
 
-        static std::unique_ptr<T> create_ability(const nlohmann::json &j);
+        static std::unique_ptr<T> create_product(const nlohmann::json &j);
     };
 }
 

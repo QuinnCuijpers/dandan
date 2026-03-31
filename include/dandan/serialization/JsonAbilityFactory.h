@@ -13,7 +13,7 @@ namespace dandan::serialization
     public:
         static nlohmann::json create_json(const abilities::IAbility *ability);
 
-        static std::unique_ptr<abilities::IAbility> create_ability(const nlohmann::json &j);
+        static std::unique_ptr<abilities::IAbility> create_product(const nlohmann::json &j);
     };
 }
 

@@ -11,9 +11,9 @@ namespace dandan::serialization
     class JsonFactory<costs::ICost>
     {
     public:
-        nlohmann::json create_json(const costs::ICost *cost);
+        static nlohmann::json create_json(const costs::ICost *cost);
 
-        std::unique_ptr<costs::ICost> create_cost(const nlohmann::json &j);
+        static std::unique_ptr<costs::ICost> create_product(const nlohmann::json &j);
     };
 }
 

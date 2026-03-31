@@ -18,10 +18,6 @@ namespace dandan::abilities
 
         void resolve() override;
 
-        void to_json(nlohmann::json &j, const IAbility &ability) override;
-
-        void from_json(const nlohmann::json &j, IAbility &ability) override;
-
     private:
         int m_damage{1};
     };

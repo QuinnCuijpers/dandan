@@ -3,7 +3,6 @@
 
 #include "IAbility.h"
 #include "dandan/costs/ICost.h"
-#include "dandan/effects/ITriggeredEffect.h"
 #include "dandan/effects/IEffect.h"
 #include <memory>
 
@@ -17,9 +16,8 @@ namespace dandan::abilities
 
         void resolve() override;
 
-        void from_json(const nlohmann::json &j, IAbility &ability) override;
-
-        void to_json(nlohmann::json &j, const IAbility &ability) override;
+        const costs::ICost *getCost() const { return m_cost.get(); }
+        const effects::IEffect *getEffect() const { return m_effect.get(); }
 
     private:
         std::unique_ptr<costs::ICost> m_cost;

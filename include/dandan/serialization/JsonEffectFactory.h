@@ -11,9 +11,9 @@ namespace dandan::serialization
     class JsonFactory<effects::IEffect>
     {
     public:
-        nlohmann::json create_json(const effects::IEffect *effect);
+        static nlohmann::json create_json(const effects::IEffect *effect);
 
-        std::unique_ptr<effects::IEffect> create_effect(const nlohmann::json &j);
+        static std::unique_ptr<effects::IEffect> create_product(const nlohmann::json &j);
     };
 }
 

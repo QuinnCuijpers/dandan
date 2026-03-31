@@ -15,8 +15,8 @@ namespace dandan::serialization
                     {"type", "ActivatedAbility"},
                     {"data", nlohmann::json::object()}}};
             // TODO: Implement JSON serialization for ActivatedAbility's cost and effect
-            // j["data"]["cost"] = create_json(activated->getCost());
-            // j["data"]["effect"] = create_json(activated->getEffect());
+            j["data"]["cost"] = JsonFactory<costs::ICost>::create_json(activated->getCost());
+            // j["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(activated->getEffect());
 
             return j;
         }
@@ -39,13 +39,24 @@ namespace dandan::serialization
             j["data"]["ability"] = create_json(withDamage->getInnerAbility());
             return j;
         }
+        else if (const ReplacementAbility *replacement = dynamic_cast<const ReplacementAbility *>(ability))
+        {
+            auto j =
+                nlohmann::json{
+                    {"type", "ReplacementAbility"},
+                    {"data", nlohmann::json::object()}};
+
+            j["data"]["event"] = JsonFactory<events::IEvent>::create_json(replacement->getEvent());
+            j["data"]["replace_effect"] = JsonFactory<effects::IReplacementEffect>::create_json(replacement->getReplaceEffect());
+            return j;
+        }
         else
         {
             throw std::runtime_error("Unknown ability type for JSON serialization");
         }
     }
 
-    std::unique_ptr<abilities::IAbility> JsonFactory<abilities::IAbility>::create_ability(const nlohmann::json &j)
+    std::unique_ptr<abilities::IAbility> JsonFactory<abilities::IAbility>::create_product(const nlohmann::json &j)
     {
         const std::string type{j.at("type").get<std::string>()};
         const nlohmann::json &data{j.at("data")};
@@ -64,7 +75,7 @@ namespace dandan::serialization
         else if (type == "WithDamage")
         {
             const int damage{data.at("damage").get<int>()};
-            auto inner_ability = create_ability(data.at("ability"));
+            auto inner_ability = create_product(data.at("ability"));
             return std::make_unique<WithDamage>(std::move(inner_ability), damage);
         }
         else

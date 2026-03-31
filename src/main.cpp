@@ -83,16 +83,19 @@ int main()
 {
     std::vector<std::unique_ptr<dandan::IAbility>> abilities;
 
-    abilities.push_back(std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+    abilities.push_back(std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::COLORLESS));
 
-    // abilities.push_back(
-    //     std::make_unique<dandan::WithDamage>(
-    //         std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::RED)));
+    abilities.push_back(
+        std::make_unique<dandan::WithDamage>(
+            std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::RED)));
 
-    dandan::Card island{"Island", 0, dandan::Card::Land, std::move(abilities)};
+    dandan::Card test{"Test", 0, dandan::Card::Land, std::move(abilities)};
 
-    print_card_info(island);
+    print_card_info(test);
 
-    const auto card_json_path = get_card_path("data/jsons", island.get_name());
-    write_card_to_json(island, card_json_path);
+    const auto card_json_path = get_card_path("data/jsons", test.get_name());
+    write_card_to_json(test, card_json_path);
+
+    const auto loaded_card = read_Card_from_json(card_json_path);
+    print_card_info(loaded_card);
 }

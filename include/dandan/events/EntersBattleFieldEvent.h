@@ -6,16 +6,14 @@
 namespace dandan::events
 {
 
-    class EntersBattlefieldEvent : public IEvent
+    struct EntersBattlefieldEvent : public IEvent
     {
-    public:
+        std::optional<bool> m_tapped{};
+
         void setTapped(bool tapped) { m_tapped = tapped; }
         bool isTapped() const { return m_tapped.value_or(false); }
 
         void to_json(nlohmann::json &j, const IEvent &event) const override;
-
-    private:
-        std::optional<bool> m_tapped{};
     };
 }
 
