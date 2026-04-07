@@ -1,6 +1,6 @@
 #include "dandan/effects/DrawEffect.h"
-#include <nlohmann/json.hpp>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 namespace dandan::effects
 {
@@ -10,4 +10,4 @@ namespace dandan::effects
         std::cout << "Applying draw effect\n";
     }
 
-}
+} // namespace dandan::effects

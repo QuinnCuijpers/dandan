@@ -1,7 +1,6 @@
 #include "dandan/costs/GenericManaCost.h"
-#include "dandan/abilities/IAbility.h"
-#include <nlohmann/json.hpp>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 namespace dandan::costs
 {
@@ -10,4 +9,4 @@ namespace dandan::costs
         std::cout << "Evaluating GenericManaCost with " << m_amount << " mana\n";
     }
 
-}
+} // namespace dandan::costs

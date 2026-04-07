@@ -1,0 +1,23 @@
+BasedOnStyle: Microsoft
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# Allman braces for everything
+BreakBeforeBraces: Allman
+
+# Indent namespace contents as per vc format
+NamespaceIndentation: All
+
+# General formatting
+ColumnLimit: 80
+IndentPPDirectives: None
+AccessModifierOffset: -4
+
+# Alignment
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+
+# Templates & includes
+SortIncludes: false

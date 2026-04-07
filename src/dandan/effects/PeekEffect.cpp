@@ -1,14 +1,14 @@
 #include "dandan/effects/PeekEffect.h"
-#include "dandan/abilities/TriggeredAbility.h"
-#include <nlohmann/json.hpp>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 namespace dandan::effects
 {
 
     void PeekEffect::apply()
     {
-        std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount << " cards of the library\n";
+        std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount
+                  << " cards of the library\n";
     }
 
-}
+} // namespace dandan::effects
