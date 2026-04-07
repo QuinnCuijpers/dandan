@@ -33,7 +33,7 @@ jobs:
             cpp_compiler: cl
           - os: ubuntu-latest
             cpp_compiler: g++
-          - os: ubuntu-latest
+          - os: macos-latest
             cpp_compiler: clang++
         exclude:
           - os: windows-latest
