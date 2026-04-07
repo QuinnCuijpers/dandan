@@ -12,4 +12,4 @@ namespace dandan::abilities
         std::cout << "Resolving WithDamage decorator\n";
         std::cout << "Dealing " << m_damage << " damage\n";
     }
-}
+} // namespace dandan::abilities

@@ -8,8 +8,9 @@ namespace dandan::effects
 {
     struct EntersTappedEffect : public IReplacementEffect
     {
-        std::unique_ptr<dandan::events::IEvent> replace(dandan::events::IEvent &event) override;
+        std::unique_ptr<dandan::events::IEvent> replace(
+            dandan::events::IEvent &event) override;
     };
-}
+} // namespace dandan::effects
 
 #endif

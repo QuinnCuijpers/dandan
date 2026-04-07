@@ -12,6 +12,6 @@ namespace dandan::costs
         virtual ~ICost() = default;
         virtual void evaluate() = 0;
     };
-}
+} // namespace dandan::costs
 
 #endif

@@ -10,10 +10,12 @@ namespace dandan::effects
     {
         int m_scry_amount{1};
 
-        ScryEffect(int scry_amount) : m_scry_amount(scry_amount) {}
+        ScryEffect(int scry_amount) : m_scry_amount(scry_amount)
+        {
+        }
 
         void apply() override;
     };
-}
+} // namespace dandan::effects
 
 #endif

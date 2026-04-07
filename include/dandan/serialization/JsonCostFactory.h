@@ -7,14 +7,14 @@
 
 namespace dandan::serialization
 {
-    template <>
-    class JsonFactory<costs::ICost>
+    template <> class JsonFactory<costs::ICost>
     {
     public:
         static nlohmann::json create_json(const costs::ICost *cost);
 
-        static std::unique_ptr<costs::ICost> create_product(const nlohmann::json &j);
+        static std::unique_ptr<costs::ICost> create_product(
+            const nlohmann::json &j);
     };
-}
+} // namespace dandan::serialization
 
 #endif

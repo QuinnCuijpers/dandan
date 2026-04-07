@@ -11,9 +11,10 @@ namespace dandan::effects
     class IReplacementEffect
     {
     public:
-        virtual std::unique_ptr<events::IEvent> replace(events::IEvent &event) = 0;
+        virtual std::unique_ptr<events::IEvent> replace(
+            events::IEvent &event) = 0;
         virtual ~IReplacementEffect() = default;
     };
 
-}
+} // namespace dandan::effects
 #endif

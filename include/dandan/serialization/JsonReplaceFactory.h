@@ -5,14 +5,15 @@
 
 namespace dandan::serialization
 {
-    template <>
-    class JsonFactory<effects::IReplacementEffect>
+    template <> class JsonFactory<effects::IReplacementEffect>
     {
     public:
-        static nlohmann::json create_json(const effects::IReplacementEffect *obj);
+        static nlohmann::json create_json(
+            const effects::IReplacementEffect *obj);
 
-        static std::unique_ptr<effects::IReplacementEffect> create_product(const nlohmann::json &j);
+        static std::unique_ptr<effects::IReplacementEffect> create_product(
+            const nlohmann::json &j);
     };
-}
+} // namespace dandan::serialization
 
 #endif

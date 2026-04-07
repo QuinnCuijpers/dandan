@@ -11,4 +11,4 @@ namespace dandan::abilities
         m_effect->apply();
     }
 
-}
+} // namespace dandan::abilities

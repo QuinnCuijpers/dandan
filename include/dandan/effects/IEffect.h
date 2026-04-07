@@ -13,6 +13,6 @@ namespace dandan::effects
         virtual void apply() = 0;
     };
 
-}
+} // namespace dandan::effects
 
 #endif

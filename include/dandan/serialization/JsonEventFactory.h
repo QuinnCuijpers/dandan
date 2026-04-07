@@ -6,14 +6,14 @@
 
 namespace dandan::serialization
 {
-    template <>
-    class JsonFactory<events::IEvent>
+    template <> class JsonFactory<events::IEvent>
     {
     public:
-        static std::unique_ptr<dandan::events::IEvent> create_product(const nlohmann::json &j);
+        static std::unique_ptr<dandan::events::IEvent> create_product(
+            const nlohmann::json &j);
 
         static nlohmann::json create_json(const dandan::events::IEvent *event);
     };
-}
+} // namespace dandan::serialization
 
 #endif

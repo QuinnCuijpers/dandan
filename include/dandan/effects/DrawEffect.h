@@ -13,11 +13,13 @@ namespace dandan::effects
         int m_amount{1};
 
         DrawEffect() = default;
-        explicit DrawEffect(int amount) : m_amount(amount) {}
+        explicit DrawEffect(int amount) : m_amount(amount)
+        {
+        }
 
         void apply() override;
     };
 
-}
+} // namespace dandan::effects
 
 #endif

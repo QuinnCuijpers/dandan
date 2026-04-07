@@ -6,14 +6,13 @@
 
 namespace dandan::serialization
 {
-    template <typename T>
-    class JsonFactory
+    template <typename T> class JsonFactory
     {
     public:
         static nlohmann::json create_json(const T *obj);
 
         static std::unique_ptr<T> create_product(const nlohmann::json &j);
     };
-}
+} // namespace dandan::serialization
 
 #endif

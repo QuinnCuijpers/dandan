@@ -6,22 +6,32 @@
 #include "dandan/effects/IEffect.h"
 #include <memory>
 
-namespace dandan::abilities {
-class ActivatedAbility : public IAbility {
-public:
-  ActivatedAbility(std::unique_ptr<costs::ICost> cost,
-                   std::unique_ptr<effects::IEffect> effect)
-      : m_cost(std::move(cost)), m_effect(std::move(effect)) {}
+namespace dandan::abilities
+{
+    class ActivatedAbility : public IAbility
+    {
+    public:
+        ActivatedAbility(std::unique_ptr<costs::ICost> cost,
+                         std::unique_ptr<effects::IEffect> effect)
+            : m_cost(std::move(cost)), m_effect(std::move(effect))
+        {
+        }
 
-  void resolve() override;
+        void resolve() override;
 
-  const costs::ICost *getCost() const { return m_cost.get(); }
-  const effects::IEffect *getEffect() const { return m_effect.get(); }
+        const costs::ICost *getCost() const
+        {
+            return m_cost.get();
+        }
+        const effects::IEffect *getEffect() const
+        {
+            return m_effect.get();
+        }
 
-private:
-  std::unique_ptr<costs::ICost> m_cost;
-  std::unique_ptr<effects::IEffect> m_effect;
-};
+    private:
+        std::unique_ptr<costs::ICost> m_cost;
+        std::unique_ptr<effects::IEffect> m_effect;
+    };
 } // namespace dandan::abilities
 
 #endif

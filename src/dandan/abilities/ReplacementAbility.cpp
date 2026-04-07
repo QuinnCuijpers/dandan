@@ -9,4 +9,4 @@ namespace dandan::abilities
     {
         std::cout << "Resolving ReplacementAbility\n";
     }
-}
+} // namespace dandan::abilities

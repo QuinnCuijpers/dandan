@@ -11,5 +11,5 @@ namespace dandan::core
     private:
         std::deque<Card> cards;
     };
-}
+} // namespace dandan::core
 #endif
