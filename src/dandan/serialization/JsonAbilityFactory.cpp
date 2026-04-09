@@ -2,6 +2,7 @@
 #include "dandan/serialization/JsonFactory.h"
 
 #include "dandan/dandan.h"
+#include <memory>
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -12,14 +13,12 @@ namespace dandan::serialization
         if (const ActivatedAbility *activated =
                 dynamic_cast<const ActivatedAbility *>(ability))
         {
-            auto j{nlohmann::json{{"type", "ActivatedAbility"},
-                                  {"data", nlohmann::json::object()}}};
-            // TODO: Implement JSON serialization for ActivatedAbility's cost
-            // and effect
+            auto j = nlohmann::json{{"type", "ActivatedAbility"},
+                                    {"data", nlohmann::json::object()}};
             j["data"]["cost"] =
                 JsonFactory<costs::ICost>::create_json(activated->getCost());
-            // j["data"]["effect"] =
-            // JsonFactory<effects::IEffect>::create_json(activated->getEffect());
+            j["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
+                activated->getEffect());
 
             return j;
         }
@@ -68,10 +67,14 @@ namespace dandan::serialization
 
         if (type == "ActivatedAbility")
         {
-            // TODO: Implement JSON deserialization for ActivatedAbility's cost
-            // and effect
-            throw std::runtime_error(
-                "ActivatedAbility deserialization not implemented yet");
+            auto cost{
+                JsonFactory<dandan::ICost>::create_product(data.at("cost"))};
+
+            auto effect{JsonFactory<dandan::IEffect>::create_product(
+                data.at("effect"))};
+
+            return std::make_unique<ActivatedAbility>(std::move(cost),
+                                                      std::move(effect));
         }
         else if (type == "ManaAbility")
         {
@@ -86,6 +89,17 @@ namespace dandan::serialization
             auto inner_ability = create_product(data.at("ability"));
             return std::make_unique<WithDamage>(std::move(inner_ability),
                                                 damage);
+        }
+        else if (type == "ReplacementAbility")
+        {
+            auto event{
+                JsonFactory<dandan::IEvent>::create_product(data.at("event"))};
+
+            auto effect{JsonFactory<dandan::IReplacementEffect>::create_product(
+                data.at("replace_effect"))};
+
+            return std::make_unique<ReplacementAbility>(std::move(event),
+                                                        std::move(effect));
         }
         else
         {

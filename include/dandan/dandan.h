@@ -8,9 +8,13 @@
 #include "dandan/abilities/TriggeredAbility.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
+#include "dandan/costs/ColoredManaCost.h"
 #include "dandan/costs/CyclingCost.h"
+#include "dandan/costs/GenericManaCost.h"
+#include "dandan/costs/ICost.h"
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/EntersTappedEffect.h"
+#include "dandan/effects/IEffect.h"
 #include "dandan/events/EntersBattleFieldEvent.h"
 
 namespace dandan
@@ -26,12 +30,16 @@ namespace dandan
 
     using effects::DrawEffect;
     using effects::EntersTappedEffect;
+    using effects::IEffect;
     using effects::IReplacementEffect;
 
     using events::EntersBattlefieldEvent;
     using events::IEvent;
 
+    using costs::ColoredManaCost;
     using costs::CyclingCost;
+    using costs::GenericManaCost;
+    using costs::ICost;
 } // namespace dandan
 
 #endif

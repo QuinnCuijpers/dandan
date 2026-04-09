@@ -89,15 +89,23 @@ void print_card_info(const dandan::Card &card)
 
 int main()
 {
-    std::vector<std::unique_ptr<dandan::IAbility>> abilities;
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
     abilities.push_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::COLORLESS));
+        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
 
-    abilities.push_back(std::make_unique<dandan::WithDamage>(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::RED)));
+    abilities.push_back(std::make_unique<dandan::ReplacementAbility>(
+        std::make_unique<dandan::EntersBattlefieldEvent>(),
+        std::make_unique<dandan::EntersTappedEffect>()));
 
-    dandan::Card test{"Test", 0, dandan::Card::Land, std::move(abilities)};
+    abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
+        std::make_unique<dandan::CyclingCost>(
+            std::make_unique<dandan::ColoredManaCost>(
+                dandan::ColoredManaCost::BLUE)),
+        std::make_unique<dandan::DrawEffect>()));
+
+    dandan::Card test{"Lonely Sandbar", 0, dandan::Card::Land,
+                      std::move(abilities)};
 
     print_card_info(test);
 

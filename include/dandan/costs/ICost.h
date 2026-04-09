@@ -1,7 +1,6 @@
 #ifndef DANDAN_I_COST
 #define DANDAN_I_COST
 
-#include "dandan/abilities/IAbility.h"
 #include <nlohmann/json_fwd.hpp>
 
 namespace dandan::costs

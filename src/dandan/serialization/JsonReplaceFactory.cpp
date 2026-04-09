@@ -13,7 +13,7 @@ namespace dandan::serialization
                 dynamic_cast<const effects::EntersTappedEffect *>(obj))
         {
             return nlohmann::json{{"type", "EntersTappedEffect"},
-                                  {"data", nlohmann::json()}};
+                                  {"data", nlohmann::json::object()}};
         }
         else
         {

@@ -2,6 +2,7 @@
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/PeekEffect.h"
 #include "dandan/effects/ScryEffect.h"
+#include <memory>
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -14,7 +15,7 @@ namespace dandan::serialization
                 dynamic_cast<const effects::ScryEffect *>(effect))
         {
             auto j = nlohmann::json{{"type", "ScryEffect"},
-                                    {"data", nlohmann::json()}};
+                                    {"data", nlohmann::json::object()}};
             j["data"]["scry_amount"] = scryEffect->m_scry_amount;
             return j;
         }
@@ -22,7 +23,7 @@ namespace dandan::serialization
                      dynamic_cast<const effects::PeekEffect *>(effect))
         {
             auto j = nlohmann::json{{"type", "PeekEffect"},
-                                    {"data", nlohmann::json()}};
+                                    {"data", nlohmann::json::object()}};
             j["data"]["peek_amount"] = peekEffect->m_peek_amount;
             return j;
         }
@@ -30,7 +31,7 @@ namespace dandan::serialization
                      dynamic_cast<const effects::DrawEffect *>(effect))
         {
             auto j = nlohmann::json{{"type", "DrawEffect"},
-                                    {"data", nlohmann::json()}};
+                                    {"data", nlohmann::json::object()}};
             j["data"]["amount"] = drawEffect->m_amount;
             return j;
         }
@@ -56,6 +57,11 @@ namespace dandan::serialization
         {
             return std::make_unique<effects::PeekEffect>(
                 data.at("peek_amount").get<int>());
+        }
+        else if (type == "DrawEffect")
+        {
+            return std::make_unique<effects::DrawEffect>(
+                data.at("amount").get<int>());
         }
         else
         {

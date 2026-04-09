@@ -1,24 +1,106 @@
 #include "dandan/dandan.h"
+#include "nlohmann/json.hpp"
 #include "gtest/gtest.h"
+#include <cctype>
 #include <filesystem>
+#include <fstream>
 #include <gtest/gtest.h>
+#include <iostream>
 #include <memory>
-#include <nlohmann/json.hpp>
+#include <string>
 #include <string_view>
 #include <vector>
-#include <iostream>
-#include <fstream>
 
-static std::vector<std::unique_ptr<dandan::IAbility>> islandAbilities()
+#define LAND(name)                                                             \
+    dandan::Card                                                               \
+    {                                                                          \
+        formatCardName(#name), 0, dandan::Card::Land, name##Abilities()        \
+    }
+
+static std::string formatCardName(std::string_view name)
 {
-    auto res{std::vector<std::unique_ptr<dandan::IAbility>>{}};
-    res.push_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
-    return res;
+    {
+        std::string result;
+        for (char c : name)
+        {
+            if (std::isupper(c) && !result.empty())
+                result += ' ';
+            result += c;
+        }
+        return result;
+    }
 }
 
-static const dandan::Card *CARDS[] = {
-    new dandan::Card{"Island", 0, dandan::Card::Land, islandAbilities()}};
+static std::vector<std::unique_ptr<dandan::IAbility>> IslandAbilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+    abilities.push_back(
+        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+    return abilities;
+}
+
+static std::vector<std::unique_ptr<dandan::IAbility>> RemoteIsleAbilities()
+{
+
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    abilities.push_back(
+        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+
+    abilities.push_back(std::make_unique<dandan::ReplacementAbility>(
+        std::make_unique<dandan::EntersBattlefieldEvent>(),
+        std::make_unique<dandan::EntersTappedEffect>()));
+
+    abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
+        std::make_unique<dandan::CyclingCost>(
+            std::make_unique<dandan::GenericManaCost>(2)),
+        std::make_unique<dandan::DrawEffect>()));
+
+    return abilities;
+}
+
+static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    abilities.push_back(
+        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+
+    abilities.push_back(std::make_unique<dandan::ReplacementAbility>(
+        std::make_unique<dandan::EntersBattlefieldEvent>(),
+        std::make_unique<dandan::EntersTappedEffect>()));
+
+    abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
+        std::make_unique<dandan::CyclingCost>(
+            std::make_unique<dandan::ColoredManaCost>(
+                dandan::ColoredManaCost::BLUE)),
+        std::make_unique<dandan::DrawEffect>()));
+
+    return abilities;
+}
+
+static const dandan::Card *CARDS[] = {new LAND(Island), new LAND(RemoteIsle),
+                                      new LAND(LonelySandbar)};
+
+static std::string cardName(
+    const ::testing::TestParamInfo<const dandan::Card *> &info)
+{
+    const std::string raw_name{info.param->get_name()};
+    std::string name{};
+
+    for (const auto &c : raw_name)
+    {
+        if (std::isalnum(c))
+        {
+            name.push_back(c);
+        }
+        else
+        {
+            name.push_back('_');
+        }
+    }
+    return name;
+}
 
 class JsonTest : public testing::TestWithParam<const dandan::Card *>
 {
@@ -36,7 +118,6 @@ protected:
         auto json_file_path{std::filesystem::path{DANDAN_SOURCE_DIR} /
                             "data/jsons" / name};
         json_file_path += ".json";
-        std::cout << json_file_path << '\n';
 
         std::ifstream file{json_file_path};
         nlohmann::json j{};
@@ -52,4 +133,4 @@ TEST_P(JsonTest, DeserializeCorrect)
 };
 
 INSTANTIATE_TEST_SUITE_P(DeserializationTests, JsonTest,
-                         testing::ValuesIn(CARDS));
+                         testing::ValuesIn(CARDS), cardName);

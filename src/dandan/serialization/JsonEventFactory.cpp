@@ -11,7 +11,7 @@ namespace dandan::serialization
                 dynamic_cast<const events::EntersBattlefieldEvent *>(event))
         {
             auto j = nlohmann::json{{"type", "EntersBattlefieldEvent"},
-                                    {"data", nlohmann::json()}};
+                                    {"data", nlohmann::json::object()}};
             if (entersBattlefieldEvent->m_tapped.has_value())
             {
                 j["data"]["tapped"] = entersBattlefieldEvent->m_tapped.value();

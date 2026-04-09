@@ -20,4 +20,3 @@ AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 
 # Templates & includes
-SortIncludes: false
