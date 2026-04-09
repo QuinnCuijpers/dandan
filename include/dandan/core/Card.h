@@ -37,6 +37,12 @@ namespace dandan::core
         {
         }
 
+        ~Card() = default;
+        Card(const Card &other) = delete;
+        Card &operator=(const Card &other) = delete;
+        Card(Card &&other) = default;
+        Card &operator=(Card &&other) = default;
+
         std::string_view get_name() const
         {
             return m_name;
