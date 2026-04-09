@@ -9,9 +9,8 @@ namespace dandan::abilities
     class IAbilityDecorator : public IAbility
     {
     public:
-        IAbilityDecorator(std::unique_ptr<IAbility> ability)
+        explicit IAbilityDecorator(std::unique_ptr<IAbility> ability)
             : m_ability{std::move(ability)} {};
-        virtual void resolve() = 0;
 
     protected:
         std::unique_ptr<IAbility> m_ability;

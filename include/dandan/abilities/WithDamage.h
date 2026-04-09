@@ -9,7 +9,7 @@ namespace dandan::abilities
     class WithDamage : public IAbilityDecorator
     {
     public:
-        WithDamage(std::unique_ptr<IAbility> ability)
+        explicit WithDamage(std::unique_ptr<IAbility> ability)
             : IAbilityDecorator(std::move(ability)) {};
         WithDamage(std::unique_ptr<IAbility> ability, int damage)
             : IAbilityDecorator(std::move(ability)), m_damage{damage}

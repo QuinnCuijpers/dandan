@@ -9,6 +9,8 @@
 #include <vector>
 #include <memory>
 
+// TODO: add proper equality checks
+
 namespace dandan::core
 {
 
@@ -63,7 +65,7 @@ namespace dandan::core
             return os;
         }
 
-        std::string_view TypeToString(Type type) const;
+        static std::string_view TypeToString(Type type);
 
     private:
         std::string m_name{"unknown"};

@@ -1,4 +1,5 @@
 #include "dandan/dandan.h"
+#include <exception>
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
@@ -101,8 +102,14 @@ int main()
     print_card_info(test);
 
     const auto card_json_path = get_card_path("data/jsons", test.get_name());
-    write_card_to_json(test, card_json_path);
-
-    const auto loaded_card = read_Card_from_json(card_json_path);
-    print_card_info(loaded_card);
+    try
+    {
+        write_card_to_json(test, card_json_path);
+        const auto loaded_card = read_Card_from_json(card_json_path);
+        print_card_info(loaded_card);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << '\n';
+    }
 }

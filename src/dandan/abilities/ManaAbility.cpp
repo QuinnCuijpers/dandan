@@ -20,7 +20,7 @@ namespace dandan::abilities
                                   {ManaAbility::ManaType::RED, "Red"},
                                   {ManaAbility::ManaType::GREEN, "Green"}})
 
-    std::string_view ManaAbility::ManaTypeToString(ManaType type) const
+    std::string_view ManaAbility::ManaTypeToString(ManaType type)
     {
         switch (type)
         {

@@ -20,11 +20,11 @@ namespace dandan::abilities
         };
 
         ManaAbility() = default;
-        ManaAbility(ManaType color) : m_color(color)
+        explicit ManaAbility(ManaType color) : m_color(color)
         {
         }
 
-        std::string_view ManaTypeToString(ManaType type) const;
+        static std::string_view ManaTypeToString(ManaType type);
 
         static ManaType ManaTypeFromString(const std::string_view &str);
 

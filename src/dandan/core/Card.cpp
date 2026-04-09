@@ -50,7 +50,7 @@ namespace dandan::core
                            {"abilities", ability_json}};
     }
 
-    std::string_view Card::TypeToString(Type type) const
+    std::string_view Card::TypeToString(Type type)
     {
         switch (type)
         {

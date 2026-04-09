@@ -10,7 +10,7 @@ namespace dandan::effects
     {
         int m_scry_amount{1};
 
-        ScryEffect(int scry_amount) : m_scry_amount(scry_amount)
+        explicit ScryEffect(int scry_amount) : m_scry_amount(scry_amount)
         {
         }
 
