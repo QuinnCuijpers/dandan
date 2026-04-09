@@ -1,4 +1,5 @@
 #include "dandan/dandan.h"
+#include <fstream>
 #include <gtest/gtest.h>
 #include <memory>
 #include <nlohmann/json.hpp>
@@ -12,22 +13,20 @@ static const char *CARD_NAMES[] = {
 
 TEST(DandanLibTest, Island)
 {
-    auto file{"../data/jsons/Island.json"};
+    std::ifstream file{"../../data/jsons/Island.json"};
+    nlohmann::json j{};
 
-    nlohmann::json j{file};
+    file >> j;
+
+    auto island_recieved{j.get<dandan::Card>()};
 
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
     abilities.push_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::COLORLESS));
-
-    abilities.push_back(std::make_unique<dandan::WithDamage>(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::RED)));
+        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
 
     auto island_expected{
         dandan::Card("Island", 0, dandan::Card::Land, std::move(abilities))};
-
-    auto island_recieved{j.get<dandan::Card>()};
 
     EXPECT_EQ(island_recieved.get_name(), island_expected.get_name());
 }
