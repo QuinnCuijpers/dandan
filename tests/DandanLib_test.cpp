@@ -113,10 +113,6 @@ static std::string cardName(
         {
             name.push_back(c);
         }
-        else
-        {
-            name.push_back('_');
-        }
     }
     return name;
 }
