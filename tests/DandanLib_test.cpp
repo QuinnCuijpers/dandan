@@ -104,20 +104,6 @@ static const std::vector<const dandan::Card *> &getCards()
         new LAND(HalimarDepths)};
     return cards;
 }
-namespace dandan
-{
-    void PrintTo(const dandan::Card *card, std::ostream *os)
-    {
-        std::string raw{card->get_name()};
-        std::string sanitized;
-        for (unsigned char c : raw)
-            if (std::isalnum(c))
-            {
-                sanitized += c;
-            }
-        *os << sanitized;
-    }
-} // namespace dandan
 
 class JsonTest : public testing::TestWithParam<const dandan::Card *>
 {
@@ -149,6 +135,20 @@ TEST_P(JsonTest, DeserializeCorrect)
     EXPECT_EQ(m_recieved.get_name(), m_expected->get_name());
 };
 
+std::string CardParamName(
+    const testing::TestParamInfo<const dandan::Card *> &info)
+{
+    const std::string raw_name{info.param->get_name()};
+    std::string name;
+    for (char c : raw_name)
+    {
+        if (std::isalnum(static_cast<unsigned char>(c)))
+            name.push_back(c);
+    }
+    if (name.empty())
+        name = "unnamed";
+    return name;
+}
+
 INSTANTIATE_TEST_SUITE_P(DeserializationTests, JsonTest,
-                         testing::ValuesIn(getCards()),
-                         testing::PrintToStringParamName());
+                         testing::ValuesIn(getCards()), CardParamName);
