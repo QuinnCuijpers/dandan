@@ -10,6 +10,8 @@ target_compile_definitions(Main
 # depend on nlohmann_json.
 target_link_libraries(Main PRIVATE DandanLib nlohmann_json::nlohmann_json)
 
+target_compile_features(Main PRIVATE cxx_std_17)
+
 if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
    OR (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"))
 

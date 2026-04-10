@@ -9,8 +9,6 @@
 #include <utility>
 #include <vector>
 
-// TODO: add proper equality checks
-
 namespace dandan::core
 {
 

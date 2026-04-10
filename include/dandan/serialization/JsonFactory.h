@@ -4,8 +4,8 @@
 #include <memory>
 #include <nlohmann/json_fwd.hpp>
 
-// TODO: consider using subtype polymorphism instead of template specialization
-// for each type
+// TODO: consider restricting this only to specializations by using concepts for
+// example
 namespace dandan::serialization
 {
     template <typename T> class JsonFactory
