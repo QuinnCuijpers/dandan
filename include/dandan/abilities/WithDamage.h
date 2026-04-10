@@ -6,7 +6,7 @@
 namespace dandan::abilities
 {
 
-    class WithDamage : public IAbilityDecorator
+    class WithDamage final : public IAbilityDecorator
     {
     public:
         explicit WithDamage(std::unique_ptr<IAbility> ability)

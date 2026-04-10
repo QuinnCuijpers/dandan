@@ -4,10 +4,10 @@
 #include "dandan/abilities/IAbility.h"
 
 #include <iostream>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-#include <memory>
 
 // TODO: add proper equality checks
 
@@ -36,12 +36,6 @@ namespace dandan::core
               m_abilities{std::move(abilities)}
         {
         }
-
-        ~Card() = default;
-        Card(const Card &other) = delete;
-        Card &operator=(const Card &other) = delete;
-        Card(Card &&other) = default;
-        Card &operator=(Card &&other) = default;
 
         std::string_view get_name() const
         {

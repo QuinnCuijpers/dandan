@@ -8,7 +8,7 @@
 
 namespace dandan::abilities
 {
-    class ActivatedAbility : public IAbility
+    class ActivatedAbility final : public IAbility
     {
     public:
         ActivatedAbility(std::unique_ptr<costs::ICost> cost,

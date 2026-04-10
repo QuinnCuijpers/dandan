@@ -5,7 +5,7 @@
 
 namespace dandan::costs
 {
-    class GenericManaCost : public ICost
+    class GenericManaCost final : public ICost
     {
     public:
         explicit GenericManaCost(int amount) : m_amount{amount} {};

@@ -6,7 +6,7 @@
 namespace dandan::abilities
 {
 
-    class ManaAbility : public IAbility
+    class ManaAbility final : public IAbility
     {
     public:
         enum ManaType

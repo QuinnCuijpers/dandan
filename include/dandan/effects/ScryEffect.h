@@ -6,7 +6,7 @@
 namespace dandan::effects
 {
 
-    struct ScryEffect : public IEffect
+    struct ScryEffect final : public IEffect
     {
         int m_scry_amount{1};
 

@@ -9,7 +9,7 @@
 namespace dandan::abilities
 {
 
-    class ReplacementAbility : public IAbility
+    class ReplacementAbility final : public IAbility
     {
     public:
         ReplacementAbility() = default;

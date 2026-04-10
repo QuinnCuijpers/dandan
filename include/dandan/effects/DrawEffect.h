@@ -7,7 +7,7 @@
 
 namespace dandan::effects
 {
-    struct DrawEffect : public IEffect
+    struct DrawEffect final : public IEffect
     {
     public:
         int m_amount{1};

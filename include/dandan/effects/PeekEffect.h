@@ -6,7 +6,7 @@
 namespace dandan::effects
 {
 
-    struct PeekEffect : public IEffect
+    struct PeekEffect final : public IEffect
     {
         int m_peek_amount{3};
 

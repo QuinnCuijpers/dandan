@@ -5,7 +5,7 @@
 
 namespace dandan::costs
 {
-    class CyclingCost : public ICost
+    class CyclingCost final : public ICost
     {
     public:
         explicit CyclingCost(std::unique_ptr<ICost> mc)

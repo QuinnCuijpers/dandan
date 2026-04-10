@@ -8,7 +8,7 @@
 namespace dandan::abilities
 {
 
-    class TriggeredAbility : public IAbility
+    class TriggeredAbility final : public IAbility
     {
     public:
         TriggeredAbility(std::unique_ptr<dandan::events::IEvent> on,
