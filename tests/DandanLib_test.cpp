@@ -105,6 +105,18 @@ static const std::vector<const dandan::Card *> &getCards()
     return cards;
 }
 
+void PrintTo(const dandan::Card *card, std::ostream *os)
+{
+    std::string raw{card->get_name()};
+    std::string sanitized;
+    for (unsigned char c : raw)
+        if (std::isalnum(c))
+        {
+            sanitized += c;
+        }
+    *os << sanitized;
+}
+
 class JsonTest : public testing::TestWithParam<const dandan::Card *>
 {
 
@@ -135,14 +147,6 @@ TEST_P(JsonTest, DeserializeCorrect)
     EXPECT_EQ(m_recieved.get_name(), m_expected->get_name());
 };
 
-INSTANTIATE_TEST_SUITE_P(
-    DeserializationTests, JsonTest, testing::ValuesIn(getCards()),
-    [](const ::testing::TestParamInfo<const dandan::Card *> &info)
-    {
-        const std::string raw_name{info.param->get_name()};
-        std::string name{};
-        for (const auto &c : raw_name)
-            if (std::isalnum(c))
-                name.push_back(c);
-        return name;
-    });
+INSTANTIATE_TEST_SUITE_P(DeserializationTests, JsonTest,
+                         testing::ValuesIn(getCards()),
+                         testing::PrintToStringParamName());
