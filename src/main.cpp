@@ -1,3 +1,4 @@
+#include "dandan/core/Board.h"
 #include "dandan/dandan.h"
 #include <exception>
 #include <nlohmann/json.hpp>
@@ -87,7 +88,7 @@ void print_card_info(const dandan::Card &card)
     }
 }
 
-int main()
+void check_card_serialize()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -120,4 +121,11 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+}
+
+int main()
+{
+    dandan::core::Board board{};
+
+    board.printCards();
 }
