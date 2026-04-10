@@ -3,3 +3,4 @@ build
 # developer files
 Roadmap.md
 cppcheck.txt
+.cache/
