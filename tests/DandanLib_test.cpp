@@ -138,7 +138,7 @@ TEST_P(JsonTest, DeserializeCorrect)
 std::string CardParamName(
     const testing::TestParamInfo<const dandan::Card *> &info)
 {
-    std::cerr << "Called CardParamName with: " << info.param->get_name()
+    std::cout << "Called CardParamName with: " << info.param->get_name()
               << '\n';
     const std::string raw_name{info.param->get_name()};
     std::string name;
