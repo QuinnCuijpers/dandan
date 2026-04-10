@@ -1,6 +1,6 @@
 {
     "cost": 0,
-    "effects": [
+    "abilities": [
         {
             "data": {
                 "color": "Blue"
@@ -13,7 +13,7 @@
                     "data": null,
                     "type": "EntersBattlefieldEvent"
                 },
-                "replacement_effect": {
+                "replace_effect": {
                     "data": null,
                     "type": "EntersTappedEffect"
                 }
@@ -28,7 +28,7 @@
                     },
                     "type": "PeekEffect"
                 },
-                "on": {
+                "event": {
                     "data": null,
                     "type": "EntersBattlefieldEvent"
                 }

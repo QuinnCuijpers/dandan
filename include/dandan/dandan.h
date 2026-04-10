@@ -15,6 +15,7 @@
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/EntersTappedEffect.h"
 #include "dandan/effects/IEffect.h"
+#include "dandan/effects/PeekEffect.h"
 #include "dandan/events/EntersBattleFieldEvent.h"
 
 namespace dandan
@@ -32,6 +33,7 @@ namespace dandan
     using effects::EntersTappedEffect;
     using effects::IEffect;
     using effects::IReplacementEffect;
+    using effects::PeekEffect;
 
     using events::EntersBattlefieldEvent;
     using events::IEvent;

@@ -101,6 +101,17 @@ namespace dandan::serialization
             return std::make_unique<ReplacementAbility>(std::move(event),
                                                         std::move(effect));
         }
+        else if (type == "TriggeredAbility")
+        {
+            auto event{
+                JsonFactory<dandan::IEvent>::create_product(data.at("event"))};
+
+            auto effect{JsonFactory<dandan::IEffect>::create_product(
+                data.at("effect"))};
+
+            return std::make_unique<TriggeredAbility>(std::move(event),
+                                                      std::move(effect));
+        }
         else
         {
             throw std::runtime_error("Unknown ability type in JSON: " + type);

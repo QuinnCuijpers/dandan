@@ -1,9 +1,11 @@
 #ifndef DANDAN_JSONFACTORY_H
 #define DANDAN_JSONFACTORY_H
 
-#include <nlohmann/json_fwd.hpp>
 #include <memory>
+#include <nlohmann/json_fwd.hpp>
 
+// TODO: consider using subtype polymorphism instead of template specialization
+// for each type
 namespace dandan::serialization
 {
     template <typename T> class JsonFactory

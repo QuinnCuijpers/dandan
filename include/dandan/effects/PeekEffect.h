@@ -10,6 +10,8 @@ namespace dandan::effects
     {
         int m_peek_amount{3};
 
+        PeekEffect() = default;
+
         explicit PeekEffect(int peek_amount) : m_peek_amount(peek_amount)
         {
         }

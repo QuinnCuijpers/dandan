@@ -63,14 +63,14 @@ static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.push_back(
+    abilities.emplace_back(
         std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
 
-    abilities.push_back(std::make_unique<dandan::ReplacementAbility>(
+    abilities.emplace_back(std::make_unique<dandan::ReplacementAbility>(
         std::make_unique<dandan::EntersBattlefieldEvent>(),
         std::make_unique<dandan::EntersTappedEffect>()));
 
-    abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
+    abilities.emplace_back(std::make_unique<dandan::ActivatedAbility>(
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ColoredManaCost>(
                 dandan::ColoredManaCost::BLUE)),
@@ -79,8 +79,27 @@ static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
     return abilities;
 }
 
+static std::vector<std::unique_ptr<dandan::IAbility>> HalimarDepthsAbilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    abilities.emplace_back(
+        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+
+    abilities.emplace_back(std::make_unique<dandan::ReplacementAbility>(
+        std::make_unique<dandan::EntersBattlefieldEvent>(),
+        std::make_unique<dandan::EntersTappedEffect>()));
+
+    abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
+        std::make_unique<dandan::EntersBattlefieldEvent>(),
+        std::make_unique<dandan::PeekEffect>()));
+
+    return abilities;
+}
+
 static const dandan::Card *CARDS[] = {new LAND(Island), new LAND(RemoteIsle),
-                                      new LAND(LonelySandbar)};
+                                      new LAND(LonelySandbar),
+                                      new LAND(HalimarDepths)};
 
 static std::string cardName(
     const ::testing::TestParamInfo<const dandan::Card *> &info)
