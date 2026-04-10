@@ -104,18 +104,20 @@ static const std::vector<const dandan::Card *> &getCards()
         new LAND(HalimarDepths)};
     return cards;
 }
-
-void PrintTo(const dandan::Card *card, std::ostream *os)
+namespace dandan
 {
-    std::string raw{card->get_name()};
-    std::string sanitized;
-    for (unsigned char c : raw)
-        if (std::isalnum(c))
-        {
-            sanitized += c;
-        }
-    *os << sanitized;
-}
+    void PrintTo(const dandan::Card *card, std::ostream *os)
+    {
+        std::string raw{card->get_name()};
+        std::string sanitized;
+        for (unsigned char c : raw)
+            if (std::isalnum(c))
+            {
+                sanitized += c;
+            }
+        *os << sanitized;
+    }
+} // namespace dandan
 
 class JsonTest : public testing::TestWithParam<const dandan::Card *>
 {
