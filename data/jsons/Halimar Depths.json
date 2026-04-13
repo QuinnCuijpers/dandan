@@ -9,16 +9,18 @@
         },
         {
             "data": {
-                "event": {
-                    "data": null,
-                    "type": "EntersBattlefieldEvent"
+                "on_effect": {
+                    "data": {
+                        "tapped": false
+                    },
+                    "type": "ETBEffect"
                 },
-                "replace_effect": {
-                    "data": null,
+                "replacement_effect": {
+                    "data": {},
                     "type": "EntersTappedEffect"
                 }
             },
-            "type": "ReplacementAbility"
+            "type": "StaticAbility"
         },
         {
             "data": {
@@ -29,7 +31,7 @@
                     "type": "PeekEffect"
                 },
                 "event": {
-                    "data": null,
+                    "data": {},
                     "type": "EntersBattlefieldEvent"
                 }
             },

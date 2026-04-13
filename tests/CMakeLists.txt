@@ -1,6 +1,6 @@
 # todo: Add tests for the Dandan library
 
-add_executable(DandanLibTest DandanLib_test.cpp)
+add_executable(DandanLibTest DandanLibTest.cpp)
 
 target_compile_features(DandanLibTest PRIVATE cxx_std_17)
 

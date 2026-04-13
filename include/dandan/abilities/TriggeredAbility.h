@@ -17,6 +17,15 @@ namespace dandan::abilities
         {
         }
 
+        const dandan::events::IEvent *getOnEvent() const
+        {
+            return m_on.get();
+        }
+        const dandan::effects::IEffect *getEffect() const
+        {
+            return m_effect.get();
+        }
+
         void resolve() override;
 
     private:

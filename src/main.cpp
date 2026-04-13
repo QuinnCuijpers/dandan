@@ -95,8 +95,8 @@ void check_card_serialize()
     abilities.push_back(
         std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
 
-    abilities.push_back(std::make_unique<dandan::ReplacementAbility>(
-        std::make_unique<dandan::EntersBattlefieldEvent>(),
+    abilities.push_back(std::make_unique<dandan::StaticAbility>(
+        std::make_unique<dandan::ETBEffect>(),
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.push_back(std::make_unique<dandan::ActivatedAbility>(

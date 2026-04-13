@@ -4,7 +4,7 @@
 #include "dandan/abilities/ActivatedAbility.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/abilities/ManaAbility.h"
-#include "dandan/abilities/ReplacementAbility.h"
+#include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/TriggeredAbility.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
@@ -13,29 +13,31 @@
 #include "dandan/costs/GenericManaCost.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/effects/DrawEffect.h"
-#include "dandan/effects/EntersTappedEffect.h"
+#include "dandan/effects/ETBEffect.h"
 #include "dandan/effects/IEffect.h"
 #include "dandan/effects/PeekEffect.h"
-#include "dandan/events/EntersBattleFieldEvent.h"
+#include "dandan/events/ETBEvent.h"
+#include "dandan/replacement_effects/EntersTappedEffect.h"
 
 namespace dandan
 {
     using abilities::ActivatedAbility;
     using abilities::IAbility;
     using abilities::ManaAbility;
-    using abilities::ReplacementAbility;
+    using abilities::StaticAbility;
     using abilities::TriggeredAbility;
     using abilities::WithDamage;
 
     using core::Card;
 
     using effects::DrawEffect;
-    using effects::EntersTappedEffect;
+    using effects::ETBEffect;
     using effects::IEffect;
-    using effects::IReplacementEffect;
     using effects::PeekEffect;
+    using replacement_effects::EntersTappedEffect;
+    using replacement_effects::IReplacementEffect;
 
-    using events::EntersBattlefieldEvent;
+    using events::ETBEvent;
     using events::IEvent;
 
     using costs::ColoredManaCost;

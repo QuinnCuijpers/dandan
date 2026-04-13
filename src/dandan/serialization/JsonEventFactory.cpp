@@ -1,5 +1,5 @@
 #include "dandan/serialization/JsonEventFactory.h"
-#include "dandan/events/EntersBattleFieldEvent.h"
+#include "dandan/events/ETBEvent.h"
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -8,7 +8,7 @@ namespace dandan::serialization
         const events::IEvent *event)
     {
         if (const auto *entersBattlefieldEvent =
-                dynamic_cast<const events::EntersBattlefieldEvent *>(event))
+                dynamic_cast<const events::ETBEvent *>(event))
         {
             auto j = nlohmann::json{{"type", "EntersBattlefieldEvent"},
                                     {"data", nlohmann::json::object()}};
@@ -32,7 +32,7 @@ namespace dandan::serialization
 
         if (type == "EntersBattlefieldEvent")
         {
-            auto event = std::make_unique<events::EntersBattlefieldEvent>();
+            auto event = std::make_unique<events::ETBEvent>();
             if (data.contains("tapped"))
             {
                 event->setTapped(data["tapped"].get<bool>());

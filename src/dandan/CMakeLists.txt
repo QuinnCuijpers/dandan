@@ -23,6 +23,7 @@ add_subdirectory(effects)
 add_subdirectory(events)
 add_subdirectory(costs)
 add_subdirectory(serialization)
+add_subdirectory(replacement_effects)
 
 target_link_libraries(
   DandanLib
@@ -32,6 +33,7 @@ target_link_libraries(
           DandanEvents
           DandanCosts
           DandanSerialize
+          DandanReplacement
           nlohmann_json::nlohmann_json)
 
 target_include_directories(DandanLib PUBLIC ${CMAKE_SOURCE_DIR}/include)

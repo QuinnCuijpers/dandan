@@ -25,6 +25,8 @@ namespace dandan::core
         Hand m_hand{};
         // Battlefield m_battlefield;
         // Graveyard m_graveyard;
+        // Stack m_stack;
+        // EventManager m_event_manager;
     };
 
 } // namespace dandan::core

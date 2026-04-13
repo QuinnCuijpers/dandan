@@ -5,7 +5,6 @@
 #include <filesystem>
 #include <fstream>
 #include <gtest/gtest.h>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -47,8 +46,8 @@ static std::vector<std::unique_ptr<dandan::IAbility>> RemoteIsleAbilities()
     abilities.push_back(
         std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
 
-    abilities.push_back(std::make_unique<dandan::ReplacementAbility>(
-        std::make_unique<dandan::EntersBattlefieldEvent>(),
+    abilities.push_back(std::make_unique<dandan::StaticAbility>(
+        std::make_unique<dandan::ETBEffect>(),
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
@@ -66,8 +65,8 @@ static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
     abilities.emplace_back(
         std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
 
-    abilities.emplace_back(std::make_unique<dandan::ReplacementAbility>(
-        std::make_unique<dandan::EntersBattlefieldEvent>(),
+    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
+        std::make_unique<dandan::ETBEffect>(),
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::ActivatedAbility>(
@@ -86,12 +85,12 @@ static std::vector<std::unique_ptr<dandan::IAbility>> HalimarDepthsAbilities()
     abilities.emplace_back(
         std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
 
-    abilities.emplace_back(std::make_unique<dandan::ReplacementAbility>(
-        std::make_unique<dandan::EntersBattlefieldEvent>(),
+    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
+        std::make_unique<dandan::ETBEffect>(),
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::EntersBattlefieldEvent>(),
+        std::make_unique<dandan::ETBEvent>(),
         std::make_unique<dandan::PeekEffect>()));
 
     return abilities;
@@ -109,14 +108,13 @@ class JsonTest : public testing::TestWithParam<const dandan::Card *>
 {
 
 protected:
-    dandan::Card m_recieved{};
-    const dandan::Card *m_expected{};
-
+    nlohmann::json m_expected;
+    nlohmann::json m_received;
     void SetUp() override
     {
         auto params{GetParam()};
-        m_expected = params;
-        std::string_view name{m_expected->get_name()};
+        auto card = params;
+        std::string_view name{card->get_name()};
 
         auto json_file_path{std::filesystem::path{DANDAN_SOURCE_DIR} /
                             "data/jsons" / name};
@@ -125,21 +123,20 @@ protected:
         std::ifstream file{json_file_path};
         nlohmann::json j{};
         file >> j;
-        m_recieved = j.get<dandan::Card>();
+
+        m_expected = j;
+        m_received = nlohmann::json(*card);
     }
 };
 
 TEST_P(JsonTest, DeserializeCorrect)
 {
-    std::cout << m_recieved.get_name() << '\n';
-    EXPECT_EQ(m_recieved.get_name(), m_expected->get_name());
+    EXPECT_EQ(m_received, m_expected);
 };
 
 std::string CardParamName(
     const testing::TestParamInfo<const dandan::Card *> &info)
 {
-    std::cout << "Called CardParamName with: " << info.param->get_name()
-              << '\n';
     const std::string raw_name{info.param->get_name()};
     std::string name;
     for (char c : raw_name)

@@ -1,16 +1,17 @@
 #include "dandan/serialization/JsonReplaceFactory.h"
-#include "dandan/effects/EntersTappedEffect.h"
+#include "dandan/replacement_effects/EntersTappedEffect.h"
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
 {
-    nlohmann::json JsonFactory<effects::IReplacementEffect>::create_json(
-        const effects::IReplacementEffect *obj)
+    nlohmann::json JsonFactory<replacement_effects::IReplacementEffect>::
+        create_json(const replacement_effects::IReplacementEffect *obj)
     {
 
         if ([[maybe_unused]]
             const auto *etb_tapped =
-                dynamic_cast<const effects::EntersTappedEffect *>(obj))
+                dynamic_cast<const replacement_effects::EntersTappedEffect *>(
+                    obj))
         {
             return nlohmann::json{{"type", "EntersTappedEffect"},
                                   {"data", nlohmann::json::object()}};
@@ -22,8 +23,9 @@ namespace dandan::serialization
         }
     }
 
-    std::unique_ptr<effects::IReplacementEffect> JsonFactory<
-        effects::IReplacementEffect>::create_product(const nlohmann::json &j)
+    std::unique_ptr<replacement_effects::IReplacementEffect> JsonFactory<
+        replacement_effects::IReplacementEffect>::
+        create_product(const nlohmann::json &j)
     {
         [[maybe_unused]]
         const auto &data = j.at("data");
@@ -32,7 +34,7 @@ namespace dandan::serialization
 
         if (type == "EntersTappedEffect")
         {
-            return std::make_unique<effects::EntersTappedEffect>();
+            return std::make_unique<replacement_effects::EntersTappedEffect>();
         }
         else
         {

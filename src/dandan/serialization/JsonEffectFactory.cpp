@@ -1,5 +1,6 @@
 #include "dandan/serialization/JsonEffectFactory.h"
 #include "dandan/effects/DrawEffect.h"
+#include "dandan/effects/ETBEffect.h"
 #include "dandan/effects/PeekEffect.h"
 #include "dandan/effects/ScryEffect.h"
 #include <memory>
@@ -35,6 +36,15 @@ namespace dandan::serialization
             j["data"]["amount"] = drawEffect->m_amount;
             return j;
         }
+        else if (const auto *etbEffect =
+                     dynamic_cast<const effects::ETBEffect *>(effect))
+        {
+            auto j = nlohmann::json{{"type", "ETBEffect"},
+                                    {"data", nlohmann::json::object()}};
+            j["data"]["tapped"] = etbEffect->m_tapped;
+            return j;
+        }
+        else
         {
             throw std::runtime_error(
                 "Unknown effect type for JSON serialization: " +
@@ -62,6 +72,15 @@ namespace dandan::serialization
         {
             return std::make_unique<effects::DrawEffect>(
                 data.at("amount").get<int>());
+        }
+        else if (type == "ETBEffect")
+        {
+            auto etbEffect = std::make_unique<effects::ETBEffect>();
+            if (data.contains("tapped"))
+            {
+                etbEffect->setTapped(data.at("tapped").get<bool>());
+            }
+            return etbEffect;
         }
         else
         {

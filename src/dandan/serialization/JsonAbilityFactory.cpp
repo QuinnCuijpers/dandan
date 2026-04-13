@@ -39,17 +39,29 @@ namespace dandan::serialization
             j["data"]["ability"] = create_json(withDamage->getInnerAbility());
             return j;
         }
-        else if (const ReplacementAbility *replacement =
-                     dynamic_cast<const ReplacementAbility *>(ability))
+        else if (const StaticAbility *staticAbility =
+                     dynamic_cast<const StaticAbility *>(ability))
         {
-            auto j = nlohmann::json{{"type", "ReplacementAbility"},
+            auto j = nlohmann::json{{"type", "StaticAbility"},
+                                    {"data", nlohmann::json::object()}};
+
+            j["data"]["on_effect"] = JsonFactory<effects::IEffect>::create_json(
+                staticAbility->getOnEffect());
+            j["data"]["replacement_effect"] =
+                JsonFactory<replacement_effects::IReplacementEffect>::
+                    create_json(staticAbility->getReplacementEffect());
+            return j;
+        }
+        else if (const TriggeredAbility *triggered =
+                     dynamic_cast<const TriggeredAbility *>(ability))
+        {
+            auto j = nlohmann::json{{"type", "TriggeredAbility"},
                                     {"data", nlohmann::json::object()}};
 
             j["data"]["event"] = JsonFactory<events::IEvent>::create_json(
-                replacement->getEvent());
-            j["data"]["replace_effect"] =
-                JsonFactory<effects::IReplacementEffect>::create_json(
-                    replacement->getReplaceEffect());
+                triggered->getOnEvent());
+            j["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
+                triggered->getEffect());
             return j;
         }
         else
@@ -90,16 +102,17 @@ namespace dandan::serialization
             return std::make_unique<WithDamage>(std::move(inner_ability),
                                                 damage);
         }
-        else if (type == "ReplacementAbility")
+        else if (type == "StaticAbility")
         {
-            auto event{
-                JsonFactory<dandan::IEvent>::create_product(data.at("event"))};
+            auto on_effect{JsonFactory<dandan::IEffect>::create_product(
+                data.at("on_effect"))};
 
-            auto effect{JsonFactory<dandan::IReplacementEffect>::create_product(
-                data.at("replace_effect"))};
+            auto replacement_effect{
+                JsonFactory<dandan::IReplacementEffect>::create_product(
+                    data.at("replacement_effect"))};
 
-            return std::make_unique<ReplacementAbility>(std::move(event),
-                                                        std::move(effect));
+            return std::make_unique<StaticAbility>(
+                std::move(on_effect), std::move(replacement_effect));
         }
         else if (type == "TriggeredAbility")
         {

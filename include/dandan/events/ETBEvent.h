@@ -7,7 +7,7 @@
 namespace dandan::events
 {
 
-    struct EntersBattlefieldEvent final : public IEvent
+    struct ETBEvent final : public IEvent
     {
         std::optional<bool> m_tapped{};
 
