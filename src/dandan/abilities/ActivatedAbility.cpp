@@ -4,7 +4,7 @@
 
 namespace dandan::abilities
 {
-    void ActivatedAbility::resolve()
+    void ActivatedAbility::resolve() const
     {
         std::cout << "Resolving Activated ability\n";
         m_cost->evaluate();

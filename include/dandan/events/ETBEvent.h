@@ -20,7 +20,14 @@ namespace dandan::events
             return m_tapped.value_or(false);
         }
 
-        void to_json(nlohmann::json &j, const IEvent &event) const override;
+        bool equals(const IEvent &other) const override
+        {
+            const ETBEvent *otherETB = dynamic_cast<const ETBEvent *>(&other);
+            if (!otherETB)
+                return false;
+
+            return m_tapped == otherETB->m_tapped;
+        }
     };
 } // namespace dandan::events
 

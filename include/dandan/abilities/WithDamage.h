@@ -26,7 +26,12 @@ namespace dandan::abilities
             return m_ability.get();
         }
 
-        void resolve() override;
+        bool appliesToEvent(const events::IEvent &event) const override
+        {
+            return m_ability->appliesToEvent(event);
+        }
+
+        void resolve() const override;
 
     private:
         int m_damage{1};

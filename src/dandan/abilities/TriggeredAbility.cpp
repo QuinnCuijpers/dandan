@@ -4,7 +4,7 @@
 namespace dandan::abilities
 {
 
-    void TriggeredAbility::resolve()
+    void TriggeredAbility::resolve() const
     {
         // In a real implementation, you would check the game state to see if
         // the event specified in m_on has occurred. If it has, you would then

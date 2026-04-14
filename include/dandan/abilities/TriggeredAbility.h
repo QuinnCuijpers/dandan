@@ -17,6 +17,11 @@ namespace dandan::abilities
         {
         }
 
+        bool appliesToEvent(const events::IEvent &event) const override
+        {
+            return event.equals(*m_on);
+        }
+
         const dandan::events::IEvent *getOnEvent() const
         {
             return m_on.get();
@@ -26,7 +31,7 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        void resolve() override;
+        void resolve() const override;
 
     private:
         std::unique_ptr<dandan::events::IEvent> m_on;

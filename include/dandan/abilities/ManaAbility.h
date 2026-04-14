@@ -33,7 +33,7 @@ namespace dandan::abilities
             return m_color;
         }
 
-        void resolve() override;
+        void resolve() const override;
 
     private:
         ManaType m_color{COLORLESS};

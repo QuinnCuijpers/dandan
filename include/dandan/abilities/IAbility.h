@@ -1,6 +1,7 @@
 #ifndef IABILITY_H
 #define IABILITY_H
 
+#include "dandan/events/IEvent.h"
 #include <nlohmann/json_fwd.hpp>
 
 namespace dandan::abilities
@@ -9,7 +10,13 @@ namespace dandan::abilities
     {
     public:
         virtual ~IAbility() = default;
-        virtual void resolve() = 0;
+        virtual void resolve() const = 0;
+
+        virtual bool appliesToEvent(
+            [[maybe_unused]] const events::IEvent &event) const
+        {
+            return false;
+        }
     };
 }; // namespace dandan::abilities
 

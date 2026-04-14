@@ -5,7 +5,7 @@
 namespace dandan::abilities
 {
 
-    void ManaAbility::resolve()
+    void ManaAbility::resolve() const
     {
         std::cout << "Resolving ManaAbility: " << ManaTypeToString(m_color)
                   << " mana\n";

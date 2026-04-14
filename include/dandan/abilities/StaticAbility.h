@@ -23,7 +23,7 @@ namespace dandan::abilities
         {
         }
 
-        void resolve() override;
+        void resolve() const override;
 
         const dandan::effects::IEffect *getOnEffect() const
         {

@@ -1,6 +1,6 @@
 add_library(DandanEvents OBJECT)
 
-target_sources(DandanEvents PRIVATE EntersBattlefieldEvent.cpp)
+target_sources(DandanEvents PRIVATE ETBEvent.cpp)
 
 target_sources(DandanEvents PUBLIC FILE_SET HEADERS BASE_DIRS
                                    ${CMAKE_SOURCE_DIR}/include)

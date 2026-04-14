@@ -2,7 +2,9 @@
 #define DANDAN_BOARD_H
 
 #include "dandan/core/Deck.h"
+#include "dandan/core/EventManager.h"
 #include "dandan/core/Hand.h"
+#include "dandan/core/Stack.h"
 #include <iostream>
 
 namespace dandan::core
@@ -25,8 +27,8 @@ namespace dandan::core
         Hand m_hand{};
         // Battlefield m_battlefield;
         // Graveyard m_graveyard;
-        // Stack m_stack;
-        // EventManager m_event_manager;
+        Stack m_stack{};
+        EventManager m_event_manager{};
     };
 
 } // namespace dandan::core

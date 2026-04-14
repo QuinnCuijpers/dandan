@@ -1,12 +1,10 @@
 #include "dandan/abilities/WithDamage.h"
-#include "dandan/abilities/ManaAbility.h"
-#include <nlohmann/json.hpp>
 #include <iostream>
 
 namespace dandan::abilities
 {
 
-    void WithDamage::resolve()
+    void WithDamage::resolve() const
     {
         m_ability->resolve();
         std::cout << "Resolving WithDamage decorator\n";

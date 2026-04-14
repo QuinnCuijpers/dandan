@@ -17,7 +17,7 @@ namespace dandan::abilities
         {
         }
 
-        void resolve() override;
+        void resolve() const override;
 
         const costs::ICost *getCost() const
         {
