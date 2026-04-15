@@ -12,7 +12,7 @@ namespace
 {
     std::filesystem::path project_root()
     {
-        return std::filesystem::path{DANDAN_SOURCE_DIR};
+        return std::filesystem::path{DANDAN_PROJECT_SOURCE};
     }
 
     std::filesystem::path resolve_from_project_root(

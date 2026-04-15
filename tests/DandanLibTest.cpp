@@ -1,6 +1,7 @@
 #include "dandan/dandan.h"
 #include "nlohmann/json.hpp"
 #include "gtest/gtest.h"
+#include <algorithm>
 #include <cctype>
 #include <filesystem>
 #include <fstream>
@@ -116,7 +117,7 @@ protected:
         auto card = params;
         std::string_view name{card->get_name()};
 
-        auto json_file_path{std::filesystem::path{DANDAN_SOURCE_DIR} /
+        auto json_file_path{std::filesystem::path{DANDAN_PROJECT_SOURCE} /
                             "data/jsons" / name};
         json_file_path += ".json";
 
@@ -139,11 +140,8 @@ std::string CardParamName(
 {
     const std::string raw_name{info.param->get_name()};
     std::string name;
-    for (char c : raw_name)
-    {
-        if (std::isalnum(static_cast<unsigned char>(c)))
-            name.push_back(c);
-    }
+    std::copy_if(raw_name.begin(), raw_name.end(), std::back_inserter(name),
+                 [](char c) { return std::isalnum(c); });
     if (name.empty())
         name = "unnamed";
     return name;

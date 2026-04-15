@@ -6,7 +6,7 @@
 #include <vector>
 
 static auto DANDAN_DECKLIST =
-    std::filesystem::path("../../data/temp_decklist.txt");
+    std::filesystem::path(DANDAN_PROJECT_SOURCE) / "data/temp_decklist.txt";
 
 namespace dandan::core
 {
