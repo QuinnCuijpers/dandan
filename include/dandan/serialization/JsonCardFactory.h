@@ -14,7 +14,8 @@ namespace dandan::serialization
     public:
         static nlohmann::json create_json(const core::Card *card);
 
-        static core::Card create_product(const nlohmann::json &j);
+        static std::unique_ptr<core::Card> create_product(
+            const nlohmann::json &j);
     };
 } // namespace dandan::serialization
 

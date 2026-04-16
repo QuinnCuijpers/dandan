@@ -39,7 +39,8 @@ namespace dandan::serialization
         return j;
     }
 
-    core::Card JsonFactory<core::Card>::create_product(const nlohmann::json &j)
+    std::unique_ptr<core::Card> JsonFactory<core::Card>::create_product(
+        const nlohmann::json &j)
     {
 
         auto name = j.at("name").get<std::string>();
@@ -62,7 +63,8 @@ namespace dandan::serialization
             abilities.push_back(std::move(ability));
         }
 
-        return core::Card(name, cost, type, std::move(abilities));
+        return std::make_unique<core::Card>(name, cost, type,
+                                            std::move(abilities));
     }
 } // namespace dandan::serialization
 
