@@ -2,8 +2,13 @@ add_library(DandanSerialize OBJECT)
 
 target_sources(
   DandanSerialize
-  PRIVATE JsonAbilityFactory.cpp JsonCardFactory.cpp JsonCostFactory.cpp
-          JsonEventFactory.cpp JsonEffectFactory.cpp JsonReplaceFactory.cpp)
+  PRIVATE JsonFactory.cpp
+          JsonAbilityFactory.cpp
+          JsonCardFactory.cpp
+          JsonCostFactory.cpp
+          JsonEventFactory.cpp
+          JsonEffectFactory.cpp
+          JsonReplaceFactory.cpp)
 
 target_sources(DandanSerialize PUBLIC FILE_SET HEADERS BASE_DIRS
                                       ${CMAKE_SOURCE_DIR}/include)
