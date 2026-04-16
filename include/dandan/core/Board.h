@@ -16,7 +16,8 @@ namespace dandan::core
         Board() : m_deck{}, m_hand{}
         {
             auto new_hand_cards{m_deck.draw(7)};
-            m_hand = Hand{new_hand_cards};
+            auto hand{Hand{std::move(new_hand_cards)}};
+            m_hand = std::move(hand);
             std::cout << "Board initialized with deck and hand.\n";
         };
 

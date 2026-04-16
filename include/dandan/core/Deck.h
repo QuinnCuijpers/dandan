@@ -1,8 +1,10 @@
 #ifndef DECK_H
 #define DECK_H
 
+#include "dandan/core/Card.h"
 #include <deque>
 #include <filesystem>
+#include <memory>
 #include <vector>
 
 static auto DANDAN_DECKLIST =
@@ -14,23 +16,26 @@ namespace dandan::core
     {
 
     public:
+#ifdef DANDAN_BUILD_SERIALIZE
         Deck();
         explicit Deck(std::filesystem::path path);
+#endif
 
-        const std::deque<std::string> &getCards() const
+        const std::deque<std::unique_ptr<Card>> &getCards() const
         {
             return m_cards;
         }
 
-        std::vector<std::string> draw(int count = 1);
+        std::vector<std::unique_ptr<Card>> draw(int count = 1);
 
         void peek(int count) const;
 
     private:
         std::filesystem::path m_decklist_path{DANDAN_DECKLIST};
-        std::deque<std::string> m_cards{};
-
+        std::deque<std::unique_ptr<Card>> m_cards{};
+#ifdef DANDAN_BUILD_SERIALIZE
         void loadCards(std::filesystem::path path);
+#endif
     };
 } // namespace dandan::core
 #endif

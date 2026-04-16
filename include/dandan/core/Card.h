@@ -32,6 +32,11 @@ namespace dandan::core
         };
 
         Card() = default;
+
+#ifdef DANDAN_BUILD_SERIALIZE
+        Card(std::string_view name);
+#endif
+
         Card(std::string_view name, int cost, Type type,
              std::vector<std::unique_ptr<abilities::IAbility>> abilities = {})
             : m_name{name}, m_cost{cost}, m_type{type},

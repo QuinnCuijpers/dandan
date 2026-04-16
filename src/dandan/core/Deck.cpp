@@ -1,16 +1,22 @@
 #include "dandan/core/Deck.h"
+#include "dandan/core/Card.h"
+#include <iostream>
+#include <memory>
+#include <utility>
+#include <vector>
+
+#ifdef DANDAN_BUILD_SERIALIZE
 #include <algorithm>
 #include <fstream>
-#include <iostream>
 #include <random>
 #include <sstream>
 #include <string>
-#include <utility>
-#include <vector>
+#endif
 
 namespace dandan::core
 {
 
+#ifdef DANDAN_BUILD_SERIALIZE
     Deck::Deck()
     {
         std::cout << "No decklist path provided. Using default: "
@@ -43,19 +49,20 @@ namespace dandan::core
                           << " to the deck.\n";
                 for (int i = 0; i < amount; ++i)
                 {
-                    m_cards.emplace_back(name);
+                    m_cards.emplace_back(std::make_unique<Card>(name));
                 }
             }
         }
         std::shuffle(m_cards.begin(), m_cards.end(), std::random_device{});
     }
+#endif
 
-    std::vector<std::string> Deck::draw(int count)
+    std::vector<std::unique_ptr<Card>> Deck::draw(int count)
     {
-        std::vector<std::string> drawn_cards;
+        std::vector<std::unique_ptr<Card>> drawn_cards;
         for (int i = 0; i < count && !m_cards.empty(); ++i)
         {
-            drawn_cards.push_back(m_cards.front());
+            drawn_cards.push_back(std::move(m_cards.front()));
             m_cards.pop_front();
         }
         return drawn_cards;
@@ -65,8 +72,9 @@ namespace dandan::core
     {
         for (int i = 0; i < count && i < static_cast<int>(m_cards.size()); ++i)
         {
-            const std::string &card = m_cards[i];
-            std::cout << "card " << i << " from the top: " << card << '\n';
+            const std::unique_ptr<Card> &card = m_cards[i];
+            std::cout << "card " << i << " from the top: " << *(card.get())
+                      << '\n';
         }
     }
 } // namespace dandan::core

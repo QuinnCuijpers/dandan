@@ -1,9 +1,8 @@
 #ifndef DANDAN_JSONABILITYFACTORY_H
 #define DANDAN_JSONABILITYFACTORY_H
 
-#include "dandan/abilities/IAbility.h"
 #ifdef DANDAN_BUILD_SERIALIZE
-
+#include "dandan/abilities/IAbility.h"
 #include "dandan/serialization/JsonFactory.h"
 #include <nlohmann/json_fwd.hpp>
 

@@ -7,18 +7,16 @@ namespace dandan::core
     {
         std::cout << '\n';
         std::cout << "Cards in deck:\n";
-        auto cards{m_deck.getCards()};
-        for (const auto &card : cards)
+        for (const auto &card : m_deck.getCards())
         {
-            std::cout << card << '\n';
+            std::cout << *(card.get()) << '\n';
         }
         std::cout << '\n';
 
         std::cout << "Cards in hand:\n";
-        auto hand_cards{m_hand.getCards()};
-        for (const auto &card : hand_cards)
+        for (const auto &card : m_hand.getCards())
         {
-            std::cout << card << '\n';
+            std::cout << *(card.get()) << '\n';
         }
     }
 
