@@ -4,6 +4,11 @@ target_sources(Main PRIVATE main.cpp)
 
 target_link_libraries(Main PRIVATE DandanLib)
 
+if(DANDAN_BUILD_SERIALIZE)
+  target_compile_definitions(Main PRIVATE DANDAN_BUILD_SERIALIZE)
+  target_link_libraries(Main PRIVATE nlohmann_json::nlohmann_json)
+endif()
+
 target_compile_features(Main PRIVATE cxx_std_17)
 
 if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")

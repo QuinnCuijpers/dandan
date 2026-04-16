@@ -29,6 +29,10 @@ namespace
     }
 } // namespace
 
+std::filesystem::path get_card_path(const std::filesystem::path &json_dir,
+                                    std::string_view card_name);
+void print_card_info(const dandan::Card &card);
+
 #ifdef DANDAN_BUILD_SERIALIZE
 dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
 {
@@ -94,7 +98,7 @@ void check_card_serialize()
 
     print_card_info(test);
 
-    const auto card_json_path = get_card_path("data/jsons", test.get_name());
+    const auto card_json_path = get_card_path("data/jsons", test.getName());
     try
     {
         write_card_to_json(test, card_json_path);
