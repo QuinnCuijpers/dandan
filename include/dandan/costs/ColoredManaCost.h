@@ -2,6 +2,7 @@
 #define DANDAN_COLOREDMANACOST_H
 
 #include "ICost.h"
+#include <string>
 
 namespace dandan::costs
 {

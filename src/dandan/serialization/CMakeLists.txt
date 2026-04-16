@@ -2,8 +2,8 @@ add_library(DandanSerialize OBJECT)
 
 target_sources(
   DandanSerialize
-  PRIVATE JsonAbilityFactory.cpp JsonCostFactory.cpp JsonEventFactory.cpp
-          JsonEffectFactory.cpp JsonReplaceFactory.cpp)
+  PRIVATE JsonAbilityFactory.cpp JsonCardFactory.cpp JsonCostFactory.cpp
+          JsonEventFactory.cpp JsonEffectFactory.cpp JsonReplaceFactory.cpp)
 
 target_sources(DandanSerialize PUBLIC FILE_SET HEADERS BASE_DIRS
                                       ${CMAKE_SOURCE_DIR}/include)
@@ -21,5 +21,7 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
   target_compile_options(DandanSerialize PRIVATE -Wall -Wextra -Wpedantic)
 
 endif()
+
+target_compile_definitions(DandanSerialize PRIVATE DANDAN_BUILD_SERIALIZE)
 
 target_link_libraries(DandanSerialize PRIVATE nlohmann_json::nlohmann_json)

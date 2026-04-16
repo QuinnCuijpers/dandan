@@ -4,6 +4,7 @@
 #include "IAbility.h"
 #include "dandan/effects/IEffect.h"
 #include "dandan/events/IEvent.h"
+#include <memory>
 
 namespace dandan::abilities
 {

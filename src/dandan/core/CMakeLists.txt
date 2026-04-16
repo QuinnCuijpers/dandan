@@ -20,5 +20,9 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 
 endif()
 
-target_link_libraries(DandanCore PRIVATE nlohmann_json::nlohmann_json)
 target_include_directories(DandanCore PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+if(DANDAN_BUILD_SERIALIZE)
+  target_compile_definitions(DandanCore PRIVATE DANDAN_BUILD_SERIALIZE)
+  target_link_libraries(DandanCore PRIVATE nlohmann_json::nlohmann_json)
+endif()

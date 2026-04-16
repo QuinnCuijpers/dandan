@@ -1,6 +1,8 @@
 #ifndef DANDAN_JSONEFFECTFACTORY_H
 #define DANDAN_JSONEFFECTFACTORY_H
 
+#ifdef DANDAN_BUILD_SERIALIZE
+
 #include "JsonFactory.h"
 #include "dandan/effects/IEffect.h"
 #include <nlohmann/json_fwd.hpp>
@@ -17,4 +19,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif
+#endif // DANDAN_BUILD_SERIALIZE
+
+#endif // DANDAN_JSONEFFECTFACTORY_H

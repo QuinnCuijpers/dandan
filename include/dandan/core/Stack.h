@@ -3,6 +3,8 @@
 
 #include "dandan/abilities/IAbility.h"
 #include <memory>
+#include <vector>
+
 namespace dandan::core
 {
     class Stack

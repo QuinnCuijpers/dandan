@@ -2,7 +2,6 @@
 #define IABILITY_H
 
 #include "dandan/events/IEvent.h"
-#include <nlohmann/json_fwd.hpp>
 
 namespace dandan::abilities
 {

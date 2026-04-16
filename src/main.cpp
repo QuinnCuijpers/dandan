@@ -1,12 +1,15 @@
 #include "dandan/core/Board.h"
 #include "dandan/dandan.h"
-#include <exception>
-#include <nlohmann/json.hpp>
 
 #include <filesystem>
-#include <fstream>
 #include <iostream>
+
+#ifdef DANDAN_BUILD_SERIALIZE
+#include <exception>
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include <vector>
+#endif
 
 namespace
 {
@@ -26,6 +29,7 @@ namespace
     }
 } // namespace
 
+#ifdef DANDAN_BUILD_SERIALIZE
 dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
 {
     const auto resolved_path = resolve_from_project_root(json_path);
@@ -68,26 +72,6 @@ void write_card_to_json(const dandan::Card &card,
     json_file << j.dump(4) << '\n';
 }
 
-std::filesystem::path get_card_path(const std::filesystem::path &json_dir,
-                                    std::string_view card_name)
-{
-    std::filesystem::path filename{std::string(card_name)};
-    filename.replace_extension(".json");
-    return resolve_from_project_root(json_dir) / filename;
-}
-
-void print_card_info(const dandan::Card &card)
-{
-    std::cout << "Card: " << card.get_name() << '\n';
-    std::cout << "Cost: " << card.get_cost() << '\n';
-    std::cout << "Type: " << card.TypeToString(card.get_type()) << '\n';
-    std::cout << "Abilities:\n";
-    for (const auto &ability : card.get_abilities())
-    {
-        ability->resolve();
-    }
-}
-
 void check_card_serialize()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
@@ -120,6 +104,27 @@ void check_card_serialize()
     catch (std::exception &e)
     {
         std::cout << e.what() << '\n';
+    }
+}
+#endif
+
+std::filesystem::path get_card_path(const std::filesystem::path &json_dir,
+                                    std::string_view card_name)
+{
+    std::filesystem::path filename{std::string(card_name)};
+    filename.replace_extension(".json");
+    return resolve_from_project_root(json_dir) / filename;
+}
+
+void print_card_info(const dandan::Card &card)
+{
+    std::cout << "Card: " << card.getName() << '\n';
+    std::cout << "Cost: " << card.getCost() << '\n';
+    std::cout << "Type: " << card.TypeToString(card.getType()) << '\n';
+    std::cout << "Abilities:\n";
+    for (const auto &ability : card.getAbilities())
+    {
+        ability->resolve();
     }
 }
 

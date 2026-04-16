@@ -1,8 +1,6 @@
 #ifndef DANDAN_I_COST
 #define DANDAN_I_COST
 
-#include <nlohmann/json_fwd.hpp>
-
 namespace dandan::costs
 {
     class ICost

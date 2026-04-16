@@ -18,5 +18,3 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
   target_compile_options(DandanReplacement PRIVATE -Wall -Wextra -Wpedantic)
 
 endif()
-
-target_link_libraries(DandanReplacement PRIVATE nlohmann_json::nlohmann_json)

@@ -1,3 +1,4 @@
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
 #include "nlohmann/json.hpp"
 #include "gtest/gtest.h"
@@ -115,7 +116,7 @@ protected:
     {
         auto params{GetParam()};
         auto card = params;
-        std::string_view name{card->get_name()};
+        std::string_view name{card->getName()};
 
         auto json_file_path{std::filesystem::path{DANDAN_PROJECT_SOURCE} /
                             "data/jsons" / name};
@@ -138,7 +139,7 @@ TEST_P(JsonTest, DeserializeCorrect)
 std::string CardParamName(
     const testing::TestParamInfo<const dandan::Card *> &info)
 {
-    const std::string raw_name{info.param->get_name()};
+    const std::string raw_name{info.param->getName()};
     std::string name;
     std::copy_if(raw_name.begin(), raw_name.end(), std::back_inserter(name),
                  [](char c) { return std::isalnum(c); });
@@ -149,3 +150,5 @@ std::string CardParamName(
 
 INSTANTIATE_TEST_SUITE_P(DeserializationTests, JsonTest,
                          testing::ValuesIn(getCards()), CardParamName);
+
+#endif

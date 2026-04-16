@@ -1,6 +1,5 @@
 #include "dandan/abilities/ManaAbility.h"
 #include <iostream>
-#include <nlohmann/json.hpp>
 
 namespace dandan::abilities
 {
@@ -10,15 +9,6 @@ namespace dandan::abilities
         std::cout << "Resolving ManaAbility: " << ManaTypeToString(m_color)
                   << " mana\n";
     }
-
-    NLOHMANN_JSON_SERIALIZE_ENUM(ManaAbility::ManaType,
-                                 {{ManaAbility::ManaType::COLORLESS,
-                                   "Colorless"},
-                                  {ManaAbility::ManaType::WHITE, "White"},
-                                  {ManaAbility::ManaType::BLUE, "Blue"},
-                                  {ManaAbility::ManaType::BLACK, "Black"},
-                                  {ManaAbility::ManaType::RED, "Red"},
-                                  {ManaAbility::ManaType::GREEN, "Green"}})
 
     std::string_view ManaAbility::ManaTypeToString(ManaType type)
     {

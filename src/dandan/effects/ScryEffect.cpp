@@ -1,5 +1,4 @@
 #include "dandan/effects/ScryEffect.h"
-#include <nlohmann/json.hpp>
 
 namespace dandan::effects
 {

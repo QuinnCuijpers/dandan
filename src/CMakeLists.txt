@@ -2,10 +2,7 @@ add_executable(Main)
 
 target_sources(Main PRIVATE main.cpp)
 
-# TODO: remove the direct dependency on nlohmann_json here, and only link
-# DandanLib to it. Main should only depend on DandanLib, and DandanLib should
-# depend on nlohmann_json.
-target_link_libraries(Main PRIVATE DandanLib nlohmann_json::nlohmann_json)
+target_link_libraries(Main PRIVATE DandanLib)
 
 target_compile_features(Main PRIVATE cxx_std_17)
 

@@ -1,5 +1,8 @@
 #ifndef DANDAN_JSONREPLACEFACTORY_H
 #define DANDAN_JSONREPLACEFACTORY_H
+
+#ifdef DANDAN_BUILD_SERIALIZE
+
 #include "JsonFactory.h"
 #include "dandan/replacement_effects/IReplacementEffect.h"
 
@@ -16,4 +19,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif
+#endif // DANDAN_BUILD_SERIALIZE
+
+#endif // DANDAN_JSONREPLACEFACTORY_H

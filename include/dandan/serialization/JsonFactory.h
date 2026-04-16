@@ -1,6 +1,8 @@
 #ifndef DANDAN_JSONFACTORY_H
 #define DANDAN_JSONFACTORY_H
 
+#ifdef DANDAN_BUILD_SERIALIZE
+
 #include <memory>
 #include <nlohmann/json_fwd.hpp>
 
@@ -17,4 +19,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif
+#endif // DANDAN_BUILD_SERIALIZE
+
+#endif // DANDAN_JSONFACTORY_H

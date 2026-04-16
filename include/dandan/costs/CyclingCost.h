@@ -2,6 +2,7 @@
 #define DANDAN_CYCLING_H
 
 #include "ICost.h"
+#include <memory>
 
 namespace dandan::costs
 {

@@ -1,12 +1,22 @@
 #include "dandan/serialization/JsonAbilityFactory.h"
-#include "dandan/serialization/JsonFactory.h"
 
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
+#include "dandan/serialization/JsonFactory.h"
 #include <memory>
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
 {
+    NLOHMANN_JSON_SERIALIZE_ENUM(abilities::ManaAbility::ManaType,
+                                 {{ManaAbility::ManaType::COLORLESS,
+                                   "Colorless"},
+                                  {ManaAbility::ManaType::WHITE, "White"},
+                                  {ManaAbility::ManaType::BLUE, "Blue"},
+                                  {ManaAbility::ManaType::BLACK, "Black"},
+                                  {ManaAbility::ManaType::RED, "Red"},
+                                  {ManaAbility::ManaType::GREEN, "Green"}});
+
     nlohmann::json JsonFactory<abilities::IAbility>::create_json(
         const IAbility *ability)
     {
@@ -131,3 +141,5 @@ namespace dandan::serialization
         }
     }
 } // namespace dandan::serialization
+
+#endif // DANDAN_BUILD_SERIALIZE

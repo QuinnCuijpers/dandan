@@ -22,18 +22,18 @@ add_subdirectory(abilities)
 add_subdirectory(effects)
 add_subdirectory(events)
 add_subdirectory(costs)
-add_subdirectory(serialization)
 add_subdirectory(replacement_effects)
 
-target_link_libraries(
-  DandanLib
-  PRIVATE DandanCore
-          DandanAbilities
-          DandanEffects
-          DandanEvents
-          DandanCosts
-          DandanSerialize
-          DandanReplacement
-          nlohmann_json::nlohmann_json)
+if(DANDAN_BUILD_SERIALIZE)
+  add_subdirectory(serialization)
+endif()
 
-target_include_directories(DandanLib PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(
+  DandanLib PRIVATE DandanCore DandanAbilities DandanEffects DandanEvents
+                    DandanCosts DandanReplacement)
+
+if(DANDAN_BUILD_SERIALIZE)
+  target_link_libraries(DandanLib PRIVATE DandanSerialize
+                                          nlohmann_json::nlohmann_json)
+  target_compile_definitions(DandanLib PRIVATE DANDAN_BUILD_SERIALIZE)
+endif()

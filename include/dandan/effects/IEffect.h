@@ -1,8 +1,6 @@
 #ifndef DANDAN_I_EFFECT_H
 #define DANDAN_I_EFFECT_H
 
-#include <nlohmann/json_fwd.hpp>
-
 namespace dandan::effects
 {
     // TODO: change `apply` to take in a `GameState` object and modify it

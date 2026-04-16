@@ -2,7 +2,6 @@
 #define IREPLACEMENTEFFECT_H
 
 #include "dandan/effects/IEffect.h"
-#include <nlohmann/json_fwd.hpp>
 
 namespace dandan::replacement_effects
 {

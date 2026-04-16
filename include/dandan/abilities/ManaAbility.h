@@ -2,6 +2,7 @@
 #define MANAABILITY_H
 
 #include "IAbility.h"
+#include <string_view>
 
 namespace dandan::abilities
 {

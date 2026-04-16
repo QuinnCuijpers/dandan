@@ -1,8 +1,6 @@
 #ifndef DANDAN_DRAWEFFECT_H
 #define DANDAN_DRAWEFFECT_H
 
-#include <nlohmann/json_fwd.hpp>
-
 #include "IEffect.h"
 
 namespace dandan::effects

@@ -9,6 +9,10 @@
 #include <utility>
 #include <vector>
 
+#ifdef DANDAN_BUILD_SERIALIZE
+#include <nlohmann/json_fwd.hpp>
+#endif
+
 namespace dandan::core
 {
 
@@ -35,26 +39,23 @@ namespace dandan::core
         {
         }
 
-        std::string_view get_name() const
+        std::string_view getName() const
         {
             return m_name;
         }
-        int get_cost() const
+        int getCost() const
         {
             return m_cost;
         }
-        Type get_type() const
+        Type getType() const
         {
             return m_type;
         }
-        const std::vector<std::unique_ptr<abilities::IAbility>> &get_abilities()
+        const std::vector<std::unique_ptr<abilities::IAbility>> &getAbilities()
             const
         {
             return m_abilities;
         }
-
-        friend void from_json(const nlohmann::json &j, Card &c);
-        friend void to_json(nlohmann::json &j, const Card &c);
 
         friend std::ostream &operator<<(std::ostream &os, const Card &c)
         {
@@ -64,6 +65,11 @@ namespace dandan::core
         }
 
         static std::string_view TypeToString(Type type);
+
+#ifdef DANDAN_BUILD_SERIALIZE
+        friend void from_json(const nlohmann::json &j, Card &c);
+        friend void to_json(nlohmann::json &j, const Card &c);
+#endif
 
     private:
         std::string m_name{"unknown"};

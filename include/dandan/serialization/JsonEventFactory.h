@@ -1,6 +1,8 @@
 #ifndef DANDAN_JSONEVENTFACTORY_H
 #define DANDAN_JSONEVENTFACTORY_H
 
+#ifdef DANDAN_BUILD_SERIALIZE
+
 #include "JsonFactory.h"
 #include "dandan/events/IEvent.h"
 
@@ -16,4 +18,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif
+#endif // DANDAN_BUILD_SERIALIZE
+
+#endif // DANDAN_JSONEVENTFACTORY_H

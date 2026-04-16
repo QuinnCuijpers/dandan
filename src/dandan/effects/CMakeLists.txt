@@ -20,5 +20,4 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 
 endif()
 
-target_link_libraries(DandanEffects PRIVATE nlohmann_json::nlohmann_json)
 target_include_directories(DandanEffects PUBLIC ${CMAKE_SOURCE_DIR}/include)

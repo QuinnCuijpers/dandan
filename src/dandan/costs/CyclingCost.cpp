@@ -1,6 +1,5 @@
 #include "dandan/costs/CyclingCost.h"
 #include <iostream>
-#include <nlohmann/json.hpp>
 
 namespace dandan::costs
 {

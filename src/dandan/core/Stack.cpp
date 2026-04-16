@@ -7,7 +7,7 @@ namespace dandan::core
         if (m_stack.empty())
             return;
 
-        auto ability = m_stack.back();
+        const auto *ability = m_stack.back();
         m_stack.pop_back();
 
         ability->resolve();

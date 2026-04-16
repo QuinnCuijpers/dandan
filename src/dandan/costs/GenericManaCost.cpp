@@ -1,6 +1,5 @@
 #include "dandan/costs/GenericManaCost.h"
 #include <iostream>
-#include <nlohmann/json.hpp>
 
 namespace dandan::costs
 {
