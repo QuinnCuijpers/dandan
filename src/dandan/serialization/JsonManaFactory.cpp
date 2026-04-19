@@ -1,7 +1,7 @@
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/serialization/JsonManaFactory.h"
 #include "dandan/mana/Mana.h"
 #include <algorithm>
-#ifdef DANDAN_BUILD_SERIALIZE
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -43,10 +43,12 @@ namespace dandan::serialization
     std::unique_ptr<dandan::mana::Mana> JsonFactory<
         dandan::mana::Mana>::create_product(const nlohmann::json &j)
     {
-        std::string mana_str = j.get<std::string>();
+        const std::string mana_str = j.get<std::string>();
         auto mana = std::make_unique<dandan::mana::Mana>();
-        for (char c : mana_str)
+
+        for (std::size_t i = 0; i < mana_str.size(); ++i)
         {
+            const char c = mana_str[i];
             switch (c)
             {
             case 'C':
@@ -67,11 +69,31 @@ namespace dandan::serialization
             case 'G':
                 mana->getMana()[dandan::mana::ManaType::GREEN]++;
                 break;
+            case '(':
+            {
+                const auto close_pos = mana_str.find(')', i);
+                if (close_pos == std::string::npos)
+                {
+                    throw std::runtime_error("Invalid mana string in JSON: "
+                                             "missing closing parenthesis");
+                }
+
+                const std::string generic_amount_str =
+                    mana_str.substr(i + 1, close_pos - (i + 1));
+                const int generic_amount = std::stoi(generic_amount_str);
+                mana->getMana()[dandan::mana::ManaType::GENERIC] +=
+                    generic_amount;
+
+                // Move iterator to ')' so loop increment goes to next symbol.
+                i = close_pos;
+                break;
+            }
             default:
                 throw std::runtime_error("Unknown mana symbol in JSON: " +
                                          std::string(1, c));
             }
         }
+
         return mana;
     }
 } // namespace dandan::serialization
