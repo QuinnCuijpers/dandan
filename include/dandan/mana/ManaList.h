@@ -16,7 +16,7 @@ namespace dandan::mana
         }
 
         explicit ManaList(std::vector<std::unique_ptr<Mana>> options)
-            : m_options(std::move(options))
+            : m_options{std::move(options)}
         {
         }
 

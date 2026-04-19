@@ -2,7 +2,9 @@
     "abilities": [
         {
             "data": {
-                "color": "Colorless"
+                "mana_list": [
+                    "C"
+                ]
             },
             "type": "ManaAbility"
         },
@@ -11,8 +13,8 @@
                 "ability": {
                     "data": {
                         "mana_list": [
-                            "R",
-                            "U"
+                            "U",
+                            "R"
                         ]
                     },
                     "type": "ManaAbility"

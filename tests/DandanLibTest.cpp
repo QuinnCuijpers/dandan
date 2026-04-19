@@ -1,6 +1,3 @@
-#include "dandan/mana/BlueMana.h"
-#include "dandan/mana/GenericMana.h"
-#include "dandan/mana/ManaList.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
 #include "nlohmann/json.hpp"
@@ -102,11 +99,29 @@ static std::vector<std::unique_ptr<dandan::IAbility>> HalimarDepthsAbilities()
     return abilities;
 }
 
+static std::vector<std::unique_ptr<dandan::IAbility>> ShivanReefAbilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    abilities.emplace_back(
+        std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
+            std::make_unique<dandan::mana::ColorlessMana>()}));
+
+    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Mana>>{}};
+    mana_list.emplace_back(std::make_unique<dandan::mana::BlueMana>());
+    mana_list.emplace_back(std::make_unique<dandan::mana::RedMana>());
+
+    abilities.emplace_back(std::make_unique<dandan::WithDamage>(
+        std::make_unique<dandan::ManaAbility>(
+            dandan::ManaList{std::move(mana_list)})));
+    return abilities;
+}
+
 static const std::vector<const dandan::Card *> &getCards()
 {
     static const std::vector<const dandan::Card *> cards = {
         new LAND(Island), new LAND(RemoteIsle), new LAND(LonelySandbar),
-        new LAND(HalimarDepths)};
+        new LAND(HalimarDepths), new LAND(ShivanReef)};
     return cards;
 }
 

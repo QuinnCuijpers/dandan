@@ -1,10 +1,10 @@
 #ifndef DANDAN_MANA_H
 #define DANDAN_MANA_H
 
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 
 namespace dandan::mana
 {
@@ -20,6 +20,7 @@ namespace dandan::mana
         GENERIC,
     };
 
+    [[maybe_unused]]
     static std::string_view ManaTypeToString(ManaType type)
     {
         switch (type)
@@ -43,6 +44,7 @@ namespace dandan::mana
         }
     }
 
+    [[maybe_unused]]
     static ManaType ManaTypeFromString(const std::string_view &str)
     {
         if (str == "Colorless")
@@ -64,7 +66,7 @@ namespace dandan::mana
                                         std::string(str));
     }
 
-    typedef std::unordered_map<ManaType, int> ManaMap;
+    typedef std::map<ManaType, int> ManaMap;
 
     class Mana
     {
@@ -79,6 +81,7 @@ namespace dandan::mana
         ManaMap m_manaMap;
     };
 
+    [[maybe_unused]]
     static std::string ManaToSymbols(const ManaMap &mana_map)
     {
         std::string symbols;

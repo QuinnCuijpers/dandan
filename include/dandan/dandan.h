@@ -16,6 +16,13 @@
 #include "dandan/effects/IEffect.h"
 #include "dandan/effects/PeekEffect.h"
 #include "dandan/events/ETBEvent.h"
+#include "dandan/mana/BlackMana.h"
+#include "dandan/mana/BlueMana.h"
+#include "dandan/mana/ColorlessMana.h"
+#include "dandan/mana/GenericMana.h"
+#include "dandan/mana/GreenMana.h"
+#include "dandan/mana/ManaList.h"
+#include "dandan/mana/RedMana.h"
 #include "dandan/replacement_effects/EntersTappedEffect.h"
 
 namespace dandan
@@ -42,6 +49,15 @@ namespace dandan
     using costs::CyclingCost;
     using costs::ICost;
     using costs::ManaCost;
+
+    using mana::BlackMana;
+    using mana::BlueMana;
+    using mana::ColorlessMana;
+    using mana::GenericMana;
+    using mana::GreenMana;
+    using mana::ManaList;
+    using mana::RedMana;
+
 } // namespace dandan
 
 #endif
