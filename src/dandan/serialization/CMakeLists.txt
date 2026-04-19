@@ -8,7 +8,8 @@ target_sources(
           JsonCostFactory.cpp
           JsonEventFactory.cpp
           JsonEffectFactory.cpp
-          JsonReplaceFactory.cpp)
+          JsonReplaceFactory.cpp
+          JsonManaFactory.cpp)
 
 target_sources(DandanSerialize PUBLIC FILE_SET HEADERS BASE_DIRS
                                       ${CMAKE_SOURCE_DIR}/include)

@@ -1,8 +1,8 @@
-#ifndef MANAABILITY_H
-#define MANAABILITY_H
+#ifndef DANDAN_MANAABILITY_H
+#define DANDAN_MANAABILITY_H
 
 #include "IAbility.h"
-#include <string_view>
+#include "dandan/mana/ManaList.h"
 
 namespace dandan::abilities
 {
@@ -10,35 +10,21 @@ namespace dandan::abilities
     class ManaAbility final : public IAbility
     {
     public:
-        enum ManaType
-        {
-            COLORLESS,
-            WHITE,
-            BLUE,
-            BLACK,
-            RED,
-            GREEN
-        };
-
-        ManaAbility() = default;
-        explicit ManaAbility(ManaType color) : m_color(color)
+        explicit ManaAbility(mana::ManaList manaList)
+            : m_mana_list(std::move(manaList))
         {
         }
 
-        static std::string_view ManaTypeToString(ManaType type);
-
-        static ManaType ManaTypeFromString(const std::string_view &str);
-
-        ManaType getColor() const
+        const mana::ManaList *getMana() const
         {
-            return m_color;
+            return &m_mana_list;
         }
 
         void resolve() const override;
 
     private:
-        ManaType m_color{COLORLESS};
+        mana::ManaList m_mana_list;
     };
 } // namespace dandan::abilities
 
-#endif
+#endif // DANDAN_MANAABILITY_H

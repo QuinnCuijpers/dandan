@@ -34,7 +34,7 @@ namespace dandan::core
         Card() = default;
 
 #ifdef DANDAN_BUILD_SERIALIZE
-        Card(std::string_view name);
+        explicit Card(std::string_view name);
 #endif
 
         Card(std::string_view name, int cost, Type type,

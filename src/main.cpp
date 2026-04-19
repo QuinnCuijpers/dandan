@@ -1,8 +1,10 @@
 #include "dandan/core/Board.h"
 #include "dandan/dandan.h"
+#include "dandan/mana/BlueMana.h"
 
 #include <filesystem>
 #include <iostream>
+#include <memory>
 
 #ifdef DANDAN_BUILD_SERIALIZE
 #include <exception>
@@ -80,8 +82,8 @@ void check_card_serialize()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.push_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+    abilities.push_back(std::make_unique<dandan::ManaAbility>(
+        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.push_back(std::make_unique<dandan::StaticAbility>(
         std::make_unique<dandan::ETBEffect>(),

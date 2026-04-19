@@ -1,3 +1,5 @@
+#include "dandan/mana/BlueMana.h"
+#include "dandan/mana/ManaList.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
 #include "nlohmann/json.hpp"
@@ -35,8 +37,8 @@ static std::string formatCardName(std::string_view name)
 static std::vector<std::unique_ptr<dandan::IAbility>> IslandAbilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
-    abilities.push_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+    abilities.push_back(std::make_unique<dandan::ManaAbility>(
+        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
     return abilities;
 }
 
@@ -45,8 +47,8 @@ static std::vector<std::unique_ptr<dandan::IAbility>> RemoteIsleAbilities()
 
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.push_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+    abilities.push_back(std::make_unique<dandan::ManaAbility>(
+        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.push_back(std::make_unique<dandan::StaticAbility>(
         std::make_unique<dandan::ETBEffect>(),
@@ -64,8 +66,8 @@ static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.emplace_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         std::make_unique<dandan::ETBEffect>(),
@@ -84,8 +86,8 @@ static std::vector<std::unique_ptr<dandan::IAbility>> HalimarDepthsAbilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.emplace_back(
-        std::make_unique<dandan::ManaAbility>(dandan::ManaAbility::BLUE));
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         std::make_unique<dandan::ETBEffect>(),

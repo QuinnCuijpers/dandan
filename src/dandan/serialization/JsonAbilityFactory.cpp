@@ -2,20 +2,13 @@
 
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
+#include "dandan/mana/ManaList.h"
 #include "dandan/serialization/JsonFactory.h"
 #include <memory>
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
 {
-    NLOHMANN_JSON_SERIALIZE_ENUM(abilities::ManaAbility::ManaType,
-                                 {{ManaAbility::ManaType::COLORLESS,
-                                   "Colorless"},
-                                  {ManaAbility::ManaType::WHITE, "White"},
-                                  {ManaAbility::ManaType::BLUE, "Blue"},
-                                  {ManaAbility::ManaType::BLACK, "Black"},
-                                  {ManaAbility::ManaType::RED, "Red"},
-                                  {ManaAbility::ManaType::GREEN, "Green"}});
 
     nlohmann::json JsonFactory<abilities::IAbility>::create_json(
         const IAbility *ability)
@@ -37,7 +30,10 @@ namespace dandan::serialization
         {
             auto j = nlohmann::json{{"type", "ManaAbility"},
                                     {"data", nlohmann::json::object()}};
-            j["data"]["color"] = mana->ManaTypeToString(mana->getColor());
+            j["data"]["mana_list"] =
+                JsonFactory<dandan::mana::ManaList>::create_json(
+                    mana->getMana());
+
             return j;
         }
         else if (const WithDamage *withDamage =
@@ -100,10 +96,11 @@ namespace dandan::serialization
         }
         else if (type == "ManaAbility")
         {
-            const std::string colorStr{data.at("color").get<std::string>()};
-            ManaAbility::ManaType color{
-                ManaAbility::ManaTypeFromString(colorStr)};
-            return std::make_unique<ManaAbility>(color);
+            std::unique_ptr<dandan::mana::ManaList> mana_list{
+                JsonFactory<dandan::mana::ManaList>::create_product(
+                    data.at("mana_list"))};
+
+            return std::make_unique<ManaAbility>(std::move(*mana_list));
         }
         else if (type == "WithDamage")
         {
