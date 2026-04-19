@@ -1,12 +1,13 @@
 #include "dandan/core/Board.h"
 #include "dandan/dandan.h"
-#include "dandan/mana/BlueMana.h"
 
 #include <filesystem>
 #include <iostream>
 #include <memory>
 
 #ifdef DANDAN_BUILD_SERIALIZE
+#include "dandan/mana/AndMana.h"
+#include "dandan/mana/BlueMana.h"
 #include <exception>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -82,20 +83,16 @@ void check_card_serialize()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.push_back(std::make_unique<dandan::ManaAbility>(
-        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        dandan::ManaList{std::make_unique<dandan::mana::AndMana>(
+            std::make_unique<dandan::mana::BlueMana>(),
+            std::make_unique<dandan::mana::RedMana>())}));
 
-    abilities.push_back(std::make_unique<dandan::StaticAbility>(
+    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         std::make_unique<dandan::ETBEffect>(),
         std::make_unique<dandan::EntersTappedEffect>()));
 
-    abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
-        std::make_unique<dandan::CyclingCost>(
-            std::make_unique<dandan::ManaCost>(
-                std::make_unique<dandan::mana::BlueMana>())),
-        std::make_unique<dandan::DrawEffect>()));
-
-    dandan::Card test{"Lonely Sandbar", 0, dandan::Card::Land,
+    dandan::Card test{"Izzet Boilerworks", 0, dandan::Card::Land,
                       std::move(abilities)};
 
     print_card_info(test);

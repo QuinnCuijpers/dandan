@@ -3,4 +3,6 @@
 2 Lonely Sandbar
 2 Remote Isle
 2 Shivan Reef
+2 Temple of Epiphany
+2 Izzet Boilerworks
 20 Island

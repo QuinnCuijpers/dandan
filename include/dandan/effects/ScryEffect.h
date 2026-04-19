@@ -10,6 +10,8 @@ namespace dandan::effects
     {
         int m_scry_amount{1};
 
+        ScryEffect() = default;
+
         explicit ScryEffect(int scry_amount) : m_scry_amount(scry_amount)
         {
         }

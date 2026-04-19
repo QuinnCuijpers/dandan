@@ -1,3 +1,4 @@
+#include "dandan/mana/AndMana.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
 #include "nlohmann/json.hpp"
@@ -15,24 +16,27 @@
 #define LAND(name)                                                             \
     dandan::Card                                                               \
     {                                                                          \
-        formatCardName(#name), 0, dandan::Card::Land, name##Abilities()        \
+        formatCardName(#name), 0, dandan::Card::Land, name##_Abilities()       \
     }
 
 static std::string formatCardName(std::string_view name)
 {
+    std::string result{};
+    for (char c : name)
     {
-        std::string result;
-        for (char c : name)
+        if (c == '_')
         {
-            if (std::isupper(c) && !result.empty())
-                result += ' ';
+            result += ' ';
+        }
+        else
+        {
             result += c;
         }
-        return result;
     }
+    return result;
 }
 
-static std::vector<std::unique_ptr<dandan::IAbility>> IslandAbilities()
+static std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
     abilities.push_back(std::make_unique<dandan::ManaAbility>(
@@ -40,7 +44,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> IslandAbilities()
     return abilities;
 }
 
-static std::vector<std::unique_ptr<dandan::IAbility>> RemoteIsleAbilities()
+static std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
 {
 
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
@@ -61,7 +65,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> RemoteIsleAbilities()
     return abilities;
 }
 
-static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
+static std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -81,7 +85,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
     return abilities;
 }
 
-static std::vector<std::unique_ptr<dandan::IAbility>> HalimarDepthsAbilities()
+static std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -99,7 +103,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> HalimarDepthsAbilities()
     return abilities;
 }
 
-static std::vector<std::unique_ptr<dandan::IAbility>> ShivanReefAbilities()
+static std::vector<std::unique_ptr<dandan::IAbility>> Shivan_Reef_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -117,13 +121,59 @@ static std::vector<std::unique_ptr<dandan::IAbility>> ShivanReefAbilities()
     return abilities;
 }
 
+static std::vector<std::unique_ptr<dandan::IAbility>>
+Temple_of_Epiphany_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Mana>>{}};
+    mana_list.emplace_back(std::make_unique<dandan::mana::BlueMana>());
+    mana_list.emplace_back(std::make_unique<dandan::mana::RedMana>());
+
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        dandan::ManaList{std::move(mana_list)}));
+
+    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
+        std::make_unique<dandan::ETBEffect>(),
+        std::make_unique<dandan::EntersTappedEffect>()));
+
+    abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
+        std::make_unique<dandan::ETBEvent>(),
+        std::make_unique<dandan::ScryEffect>()));
+
+    return abilities;
+}
+
+static std::vector<std::unique_ptr<dandan::IAbility>>
+Izzet_Boilerworks_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        dandan::ManaList{std::make_unique<dandan::mana::AndMana>(
+            std::make_unique<dandan::mana::BlueMana>(),
+            std::make_unique<dandan::mana::RedMana>())}));
+
+    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
+        std::make_unique<dandan::ETBEffect>(),
+        std::make_unique<dandan::EntersTappedEffect>()));
+
+    abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
+        std::make_unique<dandan::ETBEvent>(),
+        std::make_unique<dandan::BounceLandEffect>()));
+
+    return abilities;
+}
+
 static const std::vector<const dandan::Card *> &getCards()
 {
     static const std::vector<const dandan::Card *> cards = {
-        new LAND(Island), new LAND(RemoteIsle), new LAND(LonelySandbar),
-        new LAND(HalimarDepths), new LAND(ShivanReef)};
+        new LAND(Island),           new LAND(Remote_Isle),
+        new LAND(Lonely_Sandbar),   new LAND(Halimar_Depths),
+        new LAND(Shivan_Reef),      new LAND(Temple_of_Epiphany),
+        new LAND(Izzet_Boilerworks)};
     return cards;
-}
+};
 
 class JsonTest : public testing::TestWithParam<const dandan::Card *>
 {

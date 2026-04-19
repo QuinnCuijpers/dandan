@@ -3,8 +3,7 @@
         {
             "data": {
                 "mana_list": [
-                    "U",
-                    "R"
+                    "UR"
                 ]
             },
             "type": "ManaAbility"
@@ -23,24 +22,9 @@
                 }
             },
             "type": "StaticAbility"
-        },
-        {
-            "data": {
-                "effect": {
-                    "data": {
-                        "scry_amount": 1
-                    },
-                    "type": "ScryEffect"
-                },
-                "event": {
-                    "data": {},
-                    "type": "EntersBattlefieldEvent"
-                }
-            },
-            "type": "TriggeredAbility"
         }
     ],
     "cost": 0,
-    "name": "Temple of Epiphany",
+    "name": "Izzet Boilerworks",
     "type": "Land"
 }

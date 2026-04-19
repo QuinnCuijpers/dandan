@@ -11,10 +11,12 @@
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/ManaCost.h"
+#include "dandan/effects/BounceLandEffect.h"
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/ETBEffect.h"
 #include "dandan/effects/IEffect.h"
 #include "dandan/effects/PeekEffect.h"
+#include "dandan/effects/ScryEffect.h"
 #include "dandan/events/ETBEvent.h"
 #include "dandan/mana/BlackMana.h"
 #include "dandan/mana/BlueMana.h"
@@ -36,10 +38,13 @@ namespace dandan
 
     using core::Card;
 
+    using effects::BounceLandEffect;
     using effects::DrawEffect;
     using effects::ETBEffect;
     using effects::IEffect;
     using effects::PeekEffect;
+    using effects::ScryEffect;
+
     using replacement_effects::EntersTappedEffect;
     using replacement_effects::IReplacementEffect;
 

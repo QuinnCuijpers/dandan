@@ -1,4 +1,5 @@
 10 Dandân
+
 8 Memory Lapse
 4 Accumulated Knowledge
 2 Brainstorm
@@ -14,6 +15,7 @@
 2 Supplant Form
 2 Unsubstantiate
 2 Vision Charm
+
 2 Halimar Depths
 2 Izzet Boilerworks
 2 Lonely Sandbar

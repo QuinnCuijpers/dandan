@@ -1,8 +1,10 @@
 #include "dandan/serialization/JsonEffectFactory.h"
+#include "dandan/effects/BounceLandEffect.h"
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/ETBEffect.h"
 #include "dandan/effects/PeekEffect.h"
 #include "dandan/effects/ScryEffect.h"
+#include "nlohmann/json_fwd.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
 
@@ -42,6 +44,13 @@ namespace dandan::serialization
             auto j = nlohmann::json{{"type", "ETBEffect"},
                                     {"data", nlohmann::json::object()}};
             j["data"]["tapped"] = etbEffect->m_tapped;
+            return j;
+        }
+        else if ([[maybe_unused]] const auto *bounceLandEffect =
+                     dynamic_cast<const effects::BounceLandEffect *>(effect))
+        {
+            auto j = nlohmann::json{{"type", "BounceLandEffect"},
+                                    {"data", nlohmann::json::object()}};
             return j;
         }
         else
