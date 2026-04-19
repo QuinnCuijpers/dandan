@@ -18,7 +18,7 @@ namespace dandan::serialization
     template <> class JsonFactory<dandan::mana::Mana>
     {
     public:
-        static nlohmann::json create_json(const dandan::mana::Mana &mana);
+        static nlohmann::json create_json(const dandan::mana::Mana *mana);
         static std::unique_ptr<dandan::mana::Mana> create_product(
             const nlohmann::json &j);
     };

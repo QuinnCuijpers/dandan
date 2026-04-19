@@ -29,9 +29,9 @@
                     "data": {
                         "inner_cost": {
                             "data": {
-                                "amount": 2
+                                "mana": "(2)"
                             },
-                            "type": "GenericManaCost"
+                            "type": "ManaCost"
                         }
                     },
                     "type": "CyclingCost"

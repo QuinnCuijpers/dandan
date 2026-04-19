@@ -1,8 +1,9 @@
 #include "dandan/serialization/JsonCostFactory.h"
-#include "dandan/costs/ColoredManaCost.h"
 #include "dandan/costs/CyclingCost.h"
-#include "dandan/costs/GenericManaCost.h"
 #include "dandan/costs/ICost.h"
+#include "dandan/costs/ManaCost.h"
+#include "dandan/mana/Mana.h"
+#include "dandan/serialization/JsonManaFactory.h"
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -20,21 +21,13 @@ namespace dandan::serialization
             j["data"]["inner_cost"] = create_json(inner_cost);
             return j;
         }
-        else if (const auto *generic_cost =
-                     dynamic_cast<const costs::GenericManaCost *>(cost))
+        else if (const auto *mana_cost =
+                     dynamic_cast<const costs::ManaCost *>(cost))
         {
-            auto j = nlohmann::json{{"type", "GenericManaCost"},
+            auto j = nlohmann::json{{"type", "ManaCost"},
                                     {"data", nlohmann::json::object()}};
-            j["data"]["amount"] = generic_cost->getAmount();
-            return j;
-        }
-        else if (const auto *colored_cost =
-                     dynamic_cast<const costs::ColoredManaCost *>(cost))
-        {
-            auto j = nlohmann::json{{"type", "ColoredManaCost"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["color"] =
-                colored_cost->ManaColorToString(colored_cost->getColor());
+            j["data"]["mana"] =
+                JsonFactory<mana::Mana>::create_json(mana_cost->getMana());
             return j;
         }
         else
@@ -58,17 +51,11 @@ namespace dandan::serialization
             return std::make_unique<costs::CyclingCost>(
                 std::move(generic_cost));
         }
-        else if (type == "GenericManaCost")
+        else if (type == "ManaCost")
         {
-            auto amount = data.at("amount").get<int>();
-            return std::make_unique<costs::GenericManaCost>(amount);
-        }
-        else if (type == "ColoredManaCost")
-        {
-            const std::string colorStr{data.at("color").get<std::string>()};
-            costs::ColoredManaCost::ManaColor color{
-                costs::ColoredManaCost::ManaColorFromString(colorStr)};
-            return std::make_unique<costs::ColoredManaCost>(color);
+            auto mana_json = data.at("mana");
+            auto mana = JsonFactory<mana::Mana>::create_product(mana_json);
+            return std::make_unique<costs::ManaCost>(std::move(mana));
         }
         else
         {

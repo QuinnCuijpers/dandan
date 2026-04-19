@@ -29,9 +29,9 @@
                     "data": {
                         "inner_cost": {
                             "data": {
-                                "color": "BLUE"
+                                "mana": "U"
                             },
-                            "type": "ColoredManaCost"
+                            "type": "ManaCost"
                         }
                     },
                     "type": "CyclingCost"

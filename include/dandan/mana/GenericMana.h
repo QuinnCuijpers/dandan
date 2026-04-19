@@ -8,13 +8,11 @@ namespace dandan::mana
 
     class GenericMana : public Mana
     {
-
-        GenericMana(int amount)
+    public:
+        explicit GenericMana(int amount)
         {
             m_manaMap[ManaType::GENERIC] += amount;
         }
-
-        ManaMap getMana() const override;
     };
 } // namespace dandan::mana
 

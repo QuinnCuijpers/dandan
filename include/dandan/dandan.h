@@ -8,10 +8,9 @@
 #include "dandan/abilities/TriggeredAbility.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
-#include "dandan/costs/ColoredManaCost.h"
 #include "dandan/costs/CyclingCost.h"
-#include "dandan/costs/GenericManaCost.h"
 #include "dandan/costs/ICost.h"
+#include "dandan/costs/ManaCost.h"
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/ETBEffect.h"
 #include "dandan/effects/IEffect.h"
@@ -40,10 +39,9 @@ namespace dandan
     using events::ETBEvent;
     using events::IEvent;
 
-    using costs::ColoredManaCost;
     using costs::CyclingCost;
-    using costs::GenericManaCost;
     using costs::ICost;
+    using costs::ManaCost;
 } // namespace dandan
 
 #endif

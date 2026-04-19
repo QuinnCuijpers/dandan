@@ -8,12 +8,11 @@ namespace dandan::mana
 
     class BlackMana : public Mana
     {
+    public:
         BlackMana()
         {
             m_manaMap[ManaType::BLACK]++;
         }
-
-        ManaMap getMana() const override;
     };
 
 } // namespace dandan::mana

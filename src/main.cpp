@@ -91,8 +91,8 @@ void check_card_serialize()
 
     abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
         std::make_unique<dandan::CyclingCost>(
-            std::make_unique<dandan::ColoredManaCost>(
-                dandan::ColoredManaCost::BLUE)),
+            std::make_unique<dandan::ManaCost>(
+                std::make_unique<dandan::mana::BlueMana>())),
         std::make_unique<dandan::DrawEffect>()));
 
     dandan::Card test{"Lonely Sandbar", 0, dandan::Card::Land,

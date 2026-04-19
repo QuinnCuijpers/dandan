@@ -1,4 +1,5 @@
 #include "dandan/mana/BlueMana.h"
+#include "dandan/mana/GenericMana.h"
 #include "dandan/mana/ManaList.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
@@ -56,7 +57,8 @@ static std::vector<std::unique_ptr<dandan::IAbility>> RemoteIsleAbilities()
 
     abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
         std::make_unique<dandan::CyclingCost>(
-            std::make_unique<dandan::GenericManaCost>(2)),
+            std::make_unique<dandan::ManaCost>(
+                std::make_unique<dandan::mana::GenericMana>(2))),
         std::make_unique<dandan::DrawEffect>()));
 
     return abilities;
@@ -75,8 +77,8 @@ static std::vector<std::unique_ptr<dandan::IAbility>> LonelySandbarAbilities()
 
     abilities.emplace_back(std::make_unique<dandan::ActivatedAbility>(
         std::make_unique<dandan::CyclingCost>(
-            std::make_unique<dandan::ColoredManaCost>(
-                dandan::ColoredManaCost::BLUE)),
+            std::make_unique<dandan::ManaCost>(
+                std::make_unique<dandan::mana::BlueMana>())),
         std::make_unique<dandan::DrawEffect>()));
 
     return abilities;

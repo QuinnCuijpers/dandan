@@ -1,4 +1,6 @@
 #include "dandan/serialization/JsonManaFactory.h"
+#include "dandan/mana/Mana.h"
+#include <algorithm>
 #ifdef DANDAN_BUILD_SERIALIZE
 #include <nlohmann/json.hpp>
 
@@ -8,10 +10,13 @@ namespace dandan::serialization
         const dandan::mana::ManaList *mana)
     {
         nlohmann::json j = nlohmann::json::array();
-        for (const auto &option : mana->getOptions())
-        {
-            j.push_back(JsonFactory<dandan::mana::Mana>::create_json(*option));
-        }
+        std::transform(mana->getOptions().begin(), mana->getOptions().end(),
+                       std::back_inserter(j),
+                       [](const auto &option)
+                       {
+                           return JsonFactory<dandan::mana::Mana>::create_json(
+                               option.get());
+                       });
         return j;
     }
 
@@ -19,18 +24,20 @@ namespace dandan::serialization
         dandan::mana::ManaList>::create_product(const nlohmann::json &j)
     {
         std::vector<std::unique_ptr<dandan::mana::Mana>> options{};
-        for (const auto &option_json : j)
-        {
-            options.push_back(
-                JsonFactory<dandan::mana::Mana>::create_product(option_json));
-        }
+        std::transform(
+            j.begin(), j.end(), std::back_inserter(options),
+            [](const auto &option_json)
+            {
+                return JsonFactory<dandan::mana::Mana>::create_product(
+                    option_json);
+            });
         return std::make_unique<dandan::mana::ManaList>(std::move(options));
     }
 
     nlohmann::json JsonFactory<dandan::mana::Mana>::create_json(
-        const dandan::mana::Mana &mana)
+        const dandan::mana::Mana *mana)
     {
-        return ManaToSymbols(mana.getMana());
+        return ManaToSymbols(mana->getMana());
     }
 
     std::unique_ptr<dandan::mana::Mana> JsonFactory<

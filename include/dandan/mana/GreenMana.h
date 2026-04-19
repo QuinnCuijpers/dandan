@@ -12,7 +12,6 @@ namespace dandan::mana
         {
             m_manaMap[ManaType::GREEN]++;
         }
-        ManaMap getMana() const override;
     };
 } // namespace dandan::mana
 

@@ -19,11 +19,6 @@ namespace dandan::mana
                 m_manaMap[type] += amount;
             }
         }
-
-        ManaMap getMana() const override
-        {
-            return m_manaMap;
-        }
     };
 } // namespace dandan::mana
 
