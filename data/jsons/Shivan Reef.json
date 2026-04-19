@@ -10,7 +10,10 @@
             "data": {
                 "ability": {
                     "data": {
-                        "color": "Red"
+                        "mana_list": [
+                            "R",
+                            "U"
+                        ]
                     },
                     "type": "ManaAbility"
                 },
