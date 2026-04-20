@@ -17,7 +17,7 @@ jobs:
         run: sudo apt-get install -y cppcheck cmake
 
       - name: Configure with CMake
-        run: cmake -B build --preset=serialize -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        run: cmake -B build --preset=DandanWithSerialize -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: Analyse source code
         run: |
