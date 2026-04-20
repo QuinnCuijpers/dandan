@@ -6,5 +6,5 @@ Checks: >
     readability-*,
     -modernize-use-trailing-return-type
 
-ExcludeHeaderFilterRegex: '.*/external/.*' 
+HeaderFilterRegex: '.*/(include/dandan|src/dandan|src/main\.cpp).*'
 WarningsAsErrors: '*'

@@ -25,6 +25,8 @@ jobs:
         run: |
           run-clang-tidy \
             -p build \
+            '.*/(include/dandan|src/dandan|src/main\.cpp).*'
+            
       - name: run cppcheck
         run: |
           cppcheck \
