@@ -91,6 +91,10 @@ namespace dandan::serialization
             }
             return etbEffect;
         }
+        else if (type == "BounceLandEffect")
+        {
+            return std::make_unique<effects::BounceLandEffect>();
+        }
         else
         {
             throw std::runtime_error("Unknown effect type: " + type);

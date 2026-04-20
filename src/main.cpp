@@ -6,8 +6,6 @@
 #include <memory>
 
 #ifdef DANDAN_BUILD_SERIALIZE
-#include "dandan/mana/AndMana.h"
-#include "dandan/mana/BlueMana.h"
 #include <exception>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -81,18 +79,16 @@ void write_card_to_json(const dandan::Card &card,
 
 void check_card_serialize()
 {
-    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
-
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::ManaList{std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::BlueMana>(),
-            std::make_unique<dandan::mana::RedMana>())}));
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         std::make_unique<dandan::ETBEffect>(),
         std::make_unique<dandan::EntersTappedEffect>()));
 
-    dandan::Card test{"Izzet Boilerworks", 0, dandan::Card::Land,
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        dandan::ManaList{std::make_unique<dandan::BlueMana>()}));
+
+    dandan::Card test{"Svyelunite Temple", 0, dandan::Card::Land,
                       std::move(abilities)};
 
     print_card_info(test);
@@ -133,6 +129,7 @@ void print_card_info(const dandan::Card &card)
 
 int main()
 {
+    check_card_serialize();
     dandan::core::Board board{};
 
     board.printCards();

@@ -165,13 +165,32 @@ Izzet_Boilerworks_Abilities()
     return abilities;
 }
 
+static std::vector<std::unique_ptr<dandan::IAbility>>
+Svyelunite_Temple_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
+
+    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
+        std::make_unique<dandan::ETBEffect>(),
+        std::make_unique<dandan::EntersTappedEffect>()));
+
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        dandan::ManaList{std::make_unique<dandan::BlueMana>()}));
+
+    return abilities;
+}
+
 static const std::vector<const dandan::Card *> &getCards()
 {
     static const std::vector<const dandan::Card *> cards = {
-        new LAND(Island),           new LAND(Remote_Isle),
-        new LAND(Lonely_Sandbar),   new LAND(Halimar_Depths),
-        new LAND(Shivan_Reef),      new LAND(Temple_of_Epiphany),
-        new LAND(Izzet_Boilerworks)};
+        new LAND(Island),
+        new LAND(Remote_Isle),
+        new LAND(Lonely_Sandbar),
+        new LAND(Halimar_Depths),
+        new LAND(Shivan_Reef),
+        new LAND(Temple_of_Epiphany),
+        new LAND(Izzet_Boilerworks),
+        new LAND(Svyelunite_Temple)};
     return cards;
 };
 

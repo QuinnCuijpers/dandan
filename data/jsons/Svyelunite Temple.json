@@ -1,0 +1,30 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "on_effect": {
+                    "data": {
+                        "tapped": false
+                    },
+                    "type": "ETBEffect"
+                },
+                "replacement_effect": {
+                    "data": {},
+                    "type": "EntersTappedEffect"
+                }
+            },
+            "type": "StaticAbility"
+        },
+        {
+            "data": {
+                "mana_list": [
+                    "U"
+                ]
+            },
+            "type": "ManaAbility"
+        }
+    ],
+    "cost": 0,
+    "name": "Svyelunite Temple",
+    "type": "Land"
+}
