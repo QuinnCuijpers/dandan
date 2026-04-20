@@ -8,7 +8,7 @@ namespace dandan::events
     {
     public:
         virtual ~IEvent() = default;
-        virtual bool equals(const IEvent &other) const = 0;
+        [[nodiscard]] virtual bool equals(const IEvent &other) const = 0;
     };
 
 } // namespace dandan::events

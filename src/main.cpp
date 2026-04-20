@@ -45,10 +45,10 @@ dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
                                  resolved_path.string());
     }
 
-    nlohmann::json j;
+    nlohmann::json json;
     try
     {
-        json_file >> j;
+        json_file >> json;
     }
     catch (const nlohmann::json::parse_error &e)
     {
@@ -57,7 +57,7 @@ dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
             e.what() + ")");
     }
 
-    return j.get<dandan::Card>();
+    return json.get<dandan::Card>();
 }
 
 void write_card_to_json(const dandan::Card &card,
@@ -73,8 +73,8 @@ void write_card_to_json(const dandan::Card &card,
                                  resolved_path.string());
     }
 
-    nlohmann::json j = card;
-    json_file << j.dump(4) << '\n';
+    nlohmann::json json = card;
+    json_file << json.dump(4) << '\n';
 }
 
 void check_card_serialize()
@@ -125,7 +125,7 @@ void print_card_info(const dandan::Card &card)
 {
     std::cout << "Card: " << card.getName() << '\n';
     std::cout << "Cost: " << card.getCost() << '\n';
-    std::cout << "Type: " << card.TypeToString(card.getType()) << '\n';
+    std::cout << "Type: " << dandan::Card::TypeToString(card.getType()) << '\n';
     std::cout << "Abilities:\n";
     for (const auto &ability : card.getAbilities())
     {
@@ -135,7 +135,9 @@ void print_card_info(const dandan::Card &card)
 
 int main()
 {
+#ifdef DANDAN_BUILD_SERIALIZE
     check_card_serialize();
+#endif
     dandan::core::Board board{};
 
     board.printCards();

@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonCostFactory.h"
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/ManaCost.h"
@@ -15,64 +16,59 @@ namespace dandan::serialization
         if (const auto *cycle_cost =
                 dynamic_cast<const costs::CyclingCost *>(cost))
         {
-            auto j = nlohmann::json{{"type", "CyclingCost"},
-                                    {"data", nlohmann::json::object()}};
+            auto json = nlohmann::json{{"type", "CyclingCost"},
+                                       {"data", nlohmann::json::object()}};
 
-            const auto inner_cost = cycle_cost->getInnerCost();
-            j["data"]["inner_cost"] = create_json(inner_cost);
-            return j;
+            const auto *const inner_cost = cycle_cost->getInnerCost();
+            json["data"]["inner_cost"] = create_json(inner_cost);
+            return json;
         }
-        else if (const auto *mana_cost =
-                     dynamic_cast<const costs::ManaCost *>(cost))
+        if (const auto *mana_cost = dynamic_cast<const costs::ManaCost *>(cost))
         {
-            auto j = nlohmann::json{{"type", "ManaCost"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["mana"] =
+            auto json = nlohmann::json{{"type", "ManaCost"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["mana"] =
                 JsonFactory<mana::Mana>::create_json(mana_cost->getMana());
-            return j;
+            return json;
         }
-        else if ([[maybe_unused]] const auto *self_sacrifice_cost =
-                     dynamic_cast<const costs::SelfSacrificeCost *>(cost))
+        if ([[maybe_unused]] const auto *self_sacrifice_cost =
+                dynamic_cast<const costs::SelfSacrificeCost *>(cost))
         {
-            auto j = nlohmann::json{{"type", "SelfSacrificeCost"},
-                                    {"data", nlohmann::json::object()}};
-            return j;
+            auto json = nlohmann::json{{"type", "SelfSacrificeCost"},
+                                       {"data", nlohmann::json::object()}};
+            return json;
         }
-        else
-        {
-            throw std::runtime_error(
-                "Unknown cost type for JSON serialization: " +
-                std::string(typeid(*cost).name()));
-        }
+
+        throw std::runtime_error("Unknown cost type for JSON serialization: " +
+                                 std::string(typeid(*cost).name()));
     }
 
     std::unique_ptr<costs::ICost> JsonFactory<costs::ICost>::create_product(
-        const nlohmann::json &j)
+        const nlohmann::json &json)
     {
-        const auto &type = j.at("type").get<std::string>();
-        const auto &data = j.at("data");
+        const auto &type = json.at("type").get<std::string>();
+        const auto &data = json.at("data");
 
         if (type == "CyclingCost")
         {
-            auto generic_cost_json = data.at("inner_cost");
+            const auto &generic_cost_json = data.at("inner_cost");
             auto generic_cost = create_product(generic_cost_json);
             return std::make_unique<costs::CyclingCost>(
                 std::move(generic_cost));
         }
-        else if (type == "ManaCost")
+        if (type == "ManaCost")
         {
-            auto mana_json = data.at("mana");
+            const auto &mana_json = data.at("mana");
             auto mana = JsonFactory<mana::Mana>::create_product(mana_json);
             return std::make_unique<costs::ManaCost>(std::move(mana));
         }
-        else if (type == "SelfSacrificeCost")
+        if (type == "SelfSacrificeCost")
         {
             return std::make_unique<costs::SelfSacrificeCost>();
         }
-        else
-        {
-            throw std::runtime_error(
-                "Unknown cost type for JSON deserialization");
-        }
+
+        throw std::runtime_error("Unknown cost type for JSON deserialization");
     }
 } // namespace dandan::serialization
+
+#endif // DANDAN_BUILD_SERIALIZE

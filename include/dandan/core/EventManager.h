@@ -17,7 +17,7 @@ namespace dandan::core
         void notify(const events::IEvent &event) const;
 
     private:
-        std::vector<const abilities::IAbility *> m_subscribers{};
+        std::vector<const abilities::IAbility *> m_subscribers;
     };
 } // namespace dandan::core
 

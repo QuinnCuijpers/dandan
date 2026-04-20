@@ -1,7 +1,7 @@
 #include "dandan/core/Card.h"
-#include "dandan/serialization/JsonFactory.h"
 
 #ifdef DANDAN_BUILD_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
 #endif
@@ -19,22 +19,23 @@ namespace dandan::core
             std::cerr << "Failed to open JSON file for card: " << name << '\n';
             return;
         }
-        nlohmann::json j;
-        file >> j;
-        auto factory{dandan::serialization::JsonFactory<Card>{}};
-        *this = std::move(*factory.create_product(j));
+        nlohmann::json json;
+        file >> json;
+        *this = std::move(*dandan::serialization::JsonFactory<
+                          dandan::core::Card>::create_product(json));
     }
 
-    void from_json(const nlohmann::json &j, Card &c)
+    void from_json(const nlohmann::json &json, Card &card)
     {
-        auto factory{dandan::serialization::JsonFactory<core::Card>()};
-        c = std::move(*factory.create_product(j));
+        card = std::move(*dandan::serialization::JsonFactory<
+                         dandan::core::Card>::create_product(json));
     }
 
-    void to_json(nlohmann::json &j, const Card &c)
+    void to_json(nlohmann::json &json, const Card &card)
     {
-        auto factory{dandan::serialization::JsonFactory<core::Card>()};
-        j = factory.create_json(&c);
+        json =
+            dandan::serialization::JsonFactory<dandan::core::Card>::create_json(
+                &card);
     }
 #endif
 

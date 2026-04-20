@@ -20,13 +20,14 @@ namespace dandan::mana
         {
         }
 
-        const std::vector<std::unique_ptr<Mana>> &getOptions() const
+        [[nodiscard]] const std::vector<std::unique_ptr<Mana>> &getOptions()
+            const
         {
             return m_options;
         }
 
     private:
-        std::vector<std::unique_ptr<Mana>> m_options{};
+        std::vector<std::unique_ptr<Mana>> m_options;
     };
 } // namespace dandan::mana
 

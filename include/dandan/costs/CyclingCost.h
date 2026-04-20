@@ -9,18 +9,18 @@ namespace dandan::costs
     class CyclingCost final : public ICost
     {
     public:
-        explicit CyclingCost(std::unique_ptr<ICost> mc)
-            : m_inner_cost{std::move(mc)} {};
+        explicit CyclingCost(std::unique_ptr<ICost> inner_cost)
+            : m_inner_cost{std::move(inner_cost)} {};
 
         void evaluate() override;
 
-        const ICost *getInnerCost() const
+        [[nodiscard]] const ICost *getInnerCost() const
         {
             return m_inner_cost.get();
         }
 
     private:
-        std::unique_ptr<ICost> m_inner_cost{};
+        std::unique_ptr<ICost> m_inner_cost;
     };
 } // namespace dandan::costs
 

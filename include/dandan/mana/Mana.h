@@ -1,6 +1,7 @@
 #ifndef DANDAN_MANA_H
 #define DANDAN_MANA_H
 
+#include <cstdint>
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -9,7 +10,7 @@
 namespace dandan::mana
 {
 
-    enum class ManaType
+    enum class ManaType : std::uint8_t
     {
         COLORLESS,
         WHITE,
@@ -48,31 +49,44 @@ namespace dandan::mana
     static ManaType ManaTypeFromString(const std::string_view &str)
     {
         if (str == "Colorless")
+        {
             return ManaType::COLORLESS;
-        else if (str == "White")
+        }
+        if (str == "White")
+        {
             return ManaType::WHITE;
-        else if (str == "Blue")
+        }
+        if (str == "Blue")
+        {
             return ManaType::BLUE;
-        else if (str == "Black")
+        }
+        if (str == "Black")
+        {
             return ManaType::BLACK;
-        else if (str == "Red")
+        }
+        if (str == "Red")
+        {
             return ManaType::RED;
-        else if (str == "Green")
+        }
+        if (str == "Green")
+        {
             return ManaType::GREEN;
-        else if (str == "Generic")
+        }
+        if (str == "Generic")
+        {
             return ManaType::GENERIC;
-        else
-            throw std::invalid_argument("Invalid mana type string: " +
-                                        std::string(str));
+        }
+        throw std::invalid_argument("Invalid mana type string: " +
+                                    std::string(str));
     }
 
-    typedef std::map<ManaType, int> ManaMap;
+    using ManaMap = std::map<ManaType, int>;
 
     class Mana
     {
     public:
         virtual ~Mana() = default;
-        virtual ManaMap getMana() const
+        [[nodiscard]] virtual ManaMap getMana() const
         {
             return m_manaMap;
         };

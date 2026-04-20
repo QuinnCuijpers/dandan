@@ -13,7 +13,7 @@ namespace dandan::costs
         explicit ManaCost(std::unique_ptr<mana::Mana> mana)
             : m_mana{std::move(mana)} {};
 
-        mana::Mana *getMana() const
+        [[nodiscard]] mana::Mana *getMana() const
         {
             return m_mana.get();
         }
@@ -21,7 +21,7 @@ namespace dandan::costs
         void evaluate() override;
 
     private:
-        std::unique_ptr<mana::Mana> m_mana{};
+        std::unique_ptr<mana::Mana> m_mana;
     };
 } // namespace dandan::costs
 

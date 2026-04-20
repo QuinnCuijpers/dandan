@@ -3,6 +3,7 @@
 
 #include "dandan/abilities/IAbility.h"
 
+#include <cstdint>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -19,7 +20,7 @@ namespace dandan::core
     class Card
     {
     public:
-        enum Type
+        enum Type : std::uint8_t
         {
             Land,
             Creature,
@@ -44,36 +45,36 @@ namespace dandan::core
         {
         }
 
-        std::string_view getName() const
+        [[nodiscard]] std::string_view getName() const
         {
             return m_name;
         }
-        int getCost() const
+        [[nodiscard]] int getCost() const
         {
             return m_cost;
         }
-        Type getType() const
+        [[nodiscard]] Type getType() const
         {
             return m_type;
         }
-        const std::vector<std::unique_ptr<abilities::IAbility>> &getAbilities()
-            const
+        [[nodiscard]] const std::vector<std::unique_ptr<abilities::IAbility>> &
+        getAbilities() const
         {
             return m_abilities;
         }
 
-        friend std::ostream &operator<<(std::ostream &os, const Card &c)
+        friend std::ostream &operator<<(std::ostream &ostream, const Card &card)
         {
-            os << "Card{name: " << c.m_name << ", cost: " << c.m_cost
-               << ", type: " << c.TypeToString(c.m_type) << '}';
-            return os;
+            ostream << "Card{name: " << card.m_name << ", cost: " << card.m_cost
+                    << ", type: " << Card::TypeToString(card.m_type) << '}';
+            return ostream;
         }
 
         static std::string_view TypeToString(Type type);
 
 #ifdef DANDAN_BUILD_SERIALIZE
-        friend void from_json(const nlohmann::json &j, Card &c);
-        friend void to_json(nlohmann::json &j, const Card &c);
+        friend void from_json(const nlohmann::json &json, Card &card);
+        friend void to_json(nlohmann::json &json, const Card &card);
 #endif
 
     private:

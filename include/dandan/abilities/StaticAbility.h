@@ -25,11 +25,11 @@ namespace dandan::abilities
 
         void resolve() const override;
 
-        const dandan::effects::IEffect *getOnEffect() const
+        [[nodiscard]] const dandan::effects::IEffect *getOnEffect() const
         {
             return m_on_effect.get();
         }
-        const dandan::replacement_effects::IReplacementEffect *
+        [[nodiscard]] const dandan::replacement_effects::IReplacementEffect *
         getReplacementEffect() const
         {
             return m_replacement_effect.get();

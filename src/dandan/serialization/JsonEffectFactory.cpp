@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonEffectFactory.h"
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/effects/BounceLandEffect.h"
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/ETBEffect.h"
@@ -17,72 +18,70 @@ namespace dandan::serialization
         if (const auto *scryEffect =
                 dynamic_cast<const effects::ScryEffect *>(effect))
         {
-            auto j = nlohmann::json{{"type", "ScryEffect"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["scry_amount"] = scryEffect->m_scry_amount;
-            return j;
+            auto json = nlohmann::json{{"type", "ScryEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["scry_amount"] = scryEffect->m_scry_amount;
+            return json;
         }
-        else if (const auto *peekEffect =
-                     dynamic_cast<const effects::PeekEffect *>(effect))
+        if (const auto *peekEffect =
+                dynamic_cast<const effects::PeekEffect *>(effect))
         {
-            auto j = nlohmann::json{{"type", "PeekEffect"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["peek_amount"] = peekEffect->m_peek_amount;
-            return j;
+            auto json = nlohmann::json{{"type", "PeekEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["peek_amount"] = peekEffect->m_peek_amount;
+            return json;
         }
-        else if (const auto *drawEffect =
-                     dynamic_cast<const effects::DrawEffect *>(effect))
+        if (const auto *drawEffect =
+                dynamic_cast<const effects::DrawEffect *>(effect))
         {
-            auto j = nlohmann::json{{"type", "DrawEffect"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["amount"] = drawEffect->m_amount;
-            return j;
+            auto json = nlohmann::json{{"type", "DrawEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["amount"] = drawEffect->m_amount;
+            return json;
         }
-        else if (const auto *etbEffect =
-                     dynamic_cast<const effects::ETBEffect *>(effect))
+        if (const auto *etbEffect =
+                dynamic_cast<const effects::ETBEffect *>(effect))
         {
-            auto j = nlohmann::json{{"type", "ETBEffect"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["tapped"] = etbEffect->m_tapped;
-            return j;
+            auto json = nlohmann::json{{"type", "ETBEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["tapped"] = etbEffect->m_tapped;
+            return json;
         }
-        else if ([[maybe_unused]] const auto *bounceLandEffect =
-                     dynamic_cast<const effects::BounceLandEffect *>(effect))
+        if ([[maybe_unused]] const auto *bounceLandEffect =
+                dynamic_cast<const effects::BounceLandEffect *>(effect))
         {
-            auto j = nlohmann::json{{"type", "BounceLandEffect"},
-                                    {"data", nlohmann::json::object()}};
-            return j;
+            auto json = nlohmann::json{{"type", "BounceLandEffect"},
+                                       {"data", nlohmann::json::object()}};
+            return json;
         }
-        else
-        {
-            throw std::runtime_error(
-                "Unknown effect type for JSON serialization: " +
-                std::string(typeid(*effect).name()));
-        }
+
+        throw std::runtime_error(
+            "Unknown effect type for JSON serialization: " +
+            std::string(typeid(*effect).name()));
     }
 
     std::unique_ptr<effects::IEffect> JsonFactory<
-        effects::IEffect>::create_product(const nlohmann::json &j)
+        effects::IEffect>::create_product(const nlohmann::json &json)
     {
-        const auto &type = j.at("type").get<std::string>();
-        const auto &data = j.at("data");
+        const auto &type = json.at("type").get<std::string>();
+        const auto &data = json.at("data");
 
         if (type == "ScryEffect")
         {
             return std::make_unique<effects::ScryEffect>(
                 data.at("scry_amount").get<int>());
         }
-        else if (type == "PeekEffect")
+        if (type == "PeekEffect")
         {
             return std::make_unique<effects::PeekEffect>(
                 data.at("peek_amount").get<int>());
         }
-        else if (type == "DrawEffect")
+        if (type == "DrawEffect")
         {
             return std::make_unique<effects::DrawEffect>(
                 data.at("amount").get<int>());
         }
-        else if (type == "ETBEffect")
+        if (type == "ETBEffect")
         {
             auto etbEffect = std::make_unique<effects::ETBEffect>();
             if (data.contains("tapped"))
@@ -91,13 +90,12 @@ namespace dandan::serialization
             }
             return etbEffect;
         }
-        else if (type == "BounceLandEffect")
+        if (type == "BounceLandEffect")
         {
             return std::make_unique<effects::BounceLandEffect>();
         }
-        else
-        {
-            throw std::runtime_error("Unknown effect type: " + type);
-        }
+
+        throw std::runtime_error("Unknown effect type: " + type);
     }
 } // namespace dandan::serialization
+#endif // DANDAN_BUILD_SERIALIZE

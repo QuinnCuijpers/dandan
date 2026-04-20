@@ -1,6 +1,10 @@
-checks:
+Checks: >
     bugprone-*,
     cppcoreguidelines-*,
     modernize-*,
     performance-*,
-    readability-*
+    readability-*,
+    -modernize-use-trailing-return-type
+
+ExcludeHeaderFilterRegex: '.*/external/.*' 
+WarningsAsErrors: '*'

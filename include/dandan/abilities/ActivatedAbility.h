@@ -19,11 +19,11 @@ namespace dandan::abilities
 
         void resolve() const override;
 
-        const costs::ICost *getCost() const
+        [[nodiscard]] const costs::ICost *getCost() const
         {
             return m_cost.get();
         }
-        const effects::IEffect *getEffect() const
+        [[nodiscard]] const effects::IEffect *getEffect() const
         {
             return m_effect.get();
         }

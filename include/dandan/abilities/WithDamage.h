@@ -16,12 +16,13 @@ namespace dandan::abilities
         {
         }
 
-        int getDamage() const
+        [[nodiscard]] int getDamage() const
         {
             return m_damage;
         }
 
-        bool appliesToEvent(const events::IEvent &event) const override
+        [[nodiscard]] bool appliesToEvent(
+            const events::IEvent &event) const override
         {
             return m_ability->appliesToEvent(event);
         }

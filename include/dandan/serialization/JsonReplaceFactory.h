@@ -15,7 +15,7 @@ namespace dandan::serialization
             const replacement_effects::IReplacementEffect *obj);
 
         static std::unique_ptr<replacement_effects::IReplacementEffect>
-        create_product(const nlohmann::json &j);
+        create_product(const nlohmann::json &json);
     };
 } // namespace dandan::serialization
 

@@ -15,7 +15,7 @@ namespace dandan::abilities
         {
         }
 
-        const mana::ManaList *getMana() const
+        [[nodiscard]] const mana::ManaList *getMana() const
         {
             return &m_mana_list;
         }

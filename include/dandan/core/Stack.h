@@ -20,7 +20,7 @@ namespace dandan::core
         void resolveNext();
 
     private:
-        std::vector<abilities::IAbility *> m_stack{};
+        std::vector<abilities::IAbility *> m_stack;
     };
 } // namespace dandan::core
 

@@ -12,7 +12,7 @@ namespace dandan::serialization
     {
     public:
         static std::unique_ptr<dandan::events::IEvent> create_product(
-            const nlohmann::json &j);
+            const nlohmann::json &json);
 
         static nlohmann::json create_json(const dandan::events::IEvent *event);
     };

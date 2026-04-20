@@ -1,13 +1,12 @@
-#include "dandan/mana/AndMana.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
+#include "dandan/mana/AndMana.h"
 #include "nlohmann/json.hpp"
 #include "gtest/gtest.h"
 #include <algorithm>
 #include <cctype>
 #include <filesystem>
 #include <fstream>
-#include <gtest/gtest.h>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -22,15 +21,15 @@
 static std::string formatCardName(std::string_view name)
 {
     std::string result{};
-    for (char c : name)
+    for (char char_ : name)
     {
-        if (c == '_')
+        if (char_ == '_')
         {
             result += ' ';
         }
         else
         {
-            result += c;
+            result += char_;
         }
     }
     return result;
@@ -208,8 +207,8 @@ protected:
     nlohmann::json m_received;
     void SetUp() override
     {
-        auto params{GetParam()};
-        auto card = params;
+        const auto *params{GetParam()};
+        const auto *card = params;
         std::string_view name{card->getName()};
 
         auto json_file_path{std::filesystem::path{DANDAN_PROJECT_SOURCE} /
@@ -217,10 +216,10 @@ protected:
         json_file_path += ".json";
 
         std::ifstream file{json_file_path};
-        nlohmann::json j{};
-        file >> j;
+        nlohmann::json json{};
+        file >> json;
 
-        m_expected = j;
+        m_expected = json;
         m_received = nlohmann::json(*card);
     }
 };
@@ -236,9 +235,11 @@ std::string CardParamName(
     const std::string raw_name{info.param->getName()};
     std::string name;
     std::copy_if(raw_name.begin(), raw_name.end(), std::back_inserter(name),
-                 [](char c) { return std::isalnum(c); });
+                 [](char char_) { return std::isalnum(char_); });
     if (name.empty())
+    {
         name = "unnamed";
+    }
     return name;
 }
 

@@ -16,7 +16,7 @@ namespace dandan::abilities
         {
         }
 
-        const costs::ICost *getAdditionalCost() const
+        [[nodiscard]] const costs::ICost *getAdditionalCost() const
         {
             return m_cost.get();
         }

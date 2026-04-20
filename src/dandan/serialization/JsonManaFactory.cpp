@@ -9,23 +9,23 @@ namespace dandan::serialization
     nlohmann::json JsonFactory<dandan::mana::ManaList>::create_json(
         const dandan::mana::ManaList *mana)
     {
-        nlohmann::json j = nlohmann::json::array();
+        nlohmann::json json = nlohmann::json::array();
         std::transform(mana->getOptions().begin(), mana->getOptions().end(),
-                       std::back_inserter(j),
+                       std::back_inserter(json),
                        [](const auto &option)
                        {
                            return JsonFactory<dandan::mana::Mana>::create_json(
                                option.get());
                        });
-        return j;
+        return json;
     }
 
     std::unique_ptr<dandan::mana::ManaList> JsonFactory<
-        dandan::mana::ManaList>::create_product(const nlohmann::json &j)
+        dandan::mana::ManaList>::create_product(const nlohmann::json &json)
     {
         std::vector<std::unique_ptr<dandan::mana::Mana>> options{};
         std::transform(
-            j.begin(), j.end(), std::back_inserter(options),
+            json.begin(), json.end(), std::back_inserter(options),
             [](const auto &option_json)
             {
                 return JsonFactory<dandan::mana::Mana>::create_product(
@@ -41,15 +41,15 @@ namespace dandan::serialization
     }
 
     std::unique_ptr<dandan::mana::Mana> JsonFactory<
-        dandan::mana::Mana>::create_product(const nlohmann::json &j)
+        dandan::mana::Mana>::create_product(const nlohmann::json &json)
     {
-        const std::string mana_str = j.get<std::string>();
+        const std::string mana_str = json.get<std::string>();
         auto mana = std::make_unique<dandan::mana::Mana>();
 
         for (std::size_t i = 0; i < mana_str.size(); ++i)
         {
-            const char c = mana_str[i];
-            switch (c)
+            const char char_ = mana_str[i];
+            switch (char_)
             {
             case 'C':
                 mana->getMana()[dandan::mana::ManaType::COLORLESS]++;
@@ -90,7 +90,7 @@ namespace dandan::serialization
             }
             default:
                 throw std::runtime_error("Unknown mana symbol in JSON: " +
-                                         std::string(1, c));
+                                         std::string(1, char_));
             }
         }
 

@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonReplaceFactory.h"
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/replacement_effects/EntersTappedEffect.h"
 #include <nlohmann/json.hpp>
 
@@ -16,30 +17,26 @@ namespace dandan::serialization
             return nlohmann::json{{"type", "EntersTappedEffect"},
                                   {"data", nlohmann::json::object()}};
         }
-        else
-        {
-            throw std::runtime_error(
-                "Unknown replacement effect type for JSON serialization");
-        }
+
+        throw std::runtime_error(
+            "Unknown replacement effect type for JSON serialization");
     }
 
     std::unique_ptr<replacement_effects::IReplacementEffect> JsonFactory<
         replacement_effects::IReplacementEffect>::
-        create_product(const nlohmann::json &j)
+        create_product(const nlohmann::json &json)
     {
         [[maybe_unused]]
-        const auto &data = j.at("data");
+        const auto &data = json.at("data");
 
-        const auto &type = j.at("type").get<std::string>();
+        const auto &type = json.at("type").get<std::string>();
 
         if (type == "EntersTappedEffect")
         {
             return std::make_unique<replacement_effects::EntersTappedEffect>();
         }
-        else
-        {
-            throw std::runtime_error("Unknown replacement effect type: " +
-                                     type);
-        }
+
+        throw std::runtime_error("Unknown replacement effect type: " + type);
     }
 } // namespace dandan::serialization
+#endif // DANDAN_BUILD_SERIALIZE

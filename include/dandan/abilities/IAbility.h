@@ -11,7 +11,7 @@ namespace dandan::abilities
         virtual ~IAbility() = default;
         virtual void resolve() const = 0;
 
-        virtual bool appliesToEvent(
+        [[nodiscard]] virtual bool appliesToEvent(
             [[maybe_unused]] const events::IEvent &event) const
         {
             return false;

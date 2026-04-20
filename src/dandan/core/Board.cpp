@@ -9,14 +9,14 @@ namespace dandan::core
         std::cout << "Cards in deck:\n";
         for (const auto &card : m_deck.getCards())
         {
-            std::cout << *(card.get()) << '\n';
+            std::cout << *card << '\n';
         }
         std::cout << '\n';
 
         std::cout << "Cards in hand:\n";
         for (const auto &card : m_hand.getCards())
         {
-            std::cout << *(card.get()) << '\n';
+            std::cout << *card << '\n';
         }
     }
 

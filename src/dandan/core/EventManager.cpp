@@ -6,7 +6,7 @@ namespace dandan::core
 {
     void EventManager::subscribe(const abilities::IAbility *ability)
     {
-        if (const abilities::TriggeredAbility *triggered =
+        if (const auto *triggered =
                 dynamic_cast<const abilities::TriggeredAbility *>(ability))
         {
             m_subscribers.push_back(triggered);
@@ -15,11 +15,11 @@ namespace dandan::core
 
     void EventManager::unsubscribe(const abilities::IAbility *ability)
     {
-        auto it =
+        auto iter =
             std::remove(m_subscribers.begin(), m_subscribers.end(), ability);
-        if (it != m_subscribers.end())
+        if (iter != m_subscribers.end())
         {
-            m_subscribers.erase(it, m_subscribers.end());
+            m_subscribers.erase(iter, m_subscribers.end());
         }
     }
 

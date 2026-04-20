@@ -14,11 +14,9 @@ namespace dandan::replacement_effects
             etbEffect->setTapped(true);
             return *etbEffect;
         }
-        else
-        {
-            throw std::runtime_error(
-                "EntersTappedEffect can only replace ETB effects");
-        }
+
+        throw std::runtime_error(
+            "EntersTappedEffect can only replace ETB effects");
     }
 
 } // namespace dandan::replacement_effects

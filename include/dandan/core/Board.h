@@ -13,7 +13,7 @@ namespace dandan::core
     class Board
     {
     public:
-        Board() : m_deck{}, m_hand{}
+        Board()
         {
             auto new_hand_cards{m_deck.draw(7)};
             auto hand{Hand{std::move(new_hand_cards)}};
@@ -24,12 +24,12 @@ namespace dandan::core
         void printCards() const;
 
     private:
-        Deck m_deck{};
-        Hand m_hand{};
+        Deck m_deck;
+        Hand m_hand;
         // Battlefield m_battlefield;
         // Graveyard m_graveyard;
-        Stack m_stack{};
-        EventManager m_event_manager{};
+        Stack m_stack;
+        EventManager m_event_manager;
     };
 
 } // namespace dandan::core

@@ -4,7 +4,7 @@
 #include <nlohmann/json.hpp>
 namespace dandan::core
 {
-    NLOHMANN_JSON_SERIALIZE_ENUM(Card::Type,
+    NLOHMANN_JSON_SERIALIZE_ENUM(Card::Type, // NOLINT
                                  {{Card::Type::Land, "Land"},
                                   {Card::Type::Creature, "Creature"},
                                   {Card::Type::Sorcery, "Sorcery"},
@@ -20,46 +20,46 @@ namespace dandan::serialization
 
     nlohmann::json JsonFactory<core::Card>::create_json(const core::Card *card)
     {
-        dandan::serialization::JsonFactory<abilities::IAbility> abilityFactory;
         auto ability_json = nlohmann::json::array();
 
         for (const auto &ability : card->getAbilities())
         {
-            nlohmann::json a;
-            a = abilityFactory.create_json(ability.get());
-            ability_json.push_back(a);
+            nlohmann::json ability_json;
+            ability_json =
+                JsonFactory<abilities::IAbility>::create_json(ability.get());
+            ability_json.push_back(ability_json);
         }
-        nlohmann::json j{};
+        nlohmann::json json{};
 
-        j["name"] = card->getName();
-        j["cost"] = card->getCost();
-        j["type"] = card->getType();
-        j["abilities"] = ability_json;
+        json["name"] = card->getName();
+        json["cost"] = card->getCost();
+        json["type"] = card->getType();
+        json["abilities"] = ability_json;
 
-        return j;
+        return json;
     }
 
     std::unique_ptr<core::Card> JsonFactory<core::Card>::create_product(
-        const nlohmann::json &j)
+        const nlohmann::json &json)
     {
 
-        auto name = j.at("name").get<std::string>();
+        auto name = json.at("name").get<std::string>();
         int cost{};
-        if (j.at("cost").is_string())
+        if (json.at("cost").is_string())
         {
-            cost = std::stoi(j.at("cost").get<std::string>());
+            cost = std::stoi(json.at("cost").get<std::string>());
         }
         else
         {
-            cost = j.at("cost").get<int>();
+            cost = json.at("cost").get<int>();
         }
-        auto type = j.at("type").get<core::Card::Type>();
+        auto type = json.at("type").get<core::Card::Type>();
 
-        auto factory{dandan::serialization::JsonFactory<abilities::IAbility>{}};
         auto abilities{std::vector<std::unique_ptr<abilities::IAbility>>{}};
-        for (const auto &ability_json : j.at("abilities"))
+        for (const auto &ability_json : json.at("abilities"))
         {
-            auto ability = factory.create_product(ability_json);
+            auto ability =
+                JsonFactory<abilities::IAbility>::create_product(ability_json);
             abilities.push_back(std::move(ability));
         }
 

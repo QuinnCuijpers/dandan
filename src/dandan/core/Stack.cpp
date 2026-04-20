@@ -5,7 +5,9 @@ namespace dandan::core
     void Stack::resolveNext()
     {
         if (m_stack.empty())
+        {
             return;
+        }
 
         const auto *ability = m_stack.back();
         m_stack.pop_back();

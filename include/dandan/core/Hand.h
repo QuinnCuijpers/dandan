@@ -16,7 +16,7 @@ namespace dandan::core
         {
         }
 
-        const std::vector<std::unique_ptr<Card>> &getCards() const
+        [[nodiscard]] const std::vector<std::unique_ptr<Card>> &getCards() const
         {
             return m_cards;
         }

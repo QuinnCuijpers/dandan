@@ -16,12 +16,12 @@ jobs:
             submodules: 'recursive'
 
       - name: Install dependencies
-        run: sudo apt-get install -y cppcheck cmake
+        run: sudo apt-get install -y cppcheck cmake clang-tidy
 
       - name: Configure with CMake
         run: cmake -B build --preset=DandanWithSerialize -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-      - name: Analyse source code
+      - name: run cppcheck
         run: |
           cppcheck \
             --project=build/compile_commands.json \
@@ -32,4 +32,9 @@ jobs:
             --error-exitcode=1 \
             --suppress=*:external/* \
             --suppress=missingIncludeSystem
-            --surpress=missingInclude
+            --surpress=missingInclude \
+
+      - name: Run clang-tidy
+        run: |
+          run-clang-tidy \
+            -p build \

@@ -9,22 +9,24 @@ namespace dandan::events
 
     struct ETBEvent final : public IEvent
     {
-        std::optional<bool> m_tapped{};
+        std::optional<bool> m_tapped;
 
         void setTapped(bool tapped)
         {
             m_tapped = tapped;
         }
-        bool isTapped() const
+        [[nodiscard]] bool isTapped() const
         {
             return m_tapped.value_or(false);
         }
 
-        bool equals(const IEvent &other) const override
+        [[nodiscard]] bool equals(const IEvent &other) const override
         {
-            const ETBEvent *otherETB = dynamic_cast<const ETBEvent *>(&other);
-            if (!otherETB)
+            const auto *otherETB = dynamic_cast<const ETBEvent *>(&other);
+            if (otherETB == nullptr)
+            {
                 return false;
+            }
 
             return m_tapped == otherETB->m_tapped;
         }

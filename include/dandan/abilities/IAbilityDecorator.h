@@ -12,7 +12,7 @@ namespace dandan::abilities
         explicit IAbilityDecorator(std::unique_ptr<IAbility> ability)
             : m_ability{std::move(ability)} {};
 
-        const IAbility *getInnerAbility() const
+        [[nodiscard]] const IAbility *getInnerAbility() const
         {
             return m_ability.get();
         }

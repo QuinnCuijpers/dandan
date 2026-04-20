@@ -12,22 +12,23 @@ namespace dandan::abilities
     class TriggeredAbility final : public IAbility
     {
     public:
-        TriggeredAbility(std::unique_ptr<dandan::events::IEvent> on,
+        TriggeredAbility(std::unique_ptr<dandan::events::IEvent> on_event,
                          std::unique_ptr<dandan::effects::IEffect> effect)
-            : m_on(std::move(on)), m_effect(std::move(effect))
+            : m_on(std::move(on_event)), m_effect(std::move(effect))
         {
         }
 
-        bool appliesToEvent(const events::IEvent &event) const override
+        [[nodiscard]] bool appliesToEvent(
+            const events::IEvent &event) const override
         {
             return event.equals(*m_on);
         }
 
-        const dandan::events::IEvent *getOnEvent() const
+        [[nodiscard]] const dandan::events::IEvent *getOnEvent() const
         {
             return m_on.get();
         }
-        const dandan::effects::IEffect *getEffect() const
+        [[nodiscard]] const dandan::effects::IEffect *getEffect() const
         {
             return m_effect.get();
         }

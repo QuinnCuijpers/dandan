@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-static auto DANDAN_DECKLIST =
+const static auto DANDAN_DECKLIST =
     std::filesystem::path(DANDAN_PROJECT_SOURCE) / "data/temp_decklist.txt";
 
 namespace dandan::core
@@ -21,7 +21,7 @@ namespace dandan::core
         explicit Deck(std::filesystem::path path);
 #endif
 
-        const std::deque<std::unique_ptr<Card>> &getCards() const
+        [[nodiscard]] const std::deque<std::unique_ptr<Card>> &getCards() const
         {
             return m_cards;
         }
@@ -32,9 +32,9 @@ namespace dandan::core
 
     private:
         std::filesystem::path m_decklist_path{DANDAN_DECKLIST};
-        std::deque<std::unique_ptr<Card>> m_cards{};
+        std::deque<std::unique_ptr<Card>> m_cards;
 #ifdef DANDAN_BUILD_SERIALIZE
-        void loadCards(std::filesystem::path path);
+        void loadCards(const std::filesystem::path &path);
 #endif
     };
 } // namespace dandan::core

@@ -15,7 +15,7 @@ namespace dandan::serialization
         static nlohmann::json create_json(const costs::ICost *cost);
 
         static std::unique_ptr<costs::ICost> create_product(
-            const nlohmann::json &j);
+            const nlohmann::json &json);
     };
 } // namespace dandan::serialization
 

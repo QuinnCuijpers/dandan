@@ -13,88 +13,90 @@ namespace dandan::serialization
     nlohmann::json JsonFactory<abilities::IAbility>::create_json(
         const IAbility *ability)
     {
-        if (const ActivatedAbility *activated =
+        if (const auto *activated =
                 dynamic_cast<const ActivatedAbility *>(ability))
         {
-            auto j = nlohmann::json{{"type", "ActivatedAbility"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["cost"] =
+            auto json = nlohmann::json{{"type", "ActivatedAbility"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["cost"] =
                 JsonFactory<costs::ICost>::create_json(activated->getCost());
-            j["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
+            json["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
                 activated->getEffect());
 
-            return j;
+            return json;
         }
-        else if (const ManaAbility *mana =
-                     dynamic_cast<const ManaAbility *>(ability))
+
+        if (const auto *mana = dynamic_cast<const ManaAbility *>(ability))
         {
-            auto j = nlohmann::json{{"type", "ManaAbility"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["mana_list"] =
+            auto json = nlohmann::json{{"type", "ManaAbility"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["mana_list"] =
                 JsonFactory<dandan::mana::ManaList>::create_json(
                     mana->getMana());
 
-            return j;
+            return json;
         }
-        else if (const WithDamage *withDamage =
-                     dynamic_cast<const WithDamage *>(ability))
-        {
-            auto j = nlohmann::json{{"type", "WithDamage"},
-                                    {"data", nlohmann::json::object()}};
-            j["data"]["damage"] = withDamage->getDamage();
-            j["data"]["ability"] = create_json(withDamage->getInnerAbility());
-            return j;
-        }
-        else if (const StaticAbility *staticAbility =
-                     dynamic_cast<const StaticAbility *>(ability))
-        {
-            auto j = nlohmann::json{{"type", "StaticAbility"},
-                                    {"data", nlohmann::json::object()}};
 
-            j["data"]["on_effect"] = JsonFactory<effects::IEffect>::create_json(
-                staticAbility->getOnEffect());
-            j["data"]["replacement_effect"] =
+        if (const auto *withDamage = dynamic_cast<const WithDamage *>(ability))
+        {
+            auto json = nlohmann::json{{"type", "WithDamage"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["damage"] = withDamage->getDamage();
+            json["data"]["ability"] =
+                create_json(withDamage->getInnerAbility());
+            return json;
+        }
+
+        if (const auto *staticAbility =
+                dynamic_cast<const StaticAbility *>(ability))
+        {
+            auto json = nlohmann::json{{"type", "StaticAbility"},
+                                       {"data", nlohmann::json::object()}};
+
+            json["data"]["on_effect"] =
+                JsonFactory<effects::IEffect>::create_json(
+                    staticAbility->getOnEffect());
+            json["data"]["replacement_effect"] =
                 JsonFactory<replacement_effects::IReplacementEffect>::
                     create_json(staticAbility->getReplacementEffect());
-            return j;
+            return json;
         }
-        else if (const TriggeredAbility *triggered =
-                     dynamic_cast<const TriggeredAbility *>(ability))
-        {
-            auto j = nlohmann::json{{"type", "TriggeredAbility"},
-                                    {"data", nlohmann::json::object()}};
 
-            j["data"]["event"] = JsonFactory<events::IEvent>::create_json(
+        if (const auto *triggered =
+                dynamic_cast<const TriggeredAbility *>(ability))
+        {
+            auto json = nlohmann::json{{"type", "TriggeredAbility"},
+                                       {"data", nlohmann::json::object()}};
+
+            json["data"]["event"] = JsonFactory<events::IEvent>::create_json(
                 triggered->getOnEvent());
-            j["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
+            json["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
                 triggered->getEffect());
-            return j;
+            return json;
         }
-        else if (const auto *withAdditionalCost =
-                     dynamic_cast<const WithAdditionalCost *>(ability))
-        {
-            auto j = nlohmann::json{{"type", "WithAdditionalCost"},
-                                    {"data", nlohmann::json::object()}};
 
-            j["data"]["additional_cost"] =
+        if (const auto *withAdditionalCost =
+                dynamic_cast<const WithAdditionalCost *>(ability))
+        {
+            auto json = nlohmann::json{{"type", "WithAdditionalCost"},
+                                       {"data", nlohmann::json::object()}};
+
+            json["data"]["additional_cost"] =
                 JsonFactory<costs::ICost>::create_json(
                     withAdditionalCost->getAdditionalCost());
-            j["data"]["ability"] =
+            json["data"]["ability"] =
                 create_json(withAdditionalCost->getInnerAbility());
-            return j;
+            return json;
         }
-        else
-        {
-            throw std::runtime_error(
-                "Unknown ability type for JSON serialization");
-        }
+
+        throw std::runtime_error("Unknown ability type for JSON serialization");
     }
 
     std::unique_ptr<abilities::IAbility> JsonFactory<
-        abilities::IAbility>::create_product(const nlohmann::json &j)
+        abilities::IAbility>::create_product(const nlohmann::json &json)
     {
-        const std::string type{j.at("type").get<std::string>()};
-        const nlohmann::json &data{j.at("data")};
+        const std::string type{json.at("type").get<std::string>()};
+        const nlohmann::json &data{json.at("data")};
 
         if (type == "ActivatedAbility")
         {
@@ -107,7 +109,8 @@ namespace dandan::serialization
             return std::make_unique<ActivatedAbility>(std::move(cost),
                                                       std::move(effect));
         }
-        else if (type == "ManaAbility")
+
+        if (type == "ManaAbility")
         {
             std::unique_ptr<dandan::mana::ManaList> mana_list{
                 JsonFactory<dandan::mana::ManaList>::create_product(
@@ -115,14 +118,16 @@ namespace dandan::serialization
 
             return std::make_unique<ManaAbility>(std::move(*mana_list));
         }
-        else if (type == "WithDamage")
+
+        if (type == "WithDamage")
         {
             const int damage{data.at("damage").get<int>()};
             auto inner_ability = create_product(data.at("ability"));
             return std::make_unique<WithDamage>(std::move(inner_ability),
                                                 damage);
         }
-        else if (type == "StaticAbility")
+
+        if (type == "StaticAbility")
         {
             auto on_effect{JsonFactory<dandan::IEffect>::create_product(
                 data.at("on_effect"))};
@@ -134,7 +139,8 @@ namespace dandan::serialization
             return std::make_unique<StaticAbility>(
                 std::move(on_effect), std::move(replacement_effect));
         }
-        else if (type == "TriggeredAbility")
+
+        if (type == "TriggeredAbility")
         {
             auto event{
                 JsonFactory<dandan::IEvent>::create_product(data.at("event"))};
@@ -145,7 +151,8 @@ namespace dandan::serialization
             return std::make_unique<TriggeredAbility>(std::move(event),
                                                       std::move(effect));
         }
-        else if (type == "WithAdditionalCost")
+
+        if (type == "WithAdditionalCost")
         {
             auto additional_cost{JsonFactory<dandan::ICost>::create_product(
                 data.at("additional_cost"))};
@@ -155,10 +162,8 @@ namespace dandan::serialization
             return std::make_unique<WithAdditionalCost>(
                 std::move(inner_ability), std::move(additional_cost));
         }
-        else
-        {
-            throw std::runtime_error("Unknown ability type in JSON: " + type);
-        }
+
+        throw std::runtime_error("Unknown ability type in JSON: " + type);
     }
 } // namespace dandan::serialization
 

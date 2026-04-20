@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonEventFactory.h"
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/events/ETBEvent.h"
 #include <nlohmann/json.hpp>
 
@@ -10,25 +11,24 @@ namespace dandan::serialization
         if (const auto *entersBattlefieldEvent =
                 dynamic_cast<const events::ETBEvent *>(event))
         {
-            auto j = nlohmann::json{{"type", "EntersBattlefieldEvent"},
-                                    {"data", nlohmann::json::object()}};
+            auto json = nlohmann::json{{"type", "EntersBattlefieldEvent"},
+                                       {"data", nlohmann::json::object()}};
             if (entersBattlefieldEvent->m_tapped.has_value())
             {
-                j["data"]["tapped"] = entersBattlefieldEvent->m_tapped.value();
+                json["data"]["tapped"] =
+                    entersBattlefieldEvent->m_tapped.value();
             }
-            return j;
+            return json;
         }
-        else
-        {
-            throw std::runtime_error("Unknown event type");
-        }
+
+        throw std::runtime_error("Unknown event type");
     }
 
     std::unique_ptr<events::IEvent> JsonFactory<events::IEvent>::create_product(
-        const nlohmann::json &j)
+        const nlohmann::json &json)
     {
-        const auto &type = j.at("type").get<std::string>();
-        const auto &data = j.at("data");
+        const auto &type = json.at("type").get<std::string>();
+        const auto &data = json.at("data");
 
         if (type == "EntersBattlefieldEvent")
         {
@@ -39,9 +39,8 @@ namespace dandan::serialization
             }
             return event;
         }
-        else
-        {
-            throw std::runtime_error("Unknown event type: " + type);
-        }
+
+        throw std::runtime_error("Unknown event type: " + type);
     }
 } // namespace dandan::serialization
+#endif // DANDAN_BUILD_SERIALIZE

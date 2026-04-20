@@ -30,7 +30,7 @@ namespace dandan::core
         loadCards(m_decklist_path);
     }
 
-    void Deck::loadCards(std::filesystem::path path)
+    void Deck::loadCards(const std::filesystem::path &path)
     {
         std::ifstream file{path};
         while (file)
@@ -39,12 +39,12 @@ namespace dandan::core
             std::getline(file, line);
             if (!line.empty())
             {
-                std::stringstream ss{line};
+                std::stringstream stream{line};
                 std::string name;
-                int amount;
-                ss >> amount;
-                ss.ignore(1, ' '); // Ignore the space after the amount
-                std::getline(ss, name);
+                int amount{};
+                stream >> amount;
+                stream.ignore(1, ' '); // Ignore the space after the amount
+                std::getline(stream, name);
                 std::cout << "Adding " << amount << " copies of " << name
                           << " to the deck.\n";
                 for (int i = 0; i < amount; ++i)
@@ -73,8 +73,7 @@ namespace dandan::core
         for (int i = 0; i < count && i < static_cast<int>(m_cards.size()); ++i)
         {
             const std::unique_ptr<Card> &card = m_cards[i];
-            std::cout << "card " << i << " from the top: " << *(card.get())
-                      << '\n';
+            std::cout << "card " << i << " from the top: " << *card << '\n';
         }
     }
 } // namespace dandan::core
