@@ -85,6 +85,11 @@ namespace dandan::mana
     class Mana
     {
     public:
+        Mana() = default;
+        Mana(const Mana &) = default;
+        Mana(Mana &&) = delete;
+        Mana &operator=(const Mana &) = default;
+        Mana &operator=(Mana &&) = delete;
         virtual ~Mana() = default;
         [[nodiscard]] virtual ManaMap getMana() const
         {

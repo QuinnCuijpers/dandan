@@ -1,0 +1,98 @@
+Diagnostics:
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 479
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/abilities/IAbilityDecorator.h
+    Message: member variable 'm_ability' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 327
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/core/Board.h
+    Message: 7 is a magic number; consider replacing it with a named constant
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-avoid-magic-numbers
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 2181
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/mana/Mana.h
+    Message: member variable 'm_manaMap' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 479
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/abilities/IAbilityDecorator.h
+    Message: member variable 'm_ability' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 2181
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/mana/Mana.h
+    Message: member variable 'm_manaMap' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 327
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/core/Board.h
+    Message: 7 is a magic number; consider replacing it with a named constant
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-avoid-magic-numbers
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 479
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/abilities/IAbilityDecorator.h
+    Message: member variable 'm_ability' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 2181
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/mana/Mana.h
+    Message: member variable 'm_manaMap' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 2181
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/mana/Mana.h
+    Message: member variable 'm_manaMap' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 2181
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/mana/Mana.h
+    Message: member variable 'm_manaMap' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 479
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/abilities/IAbilityDecorator.h
+    Message: member variable 'm_ability' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+- BuildDirectory: /home/quinn/Documents/dev/dandan/build
+  DiagnosticMessage:
+    FileOffset: 2181
+    FilePath: /home/quinn/Documents/dev/dandan/include/dandan/mana/Mana.h
+    Message: member variable 'm_manaMap' has protected visibility
+    Replacements: []
+  DiagnosticName: cppcoreguidelines-non-private-member-variables-in-classes
+  Level: Error
+MainSourceFile: ''

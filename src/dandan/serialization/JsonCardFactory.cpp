@@ -20,21 +20,21 @@ namespace dandan::serialization
 
     nlohmann::json JsonFactory<core::Card>::create_json(const core::Card *card)
     {
-        auto ability_json = nlohmann::json::array();
+        auto abilities_json = nlohmann::json::array();
 
         for (const auto &ability : card->getAbilities())
         {
             nlohmann::json ability_json;
             ability_json =
                 JsonFactory<abilities::IAbility>::create_json(ability.get());
-            ability_json.push_back(ability_json);
+            abilities_json.push_back(ability_json);
         }
         nlohmann::json json{};
 
         json["name"] = card->getName();
         json["cost"] = card->getCost();
         json["type"] = card->getType();
-        json["abilities"] = ability_json;
+        json["abilities"] = abilities_json;
 
         return json;
     }

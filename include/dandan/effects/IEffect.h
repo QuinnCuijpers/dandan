@@ -8,6 +8,11 @@ namespace dandan::effects
     class IEffect
     {
     public:
+        IEffect() = default;
+        IEffect(const IEffect &) = default;
+        IEffect(IEffect &&) = delete;
+        IEffect &operator=(const IEffect &) = default;
+        IEffect &operator=(IEffect &&) = delete;
         virtual ~IEffect() = default;
         virtual void apply() = 0;
     };
