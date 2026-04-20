@@ -23,7 +23,7 @@ namespace dandan::core
         }
     }
 
-    void EventManager::notify(const events::IEvent &event)
+    void EventManager::notify(const events::IEvent &event) const
     {
         for (const auto *subscriber : m_subscribers)
         {

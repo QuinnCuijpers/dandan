@@ -14,7 +14,7 @@ namespace dandan::core
 
         void subscribe(const abilities::IAbility *ability);
         void unsubscribe(const abilities::IAbility *ability);
-        void notify(const events::IEvent &event);
+        void notify(const events::IEvent &event) const;
 
     private:
         std::vector<const abilities::IAbility *> m_subscribers{};
