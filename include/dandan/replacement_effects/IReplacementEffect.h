@@ -9,13 +9,13 @@ namespace dandan::replacement_effects
     {
     public:
         IReplacementEffect() = default;
-        IReplacementEffect(const IReplacementEffect &) = default;
+        IReplacementEffect(const IReplacementEffect &) = delete;
         IReplacementEffect(IReplacementEffect &&) = delete;
-        IReplacementEffect &operator=(const IReplacementEffect &) = default;
+        IReplacementEffect &operator=(const IReplacementEffect &) = delete;
         IReplacementEffect &operator=(IReplacementEffect &&) = delete;
         virtual effects::IEffect &replace(effects::IEffect &effect) = 0;
         virtual ~IReplacementEffect() = default;
     };
 
 } // namespace dandan::replacement_effects
-#endif
+#endif // IREPLACEMENTEFFECT_H

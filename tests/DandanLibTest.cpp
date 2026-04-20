@@ -202,9 +202,11 @@ static const std::vector<const dandan::Card *> &getCards()
 class JsonTest : public testing::TestWithParam<const dandan::Card *>
 {
 
-protected:
+public:
     nlohmann::json m_expected;
     nlohmann::json m_received;
+
+protected:
     void SetUp() override
     {
         const auto *params{GetParam()};

@@ -9,9 +9,9 @@ namespace dandan::effects
     {
     public:
         IEffect() = default;
-        IEffect(const IEffect &) = default;
+        IEffect(const IEffect &) = delete;
         IEffect(IEffect &&) = delete;
-        IEffect &operator=(const IEffect &) = default;
+        IEffect &operator=(const IEffect &) = delete;
         IEffect &operator=(IEffect &&) = delete;
         virtual ~IEffect() = default;
         virtual void apply() = 0;

@@ -86,9 +86,9 @@ namespace dandan::mana
     {
     public:
         Mana() = default;
-        Mana(const Mana &) = default;
+        Mana(const Mana &) = delete;
         Mana(Mana &&) = delete;
-        Mana &operator=(const Mana &) = default;
+        Mana &operator=(const Mana &) = delete;
         Mana &operator=(Mana &&) = delete;
         virtual ~Mana() = default;
 

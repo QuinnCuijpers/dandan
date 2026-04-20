@@ -9,9 +9,9 @@ namespace dandan::abilities
     {
     public:
         IAbility() = default;
-        IAbility(const IAbility &) = default;
+        IAbility(const IAbility &) = delete;
         IAbility(IAbility &&) = delete;
-        IAbility &operator=(const IAbility &) = default;
+        IAbility &operator=(const IAbility &) = delete;
         IAbility &operator=(IAbility &&) = delete;
         virtual ~IAbility() = default;
 

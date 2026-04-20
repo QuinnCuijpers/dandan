@@ -7,9 +7,9 @@ namespace dandan::costs
     {
     public:
         ICost() = default;
-        ICost(const ICost &) = default;
+        ICost(const ICost &) = delete;
         ICost(ICost &&) = delete;
-        ICost &operator=(const ICost &) = default;
+        ICost &operator=(const ICost &) = delete;
         ICost &operator=(ICost &&) = delete;
         virtual ~ICost() = default;
         virtual void evaluate() = 0;
