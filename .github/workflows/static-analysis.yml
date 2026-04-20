@@ -17,10 +17,14 @@ jobs:
 
       - name: Install dependencies
         run: sudo apt-get install -y cppcheck cmake clang-tidy
-
+      
       - name: Configure with CMake
         run: cmake -B build --preset=DandanWithSerialize -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
+      
+      - name: Run clang-tidy
+        run: |
+          run-clang-tidy \
+            -p build \
       - name: run cppcheck
         run: |
           cppcheck \
@@ -34,7 +38,3 @@ jobs:
             --suppress=missingIncludeSystem
             --surpress=missingInclude \
 
-      - name: Run clang-tidy
-        run: |
-          run-clang-tidy \
-            -p build \
