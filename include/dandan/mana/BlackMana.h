@@ -11,7 +11,11 @@ namespace dandan::mana
     public:
         BlackMana()
         {
-            m_manaMap[ManaType::BLACK]++;
+            addMana(ManaType::BLACK, 1);
+        }
+        explicit BlackMana(int amount)
+        {
+            addMana(ManaType::BLACK, amount);
         }
     };
 

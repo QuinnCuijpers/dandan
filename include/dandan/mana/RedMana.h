@@ -10,7 +10,11 @@ namespace dandan::mana
     public:
         RedMana()
         {
-            m_manaMap[ManaType::RED]++;
+            addMana(ManaType::RED, 1);
+        }
+        explicit RedMana(int amount)
+        {
+            addMana(ManaType::RED, amount);
         }
     };
 } // namespace dandan::mana

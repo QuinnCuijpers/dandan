@@ -10,7 +10,11 @@ namespace dandan::mana
     public:
         GreenMana()
         {
-            m_manaMap[ManaType::GREEN]++;
+            addMana(ManaType::GREEN, 1);
+        }
+        explicit GreenMana(int amount)
+        {
+            addMana(ManaType::GREEN, amount);
         }
     };
 } // namespace dandan::mana

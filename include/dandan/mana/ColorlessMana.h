@@ -10,7 +10,11 @@ namespace dandan::mana
     public:
         ColorlessMana()
         {
-            m_manaMap[ManaType::COLORLESS]++;
+            addMana(ManaType::COLORLESS, 1);
+        }
+        explicit ColorlessMana(int amount)
+        {
+            addMana(ManaType::COLORLESS, amount);
         }
     };
 } // namespace dandan::mana

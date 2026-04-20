@@ -9,15 +9,15 @@ namespace dandan::mana
     class AndMana : public Mana
     {
     public:
-        AndMana(std::unique_ptr<Mana> a, std::unique_ptr<Mana> b)
+        AndMana(std::unique_ptr<Mana> a, std::unique_ptr<Mana> b) // NOLINT
         {
             for (const auto &[type, amount] : a->getMana())
             {
-                m_manaMap[type] += amount;
+                addMana(type, amount);
             }
             for (const auto &[type, amount] : b->getMana())
             {
-                m_manaMap[type] += amount;
+                addMana(type, amount);
             }
         }
     };

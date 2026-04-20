@@ -91,12 +91,18 @@ namespace dandan::mana
         Mana &operator=(const Mana &) = default;
         Mana &operator=(Mana &&) = delete;
         virtual ~Mana() = default;
+
+        virtual void addMana(ManaType type, int amount)
+        {
+            m_manaMap[type] += amount;
+        }
+
         [[nodiscard]] virtual ManaMap getMana() const
         {
             return m_manaMap;
         };
 
-    protected:
+    private:
         ManaMap m_manaMap;
     };
 

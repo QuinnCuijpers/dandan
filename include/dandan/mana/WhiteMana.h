@@ -10,7 +10,11 @@ namespace dandan::mana
     public:
         WhiteMana()
         {
-            m_manaMap[ManaType::WHITE]++;
+            addMana(ManaType::WHITE, 1);
+        }
+        explicit WhiteMana(int amount)
+        {
+            addMana(ManaType::WHITE, amount);
         }
     };
 } // namespace dandan::mana

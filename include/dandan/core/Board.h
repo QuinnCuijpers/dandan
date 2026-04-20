@@ -6,6 +6,9 @@
 #include "dandan/core/Hand.h"
 #include "dandan/core/Stack.h"
 #include <iostream>
+#include <sys/stat.h>
+
+const static int STARTING_HAND_SIZE{7};
 
 namespace dandan::core
 {
@@ -15,7 +18,7 @@ namespace dandan::core
     public:
         Board()
         {
-            auto new_hand_cards{m_deck.draw(7)};
+            auto new_hand_cards{m_deck.draw(STARTING_HAND_SIZE)};
             auto hand{Hand{std::move(new_hand_cards)}};
             m_hand = std::move(hand);
             std::cout << "Board initialized with deck and hand.\n";

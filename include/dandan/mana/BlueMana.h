@@ -10,12 +10,12 @@ namespace dandan::mana
     public:
         BlueMana()
         {
-            m_manaMap[ManaType::BLUE]++;
+            addMana(ManaType::BLUE, 1);
         }
 
         explicit BlueMana(int amount)
         {
-            m_manaMap[ManaType::BLUE] += amount;
+            addMana(ManaType::BLUE, amount);
         }
     };
 } // namespace dandan::mana

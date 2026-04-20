@@ -6,9 +6,11 @@
 
 namespace dandan::abilities
 {
-    class IAbilityDecorator : public IAbility
+    struct IAbilityDecorator : public IAbility
     {
     public:
+        std::unique_ptr<IAbility> m_ability;
+
         explicit IAbilityDecorator(std::unique_ptr<IAbility> ability)
             : m_ability{std::move(ability)} {};
 
@@ -16,9 +18,6 @@ namespace dandan::abilities
         {
             return m_ability.get();
         }
-
-    protected:
-        std::unique_ptr<IAbility> m_ability;
     };
 } // namespace dandan::abilities
 

@@ -11,7 +11,7 @@ namespace dandan::mana
     public:
         explicit GenericMana(int amount)
         {
-            m_manaMap[ManaType::GENERIC] += amount;
+            addMana(ManaType::GENERIC, amount);
         }
     };
 } // namespace dandan::mana
