@@ -70,6 +70,19 @@ namespace dandan::serialization
                 triggered->getEffect());
             return j;
         }
+        else if (const auto *withAdditionalCost =
+                     dynamic_cast<const WithAdditionalCost *>(ability))
+        {
+            auto j = nlohmann::json{{"type", "WithAdditionalCost"},
+                                    {"data", nlohmann::json::object()}};
+
+            j["data"]["additional_cost"] =
+                JsonFactory<costs::ICost>::create_json(
+                    withAdditionalCost->getAdditionalCost());
+            j["data"]["ability"] =
+                create_json(withAdditionalCost->getInnerAbility());
+            return j;
+        }
         else
         {
             throw std::runtime_error(
@@ -131,6 +144,16 @@ namespace dandan::serialization
 
             return std::make_unique<TriggeredAbility>(std::move(event),
                                                       std::move(effect));
+        }
+        else if (type == "WithAdditionalCost")
+        {
+            auto additional_cost{JsonFactory<dandan::ICost>::create_product(
+                data.at("additional_cost"))};
+
+            auto inner_ability = create_product(data.at("ability"));
+
+            return std::make_unique<WithAdditionalCost>(
+                std::move(inner_ability), std::move(additional_cost));
         }
         else
         {

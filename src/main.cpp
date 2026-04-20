@@ -88,6 +88,12 @@ void check_card_serialize()
     abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
         dandan::ManaList{std::make_unique<dandan::BlueMana>()}));
 
+    abilities.emplace_back(
+        std::make_unique<dandan::abilities::WithAdditionalCost>(
+            std::make_unique<dandan::ManaAbility>(
+                dandan::ManaList{std::make_unique<dandan::BlueMana>(2)}),
+            std::make_unique<dandan::costs::SelfSacrificeCost>()));
+
     dandan::Card test{"Svyelunite Temple", 0, dandan::Card::Land,
                       std::move(abilities)};
 

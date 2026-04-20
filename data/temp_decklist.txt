@@ -5,4 +5,5 @@
 2 Shivan Reef
 2 Temple of Epiphany
 2 Izzet Boilerworks
+2 Svyelunite Temple
 20 Island

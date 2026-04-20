@@ -21,11 +21,6 @@ namespace dandan::abilities
             return m_damage;
         }
 
-        const IAbility *getInnerAbility() const
-        {
-            return m_ability.get();
-        }
-
         bool appliesToEvent(const events::IEvent &event) const override
         {
             return m_ability->appliesToEvent(event);

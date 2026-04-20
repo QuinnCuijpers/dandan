@@ -1,6 +1,7 @@
 add_library(DandanCosts OBJECT)
 
-target_sources(DandanCosts PRIVATE CyclingCost.cpp ManaCost.cpp)
+target_sources(DandanCosts PRIVATE CyclingCost.cpp ManaCost.cpp
+  SelfSacrificeCost.cpp)
 
 target_sources(DandanCosts PUBLIC FILE_SET HEADERS BASE_DIRS
                                   ${CMAKE_SOURCE_DIR}/include)

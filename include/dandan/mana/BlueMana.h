@@ -12,6 +12,11 @@ namespace dandan::mana
         {
             m_manaMap[ManaType::BLUE]++;
         }
+
+        explicit BlueMana(int amount)
+        {
+            m_manaMap[ManaType::BLUE] += amount;
+        }
     };
 } // namespace dandan::mana
 

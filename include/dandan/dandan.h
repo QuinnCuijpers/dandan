@@ -6,11 +6,13 @@
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/TriggeredAbility.h"
+#include "dandan/abilities/WithAdditionalCost.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/ManaCost.h"
+#include "dandan/costs/SelfSacrificeCost.h"
 #include "dandan/effects/BounceLandEffect.h"
 #include "dandan/effects/DrawEffect.h"
 #include "dandan/effects/ETBEffect.h"
@@ -34,8 +36,8 @@ namespace dandan
     using abilities::ManaAbility;
     using abilities::StaticAbility;
     using abilities::TriggeredAbility;
+    using abilities::WithAdditionalCost;
     using abilities::WithDamage;
-
     using core::Card;
 
     using effects::BounceLandEffect;
@@ -54,6 +56,7 @@ namespace dandan
     using costs::CyclingCost;
     using costs::ICost;
     using costs::ManaCost;
+    using costs::SelfSacrificeCost;
 
     using mana::BlackMana;
     using mana::BlueMana;
