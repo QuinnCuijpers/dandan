@@ -9,6 +9,7 @@
 #include "dandan/abilities/WithAdditionalCost.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/Game.h"
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/ManaCost.h"
@@ -38,7 +39,9 @@ namespace dandan
     using abilities::TriggeredAbility;
     using abilities::WithAdditionalCost;
     using abilities::WithDamage;
+
     using core::Card;
+    using core::Game;
 
     using effects::BounceLandEffect;
     using effects::DrawEffect;

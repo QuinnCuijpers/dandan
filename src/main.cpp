@@ -1,4 +1,3 @@
-#include "dandan/core/Board.h"
 #include "dandan/dandan.h"
 
 #include <filesystem>
@@ -138,7 +137,7 @@ int main()
 #ifdef DANDAN_BUILD_SERIALIZE
     check_card_serialize();
 #endif
-    dandan::core::Board board{};
 
-    board.printCards();
+    dandan::Game game{};
+    game.printCards();
 }
