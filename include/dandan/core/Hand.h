@@ -21,6 +21,17 @@ namespace dandan::core
             return m_cards;
         }
 
+        [[nodiscard]] std::unique_ptr<Card> getCard(int index)
+        {
+            auto card{std::move(m_cards[index])};
+            // erase chosen over pop and swap as we want to maintain card order
+            // in hand while in the backend it is more effiecient to pop and
+            // swap, the order of cards remaining constant makes UI later easier
+            // to implement
+            m_cards.erase(m_cards.begin() + index);
+            return card;
+        }
+
     private:
         std::vector<std::unique_ptr<Card>> m_cards;
     };

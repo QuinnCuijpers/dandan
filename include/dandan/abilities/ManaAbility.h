@@ -2,7 +2,10 @@
 #define DANDAN_MANAABILITY_H
 
 #include "IAbility.h"
+#include "dandan/costs/ICost.h"
+#include "dandan/costs/TapCost.h"
 #include "dandan/mana/ManaList.h"
+#include <memory>
 
 namespace dandan::abilities
 {
@@ -15,6 +18,11 @@ namespace dandan::abilities
         {
         }
 
+        ManaAbility(std::unique_ptr<costs::ICost> cost, mana::ManaList manaList)
+            : m_cost(std::move(cost)), m_mana_list(std::move(manaList))
+        {
+        }
+
         [[nodiscard]] const mana::ManaList *getMana() const
         {
             return &m_mana_list;
@@ -23,6 +31,9 @@ namespace dandan::abilities
         void resolve() const override;
 
     private:
+        // TODO: add cost to serialization logic
+        std::unique_ptr<costs::ICost> m_cost{
+            std::make_unique<costs::TapCost>()};
         mana::ManaList m_mana_list;
     };
 } // namespace dandan::abilities

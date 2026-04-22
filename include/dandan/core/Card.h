@@ -63,6 +63,15 @@ namespace dandan::core
             return m_abilities;
         }
 
+        void play() const
+        {
+            std::cout << "Playing card: " << m_name << '\n';
+            for (const auto &ability : m_abilities)
+            {
+                ability->resolve();
+            }
+        }
+
         friend std::ostream &operator<<(std::ostream &ostream, const Card &card)
         {
             ostream << "Card{name: " << card.m_name << ", cost: " << card.m_cost

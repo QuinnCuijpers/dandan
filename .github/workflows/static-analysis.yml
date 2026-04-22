@@ -37,6 +37,6 @@ jobs:
             --inconclusive \
             --error-exitcode=1 \
             --suppress=*:external/* \
-            --suppress=missingIncludeSystem
-            --surpress=missingInclude \
+            --suppress=missingIncludeSystem \
+            --suppress=missingInclude \
 

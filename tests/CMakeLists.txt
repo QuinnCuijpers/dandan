@@ -1,5 +1,6 @@
 if(DANDAN_BUILD_SERIALIZE)
-  add_executable(DandanLibSerializationTest DandanLibTest.cpp)
+  add_executable(DandanLibSerializationTest DandanLibSerializationTest.cpp
+                                            DandanLibTest.cpp)
 
   target_compile_features(DandanLibSerializationTest PRIVATE cxx_std_17)
   target_compile_definitions(DandanLibSerializationTest

@@ -26,6 +26,7 @@ namespace dandan::serialization
             return json;
         }
 
+        // TODO: add cost to mana ability serialization logic
         if (const auto *mana = dynamic_cast<const ManaAbility *>(ability))
         {
             auto json = nlohmann::json{{"type", "ManaAbility"},
@@ -110,6 +111,7 @@ namespace dandan::serialization
                                                       std::move(effect));
         }
 
+        // TODO: add cost to mana ability deserialization logic
         if (type == "ManaAbility")
         {
             std::unique_ptr<dandan::mana::ManaList> mana_list{

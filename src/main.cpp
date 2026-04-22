@@ -1,3 +1,4 @@
+#include "dandan/core/Player.h"
 #include "dandan/dandan.h"
 
 #include <filesystem>
@@ -139,5 +140,12 @@ int main()
 #endif
 
     dandan::Game game{};
+    game.printCards();
+    auto &active_player = game.getActivePlayer();
+    for (int i{}; i < STARTING_HAND_SIZE; ++i)
+    {
+        active_player.playCard(0);
+    }
+
     game.printCards();
 }

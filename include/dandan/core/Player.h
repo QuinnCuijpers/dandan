@@ -18,6 +18,11 @@ namespace dandan::core
             return m_hand;
         }
 
+        void setHand(Hand &&hand)
+        {
+            m_hand = std::move(hand);
+        }
+
         [[nodiscard]] int getLifeTotal() const
         {
             return m_life_total;
@@ -26,6 +31,12 @@ namespace dandan::core
         [[nodiscard]] const Battlefield &getBattlefield() const
         {
             return m_battlefield;
+        }
+
+        void playCard(int index)
+        {
+            std::cout << "Player is playing card at index " << index << '\n';
+            m_battlefield.addCard(m_hand.getCard(index));
         }
 
     private:

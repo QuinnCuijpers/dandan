@@ -11,28 +11,19 @@ namespace dandan::core
     class Game
     {
     public:
-        Game() = default;
+        Game();
 
-        void printCards() const
+        [[nodiscard]] Player &getActivePlayer()
         {
-            std::cout << "Cards in deck:\n";
-            for (const auto &card : m_deck.getCards())
-            {
-                std::cout << *card << '\n';
-            }
-
-            std::cout << "Cards in hand for active player:\n";
-            for (const auto &card : m_active_player.getHand().getCards())
-            {
-                std::cout << *card << '\n';
-            }
-
-            std::cout << "Cards in hand for non-active player:\n";
-            for (const auto &card : m_non_active_player.getHand().getCards())
-            {
-                std::cout << *card << '\n';
-            }
+            return m_active_player;
         }
+
+        [[nodiscard]] const Player &getNonActivePlayer() const
+        {
+            return m_non_active_player;
+        }
+
+        void printCards() const;
 
     private:
         Player m_active_player;
