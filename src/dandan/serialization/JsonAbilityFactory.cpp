@@ -26,11 +26,12 @@ namespace dandan::serialization
             return json;
         }
 
-        // TODO: add cost to mana ability serialization logic
         if (const auto *mana = dynamic_cast<const ManaAbility *>(ability))
         {
             auto json = nlohmann::json{{"type", "ManaAbility"},
                                        {"data", nlohmann::json::object()}};
+            json["data"]["cost"] =
+                JsonFactory<costs::ICost>::create_json(mana->getCost());
             json["data"]["mana_list"] =
                 JsonFactory<dandan::mana::ManaList>::create_json(
                     mana->getMana());
@@ -76,20 +77,6 @@ namespace dandan::serialization
             return json;
         }
 
-        if (const auto *withAdditionalCost =
-                dynamic_cast<const WithAdditionalCost *>(ability))
-        {
-            auto json = nlohmann::json{{"type", "WithAdditionalCost"},
-                                       {"data", nlohmann::json::object()}};
-
-            json["data"]["additional_cost"] =
-                JsonFactory<costs::ICost>::create_json(
-                    withAdditionalCost->getAdditionalCost());
-            json["data"]["ability"] =
-                create_json(withAdditionalCost->getInnerAbility());
-            return json;
-        }
-
         throw std::runtime_error("Unknown ability type for JSON serialization");
     }
 
@@ -111,14 +98,15 @@ namespace dandan::serialization
                                                       std::move(effect));
         }
 
-        // TODO: add cost to mana ability deserialization logic
         if (type == "ManaAbility")
         {
             std::unique_ptr<dandan::mana::ManaList> mana_list{
                 JsonFactory<dandan::mana::ManaList>::create_product(
                     data.at("mana_list"))};
-
-            return std::make_unique<ManaAbility>(std::move(*mana_list));
+            std::unique_ptr<costs::ICost> cost{
+                JsonFactory<costs::ICost>::create_product(data.at("cost"))};
+            return std::make_unique<ManaAbility>(std::move(cost),
+                                                 std::move(*mana_list));
         }
 
         if (type == "WithDamage")
@@ -152,17 +140,6 @@ namespace dandan::serialization
 
             return std::make_unique<TriggeredAbility>(std::move(event),
                                                       std::move(effect));
-        }
-
-        if (type == "WithAdditionalCost")
-        {
-            auto additional_cost{JsonFactory<dandan::ICost>::create_product(
-                data.at("additional_cost"))};
-
-            auto inner_ability = create_product(data.at("ability"));
-
-            return std::make_unique<WithAdditionalCost>(
-                std::move(inner_ability), std::move(additional_cost));
         }
 
         throw std::runtime_error("Unknown ability type in JSON: " + type);

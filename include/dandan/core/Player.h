@@ -2,6 +2,7 @@
 #define DANDAN_PLAYER_H
 
 #include "dandan/core/Battlefield.h"
+#include "dandan/core/Deck.h"
 #include "dandan/core/Hand.h"
 #include "dandan/mana/Mana.h"
 
@@ -31,6 +32,11 @@ namespace dandan::core
         [[nodiscard]] const Battlefield &getBattlefield() const
         {
             return m_battlefield;
+        }
+
+        void drawCard(Deck &deck)
+        {
+            m_hand.addCards(deck.draw());
         }
 
         void playCard(int index)

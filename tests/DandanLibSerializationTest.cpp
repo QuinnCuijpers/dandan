@@ -1,3 +1,4 @@
+#include "dandan/costs/AndCost.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
@@ -176,11 +177,11 @@ Svyelunite_Temple_Abilities()
     abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
         dandan::ManaList{std::make_unique<dandan::BlueMana>()}));
 
-    abilities.emplace_back(
-        std::make_unique<dandan::abilities::WithAdditionalCost>(
-            std::make_unique<dandan::ManaAbility>(
-                dandan::ManaList{std::make_unique<dandan::BlueMana>(2)}),
-            std::make_unique<dandan::costs::SelfSacrificeCost>()));
+    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
+        std::make_unique<dandan::costs::AndCost>(
+            std::make_unique<dandan::costs::TapCost>(),
+            std::make_unique<dandan::costs::SelfSacrificeCost>()),
+        dandan::ManaList{std::make_unique<dandan::BlueMana>(2)}));
 
     return abilities;
 }

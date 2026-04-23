@@ -28,6 +28,11 @@ namespace dandan::abilities
             return &m_mana_list;
         }
 
+        [[nodiscard]] const costs::ICost *getCost() const
+        {
+            return m_cost.get();
+        }
+
         void resolve() const override;
 
     private:

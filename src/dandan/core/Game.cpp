@@ -1,11 +1,15 @@
 #include "dandan/core/Game.h"
+#include "dandan/core/Player.h"
 
 namespace dandan::core
 {
     Game::Game()
     {
-        m_active_player.setHand(Hand(m_deck.draw(STARTING_HAND_SIZE)));
-        m_non_active_player.setHand(Hand(m_deck.draw(STARTING_HAND_SIZE)));
+        for (int i{}; i < STARTING_HAND_SIZE; ++i)
+        {
+            m_active_player.drawCard(m_deck);
+            m_non_active_player.drawCard(m_deck);
+        }
     }
 
     void Game::printCards() const

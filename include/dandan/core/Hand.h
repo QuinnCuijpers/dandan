@@ -32,6 +32,14 @@ namespace dandan::core
             return card;
         }
 
+        void addCards(std::vector<std::unique_ptr<Card>> cards)
+        {
+            for (auto &card : cards)
+            {
+                m_cards.push_back(std::move(card));
+            }
+        }
+
     private:
         std::vector<std::unique_ptr<Card>> m_cards;
     };

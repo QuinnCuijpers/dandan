@@ -17,6 +17,10 @@
         },
         {
             "data": {
+                "cost": {
+                    "data": {},
+                    "type": "TapCost"
+                },
                 "mana_list": [
                     "U"
                 ]
@@ -25,20 +29,26 @@
         },
         {
             "data": {
-                "ability": {
+                "cost": {
                     "data": {
-                        "mana_list": [
-                            "UU"
+                        "sub_costs": [
+                            {
+                                "data": {},
+                                "type": "TapCost"
+                            },
+                            {
+                                "data": {},
+                                "type": "SelfSacrificeCost"
+                            }
                         ]
                     },
-                    "type": "ManaAbility"
+                    "type": "AndCost"
                 },
-                "additional_cost": {
-                    "data": {},
-                    "type": "SelfSacrificeCost"
-                }
+                "mana_list": [
+                    "UU"
+                ]
             },
-            "type": "WithAdditionalCost"
+            "type": "ManaAbility"
         }
     ],
     "cost": 0,

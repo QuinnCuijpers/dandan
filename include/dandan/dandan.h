@@ -6,7 +6,6 @@
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/TriggeredAbility.h"
-#include "dandan/abilities/WithAdditionalCost.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
@@ -37,7 +36,6 @@ namespace dandan
     using abilities::ManaAbility;
     using abilities::StaticAbility;
     using abilities::TriggeredAbility;
-    using abilities::WithAdditionalCost;
     using abilities::WithDamage;
 
     using core::Card;
@@ -60,6 +58,7 @@ namespace dandan
     using costs::ICost;
     using costs::ManaCost;
     using costs::SelfSacrificeCost;
+    using costs::TapCost;
 
     using mana::BlackMana;
     using mana::BlueMana;

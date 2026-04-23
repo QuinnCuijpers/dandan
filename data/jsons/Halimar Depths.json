@@ -5,7 +5,11 @@
             "data": {
                 "mana_list": [
                     "U"
-                ]
+                ],
+                "cost": {
+                    "type": "TapCost",
+                    "data": {}
+                }
             },
             "type": "ManaAbility"
         },

@@ -1,4 +1,6 @@
 #include "dandan/serialization/JsonCostFactory.h"
+#include "dandan/costs/AndCost.h"
+#include "dandan/costs/TapCost.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
@@ -38,6 +40,26 @@ namespace dandan::serialization
                                        {"data", nlohmann::json::object()}};
             return json;
         }
+        if ([[maybe_unused]] const auto *tap_cost =
+                dynamic_cast<const costs::TapCost *>(cost))
+        {
+            auto json = nlohmann::json{{"type", "TapCost"},
+                                       {"data", nlohmann::json::object()}};
+            return json;
+        }
+
+        if (const auto *andCost = dynamic_cast<const costs::AndCost *>(cost))
+        {
+            auto json = nlohmann::json{{"type", "AndCost"},
+                                       {"data", nlohmann::json::object()}};
+            const auto &sub_costs = andCost->getCosts();
+            json["data"]["sub_costs"] = nlohmann::json::array();
+            for (const auto &sub_cost : sub_costs)
+            {
+                json["data"]["sub_costs"].push_back(create_json(sub_cost));
+            }
+            return json;
+        }
 
         throw std::runtime_error("Unknown cost type for JSON serialization: " +
                                  std::string(typeid(*cost).name()));
@@ -65,6 +87,23 @@ namespace dandan::serialization
         if (type == "SelfSacrificeCost")
         {
             return std::make_unique<costs::SelfSacrificeCost>();
+        }
+        if (type == "TapCost")
+        {
+            return std::make_unique<costs::TapCost>();
+        }
+        if (type == "AndCost")
+        {
+            const auto &sub_costs_json = data.at("sub_costs");
+            if (!sub_costs_json.is_array() || sub_costs_json.size() != 2)
+            {
+                throw std::runtime_error(
+                    "AndCost JSON must have an array of exactly 2 sub_costs");
+            }
+            auto first_cost = create_product(sub_costs_json.at(0));
+            auto second_cost = create_product(sub_costs_json.at(1));
+            return std::make_unique<costs::AndCost>(std::move(first_cost),
+                                                    std::move(second_cost));
         }
 
         throw std::runtime_error("Unknown cost type for JSON deserialization");

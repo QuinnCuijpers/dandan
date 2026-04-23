@@ -4,7 +4,11 @@
             "data": {
                 "mana_list": [
                     "C"
-                ]
+                ],
+                "cost": {
+                    "type": "TapCost",
+                    "data": {}
+                }
             },
             "type": "ManaAbility"
         },
@@ -15,7 +19,11 @@
                         "mana_list": [
                             "U",
                             "R"
-                        ]
+                        ],
+                        "cost": {
+                            "type": "TapCost",
+                            "data": {}
+                        }
                     },
                     "type": "ManaAbility"
                 },
