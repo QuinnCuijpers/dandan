@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonEffectFactory.h"
+#include "dandan/effects/SelfSacrificeEffect.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/effects/BounceLandEffect.h"
 #include "dandan/effects/DrawEffect.h"
@@ -54,6 +55,13 @@ namespace dandan::serialization
                                        {"data", nlohmann::json::object()}};
             return json;
         }
+        if (dynamic_cast<const effects::SelfSacrificeEffect *>(effect) !=
+            nullptr)
+        {
+            auto json = nlohmann::json{{"type", "SelfSacrificeEffect"},
+                                       {"data", nlohmann::json::object()}};
+            return json;
+        }
 
         throw std::runtime_error(
             "Unknown effect type for JSON serialization: " +
@@ -94,7 +102,10 @@ namespace dandan::serialization
         {
             return std::make_unique<effects::BounceLandEffect>();
         }
-
+        if (type == "SelfSacrificeEffect")
+        {
+            return std::make_unique<effects::SelfSacrificeEffect>();
+        }
         throw std::runtime_error("Unknown effect type: " + type);
     }
 } // namespace dandan::serialization

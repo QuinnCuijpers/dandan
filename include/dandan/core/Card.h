@@ -33,6 +33,18 @@ namespace dandan::core
             MaxType
         };
 
+        enum SubType : std::uint8_t
+        {
+            None,
+            Forest,
+            Island,
+            Mountain,
+            Plains,
+            Swamp,
+            Fish,
+            MaxSubType
+        };
+
         Card() = default;
 
 #ifdef DANDAN_BUILD_SERIALIZE
@@ -40,9 +52,10 @@ namespace dandan::core
 #endif
 
         Card(std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
+             SubType subtype,
              std::vector<std::unique_ptr<abilities::IAbility>> abilities = {})
             : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-              m_abilities{std::move(abilities)}
+              m_subtype{subtype}, m_abilities{std::move(abilities)}
         {
         }
 
@@ -57,6 +70,10 @@ namespace dandan::core
         [[nodiscard]] Type getType() const
         {
             return m_type;
+        }
+        [[nodiscard]] SubType getSubType() const
+        {
+            return m_subtype;
         }
         [[nodiscard]] const std::vector<std::unique_ptr<abilities::IAbility>> &
         getAbilities() const
@@ -77,11 +94,14 @@ namespace dandan::core
         {
             ostream << "Card{name: " << card.m_name << ", cost: "
                     << dandan::mana::ManaToSymbols(card.m_mana_cost->getMana())
-                    << ", type: " << Card::TypeToString(card.m_type) << '}';
+                    << ", type: " << Card::TypeToString(card.m_type)
+                    << ", subtype: " << Card::SubTypeToString(card.m_subtype)
+                    << '}';
             return ostream;
         }
 
         static std::string_view TypeToString(Type type);
+        static std::string_view SubTypeToString(SubType subtype);
 
 #ifdef DANDAN_BUILD_SERIALIZE
         friend void from_json(const nlohmann::json &json, Card &card);
@@ -92,6 +112,7 @@ namespace dandan::core
         std::string m_name{"unknown"};
         std::unique_ptr<mana::Mana> m_mana_cost;
         Type m_type{Type::Land};
+        SubType m_subtype{SubType::None};
         std::vector<std::unique_ptr<abilities::IAbility>> m_abilities;
     };
 } // namespace dandan::core

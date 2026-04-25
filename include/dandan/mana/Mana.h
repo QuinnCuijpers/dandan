@@ -109,6 +109,11 @@ namespace dandan::mana
     [[maybe_unused]]
     static std::string ManaToSymbols(const ManaMap &mana_map)
     {
+        if (mana_map.empty())
+        {
+            return "(0)";
+        }
+
         std::string symbols;
         for (const auto &[mana_type, amount] : mana_map)
         {

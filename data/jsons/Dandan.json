@@ -1,6 +1,21 @@
 {
-    "abilities": [],
+    "abilities": [
+        {
+            "data": {
+                "effect": {
+                    "data": {},
+                    "type": "SelfSacrificeEffect"
+                },
+                "event": {
+                    "data": {},
+                    "type": "NoIslandsEvent"
+                }
+            },
+            "type": "TriggeredAbility"
+        }
+    ],
     "cost": "UU",
     "name": "Dandan",
+    "subtype": "Fish",
     "type": "Creature"
 }

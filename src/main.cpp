@@ -1,5 +1,6 @@
 #include "dandan/dandan.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/effects/SelfSacrificeEffect.h"
+#include "dandan/events/NoIslandsEvent.h"
 
 #include <filesystem>
 #include <iostream>
@@ -28,11 +29,14 @@ namespace
         }
         return project_root() / path;
     }
+    std::filesystem::path get_card_path(const std::filesystem::path &json_dir,
+                                        std::string_view card_name)
+    {
+        std::filesystem::path filename{std::string(card_name)};
+        filename.replace_extension(".json");
+        return resolve_from_project_root(json_dir) / filename;
+    }
 } // namespace
-
-std::filesystem::path get_card_path(const std::filesystem::path &json_dir,
-                                    std::string_view card_name);
-void print_card_info(const dandan::Card &card);
 
 #ifdef DANDAN_BUILD_SERIALIZE
 dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
@@ -81,17 +85,22 @@ void check_card_serialize()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
-    dandan::Card test{"Dandan", std::make_unique<dandan::BlueMana>(2),
-                      dandan::Card::Creature, std::move(abilities)};
+    abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
+        std::make_unique<dandan::events::NoIslandsEvent>(),
+        std::make_unique<dandan::effects::SelfSacrificeEffect>()));
 
-    print_card_info(test);
+    dandan::Card test{"Dandan", std::make_unique<dandan::BlueMana>(2),
+                      dandan::Card::Creature, dandan::Card::SubType::Fish,
+                      std::move(abilities)};
+
+    std::cout << test << '\n';
 
     const auto card_json_path = get_card_path("data/jsons", test.getName());
     try
     {
         write_card_to_json(test, card_json_path);
         const auto loaded_card = read_Card_from_json(card_json_path);
-        print_card_info(loaded_card);
+        std::cout << loaded_card << '\n';
     }
     catch (std::exception &e)
     {
@@ -99,27 +108,6 @@ void check_card_serialize()
     }
 }
 #endif
-
-std::filesystem::path get_card_path(const std::filesystem::path &json_dir,
-                                    std::string_view card_name)
-{
-    std::filesystem::path filename{std::string(card_name)};
-    filename.replace_extension(".json");
-    return resolve_from_project_root(json_dir) / filename;
-}
-
-void print_card_info(const dandan::Card &card)
-{
-    std::cout << "Card: " << card.getName() << '\n';
-    std::cout << "Cost: "
-              << dandan::mana::ManaToSymbols(card.getCost()->getMana()) << '\n';
-    std::cout << "Type: " << dandan::Card::TypeToString(card.getType()) << '\n';
-    std::cout << "Abilities:\n";
-    for (const auto &ability : card.getAbilities())
-    {
-        ability->resolve();
-    }
-}
 
 int main()
 {

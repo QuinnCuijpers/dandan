@@ -13,11 +13,11 @@
 #include <string_view>
 #include <vector>
 
-#define LAND(name)                                                             \
+#define LAND(name, subtype)                                                    \
     dandan::Card                                                               \
     {                                                                          \
         formatCardName(#name), std::make_unique<dandan::mana::GenericMana>(0), \
-            dandan::Card::Land, name##_Abilities()                             \
+            dandan::Card::Land, subtype, name##_Abilities()                    \
     }
 
 static std::string formatCardName(std::string_view name)
@@ -190,14 +190,14 @@ Svyelunite_Temple_Abilities()
 static const std::vector<const dandan::Card *> &getCards()
 {
     static const std::vector<const dandan::Card *> cards = {
-        new LAND(Island),
-        new LAND(Remote_Isle),
-        new LAND(Lonely_Sandbar),
-        new LAND(Halimar_Depths),
-        new LAND(Shivan_Reef),
-        new LAND(Temple_of_Epiphany),
-        new LAND(Izzet_Boilerworks),
-        new LAND(Svyelunite_Temple)};
+        new LAND(Island, dandan::Card::SubType::Island),
+        new LAND(Remote_Isle, dandan::Card::SubType::None),
+        new LAND(Lonely_Sandbar, dandan::Card::SubType::None),
+        new LAND(Halimar_Depths, dandan::Card::SubType::None),
+        new LAND(Shivan_Reef, dandan::Card::SubType::None),
+        new LAND(Temple_of_Epiphany, dandan::Card::SubType::None),
+        new LAND(Izzet_Boilerworks, dandan::Card::SubType::None),
+        new LAND(Svyelunite_Temple, dandan::Card::SubType::None)};
     return cards;
 };
 

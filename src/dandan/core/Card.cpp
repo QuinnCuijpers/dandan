@@ -61,4 +61,27 @@ namespace dandan::core
             return "Unknown";
         }
     }
+
+    std::string_view Card::SubTypeToString(SubType subtype)
+    {
+        switch (subtype)
+        {
+        case SubType::None:
+            return "None";
+        case SubType::Forest:
+            return "Forest";
+        case SubType::Island:
+            return "Island";
+        case SubType::Mountain:
+            return "Mountain";
+        case SubType::Plains:
+            return "Plains";
+        case SubType::Swamp:
+            return "Swamp";
+        case SubType::Fish:
+            return "Fish";
+        default:
+            return "Unknown";
+        }
+    }
 } // namespace dandan::core

@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonEventFactory.h"
+#include "dandan/events/NoIslandsEvent.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/events/ETBEvent.h"
 #include <nlohmann/json.hpp>
@@ -20,6 +21,11 @@ namespace dandan::serialization
             }
             return json;
         }
+        if (dynamic_cast<const events::NoIslandsEvent *>(event) != nullptr)
+        {
+            return nlohmann::json{{"type", "NoIslandsEvent"},
+                                  {"data", nlohmann::json::object()}};
+        }
 
         throw std::runtime_error("Unknown event type");
     }
@@ -38,6 +44,10 @@ namespace dandan::serialization
                 event->setTapped(data["tapped"].get<bool>());
             }
             return event;
+        }
+        if (type == "NoIslandsEvent")
+        {
+            return std::make_unique<events::NoIslandsEvent>();
         }
 
         throw std::runtime_error("Unknown event type: " + type);

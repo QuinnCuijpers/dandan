@@ -15,6 +15,15 @@ namespace dandan::core
                                   {Card::Type::Artifact, "Artifact"},
                                   {Card::Type::Planeswalker, "Planeswalker"}});
 
+    NLOHMANN_JSON_SERIALIZE_ENUM(Card::SubType, // NOLINT
+                                 {{Card::SubType::None, "None"},
+                                  {Card::SubType::Island, "Island"},
+                                  {Card::SubType::Swamp, "Swamp"},
+                                  {Card::SubType::Mountain, "Mountain"},
+                                  {Card::SubType::Forest, "Forest"},
+                                  {Card::SubType::Plains, "Plains"},
+                                  {Card::SubType::Fish, "Fish"}});
+
 } // namespace dandan::core
 
 namespace dandan::serialization
@@ -36,6 +45,10 @@ namespace dandan::serialization
         json["name"] = card->getName();
         json["cost"] = JsonFactory<mana::Mana>::create_json(card->getCost());
         json["type"] = card->getType();
+        if (card->getSubType() != core::Card::SubType::None)
+        {
+            json["subtype"] = card->getSubType();
+        }
         json["abilities"] = abilities_json;
 
         return json;
@@ -48,6 +61,11 @@ namespace dandan::serialization
         auto name = json.at("name").get<std::string>();
         auto cost = JsonFactory<mana::Mana>::create_product(json.at("cost"));
         auto type = json.at("type").get<core::Card::Type>();
+        auto subtype = core::Card::SubType::None;
+        if (json.contains("subtype"))
+        {
+            subtype = json.at("subtype").get<core::Card::SubType>();
+        }
 
         auto abilities{std::vector<std::unique_ptr<abilities::IAbility>>{}};
         for (const auto &ability_json : json.at("abilities"))
@@ -58,7 +76,7 @@ namespace dandan::serialization
         }
 
         return std::make_unique<core::Card>(name, std::move(cost), type,
-                                            std::move(abilities));
+                                            subtype, std::move(abilities));
     }
 } // namespace dandan::serialization
 

@@ -52,23 +52,23 @@ namespace dandan::serialization
             switch (char_)
             {
             case 'C':
-                mana->getMana()[dandan::mana::ManaType::COLORLESS]++;
-                break;
+                mana->addMana(mana::ManaType::COLORLESS, 1);
+                continue;
             case 'W':
-                mana->getMana()[dandan::mana::ManaType::WHITE]++;
-                break;
+                mana->addMana(mana::ManaType::WHITE, 1);
+                continue;
             case 'U':
-                mana->getMana()[dandan::mana::ManaType::BLUE]++;
-                break;
+                mana->addMana(mana::ManaType::BLUE, 1);
+                continue;
             case 'B':
-                mana->getMana()[dandan::mana::ManaType::BLACK]++;
-                break;
+                mana->addMana(mana::ManaType::BLACK, 1);
+                continue;
             case 'R':
-                mana->getMana()[dandan::mana::ManaType::RED]++;
-                break;
+                mana->addMana(mana::ManaType::RED, 1);
+                continue;
             case 'G':
-                mana->getMana()[dandan::mana::ManaType::GREEN]++;
-                break;
+                mana->addMana(mana::ManaType::GREEN, 1);
+                continue;
             case '(':
             {
                 const auto close_pos = mana_str.find(')', i);
@@ -81,19 +81,17 @@ namespace dandan::serialization
                 const std::string generic_amount_str =
                     mana_str.substr(i + 1, close_pos - (i + 1));
                 const int generic_amount = std::stoi(generic_amount_str);
-                mana->getMana()[dandan::mana::ManaType::GENERIC] +=
-                    generic_amount;
+                mana->addMana(mana::ManaType::GENERIC, generic_amount);
 
                 // Move iterator to ')' so loop increment goes to next symbol.
                 i = close_pos;
-                break;
+                continue;
             }
             default:
                 throw std::runtime_error("Unknown mana symbol in JSON: " +
                                          std::string(1, char_));
             }
         }
-
         return mana;
     }
 } // namespace dandan::serialization
