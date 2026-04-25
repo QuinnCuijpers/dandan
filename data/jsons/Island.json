@@ -13,7 +13,7 @@
             "type": "ManaAbility"
         }
     ],
-    "cost": 0,
+    "cost": "(0)",
     "name": "Island",
     "type": "Land"
 }

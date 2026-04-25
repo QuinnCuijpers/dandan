@@ -1,8 +1,5 @@
-#include "dandan/core/Player.h"
-#include "dandan/costs/AndCost.h"
-#include "dandan/costs/SelfSacrificeCost.h"
-#include "dandan/costs/TapCost.h"
 #include "dandan/dandan.h"
+#include "dandan/mana/Mana.h"
 
 #include <filesystem>
 #include <iostream>
@@ -84,21 +81,8 @@ void check_card_serialize()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
-    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        std::make_unique<dandan::ETBEffect>(),
-        std::make_unique<dandan::EntersTappedEffect>()));
-
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::ManaList{std::make_unique<dandan::BlueMana>()}));
-
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        std::make_unique<dandan::costs::AndCost>(
-            std::make_unique<dandan::costs::TapCost>(),
-            std::make_unique<dandan::costs::SelfSacrificeCost>()),
-        dandan::ManaList{std::make_unique<dandan::BlueMana>(2)}));
-
-    dandan::Card test{"Svyelunite Temple", 0, dandan::Card::Land,
-                      std::move(abilities)};
+    dandan::Card test{"Dandan", std::make_unique<dandan::BlueMana>(2),
+                      dandan::Card::Creature, std::move(abilities)};
 
     print_card_info(test);
 
@@ -127,7 +111,8 @@ std::filesystem::path get_card_path(const std::filesystem::path &json_dir,
 void print_card_info(const dandan::Card &card)
 {
     std::cout << "Card: " << card.getName() << '\n';
-    std::cout << "Cost: " << card.getCost() << '\n';
+    std::cout << "Cost: "
+              << dandan::mana::ManaToSymbols(card.getCost()->getMana()) << '\n';
     std::cout << "Type: " << dandan::Card::TypeToString(card.getType()) << '\n';
     std::cout << "Abilities:\n";
     for (const auto &ability : card.getAbilities())
@@ -142,13 +127,13 @@ int main()
     check_card_serialize();
 #endif
 
-    dandan::Game game{};
-    game.printCards();
-    auto &active_player = game.getActivePlayer();
-    for (int i{}; i < STARTING_HAND_SIZE; ++i)
-    {
-        active_player.playCard(0);
-    }
+    // dandan::Game game{};
+    // game.printCards();
+    // auto &active_player = game.getActivePlayer();
+    // for (int i{}; i < STARTING_HAND_SIZE; ++i)
+    // {
+    //     active_player.playCard(0);
+    // }
 
-    game.printCards();
+    // game.printCards();
 }

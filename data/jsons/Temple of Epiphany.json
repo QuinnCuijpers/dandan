@@ -44,7 +44,7 @@
             "type": "TriggeredAbility"
         }
     ],
-    "cost": 0,
+    "cost": "(0)",
     "name": "Temple of Epiphany",
     "type": "Land"
 }

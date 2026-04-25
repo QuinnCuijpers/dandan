@@ -2,6 +2,7 @@
 #define CARD_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/mana/Mana.h"
 
 #include <cstdint>
 #include <iostream>
@@ -38,9 +39,9 @@ namespace dandan::core
         explicit Card(std::string_view name);
 #endif
 
-        Card(std::string_view name, int cost, Type type,
+        Card(std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
              std::vector<std::unique_ptr<abilities::IAbility>> abilities = {})
-            : m_name{name}, m_cost{cost}, m_type{type},
+            : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
               m_abilities{std::move(abilities)}
         {
         }
@@ -49,9 +50,9 @@ namespace dandan::core
         {
             return m_name;
         }
-        [[nodiscard]] int getCost() const
+        [[nodiscard]] const mana::Mana *getCost() const
         {
-            return m_cost;
+            return m_mana_cost.get();
         }
         [[nodiscard]] Type getType() const
         {
@@ -74,7 +75,8 @@ namespace dandan::core
 
         friend std::ostream &operator<<(std::ostream &ostream, const Card &card)
         {
-            ostream << "Card{name: " << card.m_name << ", cost: " << card.m_cost
+            ostream << "Card{name: " << card.m_name << ", cost: "
+                    << dandan::mana::ManaToSymbols(card.m_mana_cost->getMana())
                     << ", type: " << Card::TypeToString(card.m_type) << '}';
             return ostream;
         }
@@ -88,7 +90,7 @@ namespace dandan::core
 
     private:
         std::string m_name{"unknown"};
-        int m_cost{0};
+        std::unique_ptr<mana::Mana> m_mana_cost;
         Type m_type{Type::Land};
         std::vector<std::unique_ptr<abilities::IAbility>> m_abilities;
     };

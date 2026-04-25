@@ -1,4 +1,6 @@
 #include "dandan/serialization/JsonCardFactory.h"
+#include "dandan/mana/Mana.h"
+#include "dandan/serialization/JsonFactory.h"
 
 #ifdef DANDAN_BUILD_SERIALIZE
 #include <nlohmann/json.hpp>
@@ -32,7 +34,7 @@ namespace dandan::serialization
         nlohmann::json json{};
 
         json["name"] = card->getName();
-        json["cost"] = card->getCost();
+        json["cost"] = JsonFactory<mana::Mana>::create_json(card->getCost());
         json["type"] = card->getType();
         json["abilities"] = abilities_json;
 
@@ -44,15 +46,7 @@ namespace dandan::serialization
     {
 
         auto name = json.at("name").get<std::string>();
-        int cost{};
-        if (json.at("cost").is_string())
-        {
-            cost = std::stoi(json.at("cost").get<std::string>());
-        }
-        else
-        {
-            cost = json.at("cost").get<int>();
-        }
+        auto cost = JsonFactory<mana::Mana>::create_product(json.at("cost"));
         auto type = json.at("type").get<core::Card::Type>();
 
         auto abilities{std::vector<std::unique_ptr<abilities::IAbility>>{}};
@@ -63,7 +57,7 @@ namespace dandan::serialization
             abilities.push_back(std::move(ability));
         }
 
-        return std::make_unique<core::Card>(name, cost, type,
+        return std::make_unique<core::Card>(name, std::move(cost), type,
                                             std::move(abilities));
     }
 } // namespace dandan::serialization

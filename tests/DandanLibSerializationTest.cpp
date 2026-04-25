@@ -16,7 +16,8 @@
 #define LAND(name)                                                             \
     dandan::Card                                                               \
     {                                                                          \
-        formatCardName(#name), 0, dandan::Card::Land, name##_Abilities()       \
+        formatCardName(#name), std::make_unique<dandan::mana::GenericMana>(0), \
+            dandan::Card::Land, name##_Abilities()                             \
     }
 
 static std::string formatCardName(std::string_view name)

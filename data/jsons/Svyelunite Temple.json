@@ -51,7 +51,7 @@
             "type": "ManaAbility"
         }
     ],
-    "cost": 0,
+    "cost": "(0)",
     "name": "Svyelunite Temple",
     "type": "Land"
 }
