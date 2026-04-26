@@ -14,13 +14,8 @@
         },
         {
             "data": {
-                "on_effect": {
-                    "data": {
-                        "tapped": false
-                    },
-                    "type": "ETBEffect"
-                },
-                "replacement_effect": {
+                "static_type": "Replacement",
+                "continuous_effect": {
                     "data": {},
                     "type": "EntersTappedEffect"
                 }

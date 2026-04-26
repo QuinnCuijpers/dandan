@@ -1,5 +1,5 @@
 #include "dandan/dandan.h"
-#include "dandan/effects/SelfSacrificeEffect.h"
+#include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "dandan/events/NoIslandsEvent.h"
 
 #include <filesystem>

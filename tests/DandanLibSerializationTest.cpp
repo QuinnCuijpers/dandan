@@ -1,3 +1,4 @@
+#include "dandan/abilities/StaticAbility.h"
 #include "dandan/costs/AndCost.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
@@ -54,7 +55,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
         dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.push_back(std::make_unique<dandan::StaticAbility>(
-        std::make_unique<dandan::ETBEffect>(),
+        dandan::abilities::StaticAbility::Replacement,
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
@@ -74,7 +75,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
         dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        std::make_unique<dandan::ETBEffect>(),
+        dandan::abilities::StaticAbility::Replacement,
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::ActivatedAbility>(
@@ -94,7 +95,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
         dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        std::make_unique<dandan::ETBEffect>(),
+        dandan::abilities::StaticAbility::Replacement,
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
@@ -135,7 +136,7 @@ Temple_of_Epiphany_Abilities()
         dandan::ManaList{std::move(mana_list)}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        std::make_unique<dandan::ETBEffect>(),
+        dandan::abilities::StaticAbility::Replacement,
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
@@ -156,7 +157,7 @@ Izzet_Boilerworks_Abilities()
             std::make_unique<dandan::mana::RedMana>())}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        std::make_unique<dandan::ETBEffect>(),
+        dandan::abilities::StaticAbility::Replacement,
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
@@ -172,7 +173,7 @@ Svyelunite_Temple_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        std::make_unique<dandan::ETBEffect>(),
+        dandan::abilities::StaticAbility::Replacement,
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::ManaAbility>(

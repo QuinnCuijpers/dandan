@@ -2,16 +2,11 @@
     "abilities": [
         {
             "data": {
-                "on_effect": {
-                    "data": {
-                        "tapped": false
-                    },
-                    "type": "ETBEffect"
-                },
-                "replacement_effect": {
+                "continuous_effect": {
                     "data": {},
                     "type": "EntersTappedEffect"
-                }
+                },
+                "static_type": "Replacement"
             },
             "type": "StaticAbility"
         },

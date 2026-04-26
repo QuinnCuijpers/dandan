@@ -1,11 +1,11 @@
 #ifndef DANDAN_BOUNCELANDEFFECT_H
 #define DANDAN_BOUNCELANDEFFECT_H
 
-#include "IEffect.h"
+#include "IOneShotEffect.h"
 
 namespace dandan::effects
 {
-    class BounceLandEffect : public IEffect
+    class BounceLandEffect : public IOneShotEffect
     {
     public:
         void apply() override;

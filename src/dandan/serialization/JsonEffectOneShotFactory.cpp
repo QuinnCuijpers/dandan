@@ -1,19 +1,19 @@
-#include "dandan/serialization/JsonEffectFactory.h"
-#include "dandan/effects/SelfSacrificeEffect.h"
+#include "dandan/serialization/JsonEffectOneShotFactory.h"
 #ifdef DANDAN_BUILD_SERIALIZE
-#include "dandan/effects/BounceLandEffect.h"
-#include "dandan/effects/DrawEffect.h"
-#include "dandan/effects/ETBEffect.h"
-#include "dandan/effects/PeekEffect.h"
-#include "dandan/effects/ScryEffect.h"
+#include "dandan/effects/one_shot/BounceLandEffect.h"
+#include "dandan/effects/one_shot/DrawEffect.h"
+#include "dandan/effects/one_shot/ETBEffect.h"
+#include "dandan/effects/one_shot/PeekEffect.h"
+#include "dandan/effects/one_shot/ScryEffect.h"
+#include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "nlohmann/json_fwd.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
 {
-    nlohmann::json JsonFactory<effects::IEffect>::create_json(
-        const effects::IEffect *effect)
+    nlohmann::json JsonFactory<effects::IOneShotEffect>::create_json(
+        const effects::IOneShotEffect *effect)
     {
 
         if (const auto *scryEffect =
@@ -68,8 +68,8 @@ namespace dandan::serialization
             std::string(typeid(*effect).name()));
     }
 
-    std::unique_ptr<effects::IEffect> JsonFactory<
-        effects::IEffect>::create_product(const nlohmann::json &json)
+    std::unique_ptr<effects::IOneShotEffect> JsonFactory<
+        effects::IOneShotEffect>::create_product(const nlohmann::json &json)
     {
         const auto &type = json.at("type").get<std::string>();
         const auto &data = json.at("data");

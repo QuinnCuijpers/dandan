@@ -2,6 +2,7 @@
 #define DANDAN_HAND_H
 
 #include "dandan/core/Card.h"
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -34,10 +35,11 @@ namespace dandan::core
 
         void addCards(std::vector<std::unique_ptr<Card>> cards)
         {
-            for (auto &card : cards)
-            {
-                m_cards.push_back(std::move(card));
-            }
+            std::transform(std::make_move_iterator(cards.begin()),
+                           std::make_move_iterator(cards.end()),
+                           std::back_inserter(m_cards),
+                           [](std::unique_ptr<Card> &&card)
+                           { return std::move(card); });
         }
 
     private:

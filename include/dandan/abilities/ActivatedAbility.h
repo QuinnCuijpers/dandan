@@ -3,7 +3,7 @@
 
 #include "IAbility.h"
 #include "dandan/costs/ICost.h"
-#include "dandan/effects/IEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 
 namespace dandan::abilities
@@ -12,7 +12,7 @@ namespace dandan::abilities
     {
     public:
         ActivatedAbility(std::unique_ptr<costs::ICost> cost,
-                         std::unique_ptr<effects::IEffect> effect)
+                         std::unique_ptr<effects::IOneShotEffect> effect)
             : m_cost(std::move(cost)), m_effect(std::move(effect))
         {
         }
@@ -23,14 +23,14 @@ namespace dandan::abilities
         {
             return m_cost.get();
         }
-        [[nodiscard]] const effects::IEffect *getEffect() const
+        [[nodiscard]] const effects::IOneShotEffect *getEffect() const
         {
             return m_effect.get();
         }
 
     private:
         std::unique_ptr<costs::ICost> m_cost;
-        std::unique_ptr<effects::IEffect> m_effect;
+        std::unique_ptr<effects::IOneShotEffect> m_effect;
     };
 } // namespace dandan::abilities
 

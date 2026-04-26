@@ -22,7 +22,6 @@ add_subdirectory(abilities)
 add_subdirectory(effects)
 add_subdirectory(events)
 add_subdirectory(costs)
-add_subdirectory(replacement_effects)
 add_subdirectory(conditions)
 
 if(DANDAN_BUILD_SERIALIZE)
@@ -30,14 +29,8 @@ if(DANDAN_BUILD_SERIALIZE)
 endif()
 
 target_link_libraries(
-  DandanLib
-  PRIVATE DandanCore
-          DandanAbilities
-          DandanEffects
-          DandanEvents
-          DandanCosts
-          DandanReplacement
-          DandanConditions)
+  DandanLib PRIVATE DandanCore DandanAbilities DandanEffects DandanEvents
+                    DandanCosts DandanConditions)
 
 if(DANDAN_BUILD_SERIALIZE)
   target_link_libraries(DandanLib PRIVATE DandanSerialize

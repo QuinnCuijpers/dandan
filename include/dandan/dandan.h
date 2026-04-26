@@ -13,12 +13,14 @@
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/ManaCost.h"
 #include "dandan/costs/SelfSacrificeCost.h"
-#include "dandan/effects/BounceLandEffect.h"
-#include "dandan/effects/DrawEffect.h"
-#include "dandan/effects/ETBEffect.h"
-#include "dandan/effects/IEffect.h"
-#include "dandan/effects/PeekEffect.h"
-#include "dandan/effects/ScryEffect.h"
+#include "dandan/effects/continuous/replacement/EntersTappedEffect.h"
+#include "dandan/effects/continuous/replacement/IReplacementEffect.h"
+#include "dandan/effects/one_shot/BounceLandEffect.h"
+#include "dandan/effects/one_shot/DrawEffect.h"
+#include "dandan/effects/one_shot/ETBEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
+#include "dandan/effects/one_shot/PeekEffect.h"
+#include "dandan/effects/one_shot/ScryEffect.h"
 #include "dandan/events/ETBEvent.h"
 #include "dandan/mana/BlackMana.h"
 #include "dandan/mana/BlueMana.h"
@@ -27,7 +29,6 @@
 #include "dandan/mana/GreenMana.h"
 #include "dandan/mana/ManaList.h"
 #include "dandan/mana/RedMana.h"
-#include "dandan/replacement_effects/EntersTappedEffect.h"
 
 namespace dandan
 {
@@ -44,12 +45,12 @@ namespace dandan
     using effects::BounceLandEffect;
     using effects::DrawEffect;
     using effects::ETBEffect;
-    using effects::IEffect;
+    using effects::IOneShotEffect;
     using effects::PeekEffect;
     using effects::ScryEffect;
 
-    using replacement_effects::EntersTappedEffect;
-    using replacement_effects::IReplacementEffect;
+    using effects::EntersTappedEffect;
+    using effects::IReplacementEffect;
 
     using events::ETBEvent;
     using events::IEvent;

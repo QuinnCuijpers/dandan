@@ -1,4 +1,4 @@
-#include "dandan/effects/ETBEffect.h"
+#include "dandan/effects/one_shot/ETBEffect.h"
 
 namespace dandan::effects
 {

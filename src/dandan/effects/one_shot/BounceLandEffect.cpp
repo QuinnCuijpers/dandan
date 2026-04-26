@@ -1,4 +1,4 @@
-#include "dandan/effects/BounceLandEffect.h"
+#include "dandan/effects/one_shot/BounceLandEffect.h"
 #include <iostream>
 
 namespace dandan::effects

@@ -1,10 +1,10 @@
 #ifndef DANDAN_ETBEFFECT_H
 #define DANDAN_ETBEFFECT_H
 
-#include "dandan/effects/IEffect.h"
+#include "dandan/effects//one_shot/IOneShotEffect.h"
 namespace dandan::effects
 {
-    struct ETBEffect final : public IEffect
+    struct ETBEffect final : public IOneShotEffect
     {
         void apply() override;
 

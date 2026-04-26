@@ -1,4 +1,4 @@
-#include "dandan/effects/ScryEffect.h"
+#include "dandan/effects/one_shot/ScryEffect.h"
 
 namespace dandan::effects
 {

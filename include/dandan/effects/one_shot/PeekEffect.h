@@ -1,12 +1,12 @@
 #ifndef DANDAN_PEEK_EFFECT_H
 #define DANDAN_PEEK_EFFECT_H
 
-#include "IEffect.h"
+#include "IOneShotEffect.h"
 
 namespace dandan::effects
 {
 
-    struct PeekEffect final : public IEffect
+    struct PeekEffect final : public IOneShotEffect
     {
         int m_peek_amount{3};
 

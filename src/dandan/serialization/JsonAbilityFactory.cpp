@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonAbilityFactory.h"
+#include "dandan/effects/continuous/IContinuousEffect.h"
 
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
@@ -6,6 +7,16 @@
 #include "dandan/serialization/JsonFactory.h"
 #include <memory>
 #include <nlohmann/json.hpp>
+
+namespace dandan::abilities
+{
+    NLOHMANN_JSON_SERIALIZE_ENUM( // NOLINT
+        StaticAbility::Type,
+        {{StaticAbility::Type::CharacteristicDefining,
+          "CharacteristicDefining"},
+         {StaticAbility::Type::Prevention, "Prevention"},
+         {StaticAbility::Type::Replacement, "Replacement"}});
+}
 
 namespace dandan::serialization
 {
@@ -20,8 +31,9 @@ namespace dandan::serialization
                                        {"data", nlohmann::json::object()}};
             json["data"]["cost"] =
                 JsonFactory<costs::ICost>::create_json(activated->getCost());
-            json["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
-                activated->getEffect());
+            json["data"]["effect"] =
+                JsonFactory<effects::IOneShotEffect>::create_json(
+                    activated->getEffect());
 
             return json;
         }
@@ -55,12 +67,11 @@ namespace dandan::serialization
             auto json = nlohmann::json{{"type", "StaticAbility"},
                                        {"data", nlohmann::json::object()}};
 
-            json["data"]["on_effect"] =
-                JsonFactory<effects::IEffect>::create_json(
-                    staticAbility->getOnEffect());
-            json["data"]["replacement_effect"] =
-                JsonFactory<replacement_effects::IReplacementEffect>::
-                    create_json(staticAbility->getReplacementEffect());
+            json["data"]["static_type"] = staticAbility->getType();
+
+            json["data"]["continuous_effect"] =
+                JsonFactory<effects::IContinuousEffect>::create_json(
+                    staticAbility->getEffect());
             return json;
         }
 
@@ -72,8 +83,9 @@ namespace dandan::serialization
 
             json["data"]["event"] = JsonFactory<events::IEvent>::create_json(
                 triggered->getOnEvent());
-            json["data"]["effect"] = JsonFactory<effects::IEffect>::create_json(
-                triggered->getEffect());
+            json["data"]["effect"] =
+                JsonFactory<effects::IOneShotEffect>::create_json(
+                    triggered->getEffect());
             return json;
         }
 
@@ -91,7 +103,7 @@ namespace dandan::serialization
             auto cost{
                 JsonFactory<dandan::ICost>::create_product(data.at("cost"))};
 
-            auto effect{JsonFactory<dandan::IEffect>::create_product(
+            auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
                 data.at("effect"))};
 
             return std::make_unique<ActivatedAbility>(std::move(cost),
@@ -119,15 +131,14 @@ namespace dandan::serialization
 
         if (type == "StaticAbility")
         {
-            auto on_effect{JsonFactory<dandan::IEffect>::create_product(
-                data.at("on_effect"))};
+            auto type{data.at("static_type").get<StaticAbility::Type>()};
 
-            auto replacement_effect{
-                JsonFactory<dandan::IReplacementEffect>::create_product(
-                    data.at("replacement_effect"))};
+            auto continuous_effect{
+                JsonFactory<effects::IContinuousEffect>::create_product(
+                    data.at("continuous_effect"))};
 
             return std::make_unique<StaticAbility>(
-                std::move(on_effect), std::move(replacement_effect));
+                type, std::move(continuous_effect));
         }
 
         if (type == "TriggeredAbility")
@@ -135,7 +146,7 @@ namespace dandan::serialization
             auto event{
                 JsonFactory<dandan::IEvent>::create_product(data.at("event"))};
 
-            auto effect{JsonFactory<dandan::IEffect>::create_product(
+            auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
                 data.at("effect"))};
 
             return std::make_unique<TriggeredAbility>(std::move(event),

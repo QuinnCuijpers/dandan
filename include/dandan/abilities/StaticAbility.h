@@ -2,44 +2,44 @@
 #define REPLACEMENTABILITY_H
 
 #include "IAbility.h"
-#include "dandan/effects/IEffect.h"
-#include "dandan/replacement_effects/IReplacementEffect.h"
+#include "dandan/effects/continuous/IContinuousEffect.h"
+#include <cstdint>
 #include <memory>
 
 namespace dandan::abilities
 {
 
-    // TODO: extend this class to support more static abilities.
     class StaticAbility final : public IAbility
     {
     public:
-        StaticAbility() = default;
-        StaticAbility(
-            std::unique_ptr<dandan::effects::IEffect> on_effect,
-            std::unique_ptr<dandan::replacement_effects::IReplacementEffect>
-                replacement_effect)
-            : m_on_effect(std::move(on_effect)),
-              m_replacement_effect(std::move(replacement_effect))
+        enum Type : uint8_t
         {
+            CharacteristicDefining,
+            Prevention,
+            Replacement,
+        };
+        StaticAbility(Type type,
+                      std::unique_ptr<effects::IContinuousEffect> effect)
+            : m_type(type), m_effect(std::move(effect))
+        {
+        }
+
+        [[nodiscard]] Type getType() const
+        {
+            return m_type;
+        }
+
+        [[nodiscard]] const effects::IContinuousEffect *getEffect() const
+        {
+            return m_effect.get();
         }
 
         void resolve() const override;
 
-        [[nodiscard]] const dandan::effects::IEffect *getOnEffect() const
-        {
-            return m_on_effect.get();
-        }
-        [[nodiscard]] const dandan::replacement_effects::IReplacementEffect *
-        getReplacementEffect() const
-        {
-            return m_replacement_effect.get();
-        }
-
     private:
-        std::unique_ptr<dandan::effects::IEffect> m_on_effect;
-        std::unique_ptr<dandan::replacement_effects::IReplacementEffect>
-            m_replacement_effect;
+        Type m_type{};
+        std::unique_ptr<effects::IContinuousEffect> m_effect;
     };
 } // namespace dandan::abilities
 
-#endif
+#endif // REPLACEMENTABILITY_H

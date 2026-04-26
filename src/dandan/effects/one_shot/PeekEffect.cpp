@@ -1,4 +1,4 @@
-#include "dandan/effects/PeekEffect.h"
+#include "dandan/effects/one_shot/PeekEffect.h"
 #include <iostream>
 
 namespace dandan::effects
