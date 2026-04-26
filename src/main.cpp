@@ -1,4 +1,6 @@
+#include "dandan/abilities/StaticAbility.h"
 #include "dandan/dandan.h"
+#include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "dandan/events/NoIslandsEvent.h"
 
@@ -88,6 +90,10 @@ void check_card_serialize()
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
         std::make_unique<dandan::events::NoIslandsEvent>(),
         std::make_unique<dandan::effects::SelfSacrificeEffect>()));
+
+    abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
+        dandan::abilities::StaticAbility::Prevention,
+        std::make_unique<dandan::effects::AttackPreventionEffect>()));
 
     dandan::Card test{"Dandan", std::make_unique<dandan::BlueMana>(2),
                       dandan::Card::Creature, dandan::Card::SubType::Fish,

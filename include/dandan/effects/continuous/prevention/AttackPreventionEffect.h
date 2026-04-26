@@ -5,6 +5,7 @@
 
 namespace dandan::effects
 {
+    // TODO: add parameter for condition
     class AttackPreventionEffect : public IPreventionEffect
     {
     public:

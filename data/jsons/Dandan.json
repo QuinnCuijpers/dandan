@@ -12,6 +12,16 @@
                 }
             },
             "type": "TriggeredAbility"
+        },
+        {
+            "data": {
+                "continuous_effect": {
+                    "data": {},
+                    "type": "AttackPreventionEffect"
+                },
+                "static_type": "Prevention"
+            },
+            "type": "StaticAbility"
         }
     ],
     "cost": "UU",

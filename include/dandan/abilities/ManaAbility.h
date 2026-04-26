@@ -36,7 +36,6 @@ namespace dandan::abilities
         void resolve() const override;
 
     private:
-        // TODO: add cost to serialization logic
         std::unique_ptr<costs::ICost> m_cost{
             std::make_unique<costs::TapCost>()};
         mana::ManaList m_mana_list;
