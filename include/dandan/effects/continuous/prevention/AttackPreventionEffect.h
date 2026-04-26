@@ -2,14 +2,29 @@
 #define DANDAN_ATTACKPREVENTIONEFFECT_H
 
 #include "IPreventionEffect.h"
+#include "dandan/conditions/ICondition.h"
+#include <memory>
 
 namespace dandan::effects
 {
-    // TODO: add parameter for condition
     class AttackPreventionEffect : public IPreventionEffect
     {
     public:
+        explicit AttackPreventionEffect(
+            std::unique_ptr<conditions::ICondition> condition)
+            : m_condition(std::move(condition))
+        {
+        }
+
+        [[nodiscard]] const conditions::ICondition *getCondition() const
+        {
+            return m_condition.get();
+        }
+
         void check() override;
+
+    private:
+        std::unique_ptr<conditions::ICondition> m_condition;
     };
 
 } // namespace dandan::effects

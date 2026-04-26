@@ -1,6 +1,7 @@
 #ifndef DANDAN_ICONDITION_H
 #define DANDAN_ICONDITION_H
 
+#include "dandan/core/Game.h"
 namespace dandan::conditions
 {
 
@@ -14,7 +15,7 @@ namespace dandan::conditions
         ICondition &operator=(ICondition &&) = delete;
         virtual ~ICondition() = default;
 
-        virtual bool isSatisfied() = 0;
+        virtual bool isSatisfied(const core::Game &game) = 0;
     };
 
 } // namespace dandan::conditions

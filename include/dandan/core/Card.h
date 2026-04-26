@@ -12,7 +12,7 @@
 #include <vector>
 
 #ifdef DANDAN_BUILD_SERIALIZE
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 #endif
 
 namespace dandan::core

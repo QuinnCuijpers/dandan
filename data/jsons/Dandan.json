@@ -16,7 +16,12 @@
         {
             "data": {
                 "continuous_effect": {
-                    "data": {},
+                    "data": {
+                        "condition": {
+                            "data": {},
+                            "type": "ControlsIslandCondition"
+                        }
+                    },
                     "type": "AttackPreventionEffect"
                 },
                 "static_type": "Prevention"

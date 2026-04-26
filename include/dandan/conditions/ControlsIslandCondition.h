@@ -2,21 +2,14 @@
 #define DANDAN_CONTROLSISLANDCONDITION_H
 
 #include "dandan/conditions/ICondition.h"
-#include "dandan/core/Player.h"
+#include "dandan/core/Game.h"
 
 namespace dandan::conditions
 {
     class ControlsIslandCondition : public ICondition
     {
     public:
-        explicit ControlsIslandCondition(const core::Player &player)
-            : m_player(player)
-        {
-        }
-        bool isSatisfied() override;
-
-    private:
-        const core::Player &m_player;
+        bool isSatisfied(const core::Game &game) override;
     };
 } // namespace dandan::conditions
 

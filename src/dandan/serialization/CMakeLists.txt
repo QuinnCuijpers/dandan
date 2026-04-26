@@ -9,7 +9,8 @@ target_sources(
           JsonEventFactory.cpp
           JsonEffectOneShotFactory.cpp
           JsonManaFactory.cpp
-          JsonEffectContinuousFactory.cpp)
+          JsonEffectContinuousFactory.cpp
+          JsonConditionFactory.cpp)
 
 target_sources(DandanSerialize PUBLIC FILE_SET HEADERS BASE_DIRS
                                       ${CMAKE_SOURCE_DIR}/include)

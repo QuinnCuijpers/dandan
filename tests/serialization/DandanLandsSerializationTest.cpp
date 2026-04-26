@@ -1,14 +1,10 @@
+#ifdef DANDAN_BUILD_SERIALIZE
+#include "common.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/costs/AndCost.h"
-#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
-#include "nlohmann/json.hpp"
 #include "gtest/gtest.h"
-#include <algorithm>
-#include <cctype>
-#include <filesystem>
-#include <fstream>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -20,23 +16,6 @@
         formatCardName(#name), std::make_unique<dandan::mana::GenericMana>(0), \
             dandan::Card::Land, subtype, name##_Abilities()                    \
     }
-
-static std::string formatCardName(std::string_view name)
-{
-    std::string result{};
-    for (char char_ : name)
-    {
-        if (char_ == '_')
-        {
-            result += ' ';
-        }
-        else
-        {
-            result += char_;
-        }
-    }
-    return result;
-}
 
 static std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
 {
@@ -202,53 +181,7 @@ static const std::vector<const dandan::Card *> &getCards()
     return cards;
 };
 
-class JsonTest : public testing::TestWithParam<const dandan::Card *>
-{
-
-public:
-    nlohmann::json m_expected;
-    nlohmann::json m_received;
-
-protected:
-    void SetUp() override
-    {
-        const auto *params{GetParam()};
-        const auto *card = params;
-        std::string_view name{card->getName()};
-
-        auto json_file_path{std::filesystem::path{DANDAN_PROJECT_SOURCE} /
-                            "data/jsons" / name};
-        json_file_path += ".json";
-
-        std::ifstream file{json_file_path};
-        nlohmann::json json{};
-        file >> json;
-
-        m_expected = json;
-        m_received = nlohmann::json(*card);
-    }
-};
-
-TEST_P(JsonTest, DeserializeCorrect)
-{
-    EXPECT_EQ(m_received, m_expected);
-};
-
-std::string CardParamName(
-    const testing::TestParamInfo<const dandan::Card *> &info)
-{
-    const std::string raw_name{info.param->getName()};
-    std::string name;
-    std::copy_if(raw_name.begin(), raw_name.end(), std::back_inserter(name),
-                 [](char char_) { return std::isalnum(char_); });
-    if (name.empty())
-    {
-        name = "unnamed";
-    }
-    return name;
-}
-
-INSTANTIATE_TEST_SUITE_P(DeserializationTests, JsonTest,
+INSTANTIATE_TEST_SUITE_P(LandTests, DeserializeTest,
                          testing::ValuesIn(getCards()), CardParamName);
 
 #endif

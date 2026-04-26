@@ -1,20 +1,22 @@
 #include "dandan/abilities/StaticAbility.h"
+#include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "dandan/events/NoIslandsEvent.h"
 
-#include <filesystem>
 #include <iostream>
-#include <memory>
 
 #ifdef DANDAN_BUILD_SERIALIZE
 #include <exception>
+#include <filesystem>
 #include <fstream>
+#include <memory>
 #include <nlohmann/json.hpp>
 #include <vector>
 #endif
 
+#ifdef DANDAN_BUILD_SERIALIZE
 namespace
 {
     std::filesystem::path project_root()
@@ -39,6 +41,7 @@ namespace
         return resolve_from_project_root(json_dir) / filename;
     }
 } // namespace
+#endif
 
 #ifdef DANDAN_BUILD_SERIALIZE
 dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
@@ -93,7 +96,8 @@ void check_card_serialize()
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Prevention,
-        std::make_unique<dandan::effects::AttackPreventionEffect>()));
+        std::make_unique<dandan::effects::AttackPreventionEffect>(
+            std::make_unique<dandan::conditions::ControlsIslandCondition>())));
 
     dandan::Card test{"Dandan", std::make_unique<dandan::BlueMana>(2),
                       dandan::Card::Creature, dandan::Card::SubType::Fish,
@@ -119,15 +123,16 @@ int main()
 {
 #ifdef DANDAN_BUILD_SERIALIZE
     check_card_serialize();
+
+    dandan::Game game{};
+    game.printCards();
+    auto &active_player = game.getActivePlayer();
+    for (int i{}; i < STARTING_HAND_SIZE; ++i)
+    {
+        active_player.playCard(0);
+    }
+
+    game.printCards();
 #endif
-
-    // dandan::Game game{};
-    // game.printCards();
-    // auto &active_player = game.getActivePlayer();
-    // for (int i{}; i < STARTING_HAND_SIZE; ++i)
-    // {
-    //     active_player.playCard(0);
-    // }
-
-    // game.printCards();
+    std::cout << "Hello, Dandan!\n";
 }

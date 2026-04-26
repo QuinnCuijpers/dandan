@@ -1,6 +1,8 @@
 #include "dandan/serialization/JsonEffectContinuousFactory.h"
+#include "dandan/conditions/ICondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/continuous/replacement/EntersTappedEffect.h"
+#include "dandan/serialization/JsonFactory.h"
 #include <string>
 #ifdef DANDAN_BUILD_SERIALIZE
 #include <nlohmann/json.hpp>
@@ -15,6 +17,9 @@ namespace dandan::serialization
         {
             auto json = nlohmann::json{{"type", "AttackPreventionEffect"},
                                        {"data", nlohmann::json::object()}};
+            json["data"]["condition"] =
+                JsonFactory<conditions::ICondition>::create_json(
+                    attackPreventionEffect->getCondition());
             return json;
         }
         if ([[maybe_unused]] const auto *entersTappedEffect =
@@ -33,11 +38,15 @@ namespace dandan::serialization
         create_product([[maybe_unused]] const nlohmann::json &json)
     {
         const std::string type{json.at("type").get<std::string>()};
-        //  const nlohmann::json &data{json.at("data")};
+        const nlohmann::json &data{json.at("data")};
 
         if (type == "AttackPreventionEffect")
         {
-            return std::make_unique<effects::AttackPreventionEffect>();
+            auto condition =
+                JsonFactory<conditions::ICondition>::create_product(
+                    data.at("condition"));
+            return std::make_unique<effects::AttackPreventionEffect>(
+                std::move(condition));
         }
         if (type == "EntersTappedEffect")
         {
