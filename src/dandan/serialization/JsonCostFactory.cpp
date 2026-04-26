@@ -54,7 +54,7 @@ namespace dandan::serialization
                                        {"data", nlohmann::json::object()}};
             const auto &sub_costs = andCost->getCosts();
             json["data"]["sub_costs"] = nlohmann::json::array();
-            for (const auto &sub_cost : sub_costs)
+            for (const auto *sub_cost : sub_costs)
             {
                 json["data"]["sub_costs"].push_back(create_json(sub_cost));
             }

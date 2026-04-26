@@ -9,7 +9,8 @@ namespace dandan::conditions
     class ControlsIslandCondition : public ICondition
     {
     public:
-        ControlsIslandCondition(const core::Player &player) : m_player(player)
+        explicit ControlsIslandCondition(const core::Player &player)
+            : m_player(player)
         {
         }
         bool isSatisfied() override;

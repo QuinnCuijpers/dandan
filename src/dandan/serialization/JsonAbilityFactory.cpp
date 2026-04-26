@@ -131,14 +131,14 @@ namespace dandan::serialization
 
         if (type == "StaticAbility")
         {
-            auto type{data.at("static_type").get<StaticAbility::Type>()};
+            auto static_type{data.at("static_type").get<StaticAbility::Type>()};
 
             auto continuous_effect{
                 JsonFactory<effects::IContinuousEffect>::create_product(
                     data.at("continuous_effect"))};
 
             return std::make_unique<StaticAbility>(
-                type, std::move(continuous_effect));
+                static_type, std::move(continuous_effect));
         }
 
         if (type == "TriggeredAbility")

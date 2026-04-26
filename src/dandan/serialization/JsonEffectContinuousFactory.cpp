@@ -33,7 +33,7 @@ namespace dandan::serialization
         create_product([[maybe_unused]] const nlohmann::json &json)
     {
         const std::string type{json.at("type").get<std::string>()};
-        [[maybe_unused]] const nlohmann::json &data{json.at("data")};
+        //  const nlohmann::json &data{json.at("data")};
 
         if (type == "AttackPreventionEffect")
         {
