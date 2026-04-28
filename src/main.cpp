@@ -146,6 +146,6 @@ int main()
     //     active_player.playCard(0);
     // }
 
-    game.printCards();
+    // game.printCards();
     std::cout << "Hello, Dandan!\n";
 }

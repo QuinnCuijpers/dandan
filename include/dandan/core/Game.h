@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Stack.h"
 #include "dandan/core/phases/IPhase.h"
+#include <array>
 #include <memory>
 
 namespace dandan::core
@@ -22,14 +23,30 @@ namespace dandan::core
 
         explicit Game(Deck &&deck);
 
+        [[nodiscard]] const Player &getActivePlayer() const
+        {
+            return m_players.at(m_active_player_index);
+        }
+
         [[nodiscard]] Player &getActivePlayer()
         {
-            return m_active_player;
+            return m_players.at(m_active_player_index);
         }
 
         [[nodiscard]] const Player &getNonActivePlayer() const
         {
-            return m_non_active_player;
+            return m_players.at(1 - m_active_player_index);
+        }
+
+        [[nodiscard]] Player &getNonActivePlayer()
+        {
+            return m_players.at(1 - m_active_player_index);
+        }
+
+        void swapPlayers()
+        {
+            std::cout << "Swapped players\n";
+            m_active_player_index = 1 - m_active_player_index;
         }
 
         void changePhase(std::unique_ptr<IPhase> phase)
@@ -45,9 +62,8 @@ namespace dandan::core
         void printCards() const;
 
     private:
-        Player m_active_player;
-        Player m_non_active_player;
-
+        std::array<Player, AMOUNT_PLAYERS> m_players{};
+        int m_active_player_index{};
         Deck m_deck;
         Stack m_stack;
         EventManager m_event_manager;
