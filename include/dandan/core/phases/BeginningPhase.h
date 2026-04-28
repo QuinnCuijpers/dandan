@@ -22,7 +22,7 @@ namespace dandan::core
             Draw
         };
 
-        BeginningPhase(Game *game) : IPhase(game)
+        explicit BeginningPhase(Game *game) : IPhase(game)
         {
             std::cout << "Constructed beginning phase\n";
         };

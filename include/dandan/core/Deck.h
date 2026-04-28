@@ -2,6 +2,7 @@
 #define DECK_H
 
 #include "dandan/core/Card.h"
+#include <algorithm>
 #include <deque>
 #include <filesystem>
 #include <memory>
@@ -25,13 +26,11 @@ namespace dandan::core
 #else
         Deck() = default;
 #endif
-        Deck(std::vector<std::unique_ptr<Card>> &cards)
+        explicit Deck(std::vector<std::unique_ptr<Card>> &cards)
         {
-            m_cards = std::deque<std::unique_ptr<Card>>{};
-            for (auto &card : cards)
-            {
-                m_cards.push_back(std::move(card));
-            }
+            std::transform(
+                cards.begin(), cards.end(), std::back_inserter(m_cards),
+                [](std::unique_ptr<Card> &card) { return std::move(card); });
         }
 
         [[nodiscard]] std::deque<std::unique_ptr<Card>> &getCards()

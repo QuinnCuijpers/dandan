@@ -9,7 +9,7 @@
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_PREFIX_PATH": "${sourceParentDir}/install",
-                "DANDAN_BUILD_SERIALIZE": "OFF",
+                "DANDAN_BUILD_SERIALIZE": "ON",
                 "BUILD_TESTING": "ON",
                 "JSON_DisableEnumSerialization": "ON"
             }

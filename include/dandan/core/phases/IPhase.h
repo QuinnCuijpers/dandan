@@ -8,7 +8,7 @@ namespace dandan::core
     class IPhase
     {
     public:
-        IPhase(Game *game) : m_game(game)
+        explicit IPhase(Game *game) : m_game(game)
         {
         }
         IPhase(const IPhase &) = delete;

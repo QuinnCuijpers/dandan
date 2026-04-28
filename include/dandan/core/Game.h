@@ -20,7 +20,7 @@ namespace dandan::core
         Game();
 #endif
 
-        Game(Deck &&deck);
+        explicit Game(Deck &&deck);
 
         [[nodiscard]] Player &getActivePlayer()
         {
@@ -37,7 +37,7 @@ namespace dandan::core
             m_phase = std::move(phase);
         }
 
-        void setDeck(Deck deck)
+        void setDeck(Deck &&deck)
         {
             m_deck = std::move(deck);
         }
