@@ -11,9 +11,22 @@ const static int STARTING_LIFE_TOTAL{20};
 
 namespace dandan::core
 {
+
     class Player
     {
     public:
+        // TODO: change to have players input names through gui
+        Player()
+        {
+            std::cout << "Constructed player\n";
+            std::cout << "Which name do you want to give this player? ";
+            std::getline(std::cin, m_name);
+        }
+
+        [[nodiscard]] const std::string &getName() const
+        {
+            return m_name;
+        };
         [[nodiscard]] const Hand &getHand() const
         {
             return m_hand;
@@ -46,6 +59,7 @@ namespace dandan::core
         }
 
     private:
+        std::string m_name;
         int m_life_total{STARTING_LIFE_TOTAL};
         Battlefield m_battlefield;
         Hand m_hand;

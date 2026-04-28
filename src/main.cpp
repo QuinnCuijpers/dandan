@@ -99,9 +99,12 @@ void check_card_serialize()
         std::make_unique<dandan::effects::AttackPreventionEffect>(
             std::make_unique<dandan::conditions::ControlsIslandCondition>())));
 
-    dandan::Card test{"Dandan", std::make_unique<dandan::BlueMana>(2),
-                      dandan::Card::Creature, dandan::Card::SubType::Fish,
-                      std::move(abilities)};
+    dandan::Card test{"Dandan",
+                      std::make_unique<dandan::BlueMana>(2),
+                      dandan::Card::Creature,
+                      dandan::Card::SubType::Fish,
+                      std::move(abilities),
+                      dandan::Stats{4, 1}};
 
     std::cout << test << '\n';
 

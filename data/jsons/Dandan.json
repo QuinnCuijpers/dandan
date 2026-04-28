@@ -31,10 +31,10 @@
     ],
     "cost": "UU",
     "name": "Dandan",
-    "subtype": "Fish",
-    "type": "Creature",
     "stats": {
         "power": 4,
         "toughness": 1
-    }
+    },
+    "subtype": "Fish",
+    "type": "Creature"
 }
