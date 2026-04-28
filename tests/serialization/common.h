@@ -1,9 +1,12 @@
 #ifndef DANDAN_TESTS_SERIALIZATION_COMMON_H
 #define DANDAN_TESTS_SERIALIZATION_COMMON_H
 
+#ifdef DANDAN_BUILD_SERIALIZE
+
 #include "dandan/dandan.h"
 #include "gtest/gtest.h"
 #include <fstream>
+#include <nlohmann/json.hpp>
 #include <string>
 
 class DeserializeTest : public testing::TestWithParam<const dandan::Card *>
@@ -63,5 +66,7 @@ inline static std::string formatCardName(std::string_view name)
     }
     return result;
 }
+
+#endif
 
 #endif

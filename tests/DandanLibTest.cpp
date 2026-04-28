@@ -1,12 +1,30 @@
 #include "dandan/dandan.h"
+#include "dandan/mana/GenericMana.h"
 #include <algorithm>
 #include <gtest/gtest.h>
+#include <memory>
 #include <vector>
 
 TEST(DandanLibTest, GameSetup)
 {
-    dandan::Game game{};
+    // NOLINTBEGIN
+    auto cards = std::vector<std::unique_ptr<dandan::Card>>{};
+    for (int i{}; i < 20; ++i)
+    {
+        cards.push_back(std::make_unique<dandan::Card>(
+            "Test Card " + std::to_string(i),
+            std::move(std::make_unique<dandan::mana::GenericMana>(i)),
+            dandan::Card::Type::Land, dandan::Card::SubType::Island));
+    };
+
+    // NOLINTEND
+
+    dandan::core::Deck testDeck{cards};
+    dandan::core::Game game{std::move(testDeck)};
+
     auto &active_player = game.getActivePlayer();
+
+    game.printCards();
 
     std::vector<std::string> card_names;
     std::transform(active_player.getHand().getCards().begin(),

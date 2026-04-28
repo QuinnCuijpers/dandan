@@ -49,6 +49,11 @@ namespace dandan::core
 
         void drawCard(Deck &deck)
         {
+            if (deck.getCards().empty())
+            {
+                std::cout << "Deck is empty, cannot draw card\n";
+                return;
+            }
             m_hand.addCards(deck.draw());
         }
 

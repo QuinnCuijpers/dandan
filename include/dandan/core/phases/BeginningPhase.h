@@ -2,6 +2,7 @@
 #define DANDAN_BEGINNINGPHASE_H
 
 #include "dandan/core/phases/IPhase.h"
+#include <cstdint>
 #include <iostream>
 
 // 501. Beginning Phase
@@ -14,10 +15,27 @@ namespace dandan::core
     class BeginningPhase : public IPhase
     {
     public:
-        BeginningPhase()
+        enum Step : uint8_t
+        {
+            Untap,
+            Upkeep,
+            Draw
+        };
+
+        BeginningPhase(Game *game) : IPhase(game)
         {
             std::cout << "Constructed beginning phase\n";
         };
+
+        void setStep(Step step)
+        {
+            m_step = step;
+        }
+
+        void handle();
+
+    private:
+        Step m_step{Step::Untap};
     };
 } // namespace dandan::core
 #endif

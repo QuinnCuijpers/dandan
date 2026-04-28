@@ -12,14 +12,32 @@ const static auto DANDAN_DECKLIST =
 
 namespace dandan::core
 {
+
     class Deck
     {
 
     public:
+        // TODO: if DANDAN_build-serialize is not defined then the deck will be
+        // empty. for testing purposes, we should have a defaultly defined deck
 #ifdef DANDAN_BUILD_SERIALIZE
         Deck();
         explicit Deck(std::filesystem::path path);
+#else
+        Deck() = default;
 #endif
+        Deck(std::vector<std::unique_ptr<Card>> &cards)
+        {
+            m_cards = std::deque<std::unique_ptr<Card>>{};
+            for (auto &card : cards)
+            {
+                m_cards.push_back(std::move(card));
+            }
+        }
+
+        [[nodiscard]] std::deque<std::unique_ptr<Card>> &getCards()
+        {
+            return m_cards;
+        }
 
         [[nodiscard]] const std::deque<std::unique_ptr<Card>> &getCards() const
         {

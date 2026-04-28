@@ -1,13 +1,13 @@
-#include "dandan/abilities/StaticAbility.h"
-#include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/dandan.h"
-#include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
-#include "dandan/effects/one_shot/SelfSacrificeEffect.h"
-#include "dandan/events/NoIslandsEvent.h"
 
 #include <iostream>
 
 #ifdef DANDAN_BUILD_SERIALIZE
+#include "dandan/abilities/StaticAbility.h"
+#include "dandan/conditions/ControlsIslandCondition.h"
+#include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
+#include "dandan/effects/one_shot/SelfSacrificeEffect.h"
+#include "dandan/events/NoIslandsEvent.h"
 #include <exception>
 #include <filesystem>
 #include <fstream>
@@ -126,16 +126,26 @@ int main()
 {
 #ifdef DANDAN_BUILD_SERIALIZE
     check_card_serialize();
-
-    dandan::Game game{};
-    game.printCards();
-    auto &active_player = game.getActivePlayer();
-    for (int i{}; i < STARTING_HAND_SIZE; ++i)
-    {
-        active_player.playCard(0);
-    }
-
-    game.printCards();
 #endif
+    // NOLINTBEGIN
+    auto cards = std::vector<std::unique_ptr<dandan::Card>>{};
+    for (int i{}; i < 20; ++i)
+    {
+        cards.push_back(std::make_unique<dandan::Card>(
+            "Test Card " + std::to_string(i),
+            std::make_unique<dandan::mana::GenericMana>(i),
+            dandan::Card::Type::Land, dandan::Card::SubType::Island));
+    };
+    auto deck = dandan::core::Deck{cards};
+    // NOLINTEND
+    auto game = dandan::core::Game{std::move(deck)};
+    // game.printCards();
+    // auto &active_player = game.getActivePlayer();
+    // for (int i{}; i < STARTING_HAND_SIZE; ++i)
+    // {
+    //     active_player.playCard(0);
+    // }
+
+    game.printCards();
     std::cout << "Hello, Dandan!\n";
 }

@@ -1,7 +1,8 @@
 add_library(DandanCore OBJECT)
 
 target_sources(DandanCore PRIVATE Card.cpp Deck.cpp Battlefield.cpp
-                                  EventManager.cpp Stack.cpp Game.cpp)
+                                  EventManager.cpp Stack.cpp Game.cpp
+                                  phases/BeginningPhase.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)
