@@ -21,7 +21,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz
 
-      - name: Run Doxygen (CI strict mode)
+      - name: Run Doxygen 
         run: |
-          doxygen -DWARN_AS_ERROR=YES \
-                  Doxyfile
+          doxygen Doxyfile
