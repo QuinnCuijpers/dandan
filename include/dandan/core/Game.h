@@ -5,6 +5,7 @@
 #include "EventManager.h"
 #include "Player.h"
 #include "Stack.h"
+#include "dandan/core/PreventionManager.h"
 #include "dandan/core/phases/IPhase.h"
 #include <array>
 #include <memory>
@@ -67,6 +68,7 @@ namespace dandan::core
         Deck m_deck;
         Stack m_stack;
         EventManager m_event_manager;
+        PreventionManager m_prevention_manager;
         std::unique_ptr<IPhase> m_phase;
         // Graveyard m_graveyard;
 
