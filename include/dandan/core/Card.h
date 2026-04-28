@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -17,6 +18,12 @@
 
 namespace dandan::core
 {
+
+    struct Stats
+    {
+        int power{0};
+        int toughness{1};
+    };
 
     class Card
     {
@@ -53,9 +60,11 @@ namespace dandan::core
 
         Card(std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
              SubType subtype,
-             std::vector<std::unique_ptr<abilities::IAbility>> abilities = {})
+             std::vector<std::unique_ptr<abilities::IAbility>> abilities = {},
+             std::optional<Stats> stats = std::nullopt)
             : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-              m_subtype{subtype}, m_abilities{std::move(abilities)}
+              m_subtype{subtype}, m_abilities{std::move(abilities)},
+              m_stats{stats}
         {
         }
 
@@ -74,6 +83,10 @@ namespace dandan::core
         [[nodiscard]] SubType getSubType() const
         {
             return m_subtype;
+        }
+        [[nodiscard]] const std::optional<Stats> &getStats() const
+        {
+            return m_stats;
         }
         [[nodiscard]] const std::vector<std::unique_ptr<abilities::IAbility>> &
         getAbilities() const
@@ -114,6 +127,7 @@ namespace dandan::core
         Type m_type{Type::Land};
         SubType m_subtype{SubType::None};
         std::vector<std::unique_ptr<abilities::IAbility>> m_abilities;
+        std::optional<Stats> m_stats;
     };
 } // namespace dandan::core
 

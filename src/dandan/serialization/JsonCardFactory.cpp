@@ -49,6 +49,11 @@ namespace dandan::serialization
         {
             json["subtype"] = card->getSubType();
         }
+        if (card->getStats().has_value())
+        {
+            json["stats"] = {{"power", card->getStats()->power},
+                             {"toughness", card->getStats()->toughness}};
+        }
         json["abilities"] = abilities_json;
 
         return json;
@@ -61,10 +66,19 @@ namespace dandan::serialization
         auto name = json.at("name").get<std::string>();
         auto cost = JsonFactory<mana::Mana>::create_product(json.at("cost"));
         auto type = json.at("type").get<core::Card::Type>();
+
         auto subtype = core::Card::SubType::None;
         if (json.contains("subtype"))
         {
             subtype = json.at("subtype").get<core::Card::SubType>();
+        }
+
+        auto stats = std::optional<core::Stats>{};
+        if (json.contains("stats"))
+        {
+            auto stats_json = json.at("stats");
+            stats = core::Stats{stats_json.at("power").get<int>(),
+                                stats_json.at("toughness").get<int>()};
         }
 
         auto abilities{std::vector<std::unique_ptr<abilities::IAbility>>{}};

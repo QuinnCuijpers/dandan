@@ -41,6 +41,7 @@ namespace dandan
 
     using core::Card;
     using core::Game;
+    using core::Stats;
 
     using effects::BounceLandEffect;
     using effects::DrawEffect;

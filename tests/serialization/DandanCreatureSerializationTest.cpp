@@ -3,7 +3,6 @@
 #include "common.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/conditions/ControlsIslandCondition.h"
-#include "dandan/core/Card.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
@@ -11,14 +10,14 @@
 #include "gtest/gtest.h"
 #include <memory>
 #include <string>
-#include <string_view>
 #include <vector>
 
 #define CREATURE(name, subtype)                                                \
     dandan::Card                                                               \
     {                                                                          \
         formatCardName(#name), std::make_unique<dandan::mana::BlueMana>(2),    \
-            dandan::Card::Creature, subtype, name##_Abilities()                \
+            dandan::Card::Creature, subtype, name##_Abilities(),               \
+            dandan::Stats{4, 1}                                                \
     }
 
 static std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
