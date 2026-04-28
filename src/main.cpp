@@ -138,7 +138,7 @@ int main()
     };
     auto deck = dandan::core::Deck{cards};
     // NOLINTEND
-    auto game = dandan::core::Game{std::move(deck)};
+    [[maybe_unused]] auto game = dandan::core::Game{std::move(deck)};
     // game.printCards();
     // auto &active_player = game.getActivePlayer();
     // for (int i{}; i < STARTING_HAND_SIZE; ++i)

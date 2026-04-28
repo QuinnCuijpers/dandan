@@ -1,0 +1,57 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "process",
+            "label": "Build documentation",
+            "command": "doxygen",
+            "group": "build",
+            "problemMatcher": [
+                {
+                    "owner": "cpp",
+                    "fileLocation": "autoDetect",
+                    "pattern": {
+                        "regexp": "^([^:]+):(\\d+): (error|warning): (.*?)( \\(warning treated as error, aborting now\\))?$",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4
+                    }
+                }
+            ],
+            "detail": "Build documentation"
+        },
+        {
+            "label": "cppcheck",
+            "type": "shell",
+            "group": "build",
+            "command": "cppcheck",
+            "args": [
+                "--enable=all",
+                "--template=gcc",
+                "--cppcheck-build-dir=.cache/cppcheck",
+                "--project=build/compile_commands.json",
+                "--std=c++17",
+                "--enable=all",
+                "--check-level=exhaustive",
+                "--suppress=missingIncludeSystem",
+                "--suppress=\\*:external/\\*",
+                "--suppress=missingInclude",
+                "--inconclusive",
+                "-j 4",
+            ],
+            "problemMatcher": {
+                "owner": "cppcheck",
+                "fileLocation": "autoDetect",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s*(warning|error):\\s*(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        }
+    ]
+}

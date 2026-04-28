@@ -12,6 +12,8 @@ option(DANDAN_BUILD_SERIALIZE "Enable building and testing the serialization"
 
 add_compile_definitions(DANDAN_PROJECT_SOURCE="${CMAKE_SOURCE_DIR}")
 
+include(cmake/DoxyGen.cmake)
+
 if(BUILD_TESTING)
   enable_testing()
   add_subdirectory(external/gtest)

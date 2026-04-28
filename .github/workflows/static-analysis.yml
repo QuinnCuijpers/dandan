@@ -1,11 +1,11 @@
-name: cppcheck
+name: static-analysis
 
 on:
   push:
   pull_request:
 
 jobs:
-  cppcheck:
+  static-analysis:
     name: Run Static Analysis
     runs-on: ubuntu-latest
 
