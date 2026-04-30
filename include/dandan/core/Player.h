@@ -16,11 +16,16 @@ namespace dandan::core
     {
     public:
         // TODO: change to have players input names through gui
-        Player()
+        explicit Player()
         {
             std::cout << "Constructed player\n";
             std::cout << "Which name do you want to give this player? ";
             std::getline(std::cin, m_name);
+        }
+
+        explicit Player(std::string name) : m_name(std::move(name))
+        {
+            std::cout << "Constructed player with name " << m_name << '\n';
         }
 
         [[nodiscard]] const std::string &getName() const

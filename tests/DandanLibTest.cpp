@@ -47,3 +47,37 @@ TEST(DandanLibTest, GameSetup)
 
     EXPECT_EQ(card_names, battlefield_card_names);
 }
+
+TEST(DandanLibTest, NoDrawFirstTurn)
+{
+    // NOLINTBEGIN
+    auto cards = std::vector<std::unique_ptr<dandan::Card>>{};
+    for (int i{}; i < 20; ++i)
+    {
+        cards.push_back(std::make_unique<dandan::Card>(
+            "Test Card " + std::to_string(i),
+            std::make_unique<dandan::mana::GenericMana>(i),
+            dandan::Card::Type::Land, dandan::Card::SubType::Island));
+    };
+
+    // NOLINTEND
+
+    dandan::core::Deck testDeck{cards};
+    dandan::core::Game game{std::move(testDeck)};
+
+    auto &active_player = game.getActivePlayer();
+    auto &non_active_player = game.getNonActivePlayer();
+
+    EXPECT_EQ(active_player.getHand().getCards().size(), STARTING_HAND_SIZE);
+    EXPECT_EQ(non_active_player.getHand().getCards().size(),
+              STARTING_HAND_SIZE);
+
+    game.handlePhase();
+    // Active player should not draw a card on the first turn
+    EXPECT_EQ(active_player.getHand().getCards().size(), STARTING_HAND_SIZE);
+    // Non active player should draw a card on the first turn
+    game.passTurn();
+    game.handlePhase();
+    EXPECT_EQ(non_active_player.getHand().getCards().size(),
+              STARTING_HAND_SIZE + 1);
+}

@@ -1,6 +1,7 @@
 #ifndef DANDAN_IPHASE_H
 #define DANDAN_IPHASE_H
 
+#include <memory>
 namespace dandan::core
 {
     class Game;
@@ -16,6 +17,8 @@ namespace dandan::core
         IPhase &operator=(const IPhase &) = delete;
         IPhase &operator=(IPhase &&) = delete;
         virtual ~IPhase() = default;
+
+        [[nodiscard]] virtual std::unique_ptr<IPhase> handle() = 0;
 
         [[nodiscard]] Game *getGame() const
         {

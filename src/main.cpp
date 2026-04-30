@@ -127,18 +127,8 @@ int main()
 #ifdef DANDAN_BUILD_SERIALIZE
     check_card_serialize();
 #endif
-    // NOLINTBEGIN
-    auto cards = std::vector<std::unique_ptr<dandan::Card>>{};
-    for (int i{}; i < 20; ++i)
-    {
-        cards.push_back(std::make_unique<dandan::Card>(
-            "Test Card " + std::to_string(i),
-            std::make_unique<dandan::mana::GenericMana>(i),
-            dandan::Card::Type::Land, dandan::Card::SubType::Island));
-    };
-    auto deck = dandan::core::Deck{cards};
-    // NOLINTEND
-    [[maybe_unused]] auto game = dandan::core::Game{std::move(deck)};
+
+    [[maybe_unused]] auto game = dandan::core::Game{};
     // game.printCards();
     // auto &active_player = game.getActivePlayer();
     // for (int i{}; i < STARTING_HAND_SIZE; ++i)
@@ -148,4 +138,5 @@ int main()
 
     // game.printCards();
     std::cout << "Hello, Dandan!\n";
+    game.run();
 }

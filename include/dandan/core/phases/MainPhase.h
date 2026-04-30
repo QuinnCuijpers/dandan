@@ -9,10 +9,12 @@ namespace dandan::core
     class MainPhase : public IPhase
     {
     public:
-        MainPhase()
+        MainPhase(Game *game) : IPhase(game)
         {
             std::cout << "Constructed main phase\n";
         };
+
+        [[nodiscard]] std::unique_ptr<IPhase> handle() override;
     };
 } // namespace dandan::core
 

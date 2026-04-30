@@ -19,7 +19,8 @@ namespace dandan::core
         {
             Untap,
             Upkeep,
-            Draw
+            Draw,
+            Done
         };
 
         explicit BeginningPhase(Game *game) : IPhase(game)
@@ -32,7 +33,9 @@ namespace dandan::core
             m_step = step;
         }
 
-        void handle();
+        std::unique_ptr<IPhase> handle() override;
+
+        void handleNextStep();
 
     private:
         Step m_step{Step::Untap};

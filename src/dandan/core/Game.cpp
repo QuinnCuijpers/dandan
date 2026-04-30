@@ -72,4 +72,17 @@ namespace dandan::core
             std::cout << *card << '\n';
         }
     }
+
+    void Game::run()
+    {
+        while (true)
+        {
+            while (m_phase != nullptr)
+            {
+                handlePhase();
+            }
+            m_active_player_index =
+                (m_active_player_index + 1) % AMOUNT_PLAYERS;
+        }
+    }
 } // namespace dandan::core
