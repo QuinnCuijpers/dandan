@@ -28,10 +28,12 @@ namespace dandan::core
             // manager so we apply an untap effect to all permanents and trigger
             // any effects that trigger on untapping although all untaps resolve
             // simultaneous and immediately
+            getGame()->render();
             m_step = Step::Upkeep;
             break;
         case Step::Upkeep:
             std::cout << "Handling upkeep step\n";
+            getGame()->render();
             m_step = Step::Draw;
             break;
         case Step::Draw:
@@ -47,6 +49,7 @@ namespace dandan::core
             {
                 std::cout << "Skipping draw step for starting player\n";
             }
+            getGame()->render();
             m_step = Step::Done;
             break;
         default:

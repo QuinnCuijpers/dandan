@@ -8,26 +8,17 @@ namespace dandan::core
     [[nodiscard]] std::unique_ptr<IPhase> MainPhase::handle()
     {
         std::cout << "Handling main phase\n";
-        std::cout << "Active player: " << getGame()->getActivePlayer().getName()
-                  << '\n';
-
-        std::cout << "Cards in hand:\n";
-        for (const auto &card :
-             getGame()->getActivePlayer().getHand().getCards())
-        {
-            std::cout << *card << '\n';
-        }
 
         while (true)
         {
-            std::cout
-                << "What do you want to do? (play [card index], end phase, "
-                   "or quit) ";
+            getGame()->render();
+            std::cout << "What do you want to do? (play [card index], pass, "
+                         "or quit) ";
             std::string input;
             std::getline(std::cin, input);
-            if (input == "end phase")
+            if (input == "pass")
             {
-                std::cout << "Ending main phase\n";
+                std::cout << "Passing turn\n";
                 return std::make_unique<EndingPhase>(getGame());
             }
             if (input == "quit")

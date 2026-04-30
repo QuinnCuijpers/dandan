@@ -24,8 +24,6 @@ TEST(DandanLibTest, GameSetup)
 
     auto &active_player = game.getActivePlayer();
 
-    game.printCards();
-
     std::vector<std::string> card_names;
     std::transform(active_player.getHand().getCards().begin(),
                    active_player.getHand().getCards().end(),

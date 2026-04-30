@@ -2,6 +2,7 @@
 #include "dandan/core/Player.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include <random>
+#include <string>
 
 namespace dandan::core
 {
@@ -45,44 +46,50 @@ namespace dandan::core
         GameSetup();
     }
 
-    void Game::printCards() const
-    {
-        std::cout << "Cards in deck:\n";
-        for (const auto &card : m_deck.getCards())
-        {
-            std::cout << *card << '\n';
-        }
-
-        std::cout << "\nCards in hand for active player:\n";
-        for (const auto &card : getActivePlayer().getHand().getCards())
-        {
-            std::cout << *card << '\n';
-        }
-
-        std::cout << "\nCards in hand for non-active player:\n";
-        for (const auto &card : getNonActivePlayer().getHand().getCards())
-        {
-            std::cout << *card << '\n';
-        }
-
-        std::cout << "\nCards on battlefield for active player:\n";
-        for (const auto &card :
-             getActivePlayer().getBattlefield().getPermanents())
-        {
-            std::cout << *card << '\n';
-        }
-    }
-
     void Game::run()
     {
         while (true)
         {
             while (m_phase != nullptr)
             {
+                render();
                 handlePhase();
             }
+            std::cout << "Passing turn\n";
             m_active_player_index =
                 (m_active_player_index + 1) % AMOUNT_PLAYERS;
+            changePhase(std::make_unique<BeginningPhase>(this));
         }
+    }
+
+    void Game::clearScreen()
+    {
+        std::cout << std::string(CLEAR_SCREEN_LINES, '\n');
+    }
+
+    void Game::render() const
+    {
+        // Render the full TUI
+        clearScreen();
+
+        // Player name and hand (top)
+        std::cout << getNonActivePlayer().getName() << "'s Hand: ";
+        printCards(getNonActivePlayer().getHand().getCards());
+        std::cout << "\n";
+
+        // Player's battlefield
+        std::cout << getNonActivePlayer().getName() << "'s Battlefield: ";
+        printCards(getNonActivePlayer().getBattlefield().getPermanents());
+        std::cout << "\n\n"; // space between battlefields
+
+        // Opponent's battlefield
+        std::cout << getActivePlayer().getName() << "'s Battlefield: ";
+        printCards(getActivePlayer().getBattlefield().getPermanents());
+        std::cout << "\n";
+
+        // Opponent's hand and name
+        std::cout << getActivePlayer().getName() << "'s Hand: ";
+        printCards(getActivePlayer().getHand().getCards());
+        std::cout << "\n";
     }
 } // namespace dandan::core

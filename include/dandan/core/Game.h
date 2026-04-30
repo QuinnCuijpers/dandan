@@ -14,11 +14,22 @@
 
 namespace dandan::core
 {
+    inline void printCards(const std::vector<std::unique_ptr<Card>> &cards)
+    {
+        std::cout << "[";
+        for (const auto &card : cards)
+        {
+            std::cout << card->getName() << ", ";
+        }
+        std::cout << "]\n";
+    }
 
     const static int AMOUNT_PLAYERS{2};
 
     const static std::array<std::string, AMOUNT_PLAYERS> DEFAULT_NAMES{
         std::array<std::string, AMOUNT_PLAYERS>{"Player 1", "Player 2"}};
+
+    const static int CLEAR_SCREEN_LINES{10};
 
     class Game
     {
@@ -69,9 +80,9 @@ namespace dandan::core
             return m_first_turn;
         }
 
-        void printCards() const;
-
         void run();
+
+        void render() const;
 
         // TODO: this is a temporary solution, should be replaced with proper
         // turn structure and phase handling
@@ -110,6 +121,8 @@ namespace dandan::core
         // Graveyard m_graveyard;
 
         void GameSetup();
+
+        static void clearScreen();
     };
 } // namespace dandan::core
 
