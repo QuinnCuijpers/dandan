@@ -3,7 +3,10 @@
 
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/IAction.h"
+#include "dandan/effects/one_shot/DrawEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <iostream>
+#include <memory>
 
 namespace dandan::core
 {
@@ -12,16 +15,17 @@ namespace dandan::core
     class CardDrawAction : public IAction
     {
     public:
-        CardDrawAction(Game *game) : m_game{game}
+        explicit CardDrawAction(Game *game) : m_game{game}
         {
         }
 
-        // TODO: actions should create events, but for now we will just execute
+        // TODO: actions should create effects, but for now we will just execute
         // the action directly
-        void execute() override
+        std::unique_ptr<effects::IOneShotEffect> execute() override
         {
             std::cout << "Executing card draw action\n";
             m_game->getActivePlayer().drawCard(m_game->getDeck());
+            return std::make_unique<effects::DrawEffect>();
         }
 
     private:

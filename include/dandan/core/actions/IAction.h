@@ -1,6 +1,8 @@
 #ifndef DANDAN_IACTION_H
 #define DANDAN_IACTION_H
 
+#include "dandan/effects/one_shot/IOneShotEffect.h"
+#include <memory>
 namespace dandan::core
 {
     class IAction
@@ -13,7 +15,7 @@ namespace dandan::core
         IAction &operator=(IAction &&) = delete;
         virtual ~IAction() = default;
 
-        virtual void execute() = 0;
+        virtual std::unique_ptr<effects::IOneShotEffect> execute() = 0;
     };
 } // namespace dandan::core
 

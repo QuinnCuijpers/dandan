@@ -2,7 +2,9 @@
 #define DANDAN_ATTACK_ACTION_H
 
 #include "dandan/core/actions/IAction.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <iostream>
+#include <memory>
 
 namespace dandan::core
 {
@@ -11,9 +13,10 @@ namespace dandan::core
     public:
         AttackAction() = default;
 
-        void execute() override
+        std::unique_ptr<effects::IOneShotEffect> execute() override
         {
             std::cout << "Executing attack action\n";
+            return {nullptr};
         }
     };
 } // namespace dandan::core

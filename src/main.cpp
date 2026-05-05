@@ -126,17 +126,8 @@ int main()
 {
 #ifdef DANDAN_BUILD_SERIALIZE
     check_card_serialize();
-#endif
-
-    [[maybe_unused]] auto game = dandan::core::Game{};
-    // game.printCards();
-    // auto &active_player = game.getActivePlayer();
-    // for (int i{}; i < STARTING_HAND_SIZE; ++i)
-    // {
-    //     active_player.playCard(0);
-    // }
-
-    // game.printCards();
-    std::cout << "Hello, Dandan!\n";
+    auto game = dandan::core::Game{};
     game.run();
+#endif
+    std::cout << "Hello, Dandan!\n";
 }

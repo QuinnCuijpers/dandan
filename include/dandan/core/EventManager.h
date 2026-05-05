@@ -16,9 +16,14 @@ namespace dandan::core
         void unsubscribe(const abilities::IAbility *ability);
         void notify(const events::IEvent &event) const;
 
+        [[nodiscard]] size_t size() const
+        {
+            return m_subscribers.size();
+        }
+
     private:
         std::vector<const abilities::IAbility *> m_subscribers;
     };
 } // namespace dandan::core
 
-#endif
+#endif // DANDAN_CORE_EVENTMANAGER_H

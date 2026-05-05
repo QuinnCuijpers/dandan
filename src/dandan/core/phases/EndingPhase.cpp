@@ -1,5 +1,4 @@
 #include "dandan/core/phases/EndingPhase.h"
-#include "dandan/core/Game.h"
 
 namespace dandan::core
 {
