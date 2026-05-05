@@ -32,6 +32,12 @@ namespace dandan::core
         {
             return m_name;
         };
+
+        [[nodiscard]] Hand &getHand()
+        {
+            return m_hand;
+        }
+
         [[nodiscard]] const Hand &getHand() const
         {
             return m_hand;

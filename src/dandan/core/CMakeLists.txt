@@ -10,7 +10,8 @@ target_sources(
           Game.cpp
           phases/BeginningPhase.cpp
           phases/MainPhase.cpp
-          phases/EndingPhase.cpp)
+          phases/EndingPhase.cpp
+          PreventionManager.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)

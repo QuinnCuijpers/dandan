@@ -20,7 +20,7 @@ namespace dandan::core
 
         [[nodiscard]] virtual std::unique_ptr<IPhase> handle() = 0;
 
-        [[nodiscard]] Game *getGame() const
+        [[nodiscard]] Game *getGame()
         {
             return m_game;
         }

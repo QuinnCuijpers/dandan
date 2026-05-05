@@ -21,7 +21,8 @@ namespace dandan::effects
             return m_condition.get();
         }
 
-        void check() override;
+        bool prevents(const core::IAction &action,
+                      const core::Game &game) override;
 
     private:
         std::unique_ptr<conditions::ICondition> m_condition;

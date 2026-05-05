@@ -1,6 +1,9 @@
 #include "dandan/core/Game.h"
+#include "dandan/conditions/StartingPlayerCondition.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/phases/BeginningPhase.h"
+#include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
+#include <memory>
 #include <random>
 #include <string>
 
@@ -8,6 +11,12 @@ namespace dandan::core
 {
     void Game::GameSetup()
     {
+
+        auto no_draw_starting_player{
+            std::make_unique<effects::DrawPreventionEffect>(
+                std::make_unique<conditions::StartingPlayerCondition>())};
+        m_prevention_manager.subscribe(std::move(no_draw_starting_player));
+
         // Randomize whom is starting player
         // TODO: Implement proper dice rolling to determine starting player
         // through gui
@@ -56,6 +65,7 @@ namespace dandan::core
                 handlePhase();
             }
             std::cout << "Passing turn\n";
+            m_first_turn = false;
             m_active_player_index =
                 (m_active_player_index + 1) % AMOUNT_PLAYERS;
             changePhase(std::make_unique<BeginningPhase>(this));

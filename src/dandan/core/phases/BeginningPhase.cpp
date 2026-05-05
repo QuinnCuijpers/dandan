@@ -1,5 +1,6 @@
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/actions/CardDrawAction.h"
 #include "dandan/core/phases/IPhase.h"
 #include "dandan/core/phases/MainPhase.h"
 #include <memory>
@@ -37,20 +38,25 @@ namespace dandan::core
             m_step = Step::Draw;
             break;
         case Step::Draw:
+        {
             // TODO: implement this as a prevention effect instead of hardcoding
             // the first turn rule here
             std::cout << "Handling draw step\n";
-            if (!getGame()->isFirstTurn())
+            auto draw_action =
+                std::make_unique<core::CardDrawAction>(getGame());
+            if (getGame()->isActionPrevented(*draw_action))
             {
-                std::cout << "Active player draws a card\n";
-                getGame()->getActivePlayer().drawCard(getGame()->getDeck());
+                std::cout << "Draw prevented\n";
             }
             else
             {
-                std::cout << "Skipping draw step for starting player\n";
+                draw_action->execute();
             }
             getGame()->render();
             m_step = Step::Done;
+            break;
+        }
+        case Step::Done:
             break;
         default:
             std::cerr << "Invalid step in beginning phase\n";

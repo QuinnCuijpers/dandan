@@ -2,6 +2,12 @@
 #define DANDAN_IPREVENTION_EFFECT_H
 
 #include "../IContinuousEffect.h"
+#include "dandan/core/actions/IAction.h"
+
+namespace dandan::core
+{
+    class Game;
+}
 
 namespace dandan::effects
 {
@@ -10,7 +16,8 @@ namespace dandan::effects
     public:
         IPreventionEffect() = default;
 
-        virtual void check() = 0;
+        virtual bool prevents(const core::IAction &action,
+                              const core::Game &game) = 0;
     };
 
 } // namespace dandan::effects

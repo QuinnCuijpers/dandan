@@ -1,5 +1,6 @@
 #include "dandan/core/phases/MainPhase.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include <iterator>
 
@@ -32,7 +33,20 @@ namespace dandan::core
                 {
                     int card_index =
                         std::stoi(input.substr(std::size("play ") - 1));
-                    getGame()->getActivePlayer().playCard(card_index);
+                    auto *card{getGame()
+                                   ->getActivePlayer()
+                                   .getHand()
+                                   .getCards()
+                                   .at(card_index)
+                                   .get()};
+                    auto action =
+                        std::make_unique<PlayCardAction>(card, getGame());
+                    if (getGame()->isActionPrevented(*action))
+                    {
+                        std::cout << "Action prevented\n";
+                        continue;
+                    }
+                    action->execute();
                 }
                 catch (const std::exception &e)
                 {

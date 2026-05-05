@@ -9,7 +9,7 @@ namespace dandan::core
     class MainPhase : public IPhase
     {
     public:
-        MainPhase(Game *game) : IPhase(game)
+        explicit MainPhase(Game *game) : IPhase(game)
         {
             std::cout << "Constructed main phase\n";
         };

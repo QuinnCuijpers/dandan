@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Stack.h"
 #include "dandan/core/PreventionManager.h"
+#include "dandan/core/actions/IAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
@@ -60,14 +61,24 @@ namespace dandan::core
             return m_players.at(1 - m_active_player_index);
         }
 
-        void changePhase(std::unique_ptr<IPhase> &&phase)
-        {
-            m_phase = std::move(phase);
-        }
-
         [[nodiscard]] Deck &getDeck()
         {
             return m_deck;
+        }
+
+        [[nodiscard]] EventManager &getEventManager()
+        {
+            return m_event_manager;
+        }
+
+        [[nodiscard]] const EventManager &getEventManager() const
+        {
+            return m_event_manager;
+        }
+
+        void changePhase(std::unique_ptr<IPhase> &&phase)
+        {
+            m_phase = std::move(phase);
         }
 
         void setDeck(Deck &&deck)
@@ -104,6 +115,11 @@ namespace dandan::core
                 // hardcoding it here
                 m_first_turn = false;
             }
+        }
+
+        [[nodiscard]] bool isActionPrevented(const IAction &action) const
+        {
+            return m_prevention_manager.isPrevented(action, *this);
         }
 
     private:
