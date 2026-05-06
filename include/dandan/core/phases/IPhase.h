@@ -9,7 +9,7 @@ namespace dandan::core
     class IPhase
     {
     public:
-        explicit IPhase(Game *game) : m_game(game)
+        explicit IPhase(Game &game) : m_game(game)
         {
         }
         IPhase(const IPhase &) = delete;
@@ -20,13 +20,13 @@ namespace dandan::core
 
         [[nodiscard]] virtual std::unique_ptr<IPhase> handle() = 0;
 
-        [[nodiscard]] Game *getGame()
+        [[nodiscard]] Game &getGame()
         {
             return m_game;
         }
 
     private:
-        Game *m_game;
+        Game &m_game;
     };
 } // namespace dandan::core
 

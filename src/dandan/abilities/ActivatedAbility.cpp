@@ -7,7 +7,6 @@ namespace dandan::abilities
     {
         std::cout << "Resolving Activated ability\n";
         m_cost->evaluate();
-        m_effect->apply();
     }
 
 } // namespace dandan::abilities

@@ -1,17 +1,18 @@
 #include "dandan/core/Stack.h"
+#include "dandan/core/Game.h"
 
 namespace dandan::core
 {
-    void Stack::resolveNext()
+    void Stack::resolveNext(core::Game &game)
     {
         if (m_stack.empty())
         {
             return;
         }
 
-        const auto *ability = m_stack.back();
+        auto effect = std::move(m_stack.back());
         m_stack.pop_back();
 
-        ability->resolve();
+        effect->apply(game);
     }
 } // namespace dandan::core

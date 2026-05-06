@@ -15,21 +15,21 @@ namespace dandan::core
     class CardDrawAction : public IAction
     {
     public:
-        explicit CardDrawAction(Game *game) : m_game{game}
+        explicit CardDrawAction(Game &game) : m_game{game}
         {
         }
 
         // TODO: actions should create effects, but for now we will just execute
         // the action directly
-        std::unique_ptr<effects::IOneShotEffect> execute() override
+        std::unique_ptr<effects::IOneShotEffect> createEffect() override
         {
             std::cout << "Executing card draw action\n";
-            m_game->getActivePlayer().drawCard(m_game->getDeck());
+            m_game.getActivePlayer().drawCard(m_game.getDeck());
             return std::make_unique<effects::DrawEffect>();
         }
 
     private:
-        [[maybe_unused]] Game *m_game;
+        [[maybe_unused]] Game &m_game;
     };
 } // namespace dandan::core
 

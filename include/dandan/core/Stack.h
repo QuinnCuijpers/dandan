@@ -1,7 +1,7 @@
 #ifndef DANDAN_CORE_STACK_H
 #define DANDAN_CORE_STACK_H
 
-#include "dandan/abilities/IAbility.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 #include <vector>
 
@@ -12,15 +12,15 @@ namespace dandan::core
     public:
         Stack() = default;
 
-        void push(const std::unique_ptr<abilities::IAbility> &ability)
+        void push(std::unique_ptr<effects::IOneShotEffect> &&effect)
         {
-            m_stack.push_back(ability.get());
+            m_stack.push_back(std::move(effect));
         }
 
-        void resolveNext();
+        void resolveNext(core::Game &game);
 
     private:
-        std::vector<abilities::IAbility *> m_stack;
+        std::vector<std::unique_ptr<effects::IOneShotEffect>> m_stack;
     };
 } // namespace dandan::core
 

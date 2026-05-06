@@ -5,6 +5,7 @@
 #include "dandan/core/Deck.h"
 #include "dandan/core/Hand.h"
 #include "dandan/mana/Mana.h"
+#include <memory>
 
 const static int STARTING_HAND_SIZE{7};
 const static int STARTING_LIFE_TOTAL{20};
@@ -66,6 +67,12 @@ namespace dandan::core
                 return;
             }
             m_hand.addCards(deck.draw());
+        }
+
+        void playCard(std::unique_ptr<Card> &&card)
+        {
+            std::cout << "Player is playing card " << card->getName() << '\n';
+            m_battlefield.addCard(std::move(card));
         }
 
         void playCard(int index)

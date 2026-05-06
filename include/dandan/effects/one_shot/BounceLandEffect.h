@@ -8,7 +8,7 @@ namespace dandan::effects
     class BounceLandEffect : public IOneShotEffect
     {
     public:
-        void apply() override;
+        void apply(core::Game &game) override;
     };
 } // namespace dandan::effects
 

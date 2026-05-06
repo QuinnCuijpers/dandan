@@ -29,12 +29,12 @@ namespace dandan::core
             // manager so we apply an untap effect to all permanents and trigger
             // any effects that trigger on untapping although all untaps resolve
             // simultaneous and immediately
-            getGame()->render();
+            getGame().render();
             m_step = Step::Upkeep;
             break;
         case Step::Upkeep:
             std::cout << "Handling upkeep step\n";
-            getGame()->render();
+            getGame().render();
             m_step = Step::Draw;
             break;
         case Step::Draw:
@@ -44,15 +44,15 @@ namespace dandan::core
             std::cout << "Handling draw step\n";
             auto draw_action =
                 std::make_unique<core::CardDrawAction>(getGame());
-            if (getGame()->isActionPrevented(*draw_action))
+            if (getGame().isActionPrevented(*draw_action))
             {
                 std::cout << "Draw prevented\n";
             }
             else
             {
-                draw_action->execute();
+                draw_action->createEffect();
             }
-            getGame()->render();
+            getGame().render();
             m_step = Step::Done;
             break;
         }

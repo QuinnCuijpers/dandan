@@ -15,7 +15,7 @@ namespace dandan::effects
         {
         }
 
-        void apply() override;
+        void apply(core::Game &game) override;
     };
 
 } // namespace dandan::effects

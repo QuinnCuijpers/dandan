@@ -2,7 +2,7 @@
 
 namespace dandan::effects
 {
-    void ETBEffect::apply()
+    void ETBEffect::apply(core::Game &game)
     {
         // This effect doesn't do anything by itself, it just serves as a marker
         // for replacement effects to modify it.

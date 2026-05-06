@@ -13,7 +13,7 @@ namespace dandan::core
     public:
         AttackAction() = default;
 
-        std::unique_ptr<effects::IOneShotEffect> execute() override
+        std::unique_ptr<effects::IOneShotEffect> createEffect() override
         {
             std::cout << "Executing attack action\n";
             return {nullptr};

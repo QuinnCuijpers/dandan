@@ -4,6 +4,7 @@
 #include "Deck.h"
 #include "EventManager.h"
 #include "Player.h"
+#include "ReplacementManager.h"
 #include "Stack.h"
 #include "dandan/core/PreventionManager.h"
 #include "dandan/core/actions/IAction.h"
@@ -66,6 +67,11 @@ namespace dandan::core
             return m_deck;
         }
 
+        [[nodiscard]] Stack &getStack()
+        {
+            return m_stack;
+        }
+
         [[nodiscard]] EventManager &getEventManager()
         {
             return m_event_manager;
@@ -74,6 +80,16 @@ namespace dandan::core
         [[nodiscard]] const EventManager &getEventManager() const
         {
             return m_event_manager;
+        }
+
+        [[nodiscard]] ReplacementManager &getReplacementManager()
+        {
+            return m_replacement_manager;
+        }
+
+        [[nodiscard]] const ReplacementManager &getReplacementManager() const
+        {
+            return m_replacement_manager;
         }
 
         void changePhase(std::unique_ptr<IPhase> &&phase)
@@ -99,9 +115,9 @@ namespace dandan::core
         // turn structure and phase handling
         void passTurn()
         {
-            changePhase(std::make_unique<EndingPhase>(this));
+            changePhase(std::make_unique<EndingPhase>(std::ref(*this)));
             m_active_player_index = 1 - m_active_player_index;
-            changePhase(std::make_unique<BeginningPhase>(this));
+            changePhase(std::make_unique<BeginningPhase>(std::ref(*this)));
         }
 
         void handlePhase()
@@ -132,6 +148,7 @@ namespace dandan::core
         // events and prevention effects
         EventManager m_event_manager;
         PreventionManager m_prevention_manager;
+        ReplacementManager m_replacement_manager;
         std::unique_ptr<IPhase> m_phase;
         bool m_first_turn{true};
         // Graveyard m_graveyard;

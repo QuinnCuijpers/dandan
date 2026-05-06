@@ -3,6 +3,7 @@
 #include "dandan/core/Player.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
+#include <functional>
 #include <memory>
 #include <random>
 #include <string>
@@ -40,7 +41,8 @@ namespace dandan::core
         std::cout << "Game constructed\n";
 
         std::cout << "Changing phase to beginning phase\n";
-        changePhase(std::make_unique<BeginningPhase>(this));
+        changePhase(std::make_unique<BeginningPhase>(
+            std::reference_wrapper<Game>(*this)));
     }
 #ifdef DANDAN_BUILD_SERIALIZE
     Game::Game()
@@ -68,7 +70,8 @@ namespace dandan::core
             m_first_turn = false;
             m_active_player_index =
                 (m_active_player_index + 1) % AMOUNT_PLAYERS;
-            changePhase(std::make_unique<BeginningPhase>(this));
+            changePhase(std::make_unique<BeginningPhase>(
+                std::reference_wrapper<Game>(*this)));
         }
     }
 

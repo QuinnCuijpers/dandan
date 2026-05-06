@@ -23,7 +23,7 @@ namespace dandan::core
             Done
         };
 
-        explicit BeginningPhase(Game *game) : IPhase(game)
+        explicit BeginningPhase(Game &game) : IPhase(game)
         {
             std::cout << "Constructed beginning phase\n";
         };

@@ -15,7 +15,7 @@ namespace dandan::core
         IAction &operator=(IAction &&) = delete;
         virtual ~IAction() = default;
 
-        virtual std::unique_ptr<effects::IOneShotEffect> execute() = 0;
+        virtual std::unique_ptr<effects::IOneShotEffect> createEffect() = 0;
     };
 } // namespace dandan::core
 

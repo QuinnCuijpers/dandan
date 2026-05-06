@@ -6,7 +6,7 @@ namespace dandan::effects
 {
     struct ETBEffect final : public IOneShotEffect
     {
-        void apply() override;
+        void apply(core::Game &game) override;
 
         void setTapped(bool tapped)
         {

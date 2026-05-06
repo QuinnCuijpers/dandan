@@ -9,7 +9,7 @@ namespace dandan::effects
     class SelfSacrificeEffect : public IOneShotEffect
     {
     public:
-        void apply() override
+        void apply([[maybe_unused]] core::Game &game) override
         {
             std::cout << "Resolving SelfSacrificeEffect: Sacrificing the "
                          "source card.\n";

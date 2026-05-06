@@ -5,7 +5,7 @@
 namespace dandan::effects
 {
 
-    void DrawEffect::apply()
+    void DrawEffect::apply([[maybe_unused]] core::Game &game)
     {
         std::cout << "Applying draw effect\n";
     }

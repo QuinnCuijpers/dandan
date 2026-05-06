@@ -13,7 +13,7 @@ namespace dandan::core
     class EndingPhase : public IPhase
     {
     public:
-        explicit EndingPhase(Game *game) : IPhase(game)
+        explicit EndingPhase(Game &game) : IPhase(game)
         {
             std::cout << "Constructed ending phase\n";
         };

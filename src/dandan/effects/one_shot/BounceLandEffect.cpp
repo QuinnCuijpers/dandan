@@ -3,7 +3,7 @@
 
 namespace dandan::effects
 {
-    void BounceLandEffect::apply()
+    void BounceLandEffect::apply([[maybe_unused]] core::Game &game)
     {
         std::cout << "Applying BounceLandEffect\n";
     }
