@@ -15,7 +15,7 @@ namespace dandan::effects
         explicit PeekEffect(int peek_amount) : m_peek_amount(peek_amount)
         {
         }
-        void apply(core::Game &game) override;
+        std::unique_ptr<events::IEvent> apply(core::Game &game) override;
     };
 } // namespace dandan::effects
 

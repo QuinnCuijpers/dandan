@@ -1,7 +1,6 @@
 #ifndef DANDAN_PLAYCARDACTION_H
 #define DANDAN_PLAYCARDACTION_H
 
-#include "dandan/abilities/StaticAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/IAction.h"
@@ -31,14 +30,15 @@ namespace dandan::core
                     m_game.getEventManager().subscribe(ability.get());
                 }
 
-                for (const auto &ability : m_card->getAbilities())
-                {
-                    if (ability->getType() ==
-                        abilities::StaticAbility::Replacement)
-                    {
-                        m_game.getReplacementManager().subscribe(ability.get());
-                    }
-                }
+                // for (const auto &ability : m_card->getAbilities())
+                // {
+                //     // if (ability->getType() ==
+                //     //     abilities::StaticAbility::Replacement)
+                //     // {
+                //     //
+                //     m_game.getReplacementManager().subscribe(ability.get());
+                //     // }
+                // }
 
                 std::cout << m_game.getEventManager().size()
                           << " effects subscribed\n";

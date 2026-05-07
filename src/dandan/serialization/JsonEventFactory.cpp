@@ -14,10 +14,9 @@ namespace dandan::serialization
         {
             auto json = nlohmann::json{{"type", "EntersBattlefieldEvent"},
                                        {"data", nlohmann::json::object()}};
-            if (entersBattlefieldEvent->m_tapped.has_value())
+            if (entersBattlefieldEvent->isTapped())
             {
-                json["data"]["tapped"] =
-                    entersBattlefieldEvent->m_tapped.value();
+                json["data"]["tapped"] = entersBattlefieldEvent->isTapped();
             }
             return json;
         }

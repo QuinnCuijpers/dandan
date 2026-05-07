@@ -2,6 +2,8 @@
 #define DANDAN_DRAWEFFECT_H
 
 #include "IOneShotEffect.h"
+#include "dandan/events/IEvent.h"
+#include <memory>
 
 namespace dandan::effects
 {
@@ -15,7 +17,7 @@ namespace dandan::effects
         {
         }
 
-        void apply(core::Game &game) override;
+        std::unique_ptr<events::IEvent> apply(core::Game &game) override;
     };
 
 } // namespace dandan::effects

@@ -5,9 +5,11 @@
 namespace dandan::effects
 {
 
-    void DrawEffect::apply([[maybe_unused]] core::Game &game)
+    std::unique_ptr<events::IEvent> DrawEffect::apply(
+        [[maybe_unused]] core::Game &game)
     {
         std::cout << "Applying draw effect\n";
+        return nullptr;
     }
 
 } // namespace dandan::effects

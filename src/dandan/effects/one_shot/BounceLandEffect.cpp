@@ -3,8 +3,10 @@
 
 namespace dandan::effects
 {
-    void BounceLandEffect::apply([[maybe_unused]] core::Game &game)
+    std::unique_ptr<events::IEvent> BounceLandEffect::apply(
+        [[maybe_unused]] core::Game &game)
     {
         std::cout << "Applying BounceLandEffect\n";
+        return nullptr;
     }
 } // namespace dandan::effects

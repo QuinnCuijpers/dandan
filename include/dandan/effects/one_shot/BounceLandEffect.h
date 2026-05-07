@@ -2,13 +2,15 @@
 #define DANDAN_BOUNCELANDEFFECT_H
 
 #include "IOneShotEffect.h"
+#include "dandan/events/IEvent.h"
+#include <memory>
 
 namespace dandan::effects
 {
     class BounceLandEffect : public IOneShotEffect
     {
     public:
-        void apply(core::Game &game) override;
+        std::unique_ptr<events::IEvent> apply(core::Game &game) override;
     };
 } // namespace dandan::effects
 

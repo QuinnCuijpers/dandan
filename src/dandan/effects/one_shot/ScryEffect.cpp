@@ -3,12 +3,14 @@
 namespace dandan::effects
 {
 
-    void ScryEffect::apply([[maybe_unused]] core::Game &game)
+    std::unique_ptr<events::IEvent> ScryEffect::apply(
+        [[maybe_unused]] core::Game &game)
     {
         // Implement the logic for applying the scry effect here.
         // This is a placeholder implementation. In a real implementation, you
         // would need to interact with the game state to perform the scry
         // action.
+        return nullptr;
     }
 
 } // namespace dandan::effects
