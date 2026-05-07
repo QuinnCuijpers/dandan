@@ -34,12 +34,12 @@ namespace dandan::core
             return m_name;
         };
 
-        [[nodiscard]] Hand &getHand()
+        [[nodiscard]] Hand &hand()
         {
             return m_hand;
         }
 
-        [[nodiscard]] const Hand &getHand() const
+        [[nodiscard]] const Hand &hand() const
         {
             return m_hand;
         }
@@ -54,12 +54,12 @@ namespace dandan::core
             return m_life_total;
         }
 
-        [[nodiscard]] Battlefield &getBattlefield()
+        [[nodiscard]] Battlefield &battlefield()
         {
             return m_battlefield;
         }
 
-        [[nodiscard]] const Battlefield &getBattlefield() const
+        [[nodiscard]] const Battlefield &battlefield() const
         {
             return m_battlefield;
         }

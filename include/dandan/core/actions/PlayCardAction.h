@@ -27,7 +27,7 @@ namespace dandan::core
                 std::cout << "Playing card: " << m_card->getName() << '\n';
                 for (const auto &ability : m_card->getAbilities())
                 {
-                    m_game.getEventManager().subscribe(ability.get());
+                    m_game.eventManager().subscribe(ability.get());
                 }
 
                 // for (const auto &ability : m_card->getAbilities())
@@ -40,7 +40,7 @@ namespace dandan::core
                 //     // }
                 // }
 
-                std::cout << m_game.getEventManager().size()
+                std::cout << m_game.eventManager().size()
                           << " effects subscribed\n";
                 return std::make_unique<effects::PlayCardEffect>(
                     std::move(m_card));

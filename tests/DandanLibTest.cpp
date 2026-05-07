@@ -22,11 +22,11 @@ TEST(DandanLibTest, GameSetup)
     dandan::core::Deck testDeck{cards};
     dandan::core::Game game{std::move(testDeck)};
 
-    auto &active_player = game.getActivePlayer();
+    auto &active_player = game.activePlayer();
 
     std::vector<std::string> card_names;
-    std::transform(active_player.getHand().getCards().begin(),
-                   active_player.getHand().getCards().end(),
+    std::transform(active_player.hand().getCards().begin(),
+                   active_player.hand().getCards().end(),
                    std::back_inserter(card_names), [](const auto &card)
                    { return std::string(card->getName()); });
 
@@ -37,8 +37,8 @@ TEST(DandanLibTest, GameSetup)
 
     std::vector<std::string> battlefield_card_names{};
 
-    std::transform(active_player.getBattlefield().getPermanents().begin(),
-                   active_player.getBattlefield().getPermanents().end(),
+    std::transform(active_player.battlefield().getPermanents().begin(),
+                   active_player.battlefield().getPermanents().end(),
                    std::back_inserter(battlefield_card_names),
                    [](const auto &card)
                    { return std::string(card->getName()); });
@@ -63,19 +63,18 @@ TEST(DandanLibTest, NoDrawFirstTurn)
     dandan::core::Deck testDeck{cards};
     dandan::core::Game game{std::move(testDeck)};
 
-    auto &active_player = game.getActivePlayer();
-    auto &non_active_player = game.getNonActivePlayer();
+    auto &active_player = game.activePlayer();
+    auto &non_active_player = game.nonActivePlayer();
 
-    EXPECT_EQ(active_player.getHand().getCards().size(), STARTING_HAND_SIZE);
-    EXPECT_EQ(non_active_player.getHand().getCards().size(),
-              STARTING_HAND_SIZE);
+    EXPECT_EQ(active_player.hand().getCards().size(), STARTING_HAND_SIZE);
+    EXPECT_EQ(non_active_player.hand().getCards().size(), STARTING_HAND_SIZE);
 
     game.handlePhase();
     // Active player should not draw a card on the first turn
-    EXPECT_EQ(active_player.getHand().getCards().size(), STARTING_HAND_SIZE);
+    EXPECT_EQ(active_player.hand().getCards().size(), STARTING_HAND_SIZE);
     // Non active player should draw a card on the first turn
     game.passTurn();
     game.handlePhase();
-    EXPECT_EQ(non_active_player.getHand().getCards().size(),
+    EXPECT_EQ(non_active_player.hand().getCards().size(),
               STARTING_HAND_SIZE + 1);
 }

@@ -47,7 +47,7 @@ namespace dandan::core
             return m_players.at(m_active_player_index);
         }
 
-        [[nodiscard]] Player &getActivePlayer()
+        [[nodiscard]] Player &activePlayer()
         {
             return m_players.at(m_active_player_index);
         }
@@ -57,37 +57,37 @@ namespace dandan::core
             return m_players.at(1 - m_active_player_index);
         }
 
-        [[nodiscard]] Player &getNonActivePlayer()
+        [[nodiscard]] Player &nonActivePlayer()
         {
             return m_players.at(1 - m_active_player_index);
         }
 
-        [[nodiscard]] Deck &getDeck()
+        [[nodiscard]] Deck &deck()
         {
             return m_deck;
         }
 
-        [[nodiscard]] Stack &getStack()
+        [[nodiscard]] Stack &stack()
         {
             return m_stack;
         }
 
-        [[nodiscard]] EventManager &getEventManager()
+        [[nodiscard]] EventManager &eventManager()
         {
             return m_event_manager;
         }
 
-        [[nodiscard]] const EventManager &getEventManager() const
+        [[nodiscard]] const EventManager &eventManager() const
         {
             return m_event_manager;
         }
 
-        [[nodiscard]] ReplacementManager &getReplacementManager()
+        [[nodiscard]] ReplacementManager &replacementManager()
         {
             return m_replacement_manager;
         }
 
-        [[nodiscard]] const ReplacementManager &getReplacementManager() const
+        [[nodiscard]] const ReplacementManager &replacementManager() const
         {
             return m_replacement_manager;
         }

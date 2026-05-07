@@ -15,7 +15,7 @@ namespace dandan::core
         {
             handleNextStep();
         }
-        return std::make_unique<MainPhase>(getGame());
+        return std::make_unique<MainPhase>(game());
     }
 
     void BeginningPhase::handleNextStep()
@@ -29,12 +29,12 @@ namespace dandan::core
             // manager so we apply an untap effect to all permanents and trigger
             // any effects that trigger on untapping although all untaps resolve
             // simultaneous and immediately
-            getGame().render();
+            game().render();
             m_step = Step::Upkeep;
             break;
         case Step::Upkeep:
             std::cout << "Handling upkeep step\n";
-            getGame().render();
+            game().render();
             m_step = Step::Draw;
             break;
         case Step::Draw:
@@ -43,8 +43,8 @@ namespace dandan::core
             // the first turn rule here
             std::cout << "Handling draw step\n";
             auto draw_action =
-                std::make_unique<core::CardDrawAction>(getGame());
-            if (getGame().isActionPrevented(*draw_action))
+                std::make_unique<core::CardDrawAction>(game());
+            if (game().isActionPrevented(*draw_action))
             {
                 std::cout << "Draw prevented\n";
             }
@@ -52,7 +52,7 @@ namespace dandan::core
             {
                 draw_action->createEffect();
             }
-            getGame().render();
+            game().render();
             m_step = Step::Done;
             break;
         }

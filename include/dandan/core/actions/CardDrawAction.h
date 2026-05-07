@@ -24,7 +24,7 @@ namespace dandan::core
         std::unique_ptr<effects::IOneShotEffect> createEffect() override
         {
             std::cout << "Executing card draw action\n";
-            m_game.getActivePlayer().drawCard(m_game.getDeck());
+            m_game.activePlayer().drawCard(m_game.deck());
             return std::make_unique<effects::DrawEffect>();
         }
 

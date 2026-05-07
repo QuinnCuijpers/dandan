@@ -13,7 +13,9 @@ namespace dandan::events
     {
     public:
         ETBEvent() = default;
-        ETBEvent(std::unique_ptr<core::Card> &&card) : m_source{std::move(card)}
+
+        explicit ETBEvent(std::unique_ptr<core::Card> &&card)
+            : m_source{std::move(card)}
         {
         }
 

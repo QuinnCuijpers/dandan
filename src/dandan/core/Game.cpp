@@ -28,14 +28,14 @@ namespace dandan::core
         int starting_player_index = dist(gen);
         m_active_player_index = starting_player_index;
 
-        std::cout << "Active player: " << getActivePlayer().getName() << '\n';
-        std::cout << "Non-active player: " << getNonActivePlayer().getName()
+        std::cout << "Active player: " << activePlayer().getName() << '\n';
+        std::cout << "Non-active player: " << nonActivePlayer().getName()
                   << '\n';
 
         for (int i{}; i < STARTING_HAND_SIZE; ++i)
         {
-            getActivePlayer().drawCard(m_deck);
-            getNonActivePlayer().drawCard(m_deck);
+            activePlayer().drawCard(m_deck);
+            nonActivePlayer().drawCard(m_deck);
         }
         // TODO: Implement mulligan rules
         std::cout << "Game constructed\n";
@@ -87,22 +87,22 @@ namespace dandan::core
 
         // Player name and hand (top)
         std::cout << getNonActivePlayer().getName() << "'s Hand: ";
-        printCards(getNonActivePlayer().getHand().getCards());
+        printCards(getNonActivePlayer().hand().getCards());
         std::cout << "\n";
 
         // Player's battlefield
         std::cout << getNonActivePlayer().getName() << "'s Battlefield: ";
-        printCards(getNonActivePlayer().getBattlefield().getPermanents());
+        printCards(getNonActivePlayer().battlefield().getPermanents());
         std::cout << "\n\n"; // space between battlefields
 
         // Opponent's battlefield
         std::cout << getActivePlayer().getName() << "'s Battlefield: ";
-        printCards(getActivePlayer().getBattlefield().getPermanents());
+        printCards(getActivePlayer().battlefield().getPermanents());
         std::cout << "\n";
 
         // Opponent's hand and name
         std::cout << getActivePlayer().getName() << "'s Hand: ";
-        printCards(getActivePlayer().getHand().getCards());
+        printCards(getActivePlayer().hand().getCards());
         std::cout << "\n";
     }
 } // namespace dandan::core

@@ -9,7 +9,7 @@ namespace dandan::conditions
     bool ControlsIslandCondition::isSatisfied(const core::Game &game)
     {
         const core::Player &current_player = game.getNonActivePlayer();
-        const auto &battlefield{current_player.getBattlefield()};
+        const auto &battlefield{current_player.battlefield()};
         return std::any_of(battlefield.getPermanents().begin(),
                            battlefield.getPermanents().end(),
                            [](const std::unique_ptr<core::Card> &card)

@@ -14,16 +14,20 @@ namespace dandan::effects
     class PlayCardEffect : public IOneShotEffect
     {
     public:
-        PlayCardEffect(std::unique_ptr<core::Card> &&card)
+        explicit PlayCardEffect(std::unique_ptr<core::Card> &&card)
             : m_card{std::move(card)}
         {
         }
 
+        // TODO: fix double move of card
+        // should be fine after flyweight pattern is implemented and cards are
+        // just static references to card data and copyable data structures
+        // instead of unique pointers
         std::unique_ptr<events::IEvent> apply(
             [[maybe_unused]] core::Game &game) override
         {
             std::cout << "Applying PlayCardEffect\n";
-            game.getActivePlayer().playCard(std::move(m_card));
+            game.activePlayer().playCard(std::move(m_card));
             return std::make_unique<events::ETBEvent>(std::move(m_card));
         }
 

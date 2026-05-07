@@ -12,7 +12,7 @@ namespace dandan::core
 
         while (true)
         {
-            getGame().render();
+            game().render();
             std::cout << "What do you want to do? (play [card index], pass, "
                          "or quit) ";
             std::string input;
@@ -20,7 +20,7 @@ namespace dandan::core
             if (input == "pass")
             {
                 std::cout << "Passing turn\n";
-                return std::make_unique<EndingPhase>(getGame());
+                return std::make_unique<EndingPhase>(game());
             }
             if (input == "quit")
             {
@@ -33,11 +33,10 @@ namespace dandan::core
                 {
                     int card_index =
                         std::stoi(input.substr(std::size("play ") - 1));
-                    auto card{getGame().getActivePlayer().getHand().getCard(
-                        card_index)};
+                    auto card{game().activePlayer().hand().getCard(card_index)};
                     auto action = std::make_unique<PlayCardAction>(
-                        std::move(card), getGame());
-                    if (getGame().isActionPrevented(*action))
+                        std::move(card), game());
+                    if (game().isActionPrevented(*action))
                     {
                         std::cout << "Action prevented\n";
                         continue;
@@ -45,8 +44,8 @@ namespace dandan::core
                     auto effect{action->createEffect()};
                     // should add to stack and resolve later, but for now just
                     // apply immediately as we only have cards
-                    auto event{effect->apply(getGame())};
-                    getGame().getEventManager().notify(*event, getGame());
+                    auto event{effect->apply(game())};
+                    game().eventManager().notify(*event, game());
                 }
                 catch (const std::exception &e)
                 {
