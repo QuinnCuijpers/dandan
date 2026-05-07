@@ -17,7 +17,7 @@ namespace dandan::abilities
         {
         }
 
-        void resolve() const override;
+        void resolve(core::Game &game) const override;
 
         [[nodiscard]] const costs::ICost *getCost() const
         {

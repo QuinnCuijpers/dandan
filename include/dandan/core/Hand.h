@@ -33,6 +33,11 @@ namespace dandan::core
             return card;
         }
 
+        void addCard(std::unique_ptr<Card> card)
+        {
+            m_cards.emplace_back(std::move(card));
+        }
+
         void addCards(std::vector<std::unique_ptr<Card>> cards)
         {
             std::transform(std::make_move_iterator(cards.begin()),

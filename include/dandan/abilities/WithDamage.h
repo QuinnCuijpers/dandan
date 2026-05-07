@@ -27,7 +27,7 @@ namespace dandan::abilities
             return m_ability->appliesToEvent(event);
         }
 
-        void resolve() const override;
+        void resolve(core::Game &game) const override;
 
     private:
         int m_damage{1};

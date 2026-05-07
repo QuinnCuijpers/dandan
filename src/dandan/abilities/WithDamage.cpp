@@ -4,9 +4,9 @@
 namespace dandan::abilities
 {
 
-    void WithDamage::resolve() const
+    void WithDamage::resolve(core::Game &game) const
     {
-        m_ability->resolve();
+        m_ability->resolve(game);
         std::cout << "Resolving WithDamage decorator\n";
         std::cout << "Dealing " << m_damage << " damage\n";
     }

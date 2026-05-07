@@ -23,13 +23,14 @@ namespace dandan::core
         }
     }
 
-    void EventManager::notify(const events::IEvent &event) const
+    void EventManager::notify(const events::IEvent &event,
+                              core::Game &game) const
     {
         for (const auto *subscriber : m_subscribers)
         {
             if (subscriber->appliesToEvent(event))
             {
-                subscriber->resolve();
+                subscriber->resolve(game);
             }
         }
     }

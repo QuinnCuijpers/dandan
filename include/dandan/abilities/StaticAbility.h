@@ -2,6 +2,7 @@
 #define REPLACEMENTABILITY_H
 
 #include "IAbility.h"
+#include "dandan/core/Game.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
 #include <cstdint>
 #include <memory>
@@ -34,7 +35,7 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        void resolve() const override;
+        void resolve(core::Game &game) const override;
 
     private:
         Type m_type{};

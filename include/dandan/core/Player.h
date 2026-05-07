@@ -54,6 +54,11 @@ namespace dandan::core
             return m_life_total;
         }
 
+        [[nodiscard]] Battlefield &getBattlefield()
+        {
+            return m_battlefield;
+        }
+
         [[nodiscard]] const Battlefield &getBattlefield() const
         {
             return m_battlefield;

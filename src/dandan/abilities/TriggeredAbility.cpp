@@ -1,15 +1,14 @@
 #include "dandan/abilities/TriggeredAbility.h"
+#include "dandan/core/Game.h"
+#include <iostream>
 
 namespace dandan::abilities
 {
 
-    void TriggeredAbility::resolve() const
+    void TriggeredAbility::resolve(core::Game &game) const
     {
-        // In a real implementation, you would check the game state to see if
-        // the event specified in m_on has occurred. If it has, you would then
-        // apply the effect specified in m_effect. This is a placeholder
-        // implementation. You would need to implement the logic to check for
-        // the event and apply the effect based on your game's architecture.
+        std::cout << "Resolving triggered ability\n";
+        m_effect->apply(game);
     }
 
 } // namespace dandan::abilities

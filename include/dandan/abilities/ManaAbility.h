@@ -2,6 +2,7 @@
 #define DANDAN_MANAABILITY_H
 
 #include "IAbility.h"
+#include "dandan/core/Game.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/TapCost.h"
 #include "dandan/mana/ManaList.h"
@@ -33,7 +34,7 @@ namespace dandan::abilities
             return m_cost.get();
         }
 
-        void resolve() const override;
+        void resolve(core::Game &game) const override;
 
     private:
         std::unique_ptr<costs::ICost> m_cost{

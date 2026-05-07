@@ -45,7 +45,8 @@ namespace dandan::core
                     auto effect{action->createEffect()};
                     // should add to stack and resolve later, but for now just
                     // apply immediately as we only have cards
-                    effect->apply(getGame());
+                    auto event{effect->apply(getGame())};
+                    getGame().getEventManager().notify(*event, getGame());
                 }
                 catch (const std::exception &e)
                 {

@@ -34,7 +34,7 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        void resolve() const override;
+        void resolve(core::Game &game) const override;
 
     private:
         std::unique_ptr<dandan::events::IEvent> m_on;
