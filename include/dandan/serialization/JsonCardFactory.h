@@ -9,12 +9,12 @@
 namespace dandan::serialization
 {
 
-    template <> class JsonFactory<core::Card>
+    template <> class JsonFactory<core::CardData>
     {
     public:
-        static nlohmann::json create_json(const core::Card *card);
+        static nlohmann::json create_json(const core::CardData *card);
 
-        static std::unique_ptr<core::Card> create_product(
+        static std::unique_ptr<core::CardData> create_product(
             const nlohmann::json &json);
     };
 } // namespace dandan::serialization

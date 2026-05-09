@@ -6,30 +6,32 @@
 #include <nlohmann/json.hpp>
 namespace dandan::core
 {
-    NLOHMANN_JSON_SERIALIZE_ENUM(Card::Type, // NOLINT
-                                 {{Card::Type::Land, "Land"},
-                                  {Card::Type::Creature, "Creature"},
-                                  {Card::Type::Sorcery, "Sorcery"},
-                                  {Card::Type::Instant, "Instant"},
-                                  {Card::Type::Enchantment, "Enchantment"},
-                                  {Card::Type::Artifact, "Artifact"},
-                                  {Card::Type::Planeswalker, "Planeswalker"}});
+    NLOHMANN_JSON_SERIALIZE_ENUM(CardData::Type, // NOLINT
+                                 {{CardData::Type::Land, "Land"},
+                                  {CardData::Type::Creature, "Creature"},
+                                  {CardData::Type::Sorcery, "Sorcery"},
+                                  {CardData::Type::Instant, "Instant"},
+                                  {CardData::Type::Enchantment, "Enchantment"},
+                                  {CardData::Type::Artifact, "Artifact"},
+                                  {CardData::Type::Planeswalker,
+                                   "Planeswalker"}});
 
-    NLOHMANN_JSON_SERIALIZE_ENUM(Card::SubType, // NOLINT
-                                 {{Card::SubType::None, "None"},
-                                  {Card::SubType::Island, "Island"},
-                                  {Card::SubType::Swamp, "Swamp"},
-                                  {Card::SubType::Mountain, "Mountain"},
-                                  {Card::SubType::Forest, "Forest"},
-                                  {Card::SubType::Plains, "Plains"},
-                                  {Card::SubType::Fish, "Fish"}});
+    NLOHMANN_JSON_SERIALIZE_ENUM(CardData::SubType, // NOLINT
+                                 {{CardData::SubType::None, "None"},
+                                  {CardData::SubType::Island, "Island"},
+                                  {CardData::SubType::Swamp, "Swamp"},
+                                  {CardData::SubType::Mountain, "Mountain"},
+                                  {CardData::SubType::Forest, "Forest"},
+                                  {CardData::SubType::Plains, "Plains"},
+                                  {CardData::SubType::Fish, "Fish"}});
 
 } // namespace dandan::core
 
 namespace dandan::serialization
 {
 
-    nlohmann::json JsonFactory<core::Card>::create_json(const core::Card *card)
+    nlohmann::json JsonFactory<core::CardData>::create_json(
+        const core::CardData *card)
     {
         auto abilities_json = nlohmann::json::array();
 
@@ -45,7 +47,7 @@ namespace dandan::serialization
         json["name"] = card->getName();
         json["cost"] = JsonFactory<mana::Mana>::create_json(card->getCost());
         json["type"] = card->getType();
-        if (card->getSubType() != core::Card::SubType::None)
+        if (card->getSubType() != core::CardData::SubType::None)
         {
             json["subtype"] = card->getSubType();
         }
@@ -59,18 +61,18 @@ namespace dandan::serialization
         return json;
     }
 
-    std::unique_ptr<core::Card> JsonFactory<core::Card>::create_product(
+    std::unique_ptr<core::CardData> JsonFactory<core::CardData>::create_product(
         const nlohmann::json &json)
     {
 
         auto name = json.at("name").get<std::string>();
         auto cost = JsonFactory<mana::Mana>::create_product(json.at("cost"));
-        auto type = json.at("type").get<core::Card::Type>();
+        auto type = json.at("type").get<core::CardData::Type>();
 
-        auto subtype = core::Card::SubType::None;
+        auto subtype = core::CardData::SubType::None;
         if (json.contains("subtype"))
         {
-            subtype = json.at("subtype").get<core::Card::SubType>();
+            subtype = json.at("subtype").get<core::CardData::SubType>();
         }
 
         auto stats = std::optional<core::Stats>{};
@@ -89,8 +91,8 @@ namespace dandan::serialization
             abilities.push_back(std::move(ability));
         }
 
-        return std::make_unique<core::Card>(name, std::move(cost), type,
-                                            subtype, std::move(abilities));
+        return std::make_unique<core::CardData>(name, std::move(cost), type,
+                                                subtype, std::move(abilities));
     }
 } // namespace dandan::serialization
 

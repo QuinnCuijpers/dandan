@@ -3,7 +3,6 @@
 
 #include "dandan/core/Card.h"
 #include <algorithm>
-#include <memory>
 #include <vector>
 
 namespace dandan::core
@@ -12,19 +11,18 @@ namespace dandan::core
     {
     public:
         Hand() = default;
-        explicit Hand(std::vector<std::unique_ptr<Card>> cards)
-            : m_cards(std::move(cards))
+        explicit Hand(std::vector<Card> cards) : m_cards(std::move(cards))
         {
         }
 
-        [[nodiscard]] const std::vector<std::unique_ptr<Card>> &getCards() const
+        [[nodiscard]] const std::vector<Card> &getCards() const
         {
             return m_cards;
         }
 
-        [[nodiscard]] std::unique_ptr<Card> getCard(int index)
+        [[nodiscard]] Card getCard(int index)
         {
-            auto card{std::move(m_cards[index])};
+            auto card{m_cards[index]};
             // erase chosen over pop and swap as we want to maintain card order
             // in hand while in the backend it is more effiecient to pop and
             // swap, the order of cards remaining constant makes UI later easier
@@ -33,22 +31,21 @@ namespace dandan::core
             return card;
         }
 
-        void addCard(std::unique_ptr<Card> card)
+        void addCard(Card card)
         {
-            m_cards.emplace_back(std::move(card));
+            m_cards.emplace_back(card);
         }
 
-        void addCards(std::vector<std::unique_ptr<Card>> cards)
+        void addCards(std::vector<Card> cards)
         {
             std::transform(std::make_move_iterator(cards.begin()),
                            std::make_move_iterator(cards.end()),
                            std::back_inserter(m_cards),
-                           [](std::unique_ptr<Card> &&card)
-                           { return std::move(card); });
+                           [](Card card) { return card; });
         }
 
     private:
-        std::vector<std::unique_ptr<Card>> m_cards;
+        std::vector<Card> m_cards;
     };
 } // namespace dandan::core
 

@@ -19,8 +19,6 @@ namespace dandan::core
         {
         }
 
-        // TODO: actions should create effects, but for now we will just execute
-        // the action directly
         std::unique_ptr<effects::IOneShotEffect> createEffect() override
         {
             std::cout << "Executing card draw action\n";

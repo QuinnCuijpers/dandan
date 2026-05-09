@@ -8,6 +8,7 @@
 #include "dandan/abilities/TriggeredAbility.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
 #include "dandan/core/Game.h"
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
@@ -40,6 +41,7 @@ namespace dandan
     using abilities::WithDamage;
 
     using core::Card;
+    using core::CardData;
     using core::Game;
     using core::Stats;
 

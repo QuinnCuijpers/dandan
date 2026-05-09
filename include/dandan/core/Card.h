@@ -1,133 +1,115 @@
-#ifndef CARD_H
-#define CARD_H
+#ifndef DANDAN_CARD_H
+#define DANDAN_CARD_H
 
-#include "dandan/abilities/IAbility.h"
-#include "dandan/mana/Mana.h"
-
-#include <cstdint>
-#include <iostream>
-#include <memory>
-#include <optional>
-#include <string>
-#include <utility>
-#include <vector>
-
-#ifdef DANDAN_BUILD_SERIALIZE
-#include <nlohmann/json.hpp>
-#endif
+#include "CardData.h"
+#include "CardDataFactory.h"
+#include <string_view>
 
 namespace dandan::core
 {
-
-    struct Stats
+    class CardID
     {
-        int power{0};
-        int toughness{1};
+    public:
+        static CardID generate()
+        {
+            static int current_id{0};
+            return CardID{current_id++};
+        }
+        bool operator==(const CardID &other) const
+        {
+            return m_id == other.m_id;
+        }
+
+        [[nodiscard]] int getID() const
+        {
+            return m_id;
+        }
+
+    private:
+        int m_id{0};
+        explicit CardID(int next_id) : m_id(next_id)
+        {
+        }
+    };
+
+    class PLayerID
+    {
+    public:
+        static PLayerID generate()
+        {
+            static int current_id{0};
+            return PLayerID{current_id++};
+        }
+        bool operator==(const PLayerID &other) const
+        {
+            return m_id == other.m_id;
+        }
+
+        [[nodiscard]] int getId() const
+        {
+            return m_id;
+        }
+
+    private:
+        int m_id{0};
+        explicit PLayerID(int next_id) : m_id(next_id)
+        {
+        }
     };
 
     class Card
     {
     public:
-        enum Type : std::uint8_t
-        {
-            Land,
-            Creature,
-            Sorcery,
-            Instant,
-            Enchantment,
-            Artifact,
-            Planeswalker,
-            MaxType
-        };
-
-        enum SubType : std::uint8_t
-        {
-            None,
-            Forest,
-            Island,
-            Mountain,
-            Plains,
-            Swamp,
-            Fish,
-            MaxSubType
-        };
-
-        Card() = default;
-
-#ifdef DANDAN_BUILD_SERIALIZE
-        explicit Card(std::string_view name);
-#endif
-
-        Card(std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
-             SubType subtype,
-             std::vector<std::unique_ptr<abilities::IAbility>> abilities = {},
-             std::optional<Stats> stats = std::nullopt)
-            : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-              m_subtype{subtype}, m_abilities{std::move(abilities)},
-              m_stats{stats}
+        explicit Card(std::string_view card_name)
+            : m_card_id(CardID::generate()),
+              m_controller_id(PLayerID::generate()),
+              m_card_data(&CardDataFactory::createCardData(card_name))
         {
         }
 
-        [[nodiscard]] std::string_view getName() const
+        explicit Card(CardData *card_data)
+            : m_card_id(CardID::generate()),
+              m_controller_id(PLayerID::generate()), m_card_data(card_data)
         {
-            return m_name;
-        }
-        [[nodiscard]] const mana::Mana *getCost() const
-        {
-            return m_mana_cost.get();
-        }
-        [[nodiscard]] Type getType() const
-        {
-            return m_type;
-        }
-        [[nodiscard]] SubType getSubType() const
-        {
-            return m_subtype;
-        }
-        [[nodiscard]] const std::optional<Stats> &getStats() const
-        {
-            return m_stats;
-        }
-        [[nodiscard]] const std::vector<std::unique_ptr<abilities::IAbility>> &
-        getAbilities() const
-        {
-            return m_abilities;
         }
 
-        // void play() const
-        // {
-        //     std::cout << "Playing card: " << m_name << '\n';
-        //     for (const auto &ability : m_abilities)
-        //     {
-        //         ability->resolve();
-        //     }
-        // }
+        [[nodiscard]] const CardID &getID() const
+        {
+            return m_card_id;
+        }
+        [[nodiscard]] PLayerID getControllerID() const
+        {
+            return m_controller_id;
+        }
+
+        [[nodiscard]] const CardData &getData() const
+        {
+            return *m_card_data;
+        }
 
         friend std::ostream &operator<<(std::ostream &ostream, const Card &card)
         {
-            ostream << "Card{name: " << card.m_name << ", cost: "
-                    << dandan::mana::ManaToSymbols(card.m_mana_cost->getMana())
-                    << ", type: " << Card::TypeToString(card.m_type)
-                    << ", subtype: " << Card::SubTypeToString(card.m_subtype)
-                    << '}';
+            if (card.m_card_data == nullptr)
+            {
+                ostream << "Card{ID: " << card.m_card_id.getID()
+                        << ", controller ID: " << card.m_controller_id.getId()
+                        << ", data: nullptr}";
+                return ostream;
+            }
+            ostream << "Card{ID: " << card.m_card_id.getID()
+                    << ", controller ID: " << card.m_controller_id.getId()
+                    << ", data: " << *card.m_card_data << '}';
             return ostream;
         }
 
-        static std::string_view TypeToString(Type type);
-        static std::string_view SubTypeToString(SubType subtype);
-
-#ifdef DANDAN_BUILD_SERIALIZE
-        friend void from_json(const nlohmann::json &json, Card &card);
-        friend void to_json(nlohmann::json &json, const Card &card);
-#endif
-
+        // Other methods to interact with the card instance
     private:
-        std::string m_name{"unknown"};
-        std::unique_ptr<mana::Mana> m_mana_cost;
-        Type m_type{Type::Land};
-        SubType m_subtype{SubType::None};
-        std::vector<std::unique_ptr<abilities::IAbility>> m_abilities;
-        std::optional<Stats> m_stats;
+        CardID m_card_id;
+        PLayerID m_controller_id;
+        // static pointer to card data, as the data is shared among all
+        // instances of the same card, and we want to avoid copying it for each
+        // instance
+        CardData *m_card_data;
     };
 } // namespace dandan::core
 

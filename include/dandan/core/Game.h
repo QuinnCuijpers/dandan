@@ -16,12 +16,12 @@
 
 namespace dandan::core
 {
-    inline void printCards(const std::vector<std::unique_ptr<Card>> &cards)
+    inline void printCards(const std::vector<Card> &cards)
     {
         std::cout << "[";
         for (const auto &card : cards)
         {
-            std::cout << card->getName() << ", ";
+            std::cout << card.getData().getName() << ", ";
         }
         std::cout << "]\n";
     }
@@ -117,6 +117,7 @@ namespace dandan::core
         {
             changePhase(std::make_unique<EndingPhase>(std::ref(*this)));
             m_active_player_index = 1 - m_active_player_index;
+            m_first_turn = false;
             changePhase(std::make_unique<BeginningPhase>(std::ref(*this)));
         }
 
@@ -126,10 +127,6 @@ namespace dandan::core
             {
                 auto next_phase = m_phase->handle();
                 m_phase = std::move(next_phase);
-                // TODO: this is a temporary solution to the first turn rule, we
-                // should implement this as a prevention effect instead of
-                // hardcoding it here
-                m_first_turn = false;
             }
         }
 
@@ -144,8 +141,6 @@ namespace dandan::core
         int m_active_player_index{};
         Deck m_deck;
         Stack m_stack;
-        // TODO: consider merging these into one manager class that handles both
-        // events and prevention effects
         EventManager m_event_manager;
         PreventionManager m_prevention_manager;
         ReplacementManager m_replacement_manager;

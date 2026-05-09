@@ -7,14 +7,17 @@
 
 TEST(DandanLibTest, GameSetup)
 {
+    // TODO: replace with comptime testdeck generation?
     // NOLINTBEGIN
-    auto cards = std::vector<std::unique_ptr<dandan::Card>>{};
+    auto cards = std::vector<dandan::Card>{};
     for (int i{}; i < 20; ++i)
     {
-        cards.push_back(std::make_unique<dandan::Card>(
+        auto data = dandan::core::CardData(
             "Test Card " + std::to_string(i),
             std::move(std::make_unique<dandan::mana::GenericMana>(i)),
-            dandan::Card::Type::Land, dandan::Card::SubType::Island));
+            dandan::core::CardData::Type::Land,
+            dandan::core::CardData::SubType::Island);
+        cards.push_back(dandan::Card{&data});
     };
 
     // NOLINTEND
@@ -28,7 +31,7 @@ TEST(DandanLibTest, GameSetup)
     std::transform(active_player.hand().getCards().begin(),
                    active_player.hand().getCards().end(),
                    std::back_inserter(card_names), [](const auto &card)
-                   { return std::string(card->getName()); });
+                   { return std::string(card.getData().getName()); });
 
     for (int i{}; i < STARTING_HAND_SIZE; ++i)
     {
@@ -41,7 +44,7 @@ TEST(DandanLibTest, GameSetup)
                    active_player.battlefield().getPermanents().end(),
                    std::back_inserter(battlefield_card_names),
                    [](const auto &card)
-                   { return std::string(card->getName()); });
+                   { return std::string(card.getData().getName()); });
 
     EXPECT_EQ(card_names, battlefield_card_names);
 }
@@ -49,13 +52,15 @@ TEST(DandanLibTest, GameSetup)
 TEST(DandanLibTest, NoDrawFirstTurn)
 {
     // NOLINTBEGIN
-    auto cards = std::vector<std::unique_ptr<dandan::Card>>{};
+    auto cards = std::vector<dandan::Card>{};
     for (int i{}; i < 20; ++i)
     {
-        cards.push_back(std::make_unique<dandan::Card>(
+        auto data = dandan::core::CardData(
             "Test Card " + std::to_string(i),
-            std::make_unique<dandan::mana::GenericMana>(i),
-            dandan::Card::Type::Land, dandan::Card::SubType::Island));
+            std::move(std::make_unique<dandan::mana::GenericMana>(i)),
+            dandan::core::CardData::Type::Land,
+            dandan::core::CardData::SubType::Island);
+        cards.push_back(dandan::Card{&data});
     };
 
     // NOLINTEND

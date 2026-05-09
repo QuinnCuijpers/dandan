@@ -10,8 +10,6 @@ namespace dandan::core
 
 namespace dandan::effects
 {
-    // TODO: change `apply` to take in a `GameState` object and modify it
-    // instead of just printing something to the console
     class IOneShotEffect
     {
     public:

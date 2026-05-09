@@ -14,8 +14,7 @@ namespace dandan::effects
     class PlayCardEffect : public IOneShotEffect
     {
     public:
-        explicit PlayCardEffect(std::unique_ptr<core::Card> &&card)
-            : m_card{std::move(card)}
+        explicit PlayCardEffect(core::Card &card) : m_card{card}
         {
         }
 
@@ -27,12 +26,12 @@ namespace dandan::effects
             [[maybe_unused]] core::Game &game) override
         {
             std::cout << "Applying PlayCardEffect\n";
-            game.activePlayer().playCard(std::move(m_card));
-            return std::make_unique<events::ETBEvent>(std::move(m_card));
+            game.activePlayer().playCard(m_card);
+            return std::make_unique<events::ETBEvent>(m_card);
         }
 
     private:
-        std::unique_ptr<core::Card> m_card;
+        core::Card &m_card;
     };
 } // namespace dandan::effects
 

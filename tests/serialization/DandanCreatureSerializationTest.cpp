@@ -1,4 +1,4 @@
-
+#include "dandan/mana/BlueMana.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "common.h"
 #include "dandan/abilities/StaticAbility.h"
@@ -12,12 +12,17 @@
 #include <string>
 #include <vector>
 
-#define CREATURE(name, subtype)                                                \
-    dandan::Card                                                               \
+#define CREATURE(name)                                                         \
+    dandan::core::Card                                                         \
     {                                                                          \
-        formatCardName(#name), std::make_unique<dandan::mana::BlueMana>(2),    \
-            dandan::Card::Creature, subtype, name##_Abilities(),               \
-            dandan::Stats{4, 1}                                                \
+        new dandan::CardData                                                   \
+        {                                                                      \
+            formatCardName(#name),                                             \
+                std::make_unique<dandan::mana::BlueMana>(2),                   \
+                dandan::core::CardData::Creature,                              \
+                dandan::core::CardData::SubType::Fish, name##_Abilities(),     \
+                dandan::core::Stats{4, 1}                                      \
+        }                                                                      \
     }
 
 static std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
@@ -38,7 +43,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
 static const std::vector<const dandan::Card *> &getCards()
 {
     static const std::vector<const dandan::Card *> cards = {
-        new CREATURE(Dandan, dandan::core::Card::Fish)};
+        new CREATURE(Dandan)};
     return cards;
 };
 

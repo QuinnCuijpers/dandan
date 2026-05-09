@@ -13,8 +13,7 @@ namespace dandan::core
     class PlayCardAction : public IAction
     {
     public:
-        PlayCardAction(std::unique_ptr<Card> &&card, Game &game)
-            : m_card{std::move(card)}, m_game{game}
+        PlayCardAction(Card &card, Game &game) : m_card{card}, m_game{game}
         {
         }
 
@@ -22,10 +21,11 @@ namespace dandan::core
         {
             // lands dont use the stack and their effects are applied
             // immediately
-            if (m_card->getType() == Card::Land)
+            const auto &data = m_card.getData();
+            if (data.getType() == CardData::Land)
             {
-                std::cout << "Playing card: " << m_card->getName() << '\n';
-                for (const auto &ability : m_card->getAbilities())
+                std::cout << "Playing card: " << data.getName() << '\n';
+                for (const auto &ability : data.getAbilities())
                 {
                     m_game.eventManager().subscribe(ability.get());
                 }
@@ -42,15 +42,17 @@ namespace dandan::core
 
                 std::cout << m_game.eventManager().size()
                           << " effects subscribed\n";
-                return std::make_unique<effects::PlayCardEffect>(
-                    std::move(m_card));
+                return std::make_unique<effects::PlayCardEffect>(m_card);
             }
             throw std::runtime_error("Only land cards can be played for now");
         }
 
     private:
-        // TODO: consider taking a shared ref
-        std::unique_ptr<Card> m_card;
+        // TODO: consider not having this take a game as member variable and
+        // just pass it in as a parameter to createEffect, as the action itself
+        // doesn't need to know about the game, only the effect does when it
+        // gets applied.
+        Card m_card;
         Game &m_game;
     };
 } // namespace dandan::core

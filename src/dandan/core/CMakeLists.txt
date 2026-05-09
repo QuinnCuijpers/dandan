@@ -2,7 +2,8 @@ add_library(DandanCore OBJECT)
 
 target_sources(
   DandanCore
-  PRIVATE Card.cpp
+  PRIVATE CardData.cpp
+          CardDataFactory.cpp
           Deck.cpp
           Battlefield.cpp
           EventManager.cpp

@@ -39,11 +39,8 @@ namespace dandan::core
             break;
         case Step::Draw:
         {
-            // TODO: implement this as a prevention effect instead of hardcoding
-            // the first turn rule here
             std::cout << "Handling draw step\n";
-            auto draw_action =
-                std::make_unique<core::CardDrawAction>(game());
+            auto draw_action = std::make_unique<core::CardDrawAction>(game());
             if (game().isActionPrevented(*draw_action))
             {
                 std::cout << "Draw prevented\n";

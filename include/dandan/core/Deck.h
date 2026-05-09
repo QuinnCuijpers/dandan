@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <deque>
 #include <filesystem>
-#include <memory>
 #include <vector>
 
 const static auto DANDAN_DECKLIST =
@@ -26,30 +25,30 @@ namespace dandan::core
 #else
         Deck() = default;
 #endif
-        explicit Deck(std::vector<std::unique_ptr<Card>> &cards)
+        explicit Deck(std::vector<Card> &cards)
         {
-            std::transform(
-                cards.begin(), cards.end(), std::back_inserter(m_cards),
-                [](std::unique_ptr<Card> &card) { return std::move(card); });
+            std::transform(cards.begin(), cards.end(),
+                           std::back_inserter(m_cards),
+                           [](const Card &card) { return card; });
         }
 
-        [[nodiscard]] std::deque<std::unique_ptr<Card>> &getCards()
-        {
-            return m_cards;
-        }
-
-        [[nodiscard]] const std::deque<std::unique_ptr<Card>> &getCards() const
+        [[nodiscard]] std::deque<Card> &getCards()
         {
             return m_cards;
         }
 
-        std::vector<std::unique_ptr<Card>> draw(int count = 1);
+        [[nodiscard]] const std::deque<Card> &getCards() const
+        {
+            return m_cards;
+        }
+
+        std::vector<Card> draw(int count = 1);
 
         void peek(int count) const;
 
     private:
         std::filesystem::path m_decklist_path{DANDAN_DECKLIST};
-        std::deque<std::unique_ptr<Card>> m_cards;
+        std::deque<Card> m_cards;
 #ifdef DANDAN_BUILD_SERIALIZE
         void loadCards(const std::filesystem::path &path);
 #endif

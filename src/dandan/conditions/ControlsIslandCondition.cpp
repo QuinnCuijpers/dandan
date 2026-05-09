@@ -1,6 +1,7 @@
 #include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
 #include "dandan/core/Player.h"
 #include <algorithm>
 
@@ -12,11 +13,12 @@ namespace dandan::conditions
         const auto &battlefield{current_player.battlefield()};
         return std::any_of(battlefield.getPermanents().begin(),
                            battlefield.getPermanents().end(),
-                           [](const std::unique_ptr<core::Card> &card)
+                           [](const core::Card &card)
                            {
-                               return card->getType() == core::Card::Land &&
-                                      card->getSubType() ==
-                                          core::Card::SubType::Island;
+                               return card.getData().getType() ==
+                                          core::CardData::Land &&
+                                      card.getData().getSubType() ==
+                                          core::CardData::SubType::Island;
                            });
     }
 } // namespace dandan::conditions

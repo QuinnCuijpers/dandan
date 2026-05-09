@@ -3,7 +3,6 @@
 
 #include "IEvent.h"
 #include "dandan/core/Card.h"
-#include <memory>
 #include <optional>
 
 namespace dandan::events
@@ -14,8 +13,7 @@ namespace dandan::events
     public:
         ETBEvent() = default;
 
-        explicit ETBEvent(std::unique_ptr<core::Card> &&card)
-            : m_source{std::move(card)}
+        explicit ETBEvent(core::Card &card) : m_source{card}
         {
         }
 
@@ -48,9 +46,11 @@ namespace dandan::events
         // but it needs to be default constructible for serialization, so maybe
         // an optional? but we also need to keep track of what triggered the
         // event
+
+        // can be fixed by an optional CardInstance/playerID as source
         std::optional<bool> m_tapped;
         // TODO: replace this with an actual source and not just cards
-        std::optional<std::unique_ptr<core::Card>> m_source;
+        std::optional<core::Card> m_source;
     };
 } // namespace dandan::events
 

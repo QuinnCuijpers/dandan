@@ -34,8 +34,8 @@ namespace dandan::core
                     int card_index =
                         std::stoi(input.substr(std::size("play ") - 1));
                     auto card{game().activePlayer().hand().getCard(card_index)};
-                    auto action = std::make_unique<PlayCardAction>(
-                        std::move(card), game());
+                    auto action =
+                        std::make_unique<PlayCardAction>(card, game());
                     if (game().isActionPrevented(*action))
                     {
                         std::cout << "Action prevented\n";
@@ -53,7 +53,7 @@ namespace dandan::core
                 }
             }
         }
-        // TODO: change to next phase
+        // TODO: change to next phase which would be combat phase normally
         return nullptr;
     }
 } // namespace dandan::core

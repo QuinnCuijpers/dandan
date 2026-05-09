@@ -66,7 +66,10 @@ dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
             e.what() + ")");
     }
 
-    return json.get<dandan::Card>();
+    // Get the card name from JSON and use CardDataFactory (which caches on
+    // heap)
+    std::string card_name = json["name"];
+    return dandan::Card{card_name};
 }
 
 void write_card_to_json(const dandan::Card &card,
@@ -82,7 +85,7 @@ void write_card_to_json(const dandan::Card &card,
                                  resolved_path.string());
     }
 
-    nlohmann::json json = card;
+    nlohmann::json json = card.getData();
     json_file << json.dump(4) << '\n';
 }
 
@@ -99,16 +102,18 @@ void check_card_serialize()
         std::make_unique<dandan::effects::AttackPreventionEffect>(
             std::make_unique<dandan::conditions::ControlsIslandCondition>())));
 
-    dandan::Card test{"Dandan",
-                      std::make_unique<dandan::BlueMana>(2),
-                      dandan::Card::Creature,
-                      dandan::Card::SubType::Fish,
-                      std::move(abilities),
-                      dandan::Stats{4, 1}};
+    dandan::CardData test_data{"Dandan",
+                               std::make_unique<dandan::BlueMana>(2),
+                               dandan::core::CardData::Creature,
+                               dandan::core::CardData::SubType::Fish,
+                               std::move(abilities),
+                               dandan::Stats{4, 1}};
+    dandan::Card test{&test_data};
 
     std::cout << test << '\n';
 
-    const auto card_json_path = get_card_path("data/jsons", test.getName());
+    const auto card_json_path =
+        get_card_path("data/jsons", test.getData().getName());
     try
     {
         write_card_to_json(test, card_json_path);
@@ -125,7 +130,7 @@ void check_card_serialize()
 int main()
 {
 #ifdef DANDAN_BUILD_SERIALIZE
-    check_card_serialize();
+    // check_card_serialize();
     auto game = dandan::core::Game{};
     game.run();
 #endif

@@ -1,4 +1,4 @@
-#include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
 
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
@@ -9,7 +9,7 @@ namespace dandan::core
 {
 #ifdef DANDAN_BUILD_SERIALIZE
 
-    Card::Card(std::string_view name) : m_name(name)
+    CardData::CardData(std::string_view name) : m_name(name)
     {
         auto json_path{std::filesystem::path(DANDAN_PROJECT_SOURCE) /
                        "data/jsons" / (std::string(name) + ".json")};
@@ -22,24 +22,23 @@ namespace dandan::core
         nlohmann::json json;
         file >> json;
         *this = std::move(*dandan::serialization::JsonFactory<
-                          dandan::core::Card>::create_product(json));
+                          dandan::core::CardData>::create_product(json));
     }
 
-    void from_json(const nlohmann::json &json, Card &card)
+    void from_json(const nlohmann::json &json, CardData &card)
     {
         card = std::move(*dandan::serialization::JsonFactory<
-                         dandan::core::Card>::create_product(json));
+                         dandan::core::CardData>::create_product(json));
     }
 
-    void to_json(nlohmann::json &json, const Card &card)
+    void to_json(nlohmann::json &json, const CardData &card)
     {
-        json =
-            dandan::serialization::JsonFactory<dandan::core::Card>::create_json(
-                &card);
+        json = dandan::serialization::JsonFactory<
+            dandan::core::CardData>::create_json(&card);
     }
 #endif
 
-    std::string_view Card::TypeToString(Type type)
+    std::string_view CardData::TypeToString(Type type)
     {
         switch (type)
         {
@@ -62,7 +61,7 @@ namespace dandan::core
         }
     }
 
-    std::string_view Card::SubTypeToString(SubType subtype)
+    std::string_view CardData::SubTypeToString(SubType subtype)
     {
         switch (subtype)
         {
