@@ -13,6 +13,7 @@ option(DANDAN_BUILD_SERIALIZE "Enable building and testing the serialization"
 add_compile_definitions(DANDAN_PROJECT_SOURCE="${CMAKE_SOURCE_DIR}")
 
 include(cmake/DoxyGen.cmake)
+include(cmake/coverage.cmake)
 
 if(BUILD_TESTING)
   enable_testing()

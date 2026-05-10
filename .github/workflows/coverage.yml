@@ -1,0 +1,58 @@
+name: clang-coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+            submodules: 'recursive'
+
+      - name: Install Clang + llvm-cov
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang llvm llvm-tools
+
+      - name: Configure CMake (Clang coverage)
+        env:
+          CC: clang
+          CXX: clang++
+        run: cmake -S . -B build \
+              -DENABLE_CLANG_COVERAGE=ON \
+              -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Run tests with coverage instrumentation
+        run: |
+          LLVM_PROFILE_FILE="coverage.profraw" \
+          ctest --test-dir build --output-on-failure
+
+      - name: Merge raw profile
+        run: |
+          llvm-profdata merge -sparse coverage.profraw -o coverage.profdata
+
+      - name: Generate coverage report (lcov format)
+        run: |
+          llvm-cov export \
+            --format=lcov \
+            --instr-profile=coverage.profdata \
+            $(find build -type f -executable) \
+            > coverage.info
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.info
+          flags: clang
+          fail_ci_if_error: true
+          verbose: true
