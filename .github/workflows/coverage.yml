@@ -18,7 +18,7 @@ jobs:
       - name: Install Clang + llvm-cov
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang llvm llvm-tools
+          sudo apt-get install -y clang llvm
 
       - name: Configure CMake (Clang coverage)
         env:

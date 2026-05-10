@@ -1,4 +1,4 @@
-build
+build*
 docs
 # developer files
 Roadmap.md
