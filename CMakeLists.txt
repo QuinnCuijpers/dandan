@@ -10,10 +10,14 @@ option(BUILD_TESTING "Enable testing and build tests" ON)
 option(DANDAN_BUILD_SERIALIZE "Enable building and testing the serialization"
        OFF)
 
+option(CODE_COVERAGE "Enable code coverage" OFF)
+
 add_compile_definitions(DANDAN_PROJECT_SOURCE="${CMAKE_SOURCE_DIR}")
 
 include(cmake/DoxyGen.cmake)
-include(cmake/coverage.cmake)
+if(CODE_COVERAGE)
+  include(cmake/code-coverage.cmake)
+endif()
 
 if(BUILD_TESTING)
   enable_testing()

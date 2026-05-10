@@ -1,7 +1,7 @@
 if(DANDAN_BUILD_SERIALIZE)
-  add_executable(DandanLibSerializationTest common.cpp
-                                            DandanLandsSerializationTest.cpp
-                                            DandanCreatureSerializationTest.cpp)
+  add_executable(
+    DandanLibSerializationTest common.cpp DandanLandsSerializationTest.cpp
+                               DandanCreatureSerializationTest.cpp)
 
   target_compile_features(DandanLibSerializationTest PRIVATE cxx_std_17)
   target_compile_definitions(DandanLibSerializationTest
@@ -23,6 +23,10 @@ if(DANDAN_BUILD_SERIALIZE)
   target_link_libraries(
     DandanLibSerializationTest PRIVATE DandanLib nlohmann_json::nlohmann_json
                                        GTest::gtest_main)
+
+  if(CODE_COVERAGE)
+    target_code_coverage(DandanLibSerializationTest)
+  endif()
 
   include(GoogleTest)
   gtest_discover_tests(DandanLibSerializationTest)

@@ -24,35 +24,18 @@ jobs:
         env:
           CC: clang
           CXX: clang++
-        run: cmake -S . -B build \
-              -DENABLE_CLANG_COVERAGE=ON \
-              -DCMAKE_BUILD_TYPE=Debug \
+        run: cmake -S . -B build -DCODE_COVERAGE=ON 
 
-      - name: Build
-        run: cmake --build build --parallel
+      - name: Build DandanLibTest with coverage
+        run: cmake --build build --parallel --target ccov-DandanLibTest
 
-      - name: Run tests with coverage instrumentation
-        run: |
-          LLVM_PROFILE_FILE="coverage.profraw" \
-          ctest --test-dir build --output-on-failure
-
-      - name: Merge raw profile
-        run: |
-          llvm-profdata merge -sparse build/coverage.profraw -o coverage.profdata
-
-      - name: Generate coverage report (lcov format)
-        run: |
-          llvm-cov export \
-            --format=lcov \
-            --instr-profile=coverage.profdata \
-            $(find build -type f -executable) \
-            > coverage.info
+      - name: Build DandanLibSerializationTest with coverage
+        run: cmake --build build --parallel --target ccov-DandanLibSerializationTest
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage.info
-          flags: clang
+          directory: build
           fail_ci_if_error: true
           verbose: true
