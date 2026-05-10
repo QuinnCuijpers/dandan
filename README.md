@@ -1,0 +1,1 @@
+[![codecov](https://codecov.io/github/quinncuijpers/dandan/graph/badge.svg?token=ILW71FRHP5)](https://codecov.io/github/quinncuijpers/dandan)

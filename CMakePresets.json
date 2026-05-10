@@ -13,6 +13,20 @@
                 "BUILD_TESTING": "ON",
                 "JSON_DisableEnumSerialization": "ON"
             }
+        },
+        {
+            "name": "coverage",
+            "displayName": "Coverage",
+            "description": "Preset to use with code coverage enabled",
+            "binaryDir": "${sourceDir}/build-coverage",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_PREFIX_PATH": "${sourceParentDir}/install",
+                "DANDAN_BUILD_SERIALIZE": "ON",
+                "BUILD_TESTING": "ON",
+                "CODE_COVERAGE": "ON",
+                "JSON_DisableEnumSerialization": "ON"
+            }
         }
     ]
 }

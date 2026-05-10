@@ -17,6 +17,16 @@ add_compile_definitions(DANDAN_PROJECT_SOURCE="${CMAKE_SOURCE_DIR}")
 include(cmake/DoxyGen.cmake)
 if(CODE_COVERAGE)
   include(cmake/code-coverage.cmake)
+  add_code_coverage_all_targets(
+    LCOV_OPTIONS
+    --ignore-errors
+    inconsistent
+    --exclude
+    "*/external/*"
+    --exclude
+    "*/usr/*"
+    --exclude
+    "*/tests/*")
 endif()
 
 if(BUILD_TESTING)

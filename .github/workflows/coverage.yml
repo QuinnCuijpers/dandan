@@ -1,4 +1,4 @@
-name: clang-coverage
+name: coverage
 
 on:
   push:
@@ -15,27 +15,19 @@ jobs:
         with:
             submodules: 'recursive'
 
-      - name: Install Clang + llvm-cov
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang llvm
+      - name: Configure CMake
+        run: cmake -S . -B build --preset coverage
 
-      - name: Configure CMake (Clang coverage)
-        env:
-          CC: clang
-          CXX: clang++
-        run: cmake -S . -B build --preset DandanWithSerialize -DCODE_COVERAGE=ON
+      - name: Run coverage
+        run: cmake --build build --target ccov-all
 
-      - name: Build DandanLibTest with coverage
-        run: cmake --build build --parallel --target ccov-DandanLibTest
-
-      - name: Build DandanLibSerializationTest with coverage
-        run: cmake --build build --parallel --target ccov-DandanLibSerializationTest
 
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: build
+          files: build-coverage/ccov/ccov-all.info
+          disable_search: true
           fail_ci_if_error: true
+          gcov_ignore: "*/tests/*,*/external/*"
           verbose: true
