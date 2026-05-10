@@ -21,12 +21,16 @@ if(CODE_COVERAGE)
     LCOV_OPTIONS
     --ignore-errors
     inconsistent
+    --rc
+    branch_coverage=1
     --exclude
     "*/external/*"
     --exclude
     "*/usr/*"
     --exclude
-    "*/tests/*")
+    "*/tests/*"
+    GENHTML_OPTIONS
+    --branch-coverage)
 endif()
 
 if(BUILD_TESTING)

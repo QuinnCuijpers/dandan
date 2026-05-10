@@ -3,7 +3,7 @@
 
 #ifdef DANDAN_BUILD_SERIALIZE
 
-#include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
 #include "dandan/serialization/JsonFactory.h"
 
 namespace dandan::serialization

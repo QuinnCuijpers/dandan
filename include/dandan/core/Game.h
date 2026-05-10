@@ -115,10 +115,10 @@ namespace dandan::core
         // turn structure and phase handling
         void passTurn()
         {
-            changePhase(std::make_unique<EndingPhase>(std::ref(*this)));
+            changePhase(std::make_unique<EndingPhase>(*this));
             m_active_player_index = 1 - m_active_player_index;
             m_first_turn = false;
-            changePhase(std::make_unique<BeginningPhase>(std::ref(*this)));
+            changePhase(std::make_unique<BeginningPhase>(*this));
         }
 
         void handlePhase()
