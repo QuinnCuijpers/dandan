@@ -24,7 +24,7 @@ jobs:
         env:
           CC: clang
           CXX: clang++
-        run: cmake -S . -B build -DCODE_COVERAGE=ON 
+        run: cmake -S . -B build --preset serialize -- -DCODE_COVERAGE=ON
 
       - name: Build DandanLibTest with coverage
         run: cmake --build build --parallel --target ccov-DandanLibTest
