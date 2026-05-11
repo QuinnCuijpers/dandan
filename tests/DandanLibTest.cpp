@@ -19,6 +19,8 @@ TEST(DandanLibTest, GameSetup)
     // TODO: replace with comptime testdeck generation?
     // NOLINTBEGIN
     auto cards = std::vector<dandan::Card>{};
+    auto card_data = std::vector<dandan::core::CardData>{};
+    card_data.reserve(TEST_DECK_SIZE);
     for (int i{}; i < 20; ++i)
     {
         auto data = dandan::core::CardData(
@@ -26,7 +28,8 @@ TEST(DandanLibTest, GameSetup)
             std::move(std::make_unique<dandan::mana::GenericMana>(i)),
             dandan::core::CardData::Type::Land,
             dandan::core::CardData::SubType::Island);
-        cards.push_back(dandan::Card{&data});
+        card_data.push_back(std::move(data));
+        cards.push_back(dandan::Card{&card_data.back()});
     };
 
     // NOLINTEND
@@ -62,6 +65,8 @@ TEST(DandanLibTest, NoDrawFirstTurn)
 {
     // NOLINTBEGIN
     auto cards = std::vector<dandan::Card>{};
+    auto card_data = std::vector<dandan::core::CardData>{};
+    card_data.reserve(TEST_DECK_SIZE);
     for (int i{}; i < TEST_DECK_SIZE; ++i)
     {
         auto data = dandan::core::CardData(
@@ -69,7 +74,8 @@ TEST(DandanLibTest, NoDrawFirstTurn)
             std::move(std::make_unique<dandan::mana::GenericMana>(i)),
             dandan::core::CardData::Type::Land,
             dandan::core::CardData::SubType::Island);
-        cards.push_back(dandan::Card{&data});
+        card_data.push_back(std::move(data));
+        cards.push_back(dandan::Card{&card_data.back()});
     };
 
     // NOLINTEND
@@ -99,6 +105,8 @@ TEST(DandanLibTest, Bounceland)
 {
 
     auto cards = std::vector<dandan::Card>{};
+    auto card_data = std::vector<dandan::core::CardData>{};
+    card_data.reserve(TEST_DECK_SIZE);
     for (int i{}; i < TEST_DECK_SIZE; ++i)
     {
         auto abilities{
@@ -113,7 +121,8 @@ TEST(DandanLibTest, Bounceland)
             std::make_unique<dandan::mana::GenericMana>(i),
             dandan::core::CardData::Type::Land,
             dandan::core::CardData::SubType::Island, std::move(abilities)};
-        cards.emplace_back(&data);
+        card_data.push_back(std::move(data));
+        cards.emplace_back(&card_data.back());
     };
 
     dandan::core::Deck testDeck{cards};

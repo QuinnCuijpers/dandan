@@ -51,11 +51,12 @@ namespace dandan::serialization
         {
             json["subtype"] = card->getSubType();
         }
-        if (card->getStats().has_value())
+        auto stats{card->getStats()};
+        if (stats.has_value())
         {
-            auto stats{*card->getStats()};
-            json["stats"] = {{"power", stats.power},
-                             {"toughness", stats.toughness}};
+            auto stats_safe{*stats};
+            json["stats"] = {{"power", stats_safe.power},
+                             {"toughness", stats_safe.toughness}};
         }
         json["abilities"] = abilities_json;
 
