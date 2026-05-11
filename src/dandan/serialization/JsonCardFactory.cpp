@@ -53,8 +53,9 @@ namespace dandan::serialization
         }
         if (card->getStats().has_value())
         {
-            json["stats"] = {{"power", card->getStats()->power},
-                             {"toughness", card->getStats()->toughness}};
+            auto stats{*card->getStats()};
+            json["stats"] = {{"power", stats.power},
+                             {"toughness", stats.toughness}};
         }
         json["abilities"] = abilities_json;
 

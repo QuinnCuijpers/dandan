@@ -18,7 +18,7 @@
             "name": "coverage",
             "displayName": "Coverage",
             "description": "Preset to use with code coverage enabled",
-            "binaryDir": "${sourceDir}/build-coverage",
+            "binaryDir": "${sourceDir}/build",
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_PREFIX_PATH": "${sourceParentDir}/install",

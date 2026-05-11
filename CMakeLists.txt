@@ -32,8 +32,7 @@ if(CODE_COVERAGE)
     GENHTML_OPTIONS
     --branch-coverage
     --ignore-errors
-    inconsistent
-  )
+    inconsistent)
 endif()
 
 if(BUILD_TESTING)
