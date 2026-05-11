@@ -41,8 +41,7 @@ namespace dandan::core
         std::cout << "Game constructed\n";
 
         std::cout << "Changing phase to beginning phase\n";
-        changePhase(std::make_unique<BeginningPhase>(
-            std::reference_wrapper<Game>(*this)));
+        changePhase(std::make_unique<BeginningPhase>((*this)));
     }
 #ifdef DANDAN_BUILD_SERIALIZE
     Game::Game()

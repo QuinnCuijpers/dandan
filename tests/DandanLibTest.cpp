@@ -83,3 +83,36 @@ TEST(DandanLibTest, NoDrawFirstTurn)
     EXPECT_EQ(non_active_player.hand().getCards().size(),
               STARTING_HAND_SIZE + 1);
 }
+
+// TODO: impl
+//  TEST(DandanLibTest, Bounceland)
+
+// TODO: impl
+//  TEST(DandanLibTest, Mulligan)
+//  {
+//      // NOLINTBEGIN
+//      auto cards = std::vector<dandan::Card>{};
+//      for (int i{}; i < 20; ++i)
+//      {
+//          auto data = dandan::core::CardData(
+//              "Test Card " + std::to_string(i),
+//              std::move(std::make_unique<dandan::mana::GenericMana>(i)),
+//              dandan::core::CardData::Type::Land,
+//              dandan::core::CardData::SubType::Island);
+//          cards.push_back(dandan::Card{&data});
+//      };
+
+//     // NOLINTEND
+
+//     dandan::core::Deck testDeck{cards};
+//     dandan::core::Game game{std::move(testDeck)};
+
+//     auto &active_player = game.activePlayer();
+
+//     EXPECT_EQ(active_player.hand().getCards().size(), STARTING_HAND_SIZE);
+
+//     active_player.mulligan();
+
+//     EXPECT_EQ(active_player.hand().getCards().size(), STARTING_HAND_SIZE -
+//     1);
+// }

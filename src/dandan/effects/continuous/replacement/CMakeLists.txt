@@ -23,3 +23,7 @@ endif()
 
 target_include_directories(DandanContinuousReplacementEffects
                            PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+if(CODE_COVERAGE)
+  target_code_coverage(DandanContinuousReplacementEffects)
+endif()

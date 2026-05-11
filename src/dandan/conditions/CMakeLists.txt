@@ -18,3 +18,7 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
   target_compile_options(DandanConditions PRIVATE -Wall -Wextra -Wpedantic)
 
 endif()
+
+if(CODE_COVERAGE)
+  target_code_coverage(DandanConditions)
+endif()

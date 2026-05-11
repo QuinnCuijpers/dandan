@@ -32,3 +32,7 @@ endif()
 target_compile_definitions(DandanSerialize PRIVATE DANDAN_BUILD_SERIALIZE)
 
 target_link_libraries(DandanSerialize PRIVATE nlohmann_json::nlohmann_json)
+
+if(CODE_COVERAGE)
+  target_code_coverage(DandanSerialize)
+endif()

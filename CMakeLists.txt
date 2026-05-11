@@ -21,6 +21,8 @@ if(CODE_COVERAGE)
     LCOV_OPTIONS
     --ignore-errors
     inconsistent
+    --ignore-errors
+    mismatch
     --rc
     branch_coverage=1
     --exclude

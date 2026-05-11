@@ -37,3 +37,7 @@ if(DANDAN_BUILD_SERIALIZE)
   target_compile_definitions(DandanCore PRIVATE DANDAN_BUILD_SERIALIZE)
   target_link_libraries(DandanCore PRIVATE nlohmann_json::nlohmann_json)
 endif()
+
+if(CODE_COVERAGE)
+  target_code_coverage(DandanCore)
+endif()

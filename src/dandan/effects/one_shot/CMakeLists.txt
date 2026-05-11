@@ -23,3 +23,7 @@ endif()
 
 target_include_directories(DandanOneShotEffects
                            PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+if(CODE_COVERAGE)
+  target_code_coverage(DandanOneShotEffects)
+endif()
