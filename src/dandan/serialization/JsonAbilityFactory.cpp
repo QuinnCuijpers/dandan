@@ -83,7 +83,7 @@ namespace dandan::serialization
 
             json["data"]["trigger"] =
                 JsonFactory<triggers::ITrigger>::create_json(
-                    triggered->getTrigger());
+                    triggered->trigger());
             json["data"]["effect"] =
                 JsonFactory<effects::IOneShotEffect>::create_json(
                     triggered->getEffect());

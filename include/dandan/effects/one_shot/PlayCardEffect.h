@@ -18,10 +18,6 @@ namespace dandan::effects
         {
         }
 
-        // TODO: fix double move of card
-        // should be fine after flyweight pattern is implemented and cards are
-        // just static references to card data and copyable data structures
-        // instead of unique pointers
         std::unique_ptr<events::IEvent> apply(
             [[maybe_unused]] core::Game &game) override
         {

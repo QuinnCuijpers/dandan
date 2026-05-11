@@ -80,7 +80,7 @@ namespace dandan::core
         void playCard(const Card &card)
         {
             std::cout << "Player is playing card " << card.getData().getName()
-                      << '\n';
+                      << " with ID " << card.getID().getID() << '\n';
             m_battlefield.addCard(card);
         }
 

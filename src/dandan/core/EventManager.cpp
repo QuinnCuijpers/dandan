@@ -1,6 +1,5 @@
 #include "dandan/core/EventManager.h"
 #include "dandan/abilities/TriggeredAbility.h"
-#include "dandan/core/Card.h"
 #include <algorithm>
 
 namespace dandan::core

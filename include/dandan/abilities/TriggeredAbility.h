@@ -25,10 +25,21 @@ namespace dandan::abilities
             return m_trigger->triggersOn(event);
         }
 
-        [[nodiscard]] const dandan::triggers::ITrigger *getTrigger() const
+        [[nodiscard]] const dandan::triggers::ITrigger *trigger() const
         {
             return m_trigger.get();
         }
+
+        [[nodiscard]] dandan::triggers::ITrigger *trigger()
+        {
+            return m_trigger.get();
+        }
+
+        [[nodiscard]] const dandan::effects::IOneShotEffect *effect() const
+        {
+            return m_effect.get();
+        }
+
         [[nodiscard]] const dandan::effects::IOneShotEffect *getEffect() const
         {
             return m_effect.get();

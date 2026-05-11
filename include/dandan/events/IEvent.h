@@ -1,7 +1,7 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
-#include "dandan/core/Card.h"
+#include "dandan/core/CardID.h"
 
 namespace dandan::events
 {

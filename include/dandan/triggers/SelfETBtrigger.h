@@ -4,7 +4,7 @@
 #define DANDAN_SELFETBTRIGGER_H
 
 #include "ITrigger.h"
-#include "dandan/core/Card.h"
+#include "dandan/core/CardID.h"
 #include "dandan/events/ETBEvent.h"
 #include <optional>
 
@@ -21,6 +21,11 @@ namespace dandan::triggers
         void setTapped(bool tapped)
         {
             m_tapped = tapped;
+        }
+
+        void setSourceCardID(core::CardID card_id)
+        {
+            m_card_id = card_id;
         }
 
         [[nodiscard]] bool isTapped() const
