@@ -1,15 +1,15 @@
 #ifndef DANDAN_NOISLANDSEVENT_H
 #define DANDAN_NOISLANDSEVENT_H
 
+#include "dandan/core/Card.h"
 #include "dandan/events/IEvent.h"
 namespace dandan::events
 {
     class NoIslandsEvent : public IEvent
     {
     public:
-        [[nodiscard]] bool equals(const IEvent &other) const override
+        explicit NoIslandsEvent(core::CardID card_id) : IEvent(card_id)
         {
-            return dynamic_cast<const NoIslandsEvent *>(&other) != nullptr;
         }
     };
 } // namespace dandan::events

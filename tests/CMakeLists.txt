@@ -21,7 +21,7 @@ endif()
 target_link_libraries(DandanLibTest PRIVATE DandanLib GTest::gtest_main)
 
 if(CODE_COVERAGE)
-  target_code_coverage(DandanLibTest)
+  target_code_coverage(DandanLibTest AUTO ALL)
 endif()
 include(GoogleTest)
 gtest_discover_tests(DandanLibTest)

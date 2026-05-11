@@ -1,11 +1,14 @@
 #ifndef IABILITY_H
 #define IABILITY_H
 
-#include "dandan/events/IEvent.h"
-
 namespace dandan::core
 {
     class Game;
+}
+
+namespace dandan::events
+{
+    class IEvent;
 }
 
 namespace dandan::abilities

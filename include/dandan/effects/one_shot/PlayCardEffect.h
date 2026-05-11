@@ -27,7 +27,7 @@ namespace dandan::effects
         {
             std::cout << "Applying PlayCardEffect\n";
             game.activePlayer().playCard(m_card);
-            return std::make_unique<events::ETBEvent>(m_card);
+            return std::make_unique<events::ETBEvent>(m_card.getID());
         }
 
     private:

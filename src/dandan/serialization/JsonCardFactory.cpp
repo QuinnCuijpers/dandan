@@ -1,8 +1,8 @@
 #include "dandan/serialization/JsonCardFactory.h"
-#include "dandan/mana/Mana.h"
-#include "dandan/serialization/JsonFactory.h"
 
 #ifdef DANDAN_BUILD_SERIALIZE
+#include "dandan/mana/Mana.h"
+#include "dandan/serialization/JsonFactory.h"
 #include <nlohmann/json.hpp>
 namespace dandan::core
 {

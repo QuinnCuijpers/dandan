@@ -1,4 +1,5 @@
 #include "dandan/mana/BlueMana.h"
+#include "dandan/triggers/NoIslandsTrigger.h"
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "common.h"
 #include "dandan/abilities/StaticAbility.h"
@@ -6,7 +7,6 @@
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
-#include "dandan/events/NoIslandsEvent.h"
 #include "gtest/gtest.h"
 #include <memory>
 #include <string>
@@ -30,7 +30,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::events::NoIslandsEvent>(),
+        std::make_unique<dandan::triggers::NoIslandsTrigger>(),
         std::make_unique<dandan::effects::SelfSacrificeEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(

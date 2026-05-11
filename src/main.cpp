@@ -7,7 +7,7 @@
 #include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
-#include "dandan/events/NoIslandsEvent.h"
+#include "dandan/triggers/NoIslandsTrigger.h"
 #include <exception>
 #include <filesystem>
 #include <fstream>
@@ -69,7 +69,7 @@ dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
     // Get the card name from JSON and use CardDataFactory (which caches on
     // heap)
     std::string card_name = json["name"];
-    return dandan::Card{card_name};
+    return dandan::Card{card_name, 0};
 }
 
 void write_card_to_json(const dandan::Card &card,
@@ -94,7 +94,7 @@ void check_card_serialize()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::events::NoIslandsEvent>(),
+        std::make_unique<dandan::triggers::NoIslandsTrigger>(),
         std::make_unique<dandan::effects::SelfSacrificeEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
@@ -108,7 +108,7 @@ void check_card_serialize()
                                dandan::core::CardData::SubType::Fish,
                                std::move(abilities),
                                dandan::Stats{4, 1}};
-    dandan::Card test{&test_data};
+    dandan::Card test{&test_data, 0};
 
     std::cout << test << '\n';
 
@@ -130,7 +130,7 @@ void check_card_serialize()
 int main()
 {
 #ifdef DANDAN_BUILD_SERIALIZE
-    // check_card_serialize();
+    check_card_serialize();
     auto game = dandan::core::Game{};
     game.run();
 #endif

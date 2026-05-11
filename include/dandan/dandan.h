@@ -30,6 +30,8 @@
 #include "dandan/mana/GreenMana.h"
 #include "dandan/mana/ManaList.h"
 #include "dandan/mana/RedMana.h"
+#include "dandan/triggers/ETBtrigger.h"
+#include "dandan/triggers/SelfETBtrigger.h"
 
 namespace dandan
 {
@@ -57,6 +59,9 @@ namespace dandan
 
     using events::ETBEvent;
     using events::IEvent;
+
+    using triggers::ETBTrigger;
+    using triggers::SelfETBTrigger;
 
     using costs::CyclingCost;
     using costs::ICost;

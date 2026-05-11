@@ -10,13 +10,16 @@
 #include <string_view>
 #include <vector>
 
-#define LAND(name, subtype) \
-    dandan::Card{ \
-        new dandan::CardData{ \
-            formatCardName(#name), \
-            std::make_unique<dandan::mana::GenericMana>(0), \
-            dandan::CardData::Land, subtype, name##_Abilities() \
-        }}
+#define LAND(name, subtype)                                                    \
+    dandan::Card                                                               \
+    {                                                                          \
+        new dandan::CardData                                                   \
+        {                                                                      \
+            formatCardName(#name),                                             \
+                std::make_unique<dandan::mana::GenericMana>(0),                \
+                dandan::CardData::Land, subtype, name##_Abilities()            \
+        }                                                                      \
+    }
 
 static std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
 {
@@ -79,7 +82,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::ETBEvent>(),
+        std::make_unique<dandan::ETBTrigger>(),
         std::make_unique<dandan::PeekEffect>()));
 
     return abilities;
@@ -120,7 +123,7 @@ Temple_of_Epiphany_Abilities()
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::ETBEvent>(),
+        std::make_unique<dandan::ETBTrigger>(),
         std::make_unique<dandan::ScryEffect>()));
 
     return abilities;
@@ -141,7 +144,7 @@ Izzet_Boilerworks_Abilities()
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::ETBEvent>(),
+        std::make_unique<dandan::ETBTrigger>(),
         std::make_unique<dandan::BounceLandEffect>()));
 
     return abilities;

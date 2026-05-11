@@ -914,7 +914,7 @@ function(add_code_coverage_all_targets)
       COMMAND ${EXCLUDE_COMMAND}
       COMMAND ${CMAKE_COMMAND} -E echo
               "Generated coverage .info file at ${COVERAGE_INFO}"
-      DEPENDS ccov-all-ran)
+      DEPENDS ccov-all-run ccov-all-ran)
     add_custom_target(ccov-all-capture DEPENDS ${COVERAGE_INFO})
 
     # Only generates HTML output of all targets for perusal

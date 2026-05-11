@@ -2,23 +2,23 @@
     "abilities": [
         {
             "data": {
+                "cost": {
+                    "data": {},
+                    "type": "TapCost"
+                },
                 "mana_list": [
                     "UR"
-                ],
-                "cost": {
-                    "type": "TapCost",
-                    "data": {}
-                }
+                ]
             },
             "type": "ManaAbility"
         },
         {
             "data": {
-                "static_type": "Replacement",
                 "continuous_effect": {
                     "data": {},
                     "type": "EntersTappedEffect"
-                }
+                },
+                "static_type": "Replacement"
             },
             "type": "StaticAbility"
         },
@@ -28,9 +28,9 @@
                     "data": {},
                     "type": "BounceLandEffect"
                 },
-                "event": {
+                "trigger": {
                     "data": {},
-                    "type": "EntersBattlefieldEvent"
+                    "type": "ETBTrigger"
                 }
             },
             "type": "TriggeredAbility"

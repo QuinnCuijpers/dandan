@@ -1,5 +1,5 @@
-#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/serialization/JsonManaFactory.h"
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/mana/Mana.h"
 #include <algorithm>
 #include <nlohmann/json.hpp>

@@ -6,7 +6,7 @@ target_sources(
           JsonAbilityFactory.cpp
           JsonCardFactory.cpp
           JsonCostFactory.cpp
-          JsonEventFactory.cpp
+          JsonTriggerFactory.cpp
           JsonEffectOneShotFactory.cpp
           JsonManaFactory.cpp
           JsonEffectContinuousFactory.cpp

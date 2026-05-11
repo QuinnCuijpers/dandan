@@ -2,6 +2,7 @@
 #define DANDAN_CORE_EVENTMANAGER_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/Card.h"
 #include "dandan/events/IEvent.h"
 #include <vector>
 

@@ -1,19 +1,31 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
+#include "dandan/core/Card.h"
+
 namespace dandan::events
 {
 
     class IEvent
     {
     public:
-        IEvent() = default;
+        explicit IEvent(core::CardID source) : m_source{source}
+        {
+        }
+
         IEvent(const IEvent &) = delete;
         IEvent(IEvent &&) = delete;
         IEvent &operator=(const IEvent &) = delete;
         IEvent &operator=(IEvent &&) = delete;
         virtual ~IEvent() = default;
-        [[nodiscard]] virtual bool equals(const IEvent &other) const = 0;
+
+        [[nodiscard]] core::CardID source() const
+        {
+            return m_source;
+        }
+
+    private:
+        [[maybe_unused]] core::CardID m_source;
     };
 
 } // namespace dandan::events

@@ -25,7 +25,7 @@ if(DANDAN_BUILD_SERIALIZE)
                                        GTest::gtest_main)
 
   if(CODE_COVERAGE)
-    target_code_coverage(DandanLibSerializationTest)
+    target_code_coverage(DandanLibSerializationTest AUTO ALL)
   endif()
 
   include(GoogleTest)

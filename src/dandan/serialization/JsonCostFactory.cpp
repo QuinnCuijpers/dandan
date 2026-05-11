@@ -1,11 +1,11 @@
 #include "dandan/serialization/JsonCostFactory.h"
-#include "dandan/costs/AndCost.h"
-#include "dandan/costs/TapCost.h"
 #ifdef DANDAN_BUILD_SERIALIZE
+#include "dandan/costs/AndCost.h"
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/ManaCost.h"
 #include "dandan/costs/SelfSacrificeCost.h"
+#include "dandan/costs/TapCost.h"
 #include "dandan/mana/Mana.h"
 #include "dandan/serialization/JsonManaFactory.h"
 #include <nlohmann/json.hpp>

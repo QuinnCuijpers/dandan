@@ -1,11 +1,11 @@
 #include "dandan/serialization/JsonEffectContinuousFactory.h"
+#ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/conditions/ICondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/continuous/replacement/EntersTappedEffect.h"
 #include "dandan/serialization/JsonFactory.h"
-#include <string>
-#ifdef DANDAN_BUILD_SERIALIZE
 #include <nlohmann/json.hpp>
+#include <string>
 
 namespace dandan::serialization
 {

@@ -6,9 +6,9 @@
                     "data": {},
                     "type": "SelfSacrificeEffect"
                 },
-                "event": {
+                "trigger": {
                     "data": {},
-                    "type": "NoIslandsEvent"
+                    "type": "NoIslandsTrigger"
                 }
             },
             "type": "TriggeredAbility"

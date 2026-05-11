@@ -13,7 +13,7 @@ namespace dandan::effects
         std::cin >> land_index;
         std::cout << "Bouncing land at index " << land_index << "\n";
         auto land{game.activePlayer().battlefield().getPermanent(land_index)};
-        game.activePlayer().hand().addCard(std::move(land));
+        game.activePlayer().hand().addCard(land);
         return nullptr;
     }
 } // namespace dandan::effects

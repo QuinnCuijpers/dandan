@@ -1,15 +1,14 @@
 {
-    "cost": "(0)",
     "abilities": [
         {
             "data": {
+                "cost": {
+                    "data": {},
+                    "type": "TapCost"
+                },
                 "mana_list": [
                     "U"
-                ],
-                "cost": {
-                    "type": "TapCost",
-                    "data": {}
-                }
+                ]
             },
             "type": "ManaAbility"
         },
@@ -31,14 +30,15 @@
                     },
                     "type": "PeekEffect"
                 },
-                "event": {
+                "trigger": {
                     "data": {},
-                    "type": "EntersBattlefieldEvent"
+                    "type": "ETBTrigger"
                 }
             },
             "type": "TriggeredAbility"
         }
     ],
+    "cost": "(0)",
     "name": "Halimar Depths",
     "type": "Land"
 }

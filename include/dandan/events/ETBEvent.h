@@ -11,9 +11,11 @@ namespace dandan::events
     class ETBEvent : public IEvent
     {
     public:
-        ETBEvent() = default;
+        explicit ETBEvent(core::Card &card) : IEvent{card.getID()}
+        {
+        }
 
-        explicit ETBEvent(core::Card &card) : m_source{card}
+        explicit ETBEvent(core::CardID card_id) : IEvent{card_id}
         {
         }
 
@@ -27,30 +29,8 @@ namespace dandan::events
             return m_tapped.value_or(false);
         }
 
-        [[nodiscard]] bool equals(const IEvent &other) const override
-        {
-            const auto *otherETB = dynamic_cast<const ETBEvent *>(&other);
-            if (otherETB == nullptr)
-            {
-                return false;
-            }
-
-            return m_tapped == otherETB->m_tapped;
-        }
-
     private:
-        // TODO: cant have this have a card as member
-        // maybe take a pointer or reference to the card that triggered the
-        // event instead of owning it?
-
-        // but it needs to be default constructible for serialization, so maybe
-        // an optional? but we also need to keep track of what triggered the
-        // event
-
-        // can be fixed by an optional CardInstance/playerID as source
         std::optional<bool> m_tapped;
-        // TODO: replace this with an actual source and not just cards
-        std::optional<core::Card> m_source;
     };
 } // namespace dandan::events
 

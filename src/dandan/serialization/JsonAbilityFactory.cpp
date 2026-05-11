@@ -1,8 +1,8 @@
 #include "dandan/serialization/JsonAbilityFactory.h"
-#include "dandan/effects/continuous/IContinuousEffect.h"
 
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "dandan/dandan.h"
+#include "dandan/effects/continuous/IContinuousEffect.h"
 #include "dandan/mana/ManaList.h"
 #include "dandan/serialization/JsonFactory.h"
 #include <memory>
@@ -81,8 +81,9 @@ namespace dandan::serialization
             auto json = nlohmann::json{{"type", "TriggeredAbility"},
                                        {"data", nlohmann::json::object()}};
 
-            json["data"]["event"] = JsonFactory<events::IEvent>::create_json(
-                triggered->getOnEvent());
+            json["data"]["trigger"] =
+                JsonFactory<triggers::ITrigger>::create_json(
+                    triggered->getTrigger());
             json["data"]["effect"] =
                 JsonFactory<effects::IOneShotEffect>::create_json(
                     triggered->getEffect());
@@ -143,13 +144,14 @@ namespace dandan::serialization
 
         if (type == "TriggeredAbility")
         {
-            auto event{
-                JsonFactory<dandan::IEvent>::create_product(data.at("event"))};
+            auto trigger{
+                JsonFactory<dandan::triggers::ITrigger>::create_product(
+                    data.at("trigger"))};
 
             auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
                 data.at("effect"))};
 
-            return std::make_unique<TriggeredAbility>(std::move(event),
+            return std::make_unique<TriggeredAbility>(std::move(trigger),
                                                       std::move(effect));
         }
 

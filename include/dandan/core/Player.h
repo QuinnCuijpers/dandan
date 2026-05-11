@@ -11,9 +11,11 @@ const static int STARTING_LIFE_TOTAL{20};
 
 namespace dandan::core
 {
+    using PlayerID = int;
 
     class Player
     {
+
     public:
         // TODO: change to have players input names through gui
         explicit Player()
@@ -70,7 +72,9 @@ namespace dandan::core
                 std::cout << "Deck is empty, cannot draw card\n";
                 return;
             }
-            m_hand.addCards(deck.draw());
+            auto card = deck.draw()[0];
+            card.setControllerID(m_player_id);
+            m_hand.addCards({card});
         }
 
         void playCard(const Card &card)
@@ -87,6 +91,7 @@ namespace dandan::core
         }
 
     private:
+        PlayerID m_player_id{};
         std::string m_name;
         int m_life_total{STARTING_LIFE_TOTAL};
         Battlefield m_battlefield;

@@ -3,7 +3,7 @@
 
 #include "IAbility.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
-#include "dandan/events/IEvent.h"
+#include "dandan/triggers/ITrigger.h"
 #include <memory>
 
 namespace dandan::abilities
@@ -13,21 +13,21 @@ namespace dandan::abilities
     {
     public:
         TriggeredAbility(
-            std::unique_ptr<dandan::events::IEvent> on_event,
+            std::unique_ptr<dandan::triggers::ITrigger> trigger,
             std::unique_ptr<dandan::effects::IOneShotEffect> effect)
-            : m_on(std::move(on_event)), m_effect(std::move(effect))
+            : m_trigger(std::move(trigger)), m_effect(std::move(effect))
         {
         }
 
         [[nodiscard]] bool appliesToEvent(
             const events::IEvent &event) const override
         {
-            return event.equals(*m_on);
+            return m_trigger->triggersOn(event);
         }
 
-        [[nodiscard]] const dandan::events::IEvent *getOnEvent() const
+        [[nodiscard]] const dandan::triggers::ITrigger *getTrigger() const
         {
-            return m_on.get();
+            return m_trigger.get();
         }
         [[nodiscard]] const dandan::effects::IOneShotEffect *getEffect() const
         {
@@ -37,7 +37,7 @@ namespace dandan::abilities
         void resolve(core::Game &game) const override;
 
     private:
-        std::unique_ptr<dandan::events::IEvent> m_on;
+        std::unique_ptr<dandan::triggers::ITrigger> m_trigger;
         std::unique_ptr<dandan::effects::IOneShotEffect> m_effect;
     };
 } // namespace dandan::abilities

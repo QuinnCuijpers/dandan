@@ -2,24 +2,24 @@
     "abilities": [
         {
             "data": {
+                "cost": {
+                    "data": {},
+                    "type": "TapCost"
+                },
                 "mana_list": [
                     "U",
                     "R"
-                ],
-                "cost": {
-                    "type": "TapCost",
-                    "data": {}
-                }
+                ]
             },
             "type": "ManaAbility"
         },
         {
             "data": {
-                "static_type": "Replacement",
                 "continuous_effect": {
                     "data": {},
                     "type": "EntersTappedEffect"
-                }
+                },
+                "static_type": "Replacement"
             },
             "type": "StaticAbility"
         },
@@ -31,9 +31,9 @@
                     },
                     "type": "ScryEffect"
                 },
-                "event": {
+                "trigger": {
                     "data": {},
-                    "type": "EntersBattlefieldEvent"
+                    "type": "ETBTrigger"
                 }
             },
             "type": "TriggeredAbility"

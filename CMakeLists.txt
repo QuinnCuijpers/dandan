@@ -20,8 +20,6 @@ if(CODE_COVERAGE)
   add_code_coverage_all_targets(
     LCOV_OPTIONS
     --ignore-errors
-    inconsistent
-    --ignore-errors
     mismatch
     --rc
     branch_coverage=1
@@ -32,7 +30,10 @@ if(CODE_COVERAGE)
     --exclude
     "*/tests/*"
     GENHTML_OPTIONS
-    --branch-coverage)
+    --branch-coverage
+    --ignore-errors
+    inconsistent
+  )
 endif()
 
 if(BUILD_TESTING)
