@@ -17,12 +17,12 @@ namespace dandan::core
                 throw std::runtime_error("Exceeded maximum number of players, "
                                          "cannot generate new PlayerID");
             }
-            return {next_id++};
+            return PlayerID{next_id++};
         }
 
         static PlayerID getInvalidID()
         {
-            return {-1};
+            return PlayerID{-1};
         }
 
         [[nodiscard]] int id() const
@@ -33,7 +33,7 @@ namespace dandan::core
     private:
         int m_id{0};
 
-        PlayerID(int player_id) : m_id(player_id)
+        explicit PlayerID(int player_id) : m_id(player_id)
         {
             if (player_id >= AMOUNT_PLAYERS)
             {
