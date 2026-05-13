@@ -1,36 +1,42 @@
 #include "dandan/core/EventManager.h"
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/abilities/TriggeredAbility.h"
-#include <algorithm>
+#include "dandan/core/Card.h"
+#include "dandan/core/CardID.h"
 
 namespace dandan::core
 {
-    void EventManager::subscribe(const abilities::IAbility *ability)
+    void EventManager::subscribe(const Card &card)
     {
-        if (const auto *triggered =
-                dynamic_cast<const abilities::TriggeredAbility *>(ability))
+        for (const auto &ability : card.getData().getAbilities())
         {
-            m_subscribers.push_back(triggered);
+            if (const auto *triggered =
+                    dynamic_cast<const abilities::TriggeredAbility *>(
+                        ability.get()))
+            {
+                m_subscribers[card.getID()].push_back(triggered);
+            }
         }
     }
 
-    void EventManager::unsubscribe(const abilities::IAbility *ability)
+    void EventManager::unsubscribe(const Card &card)
     {
-        auto iter =
-            std::remove(m_subscribers.begin(), m_subscribers.end(), ability);
-        if (iter != m_subscribers.end())
-        {
-            m_subscribers.erase(iter, m_subscribers.end());
-        }
+        m_subscribers.erase(card.getID());
     }
 
     void EventManager::notify(const events::IEvent &event,
                               core::Game &game) const
     {
-        for (const auto *subscriber : m_subscribers)
+        for (const auto &[card_id, abilities] : m_subscribers)
         {
-            if (subscriber->appliesToEvent(event))
+            for (const auto *ability : abilities)
             {
-                subscriber->resolve(game);
+                auto ability_context{
+                    abilities::AbilityContext{CardID{card_id}}};
+                if (ability->appliesTo(event, ability_context))
+                {
+                    ability->resolve(game, ability_context);
+                }
             }
         }
     }

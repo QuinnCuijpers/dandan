@@ -33,7 +33,7 @@
                 },
                 "trigger": {
                     "data": {},
-                    "type": "ETBTrigger"
+                    "type": "SelfETBTrigger"
                 }
             },
             "type": "TriggeredAbility"

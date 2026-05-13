@@ -5,7 +5,8 @@
 namespace dandan::abilities
 {
 
-    void TriggeredAbility::resolve(core::Game &game) const
+    void TriggeredAbility::resolve(
+        core::Game &game, [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving triggered ability\n";
         m_effect->apply(game);

@@ -11,21 +11,20 @@ const static int STARTING_LIFE_TOTAL{20};
 
 namespace dandan::core
 {
-    using PlayerID = int;
-
     class Player
     {
 
     public:
         // TODO: change to have players input names through gui
-        explicit Player()
+        explicit Player() : m_player_id(PlayerID::generate())
         {
             std::cout << "Constructed player\n";
             std::cout << "Which name do you want to give this player? ";
             std::getline(std::cin, m_name);
         }
 
-        explicit Player(std::string name) : m_name(std::move(name))
+        explicit Player(std::string name)
+            : m_player_id(PlayerID::generate()), m_name(std::move(name))
         {
             std::cout << "Constructed player with name " << m_name << '\n';
         }
@@ -91,7 +90,7 @@ namespace dandan::core
         }
 
     private:
-        PlayerID m_player_id{};
+        PlayerID m_player_id;
         std::string m_name;
         int m_life_total{STARTING_LIFE_TOTAL};
         Battlefield m_battlefield;

@@ -19,10 +19,11 @@ namespace dandan::abilities
         {
         }
 
-        [[nodiscard]] bool appliesToEvent(
-            const events::IEvent &event) const override
+        [[nodiscard]] bool appliesTo(
+            const events::IEvent &event,
+            abilities::AbilityContext context) const override
         {
-            return m_trigger->triggersOn(event);
+            return m_trigger->triggersOn(event, context);
         }
 
         [[nodiscard]] const dandan::triggers::ITrigger *trigger() const
@@ -45,7 +46,7 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        void resolve(core::Game &game) const override;
+        void resolve(core::Game &game, AbilityContext context) const override;
 
     private:
         std::unique_ptr<dandan::triggers::ITrigger> m_trigger;

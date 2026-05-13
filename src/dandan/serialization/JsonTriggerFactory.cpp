@@ -39,15 +39,14 @@ namespace dandan::serialization
     }
 
     std::unique_ptr<triggers::ITrigger> JsonFactory<
-        triggers::ITrigger>::create_product(const nlohmann::json &json,
-                                            core::CardID card_id)
+        triggers::ITrigger>::create_product(const nlohmann::json &json)
     {
         const auto &type = json.at("type").get<std::string>();
         const auto &data = json.at("data");
 
         if (type == "SelfETBTrigger")
         {
-            auto trigger = std::make_unique<triggers::SelfETBTrigger>(card_id);
+            auto trigger = std::make_unique<triggers::SelfETBTrigger>();
             if (data.contains("tapped"))
             {
                 trigger->setTapped(data["tapped"].get<bool>());
@@ -64,12 +63,6 @@ namespace dandan::serialization
         }
 
         throw std::runtime_error("Unknown trigger type: " + type);
-    }
-
-    std::unique_ptr<triggers::ITrigger> JsonFactory<
-        triggers::ITrigger>::create_product(const nlohmann::json &json)
-    {
-        return create_product(json, core::CardID::getInvalidID());
     }
 } // namespace dandan::serialization
 #endif // DANDAN_BUILD_SERIALIZE

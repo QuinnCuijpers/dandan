@@ -35,7 +35,7 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        void resolve(core::Game &game) const override;
+        void resolve(core::Game &game, AbilityContext context) const override;
 
     private:
         Type m_type{};

@@ -11,7 +11,6 @@
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
-#include <array>
 #include <memory>
 
 namespace dandan::core
@@ -25,13 +24,6 @@ namespace dandan::core
         }
         std::cout << "]\n";
     }
-
-    const static int AMOUNT_PLAYERS{2};
-
-    const static std::array<std::string, AMOUNT_PLAYERS> DEFAULT_NAMES{
-        std::array<std::string, AMOUNT_PLAYERS>{"Player 1", "Player 2"}};
-
-    const static int CLEAR_SCREEN_LINES{10};
 
     class Game
     {

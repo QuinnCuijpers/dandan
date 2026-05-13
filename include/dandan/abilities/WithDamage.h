@@ -21,13 +21,14 @@ namespace dandan::abilities
             return m_damage;
         }
 
-        [[nodiscard]] bool appliesToEvent(
-            const events::IEvent &event) const override
+        [[nodiscard]] bool appliesTo(
+            const events::IEvent &event,
+            abilities::AbilityContext context) const override
         {
-            return m_ability->appliesToEvent(event);
+            return m_ability->appliesTo(event, context);
         }
 
-        void resolve(core::Game &game) const override;
+        void resolve(core::Game &game, AbilityContext context) const override;
 
     private:
         int m_damage{1};

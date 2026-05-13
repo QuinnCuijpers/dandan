@@ -4,7 +4,9 @@
 
 namespace dandan::abilities
 {
-    void ActivatedAbility::resolve([[maybe_unused]] core::Game &game) const
+    void ActivatedAbility::resolve(
+        [[maybe_unused]] core::Game &game,
+        [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving Activated ability\n";
         m_cost->evaluate();

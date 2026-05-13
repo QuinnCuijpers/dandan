@@ -1,6 +1,9 @@
 #ifndef DANDAN_CORE_CARDID_H
 #define DANDAN_CORE_CARDID_H
 
+#include <cstddef>
+#include <functional>
+
 namespace dandan::core
 {
     class CardID
@@ -33,5 +36,16 @@ namespace dandan::core
         }
     };
 } // namespace dandan::core
+
+namespace std
+{
+    template <> struct hash<dandan::core::CardID>
+    {
+        std::size_t operator()(const dandan::core::CardID &card_id) const
+        {
+            return std::hash<int>()(card_id.getID());
+        }
+    };
+} // namespace std
 
 #endif // DANDAN_CORE_CARDID_H

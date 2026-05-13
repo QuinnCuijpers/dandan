@@ -25,10 +25,7 @@ namespace dandan::core
             if (data.getType() == CardData::Land)
             {
                 std::cout << "Playing card: " << data.getName() << '\n';
-                for (const auto &ability : data.getAbilities())
-                {
-                    m_game.eventManager().subscribe(ability.get());
-                }
+                m_game.eventManager().subscribe(m_card);
 
                 // for (const auto &ability : m_card->getAbilities())
                 // {

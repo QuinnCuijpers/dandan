@@ -1,6 +1,7 @@
 #ifndef TRIGGERS_H
 #define TRIGGERS_H
 
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/events/IEvent.h"
 
 namespace dandan::triggers
@@ -15,7 +16,8 @@ namespace dandan::triggers
         ITrigger &operator=(ITrigger &&) = delete;
         virtual ~ITrigger() = default;
         [[nodiscard]] virtual bool triggersOn(
-            const events::IEvent &other) const = 0;
+            const events::IEvent &other,
+            abilities::AbilityContext context) const = 0;
     };
 
 } // namespace dandan::triggers

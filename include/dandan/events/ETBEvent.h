@@ -10,7 +10,8 @@ namespace dandan::events
     class ETBEvent : public IEvent
     {
     public:
-        explicit ETBEvent(core::CardID card_id) : IEvent{card_id}
+        explicit ETBEvent(core::CardID card_id, core::PlayerID controller)
+            : IEvent{card_id, controller}
         {
         }
 

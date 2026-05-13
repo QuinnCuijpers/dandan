@@ -7,7 +7,8 @@
 namespace dandan::abilities
 {
 
-    void ManaAbility::resolve([[maybe_unused]] core::Game &game) const
+    void ManaAbility::resolve([[maybe_unused]] core::Game &game,
+                              [[maybe_unused]] AbilityContext context) const
     {
         for (const auto &option : m_mana_list.getOptions())
         {

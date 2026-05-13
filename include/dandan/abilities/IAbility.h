@@ -1,6 +1,8 @@
 #ifndef IABILITY_H
 #define IABILITY_H
 
+#include "dandan/abilities/AbilityContext.h"
+
 namespace dandan::core
 {
     class Game;
@@ -23,10 +25,12 @@ namespace dandan::abilities
         IAbility &operator=(IAbility &&) = delete;
         virtual ~IAbility() = default;
 
-        virtual void resolve(core::Game &game) const = 0;
+        virtual void resolve(core::Game &game,
+                             AbilityContext context) const = 0;
 
-        [[nodiscard]] virtual bool appliesToEvent(
-            [[maybe_unused]] const events::IEvent &event) const
+        [[nodiscard]] virtual bool appliesTo(
+            [[maybe_unused]] const events::IEvent &event,
+            [[maybe_unused]] abilities::AbilityContext context) const
         {
             return false;
         }

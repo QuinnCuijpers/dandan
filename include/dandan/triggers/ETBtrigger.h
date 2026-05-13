@@ -26,7 +26,8 @@ namespace dandan::triggers
         }
 
         [[nodiscard]] bool triggersOn(
-            const events::IEvent &other) const override
+            const events::IEvent &other,
+            [[maybe_unused]] abilities::AbilityContext context) const override
         {
             const auto *otherETB =
                 dynamic_cast<const events::ETBEvent *>(&other);

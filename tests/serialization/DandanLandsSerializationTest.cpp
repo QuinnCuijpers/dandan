@@ -82,7 +82,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::ETBTrigger>(),
+        std::make_unique<dandan::SelfETBTrigger>(),
         std::make_unique<dandan::PeekEffect>()));
 
     return abilities;
@@ -123,7 +123,7 @@ Temple_of_Epiphany_Abilities()
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::ETBTrigger>(),
+        std::make_unique<dandan::SelfETBTrigger>(),
         std::make_unique<dandan::ScryEffect>()));
 
     return abilities;
@@ -144,7 +144,7 @@ Izzet_Boilerworks_Abilities()
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::ETBTrigger>(),
+        std::make_unique<dandan::SelfETBTrigger>(),
         std::make_unique<dandan::BounceLandEffect>()));
 
     return abilities;

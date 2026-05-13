@@ -69,7 +69,7 @@ dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
     // Get the card name from JSON and use CardDataFactory (which caches on
     // heap)
     std::string card_name = json["name"];
-    return dandan::Card{card_name, 0};
+    return dandan::Card{card_name, dandan::core::PlayerID::generate()};
 }
 
 void write_card_to_json(const dandan::Card &card,
@@ -108,7 +108,7 @@ void check_card_serialize()
                                dandan::core::CardData::SubType::Fish,
                                std::move(abilities),
                                dandan::Stats{4, 1}};
-    dandan::Card test{&test_data, 0};
+    dandan::Card test{&test_data, dandan::core::PlayerID::generate()};
 
     std::cout << test << '\n';
 
@@ -130,7 +130,7 @@ void check_card_serialize()
 int main()
 {
 #ifdef DANDAN_BUILD_SERIALIZE
-    check_card_serialize();
+    // check_card_serialize();
     auto game = dandan::core::Game{};
     game.run();
 #endif

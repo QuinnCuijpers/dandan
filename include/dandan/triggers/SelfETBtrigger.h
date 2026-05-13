@@ -4,8 +4,8 @@
 #define DANDAN_SELFETBTRIGGER_H
 
 #include "ITrigger.h"
-#include "dandan/core/CardID.h"
 #include "dandan/events/ETBEvent.h"
+#include <iostream>
 #include <optional>
 
 namespace dandan::triggers
@@ -14,18 +14,11 @@ namespace dandan::triggers
     class SelfETBTrigger : public ITrigger
     {
     public:
-        explicit SelfETBTrigger(core::CardID card_id) : m_card_id(card_id)
-        {
-        }
+        SelfETBTrigger() = default;
 
         void setTapped(bool tapped)
         {
             m_tapped = tapped;
-        }
-
-        void setSourceCardID(core::CardID card_id)
-        {
-            m_card_id = card_id;
         }
 
         [[nodiscard]] bool isTapped() const
@@ -34,8 +27,10 @@ namespace dandan::triggers
         }
 
         [[nodiscard]] bool triggersOn(
-            const events::IEvent &other) const override
+            const events::IEvent &other,
+            abilities::AbilityContext context) const override
         {
+            std::cout << "Checking SelfETBTrigger against event\n";
             const auto *otherETB =
                 dynamic_cast<const events::ETBEvent *>(&other);
             if (otherETB == nullptr)
@@ -46,15 +41,22 @@ namespace dandan::triggers
             if (m_tapped.has_value() &&
                 otherETB->isTapped() != m_tapped.value())
             {
+                std::cout << "Tapped state does not match\n";
                 return false;
             }
-
-            return m_card_id == otherETB->source();
+            if (context.source_card_id.getID() != otherETB->source().getID())
+            {
+                std::cout << "Card ID: " << context.source_card_id.getID()
+                          << " does not match event source ID: "
+                          << otherETB->source().getID() << "\n";
+                return false;
+            }
+            std::cout << "SelfETBTrigger matches event\n";
+            return true;
         }
 
     private:
         std::optional<bool> m_tapped;
-        core::CardID m_card_id;
     };
 } // namespace dandan::triggers
 

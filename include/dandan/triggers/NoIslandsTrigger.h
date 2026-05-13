@@ -1,8 +1,8 @@
 #ifndef DANDAN_NOISLANDSTRIGGER_H
 #define DANDAN_NOISLANDSTRIGGER_H
 
-#include "dandan/triggers/ITrigger.h"
 #include "dandan/events/NoIslandsEvent.h"
+#include "dandan/triggers/ITrigger.h"
 
 namespace dandan::triggers
 {
@@ -12,7 +12,8 @@ namespace dandan::triggers
         NoIslandsTrigger() = default;
 
         [[nodiscard]] bool triggersOn(
-            const events::IEvent &other) const override
+            const events::IEvent &other,
+            [[maybe_unused]] abilities::AbilityContext context) const override
         {
             const auto *noIslandsEvent =
                 dynamic_cast<const events::NoIslandsEvent *>(&other);

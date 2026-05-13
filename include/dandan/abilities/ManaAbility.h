@@ -34,7 +34,7 @@ namespace dandan::abilities
             return m_cost.get();
         }
 
-        void resolve(core::Game &game) const override;
+        void resolve(core::Game &game, AbilityContext context) const override;
 
     private:
         std::unique_ptr<costs::ICost> m_cost{
