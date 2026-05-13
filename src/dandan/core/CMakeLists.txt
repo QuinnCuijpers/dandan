@@ -12,7 +12,8 @@ target_sources(
           phases/BeginningPhase.cpp
           phases/MainPhase.cpp
           phases/EndingPhase.cpp
-          PreventionManager.cpp)
+          PreventionManager.cpp
+          PlayerID.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)

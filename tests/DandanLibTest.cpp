@@ -1,4 +1,5 @@
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/PlayerID.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/GenericMana.h"
 #include <algorithm>
@@ -16,23 +17,21 @@ static void bounceLandHelper(dandan::core::Game &game, int land_index)
 
 TEST(DandanLibTest, GameSetup)
 {
-    // TODO: replace with comptime testdeck generation?
-    // NOLINTBEGIN
+    dandan::core::PlayerID::reset();
+    // TODO: replace with test fixture
     auto cards = std::vector<dandan::Card>{};
     auto card_data = std::vector<dandan::core::CardData>{};
     card_data.reserve(TEST_DECK_SIZE);
-    for (int i{}; i < 20; ++i)
+    for (int i{}; i < TEST_DECK_SIZE; ++i)
     {
         auto data = dandan::core::CardData(
             "Test Card " + std::to_string(i),
-            std::move(std::make_unique<dandan::mana::GenericMana>(i)),
+            std::make_unique<dandan::mana::GenericMana>(i),
             dandan::core::CardData::Type::Land,
             dandan::core::CardData::SubType::Island);
         card_data.push_back(std::move(data));
-        cards.push_back(dandan::Card{&card_data.back()});
+        cards.emplace_back(&card_data.back());
     };
-
-    // NOLINTEND
 
     dandan::core::Deck testDeck{cards};
     dandan::core::Game game{std::move(testDeck)};
@@ -63,7 +62,7 @@ TEST(DandanLibTest, GameSetup)
 
 TEST(DandanLibTest, NoDrawFirstTurn)
 {
-    // NOLINTBEGIN
+    dandan::core::PlayerID::reset();
     auto cards = std::vector<dandan::Card>{};
     auto card_data = std::vector<dandan::core::CardData>{};
     card_data.reserve(TEST_DECK_SIZE);
@@ -71,14 +70,12 @@ TEST(DandanLibTest, NoDrawFirstTurn)
     {
         auto data = dandan::core::CardData(
             "Test Card " + std::to_string(i),
-            std::move(std::make_unique<dandan::mana::GenericMana>(i)),
+            std::make_unique<dandan::mana::GenericMana>(i),
             dandan::core::CardData::Type::Land,
             dandan::core::CardData::SubType::Island);
         card_data.push_back(std::move(data));
-        cards.push_back(dandan::Card{&card_data.back()});
+        cards.emplace_back(&card_data.back());
     };
-
-    // NOLINTEND
 
     dandan::core::Deck testDeck{cards};
     dandan::core::Game game{std::move(testDeck)};
@@ -103,7 +100,7 @@ TEST(DandanLibTest, NoDrawFirstTurn)
 // the bounce land effect
 TEST(DandanLibTest, Bounceland)
 {
-
+    dandan::core::PlayerID::reset();
     auto cards = std::vector<dandan::Card>{};
     auto card_data = std::vector<dandan::core::CardData>{};
     card_data.reserve(TEST_DECK_SIZE);
