@@ -10,7 +10,7 @@ namespace dandan::effects
         std::cout << "Applying BounceLandEffect\n";
         std::cout << "what land index to bounce? ";
         int land_index{};
-        std::cin >> land_index;
+        game.istream() >> land_index;
         std::cout << "Bouncing land at index " << land_index << "\n";
         auto land{game.activePlayer().battlefield().getPermanent(land_index)};
         game.activePlayer().hand().addCard(land);

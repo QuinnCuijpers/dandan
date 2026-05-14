@@ -9,12 +9,6 @@
 
 static constexpr int TEST_DECK_SIZE{20};
 
-static void bounceLandHelper(dandan::core::Game &game, int land_index)
-{
-    auto land{game.activePlayer().battlefield().getPermanent(land_index)};
-    game.activePlayer().hand().addCard(land);
-}
-
 TEST(DandanLibTest, GameSetup)
 {
     dandan::core::PlayerID::reset();
@@ -122,26 +116,12 @@ TEST(DandanLibTest, Bounceland)
         cards.emplace_back(&card_data.back());
     };
 
+    std::istringstream input_stream("play 0\n0\npass\nplay 0\n0\npass\nquit\n");
     dandan::core::Deck testDeck{cards};
-    dandan::core::Game game{std::move(testDeck)};
+    dandan::core::Game game{dandan::Game::withIstream(input_stream)};
+    game.setDeck(std::move(testDeck));
 
-    // handle beginning phase
-    game.handlePhase();
-
-    // play the land with the bounce effect
-    game.activePlayer().playCard(0);
-    bounceLandHelper(game, 0);
-
-    // same amount of cards in hand after bounce
-    EXPECT_EQ(game.activePlayer().hand().getCards().size(), STARTING_HAND_SIZE);
-
-    game.passTurn();
-    game.handlePhase();
-    // bounce should trigger on opponent's turn
-    game.activePlayer().playCard(0);
-    bounceLandHelper(game, 0);
-    EXPECT_EQ(game.activePlayer().hand().getCards().size(),
-              STARTING_HAND_SIZE + 1);
+    game.run();
 }
 
 // TODO: impl

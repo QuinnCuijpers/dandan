@@ -56,6 +56,16 @@ namespace dandan::core
         GameSetup();
     }
 
+    Game::Game(std::istream &input) : m_input{&input}
+    {
+        GameSetup();
+    }
+
+    Game Game::withIstream(std::istream &input)
+    {
+        return Game{input};
+    }
+
     void Game::run()
     {
         while (true)

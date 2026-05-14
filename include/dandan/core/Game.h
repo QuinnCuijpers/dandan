@@ -11,6 +11,7 @@
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
+#include <istream>
 #include <memory>
 
 namespace dandan::core
@@ -33,6 +34,7 @@ namespace dandan::core
 #endif
 
         explicit Game(Deck &&deck);
+        static Game withIstream(std::istream &input);
 
         [[nodiscard]] const Player &getActivePlayer() const
         {
@@ -82,6 +84,11 @@ namespace dandan::core
         [[nodiscard]] const ReplacementManager &replacementManager() const
         {
             return m_replacement_manager;
+        }
+
+        [[nodiscard]] std::istream &istream()
+        {
+            return *m_input;
         }
 
         void changePhase(std::unique_ptr<IPhase> &&phase)
@@ -137,8 +144,11 @@ namespace dandan::core
         PreventionManager m_prevention_manager;
         ReplacementManager m_replacement_manager;
         std::unique_ptr<IPhase> m_phase;
+        std::istream *m_input{&std::cin};
         bool m_first_turn{true};
         // Graveyard m_graveyard;
+
+        explicit Game(std::istream &input);
 
         void GameSetup();
 

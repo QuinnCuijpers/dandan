@@ -16,7 +16,7 @@ namespace dandan::core
             std::cout << "What do you want to do? (play [card index], pass, "
                          "or quit) ";
             std::string input;
-            std::getline(std::cin, input);
+            std::getline(game().istream(), input);
             if (input == "pass")
             {
                 std::cout << "Passing turn\n";
