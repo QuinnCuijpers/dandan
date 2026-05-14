@@ -10,6 +10,7 @@
             "cacheVariables": {
                 "CMAKE_PREFIX_PATH": "${sourceParentDir}/install",
                 "DANDAN_BUILD_SERIALIZE": "ON",
+                "DANDAN_ENABLE_LOGGING": "ON",
                 "BUILD_TESTING": "ON",
                 "JSON_DisableEnumSerialization": "ON"
             }

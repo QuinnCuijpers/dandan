@@ -5,6 +5,7 @@
 #include "CardDataFactory.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/log.h"
 #include <string_view>
 
 namespace dandan::core
@@ -18,8 +19,8 @@ namespace dandan::core
             : m_card_id(CardID::generate()), m_controller_id(controller_id),
               m_card_data(&CardDataFactory::createCardData(card_name))
         {
-            std::cout << "Creating card: " << card_name
-                      << " with ID: " << m_card_id.getID() << '\n';
+            DLOGI << "Creating card: " << card_name
+                  << " with ID: " << m_card_id.getID() << '\n';
         }
 
         explicit Card(CardData *card_data,
@@ -27,8 +28,8 @@ namespace dandan::core
             : m_card_id(CardID::generate()), m_controller_id(controller_id),
               m_card_data(card_data)
         {
-            std::cout << "Creating card from CardData with ID: "
-                      << m_card_id.getID() << '\n';
+            DLOGI << "Creating card from CardData with ID: "
+                  << m_card_id.getID() << '\n';
         }
 
         [[nodiscard]] const CardID &getID() const

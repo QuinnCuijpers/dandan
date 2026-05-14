@@ -1,4 +1,5 @@
 #include "dandan/dandan.h"
+#include "dandan/log.h"
 
 #include <iostream>
 
@@ -129,6 +130,11 @@ void check_card_serialize()
 
 int main()
 {
+#ifdef DANDAN_ENABLE_LOGGING
+    dandan::initLogging();
+    DLOGI << "Application started";
+#endif
+
 #ifdef DANDAN_BUILD_SERIALIZE
     // check_card_serialize();
     auto game = dandan::core::Game{};

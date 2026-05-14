@@ -17,6 +17,10 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 
 endif()
 
+if(DANDAN_ENABLE_LOGGING)
+  target_sources(DandanLib PRIVATE log.cpp)
+endif()
+
 add_subdirectory(core)
 add_subdirectory(abilities)
 add_subdirectory(effects)
@@ -36,6 +40,10 @@ if(DANDAN_BUILD_SERIALIZE)
   target_link_libraries(DandanLib PRIVATE DandanSerialize
                                           nlohmann_json::nlohmann_json)
   target_compile_definitions(DandanLib PRIVATE DANDAN_BUILD_SERIALIZE)
+endif()
+
+if(DANDAN_ENABLE_LOGGING)
+  target_link_libraries(DandanLib PUBLIC plog::plog)
 endif()
 
 if(CODE_COVERAGE)

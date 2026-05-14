@@ -20,6 +20,10 @@ endif()
 
 target_link_libraries(DandanLibTest PRIVATE DandanLib GTest::gtest_main)
 
+if(DANDAN_ENABLE_LOGGING)
+  target_link_libraries(DandanLibTest PRIVATE plog::plog)
+endif()
+
 if(CODE_COVERAGE)
   target_code_coverage(DandanLibTest AUTO ALL)
 endif()

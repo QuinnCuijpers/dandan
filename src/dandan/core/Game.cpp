@@ -3,6 +3,7 @@
 #include "dandan/core/Player.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
+#include "dandan/log.h"
 #include <functional>
 #include <memory>
 #include <random>
@@ -28,9 +29,8 @@ namespace dandan::core
         int starting_player_index = dist(gen);
         m_active_player_index = starting_player_index;
 
-        std::cout << "Active player: " << activePlayer().getName() << '\n';
-        std::cout << "Non-active player: " << nonActivePlayer().getName()
-                  << '\n';
+        DLOGI << "Active player: " << activePlayer().getName() << '\n';
+        DLOGI << "Non-active player: " << nonActivePlayer().getName() << '\n';
 
         for (int i{}; i < STARTING_HAND_SIZE; ++i)
         {
@@ -38,9 +38,9 @@ namespace dandan::core
             nonActivePlayer().drawCard(m_deck);
         }
         // TODO: Implement mulligan rules
-        std::cout << "Game constructed\n";
+        DLOGI << "Game constructed\n";
 
-        std::cout << "Changing phase to beginning phase\n";
+        DLOGI << "Changing phase to beginning phase\n";
         changePhase(std::make_unique<BeginningPhase>((*this)));
     }
 #ifdef DANDAN_BUILD_SERIALIZE
@@ -52,7 +52,7 @@ namespace dandan::core
 
     Game::Game(Deck &&deck) : m_deck{std::move(deck)}
     {
-        std::cout << "Game constructed with deck\n";
+        DLOGI << "Game constructed with explicit deck\n";
         GameSetup();
     }
 
@@ -65,7 +65,7 @@ namespace dandan::core
                 render();
                 handlePhase();
             }
-            std::cout << "Passing turn\n";
+            DLOGI << "Passing turn\n";
             m_first_turn = false;
             m_active_player_index =
                 (m_active_player_index + 1) % AMOUNT_PLAYERS;

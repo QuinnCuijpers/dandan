@@ -1,5 +1,6 @@
 build*
 docs
+logs
 # developer files
 Roadmap.md
 cppcheck.txt

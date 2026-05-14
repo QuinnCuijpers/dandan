@@ -19,6 +19,10 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 
 endif()
 
+if(DANDAN_ENABLE_LOGGING)
+  target_link_libraries(DandanConditions PRIVATE plog::plog)
+endif()
+
 if(CODE_COVERAGE)
   target_code_coverage(DandanConditions)
 endif()

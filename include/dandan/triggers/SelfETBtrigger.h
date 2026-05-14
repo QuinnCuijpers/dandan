@@ -5,7 +5,7 @@
 
 #include "ITrigger.h"
 #include "dandan/events/ETBEvent.h"
-#include <iostream>
+#include "dandan/log.h"
 #include <optional>
 
 namespace dandan::triggers
@@ -30,7 +30,7 @@ namespace dandan::triggers
             const events::IEvent &other,
             abilities::AbilityContext context) const override
         {
-            std::cout << "Checking SelfETBTrigger against event\n";
+            DLOGI << "Checking SelfETBTrigger against event\n";
             const auto *otherETB =
                 dynamic_cast<const events::ETBEvent *>(&other);
             if (otherETB == nullptr)
@@ -41,17 +41,17 @@ namespace dandan::triggers
             if (m_tapped.has_value() &&
                 otherETB->isTapped() != m_tapped.value())
             {
-                std::cout << "Tapped state does not match\n";
+                DLOGI << "Tapped state does not match\n";
                 return false;
             }
             if (context.source_card_id.getID() != otherETB->source().getID())
             {
-                std::cout << "Card ID: " << context.source_card_id.getID()
-                          << " does not match event source ID: "
-                          << otherETB->source().getID() << "\n";
+                DLOGI << "Card ID: " << context.source_card_id.getID()
+                      << " does not match event source ID: "
+                      << otherETB->source().getID() << "\n";
                 return false;
             }
-            std::cout << "SelfETBTrigger matches event\n";
+            DLOGI << "SelfETBTrigger matches event\n";
             return true;
         }
 
