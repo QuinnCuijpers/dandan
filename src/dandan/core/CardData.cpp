@@ -9,7 +9,7 @@ namespace dandan::core
 {
 #ifdef DANDAN_BUILD_SERIALIZE
 
-    CardData::CardData(std::string_view name) : m_name(name)
+    CardData::CardData(std::string_view name)
     {
         auto json_path{std::filesystem::path(DANDAN_PROJECT_SOURCE) /
                        "data/jsons" / (std::string(name) + ".json")};
@@ -21,8 +21,7 @@ namespace dandan::core
         }
         nlohmann::json json;
         file >> json;
-        *this = std::move(*dandan::serialization::JsonFactory<
-                          dandan::core::CardData>::create_product(json));
+        *this = json.get<CardData>();
     }
 
     void from_json(const nlohmann::json &json, CardData &card)
@@ -56,8 +55,6 @@ namespace dandan::core
             return "Artifact";
         case Type::Planeswalker:
             return "Planeswalker";
-        default:
-            return "Unknown";
         }
     }
 
@@ -79,8 +76,6 @@ namespace dandan::core
             return "Swamp";
         case SubType::Fish:
             return "Fish";
-        default:
-            return "Unknown";
         }
     }
 } // namespace dandan::core

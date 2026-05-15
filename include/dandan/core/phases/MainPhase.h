@@ -2,7 +2,7 @@
 #define DANDAN_MAINPHASE_H
 
 #include "dandan/core/phases/IPhase.h"
-#include <iostream>
+#include "dandan/log.h"
 // 505. Main Phase
 namespace dandan::core
 {
@@ -11,7 +11,7 @@ namespace dandan::core
     public:
         explicit MainPhase(Game &game) : IPhase(game)
         {
-            std::cout << "Constructed main phase\n";
+            DLOGI << "Constructed main phase\n";
         };
 
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;

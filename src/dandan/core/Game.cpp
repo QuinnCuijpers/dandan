@@ -1,8 +1,10 @@
 #include "dandan/core/Game.h"
+#include "dandan/conditions/PlayedLandCondition.h"
 #include "dandan/conditions/StartingPlayerCondition.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
+#include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
 #include "dandan/log.h"
 #include <functional>
 #include <memory>
@@ -17,7 +19,13 @@ namespace dandan::core
         auto no_draw_starting_player{
             std::make_unique<effects::DrawPreventionEffect>(
                 std::make_unique<conditions::StartingPlayerCondition>())};
+
+        auto one_land_a_turn{
+            std::make_unique<effects::PlayCardPreventionEffect>(
+                std::make_unique<conditions::PlayedLandCondition>())};
+
         m_prevention_manager.subscribe(std::move(no_draw_starting_player));
+        m_prevention_manager.subscribe(std::move(one_land_a_turn));
 
         // Randomize whom is starting player
         // TODO: Implement proper dice rolling to determine starting player
@@ -95,23 +103,23 @@ namespace dandan::core
         clearScreen();
 
         // Player name and hand (top)
-        std::cout << getNonActivePlayer().getName() << "'s Hand: ";
-        printCards(getNonActivePlayer().hand().getCards());
+        std::cout << nonActivePlayer().getName() << "'s Hand: ";
+        printCards(nonActivePlayer().hand().getCards());
         std::cout << "\n";
 
         // Player's battlefield
-        std::cout << getNonActivePlayer().getName() << "'s Battlefield: ";
-        printCards(getNonActivePlayer().battlefield().getPermanents());
+        std::cout << nonActivePlayer().getName() << "'s Battlefield: ";
+        printCards(nonActivePlayer().battlefield().getPermanents());
         std::cout << "\n\n"; // space between battlefields
 
         // Opponent's battlefield
-        std::cout << getActivePlayer().getName() << "'s Battlefield: ";
-        printCards(getActivePlayer().battlefield().getPermanents());
+        std::cout << activePlayer().getName() << "'s Battlefield: ";
+        printCards(activePlayer().battlefield().getPermanents());
         std::cout << "\n";
 
         // Opponent's hand and name
-        std::cout << getActivePlayer().getName() << "'s Hand: ";
-        printCards(getActivePlayer().hand().getCards());
+        std::cout << activePlayer().getName() << "'s Hand: ";
+        printCards(activePlayer().hand().getCards());
         std::cout << "\n";
     }
 } // namespace dandan::core

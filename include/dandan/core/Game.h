@@ -36,7 +36,7 @@ namespace dandan::core
         explicit Game(Deck &&deck);
         static Game withIstream(std::istream &input);
 
-        [[nodiscard]] const Player &getActivePlayer() const
+        [[nodiscard]] const Player &activePlayer() const
         {
             return m_players.at(m_active_player_index);
         }
@@ -46,7 +46,7 @@ namespace dandan::core
             return m_players.at(m_active_player_index);
         }
 
-        [[nodiscard]] const Player &getNonActivePlayer() const
+        [[nodiscard]] const Player &nonActivePlayer() const
         {
             return m_players.at(1 - m_active_player_index);
         }

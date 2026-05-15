@@ -1,4 +1,6 @@
-add_executable(DandanLibTest DandanLibTest.cpp)
+add_executable(DandanLibTest)
+
+target_sources(DandanLibTest PRIVATE DandanLibTest.cpp core/CardDataTest.cpp)
 
 if(DANDAN_BUILD_SERIALIZE)
   add_subdirectory(serialization)

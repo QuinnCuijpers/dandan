@@ -1,6 +1,7 @@
 #ifndef DANDAN_MANA_H
 #define DANDAN_MANA_H
 
+#include <cassert>
 #include <cstdint>
 #include <map>
 #include <stdexcept>
@@ -40,9 +41,9 @@ namespace dandan::mana
             return "Green";
         case ManaType::GENERIC:
             return "Generic";
-        default:
-            return "Unknown";
         }
+
+        assert(false && "Unknown mana type in ManaTypeToString");
     }
 
     [[maybe_unused]]

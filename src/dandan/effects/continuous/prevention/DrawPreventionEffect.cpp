@@ -1,5 +1,6 @@
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
 #include "dandan/core/actions/CardDrawAction.h"
+#include "dandan/log.h"
 
 namespace dandan::effects
 {
@@ -11,7 +12,7 @@ namespace dandan::effects
         {
             if (m_condition->isSatisfied(game))
             {
-                std::cout << "Draw prevention effect prevents drawing card\n";
+                DLOGI << "Draw prevention effect prevents drawing card\n";
                 return true;
             }
         }

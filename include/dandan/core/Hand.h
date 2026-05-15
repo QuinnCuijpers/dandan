@@ -44,6 +44,11 @@ namespace dandan::core
                            [](Card card) { return card; });
         }
 
+        void insertAt(int index, Card card)
+        {
+            m_cards.insert(m_cards.begin() + index, card);
+        }
+
     private:
         std::vector<Card> m_cards;
     };

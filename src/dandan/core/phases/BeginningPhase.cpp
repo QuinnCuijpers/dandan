@@ -47,6 +47,8 @@ namespace dandan::core
             }
             else
             {
+                // TODO: cast draweffect to game instead of handling in the
+                // createEffect of the action
                 draw_action->createEffect();
             }
             game().render();
@@ -54,9 +56,8 @@ namespace dandan::core
             break;
         }
         case Step::Done:
-            break;
-        default:
-            std::cerr << "Invalid step in beginning phase\n";
+            assert(false &&
+                   "Unreachable code in BeginningPhase::handleNextStep");
             break;
         }
     }

@@ -36,9 +36,6 @@ namespace dandan::costs
             case mana::ManaType::GENERIC:
                 type_str = "Generic";
                 break;
-            default:
-                type_str = "Unknown";
-                break;
             }
             std::cout << amount << " " << type_str << " mana\n";
         }

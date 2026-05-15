@@ -131,7 +131,7 @@ void check_card_serialize()
 int main()
 {
 #ifdef DANDAN_ENABLE_LOGGING
-    dandan::initLogging();
+    dandan::initLogging(dandan::DANDAN_LOG_FILE_PATH);
     DLOGI << "Application started";
 #endif
 

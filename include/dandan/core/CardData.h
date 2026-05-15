@@ -37,7 +37,6 @@ namespace dandan::core
             Enchantment,
             Artifact,
             Planeswalker,
-            MaxType
         };
 
         enum SubType : std::uint8_t
@@ -49,7 +48,6 @@ namespace dandan::core
             Plains,
             Swamp,
             Fish,
-            MaxSubType
         };
 
         CardData() = default;

@@ -33,12 +33,15 @@ namespace dandan::core
                 {
                     int card_index =
                         std::stoi(input.substr(std::size("play ") - 1));
+                    // moves card out of hand
                     auto card{game().activePlayer().hand().getCard(card_index)};
                     auto action =
                         std::make_unique<PlayCardAction>(card, game());
                     if (game().isActionPrevented(*action))
                     {
                         std::cout << "Action prevented\n";
+                        // return card to hand since action was prevented
+                        game().activePlayer().hand().insertAt(card_index, card);
                         continue;
                     }
                     auto effect{action->createEffect()};

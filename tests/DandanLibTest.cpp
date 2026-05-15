@@ -124,6 +124,42 @@ TEST(DandanLibTest, Bounceland)
     game.run();
 }
 
+TEST(DandanLibTest, Play1LandATurnTest)
+{
+
+    dandan::core::PlayerID::reset();
+    auto cards = std::vector<dandan::Card>{};
+    auto card_data = std::vector<dandan::core::CardData>{};
+    card_data.reserve(TEST_DECK_SIZE);
+    for (int i{}; i < TEST_DECK_SIZE; ++i)
+    {
+        auto abilities{
+            std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
+
+        abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
+            std::make_unique<dandan::ETBTrigger>(),
+            std::make_unique<dandan::BounceLandEffect>()));
+
+        auto data = dandan::core::CardData{
+            "Test Card " + std::to_string(i),
+            std::make_unique<dandan::mana::GenericMana>(i),
+            dandan::core::CardData::Type::Land,
+            dandan::core::CardData::SubType::Island, std::move(abilities)};
+        card_data.push_back(std::move(data));
+        cards.emplace_back(&card_data.back());
+    };
+
+    std::istringstream input_stream("play 0\nplay 0\nquit\n");
+    dandan::core::Deck testDeck{cards};
+    dandan::core::Game game{dandan::Game::withIstream(input_stream)};
+    game.setDeck(std::move(testDeck));
+
+    game.run();
+
+    // only one land should be played since the second play should be prevented
+    EXPECT_EQ(game.activePlayer().battlefield().getPermanents().size(), 1);
+}
+
 // TODO: impl
 //  TEST(DandanLibTest, Mulligan)
 //  {

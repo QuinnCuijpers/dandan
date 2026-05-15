@@ -2,6 +2,7 @@
 #define DANDAN_LOG_H
 
 #ifdef DANDAN_ENABLE_LOGGING
+#include <filesystem>
 #include <plog/Log.h>
 
 // NOLINTNEXTLINE
@@ -17,7 +18,10 @@
 
 namespace dandan
 {
-    void initLogging();
+
+    const std::filesystem::path DANDAN_LOG_FILE_PATH =
+        std::filesystem::path{DANDAN_PROJECT_SOURCE} / "logs/dandan.log";
+    void initLogging(const std::string &path);
 } // namespace dandan
 
 #else
@@ -29,19 +33,20 @@ namespace dandan::log
     struct NullStream
     {
         template <typename T>
-        constexpr const NullStream &operator<<(const T &) const noexcept
+        constexpr const NullStream &operator<<(
+            const T & /*unused*/) const noexcept
         {
             return *this;
         }
 
         constexpr const NullStream &operator<<(
-            std::ostream &(*)(std::ostream &)) const noexcept
+            std::ostream &(* /*unused*/)(std::ostream &)) const noexcept
         {
             return *this;
         }
 
         constexpr const NullStream &operator<<(
-            std::ios_base &(*)(std::ios_base &)) const noexcept
+            std::ios_base &(* /*unused*/)(std::ios_base &)) const noexcept
         {
             return *this;
         }

@@ -6,7 +6,6 @@
 #include "dandan/effects/one_shot/DrawEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/log.h"
-#include <iostream>
 #include <memory>
 
 namespace dandan::core

@@ -1,3 +1,4 @@
 10 Izzet Boilerworks
 10 Island
-5 Shivan Reef
+10 Halimar Depths
+10 Dandan

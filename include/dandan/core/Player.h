@@ -64,6 +64,16 @@ namespace dandan::core
             return m_battlefield;
         }
 
+        [[nodiscard]] bool playedLandThisTurn() const
+        {
+            return m_played_land_this_turn;
+        }
+
+        void setPlayedLandThisTurn(bool played)
+        {
+            m_played_land_this_turn = played;
+        }
+
         void drawCard(Deck &deck)
         {
             if (deck.getCards().empty())
@@ -96,6 +106,7 @@ namespace dandan::core
         Battlefield m_battlefield;
         Hand m_hand;
         mana::ManaMap m_mana_pool;
+        bool m_played_land_this_turn{false};
     };
 } // namespace dandan::core
 
