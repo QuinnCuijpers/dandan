@@ -3,7 +3,6 @@
 
 #include "dandan/core/phases/IPhase.h"
 #include <cstdint>
-#include <iostream>
 
 // 512. Ending Phase
 // 512.1. The ending phase consists of two steps: end and cleanup.

@@ -2,7 +2,7 @@
 #define DANDAN_COMBATPHASE_H
 
 #include "dandan/core/phases/IPhase.h"
-#include <iostream>
+#include <stdexcept>
 
 // 506. Combat Phase
 // 507. Beginning of Combat Step

@@ -4,7 +4,6 @@
 #include "dandan/core/phases/IPhase.h"
 #include "dandan/core/phases/MainPhase.h"
 #include <cstdint>
-#include <iostream>
 #include <memory>
 
 // 501. Beginning Phase
