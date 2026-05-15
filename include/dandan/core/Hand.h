@@ -2,6 +2,7 @@
 #define DANDAN_HAND_H
 
 #include "dandan/core/Card.h"
+#include "dandan/log.h"
 #include <algorithm>
 #include <vector>
 
@@ -47,6 +48,16 @@ namespace dandan::core
         void insertAt(int index, Card card)
         {
             m_cards.insert(m_cards.begin() + index, card);
+        }
+
+        void discardCard(int index)
+        {
+            DLOGI << "Discarding card " << m_cards[index] << " at index "
+                  << index << '\n';
+            // TODO: move to graveyard instead of just removing from hand
+            // awaiting implementation of graveyard
+            // and gamewise src -> dest moving of cards
+            m_cards.erase(m_cards.begin() + index);
         }
 
     private:

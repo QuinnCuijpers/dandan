@@ -6,7 +6,6 @@
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
 #include "dandan/log.h"
-#include <functional>
 #include <memory>
 #include <random>
 #include <string>
@@ -87,8 +86,7 @@ namespace dandan::core
             m_first_turn = false;
             m_active_player_index =
                 (m_active_player_index + 1) % AMOUNT_PLAYERS;
-            changePhase(std::make_unique<BeginningPhase>(
-                std::reference_wrapper<Game>(*this)));
+            changePhase(std::make_unique<BeginningPhase>(*this));
         }
     }
 

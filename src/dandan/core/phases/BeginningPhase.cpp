@@ -2,7 +2,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/CardDrawAction.h"
 #include "dandan/core/phases/IPhase.h"
-#include "dandan/core/phases/MainPhase.h"
+#include "dandan/log.h"
 #include <memory>
 
 namespace dandan::core
@@ -10,12 +10,15 @@ namespace dandan::core
 
     std::unique_ptr<IPhase> BeginningPhase::handle()
     {
-        std::cout << "Handling beginning phase\n";
+        DLOGI << "Handling beginning phase\n";
         while (m_step != Step::Done)
         {
             handleNextStep();
         }
-        return std::make_unique<MainPhase>(game());
+        // TODO: add proper streaming to phases such that we can remove the
+        // typeid name
+        DLOGI << "Switching phases to " << typeid(*m_next_phase).name() << "\n";
+        return std::move(m_next_phase);
     }
 
     void BeginningPhase::handleNextStep()
@@ -23,7 +26,7 @@ namespace dandan::core
         switch (m_step)
         {
         case Step::Untap:
-            std::cout << "Handling untap step\n";
+            DLOGI << "Handling untap step\n";
             // Go through all permanents and untap them
             // as this could trigger effects, we need to go through the event
             // manager so we apply an untap effect to all permanents and trigger
@@ -33,17 +36,17 @@ namespace dandan::core
             m_step = Step::Upkeep;
             break;
         case Step::Upkeep:
-            std::cout << "Handling upkeep step\n";
+            DLOGI << "Handling upkeep step\n";
             game().render();
             m_step = Step::Draw;
             break;
         case Step::Draw:
         {
-            std::cout << "Handling draw step\n";
+            DLOGI << "Handling draw step\n";
             auto draw_action = std::make_unique<core::CardDrawAction>(game());
             if (game().isActionPrevented(*draw_action))
             {
-                std::cout << "Draw prevented\n";
+                DLOGI << "Draw prevented\n";
             }
             else
             {

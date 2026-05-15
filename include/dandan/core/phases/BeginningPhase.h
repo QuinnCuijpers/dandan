@@ -2,8 +2,10 @@
 #define DANDAN_BEGINNINGPHASE_H
 
 #include "dandan/core/phases/IPhase.h"
+#include "dandan/core/phases/MainPhase.h"
 #include <cstdint>
 #include <iostream>
+#include <memory>
 
 // 501. Beginning Phase
 // 502. Untap Step
@@ -23,10 +25,7 @@ namespace dandan::core
             Done
         };
 
-        explicit BeginningPhase(Game &game) : IPhase(game)
-        {
-            std::cout << "Constructed beginning phase\n";
-        };
+        explicit BeginningPhase(Game &game) : IPhase(game) {};
 
         void setStep(Step step)
         {
@@ -35,10 +34,12 @@ namespace dandan::core
 
         std::unique_ptr<IPhase> handle() override;
 
-        void handleNextStep();
-
     private:
         Step m_step{Step::Untap};
+        std::unique_ptr<IPhase> m_next_phase{
+            std::make_unique<MainPhase>(game())};
+
+        void handleNextStep();
     };
 } // namespace dandan::core
 #endif

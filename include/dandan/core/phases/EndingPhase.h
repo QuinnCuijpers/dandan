@@ -2,23 +2,35 @@
 #define DANDAN_ENDINGPHASE_H
 
 #include "dandan/core/phases/IPhase.h"
+#include <cstdint>
 #include <iostream>
 
 // 512. Ending Phase
-// 513. End Step
-// 514. Cleanup Step -->
+// 512.1. The ending phase consists of two steps: end and cleanup.
 
 namespace dandan::core
 {
     class EndingPhase : public IPhase
     {
     public:
-        explicit EndingPhase(Game &game) : IPhase(game)
+        enum Step : uint8_t
         {
-            std::cout << "Constructed ending phase\n";
+            End,
+            Cleanup,
+            Done
         };
 
+        explicit EndingPhase(Game &game) : IPhase(game) {};
+
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;
+
+    private:
+        Step m_step{Step::End};
+        // nullptr is used to indicate that there is no next phase and we should
+        // proceed to the next turn
+        std::unique_ptr<IPhase> m_next_phase{nullptr};
+
+        void handleNextStep();
     };
 } // namespace dandan::core
 

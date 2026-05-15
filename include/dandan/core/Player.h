@@ -5,6 +5,7 @@
 #include "dandan/core/Deck.h"
 #include "dandan/core/Hand.h"
 #include "dandan/mana/Mana.h"
+#include <cstddef>
 
 const static int STARTING_HAND_SIZE{7};
 const static int STARTING_LIFE_TOTAL{20};
@@ -74,6 +75,11 @@ namespace dandan::core
             m_played_land_this_turn = played;
         }
 
+        [[nodiscard]] size_t maxHandSize() const
+        {
+            return m_max_hand_size;
+        }
+
         void drawCard(Deck &deck)
         {
             if (deck.getCards().empty())
@@ -99,6 +105,12 @@ namespace dandan::core
             m_battlefield.addCard(m_hand.getCard(index));
         }
 
+        void discardCard(int index)
+        {
+            std::cout << "Player is discarding card at index " << index << '\n';
+            m_hand.discardCard(index);
+        }
+
     private:
         PlayerID m_player_id;
         std::string m_name;
@@ -107,6 +119,7 @@ namespace dandan::core
         Hand m_hand;
         mana::ManaMap m_mana_pool;
         bool m_played_land_this_turn{false};
+        size_t m_max_hand_size{STARTING_HAND_SIZE};
     };
 } // namespace dandan::core
 

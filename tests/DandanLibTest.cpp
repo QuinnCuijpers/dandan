@@ -90,8 +90,8 @@ TEST(DandanLibTest, NoDrawFirstTurn)
               STARTING_HAND_SIZE + 1);
 }
 
-// this test is a bit of a hack as we manually implement the event system for
-// the bounce land effect
+// FIXME: test is broken as the game is default constructed and thus everyone
+// draws from a default deck in temp_decklist.txt
 TEST(DandanLibTest, Bounceland)
 {
     dandan::core::PlayerID::reset();
@@ -158,6 +158,37 @@ TEST(DandanLibTest, Play1LandATurnTest)
 
     // only one land should be played since the second play should be prevented
     EXPECT_EQ(game.activePlayer().battlefield().getPermanents().size(), 1);
+}
+
+TEST(DandanLibTest, DiscardToHandSize)
+{
+    dandan::core::PlayerID::reset();
+    auto cards = std::vector<dandan::Card>{};
+    auto card_data = std::vector<dandan::core::CardData>{};
+    card_data.reserve(TEST_DECK_SIZE);
+    for (int i{}; i < TEST_DECK_SIZE; ++i)
+    {
+        auto data = dandan::core::CardData(
+            "Test Card " + std::to_string(i),
+            std::make_unique<dandan::mana::GenericMana>(i),
+            dandan::core::CardData::Type::Land,
+            dandan::core::CardData::SubType::Island);
+        card_data.push_back(std::move(data));
+        cards.emplace_back(&card_data.back());
+    };
+
+    std::istringstream input_stream("pass\npass\n0\nquit\n");
+    dandan::core::Deck testDeck{cards};
+    dandan::core::Game game{dandan::Game::withIstream(input_stream)};
+    game.setDeck(std::move(testDeck));
+
+    game.run();
+
+    // both players should be down to 7 cards in hand after discarding down to
+    // hand size at the end of the turn
+    EXPECT_EQ(game.activePlayer().hand().getCards().size(), STARTING_HAND_SIZE);
+    EXPECT_EQ(game.nonActivePlayer().hand().getCards().size(),
+              STARTING_HAND_SIZE);
 }
 
 // TODO: impl

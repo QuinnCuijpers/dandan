@@ -56,7 +56,6 @@ namespace dandan::core
                 }
             }
         }
-        // TODO: change to next phase which would be combat phase normally
-        return nullptr;
+        return std::move(m_next_phase);
     }
 } // namespace dandan::core

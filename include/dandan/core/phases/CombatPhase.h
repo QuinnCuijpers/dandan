@@ -1,6 +1,7 @@
 #ifndef DANDAN_COMBATPHASE_H
 #define DANDAN_COMBATPHASE_H
 
+#include "dandan/core/phases/IPhase.h"
 #include <iostream>
 
 // 506. Combat Phase
@@ -12,13 +13,15 @@
 
 namespace dandan::core
 {
-    class CombatPhase
+    class CombatPhase : public IPhase
     {
     public:
-        CombatPhase()
+        explicit CombatPhase(Game &game) : IPhase(game) {};
+
+        [[nodiscard]] std::unique_ptr<IPhase> handle() override
         {
-            std::cout << "Constructed combat phase\n";
-        };
+            throw std::runtime_error("Combat phase not implemented yet");
+        }
     };
 } // namespace dandan::core
 
