@@ -11,7 +11,7 @@ namespace dandan::effects
     class PlayCardPreventionEffect : public IPreventionEffect
     {
     public:
-        PlayCardPreventionEffect(
+        explicit PlayCardPreventionEffect(
             std::unique_ptr<conditions::ICondition> condition)
             : m_condition(std::move(condition))
         {
