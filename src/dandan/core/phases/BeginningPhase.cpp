@@ -32,6 +32,7 @@ namespace dandan::core
             // manager so we apply an untap effect to all permanents and trigger
             // any effects that trigger on untapping although all untaps resolve
             // simultaneous and immediately
+            game().activePlayer().setPlayedLandThisTurn(false);
             game().render();
             m_step = Step::Upkeep;
             break;

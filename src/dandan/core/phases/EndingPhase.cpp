@@ -38,7 +38,7 @@ namespace dandan::core
                         << game().activePlayer().maxHandSize()
                         << ". Please choose a card to discard: ";
                     int card_index{-1};
-                    std::cin >> card_index;
+                    game().istream() >> card_index;
                     try
                     {
                         game().activePlayer().discardCard(card_index);

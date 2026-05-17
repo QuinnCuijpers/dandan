@@ -1,6 +1,7 @@
 #include "dandan/effects/one_shot/BounceLandEffect.h"
 #include "dandan/core/Game.h"
 #include <iostream>
+#include <string>
 
 namespace dandan::effects
 {
@@ -9,8 +10,9 @@ namespace dandan::effects
     {
         std::cout << "Applying BounceLandEffect\n";
         std::cout << "what land index to bounce? ";
-        int land_index{};
-        game.istream() >> land_index;
+        std::string input;
+        std::getline(game.istream(), input);
+        int land_index{std::stoi(input)};
         std::cout << "Bouncing land at index " << land_index << "\n";
         auto land{game.activePlayer().battlefield().getPermanent(land_index)};
         game.activePlayer().hand().addCard(land);

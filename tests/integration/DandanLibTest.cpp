@@ -82,7 +82,8 @@ TEST(DandanLibTest, Bounceland)
 
     auto deck = createTestDeck(TEST_DECK_SIZE, &data);
 
-    std::istringstream input_stream("play 0\n0\npass\nplay 0\n0\npass\nquit\n");
+    std::istringstream input_stream(
+        "play 0\n0\npass\nplay 0\n0\npass\n0\nquit\n");
     dandan::core::Game game{dandan::Game::withDeck(std::move(deck))};
     game.setIstream(input_stream);
 
