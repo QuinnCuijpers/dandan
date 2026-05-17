@@ -30,7 +30,11 @@ if(CODE_COVERAGE)
     --exclude
     "*/tests/*"
     GENHTML_OPTIONS
-    --branch-coverage)
+    --branch-coverage
+    --ignore-errors
+    mismatch
+    --ignore-errors
+    inconsistent)
 endif()
 
 if(BUILD_TESTING)
