@@ -1,7 +1,7 @@
 #include "dandan/core/CardData.h"
 #include <gtest/gtest.h>
 
-TEST(DeserializeTest, NonExistantFile)
+TEST(CardDataTest, NonExistantFile)
 {
     const auto *card_name = "NonExistantCard";
     std::ostringstream buffer;
