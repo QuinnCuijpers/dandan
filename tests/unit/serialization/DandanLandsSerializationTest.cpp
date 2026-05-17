@@ -1,4 +1,4 @@
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "common.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/costs/AndCost.h"

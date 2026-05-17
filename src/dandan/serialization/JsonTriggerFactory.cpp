@@ -1,5 +1,5 @@
 #include "dandan/serialization/JsonTriggerFactory.h"
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/triggers/ETBtrigger.h"
 #include "dandan/triggers/ITrigger.h"
 #include "dandan/triggers/NoIslandsTrigger.h"
@@ -65,4 +65,4 @@ namespace dandan::serialization
         throw std::runtime_error("Unknown trigger type: " + type);
     }
 } // namespace dandan::serialization
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE

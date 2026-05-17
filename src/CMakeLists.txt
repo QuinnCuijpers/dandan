@@ -5,7 +5,7 @@ target_sources(Main PRIVATE main.cpp)
 target_link_libraries(Main PRIVATE DandanLib)
 
 if(DANDAN_BUILD_SERIALIZE)
-  target_compile_definitions(Main PRIVATE DANDAN_BUILD_SERIALIZE)
+  target_compile_definitions(Main PRIVATE DANDAN_SERIALIZE)
   target_link_libraries(Main PRIVATE nlohmann_json::nlohmann_json)
 endif()
 

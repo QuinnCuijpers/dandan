@@ -1,5 +1,5 @@
 #include "dandan/serialization/JsonManaFactory.h"
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/mana/Mana.h"
 #include <algorithm>
 #include <nlohmann/json.hpp>
@@ -96,4 +96,4 @@ namespace dandan::serialization
     }
 } // namespace dandan::serialization
 
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE

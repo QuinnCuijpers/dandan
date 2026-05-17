@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include <algorithm>
 #include <fstream>
 #include <random>
@@ -15,7 +15,7 @@
 namespace dandan::core
 {
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
     Deck::Deck()
     {
         std::cout << "No decklist path provided. Using default: "

@@ -1,7 +1,7 @@
 #ifndef DANDAN_JSONTRIGGERFACTORY_H
 #define DANDAN_JSONTRIGGERFACTORY_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 
 #include "JsonFactory.h"
 #include "dandan/triggers/ITrigger.h"
@@ -23,6 +23,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE
 
 #endif // DANDAN_JSONTRIGGERFACTORY_H

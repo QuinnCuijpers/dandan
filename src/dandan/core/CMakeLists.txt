@@ -39,7 +39,7 @@ if(DANDAN_ENABLE_LOGGING)
 endif()
 
 if(DANDAN_BUILD_SERIALIZE)
-  target_compile_definitions(DandanCore PRIVATE DANDAN_BUILD_SERIALIZE)
+  target_compile_definitions(DandanCore PRIVATE DANDAN_SERIALIZE)
   target_link_libraries(DandanCore PRIVATE nlohmann_json::nlohmann_json)
 endif()
 

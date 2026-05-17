@@ -1,7 +1,7 @@
 #ifndef DANDAN_TESTS_SERIALIZATION_COMMON_H
 #define DANDAN_TESTS_SERIALIZATION_COMMON_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 
 #include "dandan/dandan.h"
 #include "gtest/gtest.h"

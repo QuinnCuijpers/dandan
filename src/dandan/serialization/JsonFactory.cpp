@@ -1,5 +1,5 @@
 #include "dandan/serialization/JsonFactory.h"
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 
@@ -18,4 +18,4 @@ namespace dandan::serialization
         throw std::logic_error("JsonFactory not implemented for this type");
     }
 } // namespace dandan::serialization
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE

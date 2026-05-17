@@ -1,6 +1,6 @@
 #include "dandan/mana/BlueMana.h"
 #include "dandan/triggers/NoIslandsTrigger.h"
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "common.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/conditions/ControlsIslandCondition.h"

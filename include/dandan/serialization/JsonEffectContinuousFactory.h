@@ -1,7 +1,7 @@
 #ifndef DANDAN_JSONEFFECTCONTINUOUSFACTORY_H
 #define DANDAN_JSONEFFECTCONTINUOUSFACTORY_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "JsonFactory.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
 
@@ -17,6 +17,6 @@ namespace dandan::serialization
             const nlohmann::json &json);
     };
 } // namespace dandan::serialization
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE
 
 #endif // DANDAN_JSONEFFECTCONTINUOUSFACTORY_H

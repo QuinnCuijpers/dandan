@@ -1,7 +1,7 @@
 #ifndef DANDAN_JSONMANAFACTORY_H
 #define DANDAN_JSONMANAFACTORY_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 
 #include "dandan/mana/ManaList.h"
 #include "dandan/serialization/JsonFactory.h"
@@ -27,4 +27,4 @@ namespace dandan::serialization
 } // namespace dandan::serialization
 
 #endif // DANDAN_JSONMANAFACTORY_H
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE

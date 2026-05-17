@@ -80,17 +80,11 @@ TEST(DandanLibTest, Bounceland)
         dandan::core::CardData::Type::Land,
         dandan::core::CardData::SubType::Island, std::move(abilities)};
 
-    card_data.reserve(TEST_DECK_SIZE);
-    for (int i{}; i < TEST_DECK_SIZE; ++i)
-    {
-        card_data.push_back(&data);
-        cards.emplace_back(card_data.back());
-    };
+    auto deck = createTestDeck(TEST_DECK_SIZE, &data);
 
     std::istringstream input_stream("play 0\n0\npass\nplay 0\n0\npass\nquit\n");
-    dandan::core::Deck testDeck{cards};
-    dandan::core::Game game{dandan::Game::withIstream(input_stream)};
-    game.setDeck(std::move(testDeck));
+    dandan::core::Game game{dandan::Game::withDeck(std::move(deck))};
+    game.setIstream(input_stream);
 
     game.run();
 }

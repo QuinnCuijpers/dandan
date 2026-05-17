@@ -1,5 +1,5 @@
 #include "dandan/serialization/JsonConditionFactory.h"
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/conditions/ControlsIslandCondition.h"
 #include <nlohmann/json.hpp>
 
@@ -39,4 +39,4 @@ namespace dandan::serialization
 
 } // namespace dandan::serialization
 
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE

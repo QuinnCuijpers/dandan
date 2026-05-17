@@ -1,6 +1,7 @@
-#include "dandan/core/CardData.h"
 #include <gtest/gtest.h>
 
+#ifdef DANDAN_SERIALIZE
+#include "dandan/core/CardData.h"
 TEST(CardDataTest, NonExistantFile)
 {
     const auto *card_name = "NonExistantCard";
@@ -14,3 +15,4 @@ TEST(CardDataTest, NonExistantFile)
     EXPECT_EQ(output, "Failed to open JSON file for card: " +
                           std::string(card_name) + "\n");
 }
+#endif

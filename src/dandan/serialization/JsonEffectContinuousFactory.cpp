@@ -1,5 +1,5 @@
 #include "dandan/serialization/JsonEffectContinuousFactory.h"
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/conditions/ICondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/continuous/replacement/EntersTappedEffect.h"
@@ -57,4 +57,4 @@ namespace dandan::serialization
             "create_product for IContinuousEffect is not implemented yet.");
     }
 } // namespace dandan::serialization
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE

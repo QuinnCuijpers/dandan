@@ -1,7 +1,7 @@
 #ifndef DANDAN_CARDFACTORY_H
 #define DANDAN_CARDFACTORY_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 
 #include "dandan/core/CardData.h"
 #include "dandan/serialization/JsonFactory.h"
@@ -19,6 +19,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE
 
 #endif // DANDAN_CARDFACTORY_H

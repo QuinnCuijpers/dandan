@@ -1,13 +1,14 @@
 #include "dandan/core/CardData.h"
+#include <cassert>
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
 #endif
 namespace dandan::core
 {
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 
     CardData::CardData(std::string_view name)
     {
@@ -56,6 +57,7 @@ namespace dandan::core
         case Type::Planeswalker:
             return "Planeswalker";
         }
+        assert(false && "Unreachable Card type");
     }
 
     std::string_view CardData::SubTypeToString(SubType subtype)
@@ -77,5 +79,6 @@ namespace dandan::core
         case SubType::Fish:
             return "Fish";
         }
+        assert(false && "Unreachable Card subtype");
     }
 } // namespace dandan::core

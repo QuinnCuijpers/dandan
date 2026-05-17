@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
@@ -17,7 +17,7 @@
 #include <vector>
 #endif
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 namespace
 {
     std::filesystem::path project_root()
@@ -44,7 +44,7 @@ namespace
 } // namespace
 #endif
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 dandan::Card read_Card_from_json(const std::filesystem::path &json_path)
 {
     const auto resolved_path = resolve_from_project_root(json_path);
@@ -135,7 +135,7 @@ int main()
     DLOGI << "Application started";
 #endif
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
     // check_card_serialize();
     auto game = dandan::core::Game{};
     game.run();

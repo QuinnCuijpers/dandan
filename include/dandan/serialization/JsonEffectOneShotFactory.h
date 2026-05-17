@@ -1,7 +1,7 @@
 #ifndef DANDAN_JSONEFFECTFACTORY_H
 #define DANDAN_JSONEFFECTFACTORY_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 
 #include "JsonFactory.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -20,6 +20,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE
 
 #endif // DANDAN_JSONEFFECTFACTORY_H

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "common.h"
 
 TEST_P(DeserializeTest, DeserializeCorrect)

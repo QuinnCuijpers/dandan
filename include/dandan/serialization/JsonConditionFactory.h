@@ -1,7 +1,7 @@
 #ifndef DANDAN_JSONCONDITIONFACTORY_H
 #define DANDAN_JSONCONDITIONFACTORY_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "JsonFactory.h"
 #include "dandan/conditions/ICondition.h"
 

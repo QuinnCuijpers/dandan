@@ -50,7 +50,7 @@ namespace dandan::core
         DLOGI << "Changing phase to beginning phase\n";
         changePhase(std::make_unique<BeginningPhase>((*this)));
     }
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
     Game::Game()
     {
         GameSetup();

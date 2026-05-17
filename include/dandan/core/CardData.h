@@ -12,7 +12,7 @@
 #include <utility>
 #include <vector>
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include <nlohmann/json.hpp>
 #endif
 
@@ -52,9 +52,9 @@ namespace dandan::core
 
         CardData() = default;
 
-        // #ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
         explicit CardData(std::string_view name);
-        // #endif
+#endif
 
         CardData(
             std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
@@ -107,7 +107,7 @@ namespace dandan::core
         static std::string_view TypeToString(Type type);
         static std::string_view SubTypeToString(SubType subtype);
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
         friend void from_json(const nlohmann::json &json, CardData &card);
         friend void to_json(nlohmann::json &json, const CardData &card);
 #endif

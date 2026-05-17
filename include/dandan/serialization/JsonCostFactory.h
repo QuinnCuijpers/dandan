@@ -1,7 +1,7 @@
 #ifndef DANDAN_JSONCOSTFACTORY_H
 #define DANDAN_JSONCOSTFACTORY_H
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 
 #include "JsonFactory.h"
 #include "dandan/costs/ICost.h"
@@ -19,6 +19,6 @@ namespace dandan::serialization
     };
 } // namespace dandan::serialization
 
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE
 
 #endif // DANDAN_JSONCOSTFACTORY_H

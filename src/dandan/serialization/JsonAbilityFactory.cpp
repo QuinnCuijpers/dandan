@@ -1,6 +1,6 @@
 #include "dandan/serialization/JsonAbilityFactory.h"
 
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
 #include "dandan/mana/ManaList.h"
@@ -159,4 +159,4 @@ namespace dandan::serialization
     }
 } // namespace dandan::serialization
 
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE

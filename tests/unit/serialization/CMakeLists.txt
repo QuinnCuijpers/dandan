@@ -5,7 +5,7 @@ if(DANDAN_BUILD_SERIALIZE)
 
   target_compile_features(DandanLibSerializationTest PRIVATE cxx_std_17)
   target_compile_definitions(DandanLibSerializationTest
-                             PRIVATE DANDAN_BUILD_SERIALIZE)
+                             PRIVATE DANDAN_SERIALIZE)
 
   if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
      OR (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"))

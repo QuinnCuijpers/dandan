@@ -1,5 +1,5 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
-#ifdef DANDAN_BUILD_SERIALIZE
+#ifdef DANDAN_SERIALIZE
 #include "dandan/effects/one_shot/BounceLandEffect.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
@@ -109,4 +109,4 @@ namespace dandan::serialization
         throw std::runtime_error("Unknown effect type: " + type);
     }
 } // namespace dandan::serialization
-#endif // DANDAN_BUILD_SERIALIZE
+#endif // DANDAN_SERIALIZE
