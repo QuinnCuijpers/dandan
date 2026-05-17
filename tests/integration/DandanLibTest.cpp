@@ -7,28 +7,15 @@
 #include <memory>
 #include <vector>
 
+#include "common.h"
+
 static constexpr int TEST_DECK_SIZE{20};
 
 TEST(DandanLibTest, GameSetup)
 {
     dandan::core::PlayerID::reset();
-    // TODO: replace with test fixture
-    auto cards = std::vector<dandan::Card>{};
-    auto card_data = std::vector<dandan::core::CardData>{};
-    card_data.reserve(TEST_DECK_SIZE);
-    for (int i{}; i < TEST_DECK_SIZE; ++i)
-    {
-        auto data = dandan::core::CardData(
-            "Test Card " + std::to_string(i),
-            std::make_unique<dandan::mana::GenericMana>(i),
-            dandan::core::CardData::Type::Land,
-            dandan::core::CardData::SubType::Island);
-        card_data.push_back(std::move(data));
-        cards.emplace_back(&card_data.back());
-    };
-
-    dandan::core::Deck testDeck{cards};
-    dandan::core::Game game{std::move(testDeck)};
+    auto deck{createTestDeck(TEST_DECK_SIZE)};
+    auto game{dandan::Game::withDeck(std::move(deck))};
 
     auto &active_player = game.activePlayer();
 
@@ -57,22 +44,8 @@ TEST(DandanLibTest, GameSetup)
 TEST(DandanLibTest, NoDrawFirstTurn)
 {
     dandan::core::PlayerID::reset();
-    auto cards = std::vector<dandan::Card>{};
-    auto card_data = std::vector<dandan::core::CardData>{};
-    card_data.reserve(TEST_DECK_SIZE);
-    for (int i{}; i < TEST_DECK_SIZE; ++i)
-    {
-        auto data = dandan::core::CardData(
-            "Test Card " + std::to_string(i),
-            std::make_unique<dandan::mana::GenericMana>(i),
-            dandan::core::CardData::Type::Land,
-            dandan::core::CardData::SubType::Island);
-        card_data.push_back(std::move(data));
-        cards.emplace_back(&card_data.back());
-    };
-
-    dandan::core::Deck testDeck{cards};
-    dandan::core::Game game{std::move(testDeck)};
+    auto deck{createTestDeck(TEST_DECK_SIZE)};
+    auto game{dandan::Game::withDeck(std::move(deck))};
 
     auto &active_player = game.activePlayer();
     auto &non_active_player = game.nonActivePlayer();
@@ -90,30 +63,28 @@ TEST(DandanLibTest, NoDrawFirstTurn)
               STARTING_HAND_SIZE + 1);
 }
 
-// FIXME: test is broken as the game is default constructed and thus everyone
-// draws from a default deck in temp_decklist.txt
 TEST(DandanLibTest, Bounceland)
 {
     dandan::core::PlayerID::reset();
     auto cards = std::vector<dandan::Card>{};
-    auto card_data = std::vector<dandan::core::CardData>{};
+    auto card_data = std::vector<dandan::core::CardData *>{};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
+
+    abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
+        std::make_unique<dandan::ETBTrigger>(),
+        std::make_unique<dandan::BounceLandEffect>()));
+
+    auto data = dandan::core::CardData{
+        "Test Card ", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land,
+        dandan::core::CardData::SubType::Island, std::move(abilities)};
+
     card_data.reserve(TEST_DECK_SIZE);
     for (int i{}; i < TEST_DECK_SIZE; ++i)
     {
-        auto abilities{
-            std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
-
-        abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-            std::make_unique<dandan::ETBTrigger>(),
-            std::make_unique<dandan::BounceLandEffect>()));
-
-        auto data = dandan::core::CardData{
-            "Test Card " + std::to_string(i),
-            std::make_unique<dandan::mana::GenericMana>(i),
-            dandan::core::CardData::Type::Land,
-            dandan::core::CardData::SubType::Island, std::move(abilities)};
-        card_data.push_back(std::move(data));
-        cards.emplace_back(&card_data.back());
+        card_data.push_back(&data);
+        cards.emplace_back(card_data.back());
     };
 
     std::istringstream input_stream("play 0\n0\npass\nplay 0\n0\npass\nquit\n");
@@ -128,31 +99,10 @@ TEST(DandanLibTest, Play1LandATurnTest)
 {
 
     dandan::core::PlayerID::reset();
-    auto cards = std::vector<dandan::Card>{};
-    auto card_data = std::vector<dandan::core::CardData>{};
-    card_data.reserve(TEST_DECK_SIZE);
-    for (int i{}; i < TEST_DECK_SIZE; ++i)
-    {
-        auto abilities{
-            std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
-
-        abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-            std::make_unique<dandan::ETBTrigger>(),
-            std::make_unique<dandan::BounceLandEffect>()));
-
-        auto data = dandan::core::CardData{
-            "Test Card " + std::to_string(i),
-            std::make_unique<dandan::mana::GenericMana>(i),
-            dandan::core::CardData::Type::Land,
-            dandan::core::CardData::SubType::Island, std::move(abilities)};
-        card_data.push_back(std::move(data));
-        cards.emplace_back(&card_data.back());
-    };
-
+    auto deck{createTestDeck(TEST_DECK_SIZE)};
+    dandan::core::Game game{dandan::Game::withDeck(std::move(deck))};
     std::istringstream input_stream("play 0\nplay 0\nquit\n");
-    dandan::core::Deck testDeck{cards};
-    dandan::core::Game game{dandan::Game::withIstream(input_stream)};
-    game.setDeck(std::move(testDeck));
+    game.setIstream(input_stream);
 
     game.run();
 
@@ -163,24 +113,11 @@ TEST(DandanLibTest, Play1LandATurnTest)
 TEST(DandanLibTest, DiscardToHandSize)
 {
     dandan::core::PlayerID::reset();
-    auto cards = std::vector<dandan::Card>{};
-    auto card_data = std::vector<dandan::core::CardData>{};
-    card_data.reserve(TEST_DECK_SIZE);
-    for (int i{}; i < TEST_DECK_SIZE; ++i)
-    {
-        auto data = dandan::core::CardData(
-            "Test Card " + std::to_string(i),
-            std::make_unique<dandan::mana::GenericMana>(i),
-            dandan::core::CardData::Type::Land,
-            dandan::core::CardData::SubType::Island);
-        card_data.push_back(std::move(data));
-        cards.emplace_back(&card_data.back());
-    };
 
     std::istringstream input_stream("pass\npass\n0\nquit\n");
-    dandan::core::Deck testDeck{cards};
-    dandan::core::Game game{dandan::Game::withIstream(input_stream)};
-    game.setDeck(std::move(testDeck));
+    auto deck{createTestDeck(TEST_DECK_SIZE)};
+    dandan::core::Game game{dandan::Game::withDeck(std::move(deck))};
+    game.setIstream(input_stream);
 
     game.run();
 

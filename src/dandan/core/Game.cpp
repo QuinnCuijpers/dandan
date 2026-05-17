@@ -73,6 +73,11 @@ namespace dandan::core
         return Game{input};
     }
 
+    Game Game::withDeck(core::Deck &&deck)
+    {
+        return Game(std::move(deck));
+    }
+
     void Game::run()
     {
         while (true)

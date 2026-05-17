@@ -25,7 +25,8 @@ namespace dandan::core
         }
         std::cout << "]\n";
     }
-
+    // TODO: implement builder pattern to make it easier to build
+    // OR make the game setup be a function that needs to be called explicitly
     class Game
     {
     public:
@@ -33,8 +34,8 @@ namespace dandan::core
         Game();
 #endif
 
-        explicit Game(Deck &&deck);
         static Game withIstream(std::istream &input);
+        static Game withDeck(core::Deck &&deck);
 
         [[nodiscard]] const Player &activePlayer() const
         {
@@ -89,6 +90,11 @@ namespace dandan::core
         [[nodiscard]] std::istream &istream()
         {
             return *m_input;
+        }
+
+        void setIstream(std::istream &istream)
+        {
+            m_input = &istream;
         }
 
         void changePhase(std::unique_ptr<IPhase> &&phase)
@@ -149,6 +155,7 @@ namespace dandan::core
         // Graveyard m_graveyard;
 
         explicit Game(std::istream &input);
+        explicit Game(Deck &&deck);
 
         void GameSetup();
 

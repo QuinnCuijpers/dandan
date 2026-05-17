@@ -1,5 +1,3 @@
-#include "dandan/core/CardData.h"
-#include "dandan/serialization/JsonFactory.h"
 #include <gtest/gtest.h>
 #ifdef DANDAN_BUILD_SERIALIZE
 #include "common.h"
