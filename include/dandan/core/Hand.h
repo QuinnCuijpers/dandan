@@ -31,7 +31,7 @@ namespace dandan::core
             return card;
         }
 
-        void addCard(Card card)
+        void addCard(const Card &card)
         {
             m_cards.emplace_back(card);
         }
@@ -41,10 +41,10 @@ namespace dandan::core
             std::transform(std::make_move_iterator(cards.begin()),
                            std::make_move_iterator(cards.end()),
                            std::back_inserter(m_cards),
-                           [](Card card) { return card; });
+                           [](const Card &card) { return card; });
         }
 
-        void insertAt(int index, Card card)
+        void insertAt(int index, const Card &card)
         {
             m_cards.insert(m_cards.begin() + index, card);
         }

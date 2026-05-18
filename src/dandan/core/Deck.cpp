@@ -72,7 +72,8 @@ namespace dandan::core
         for (int i = 0; i < count && i < static_cast<int>(m_cards.size()); ++i)
         {
             const Card &card = m_cards[i];
-            std::cout << "card " << i << " from the top: " << card << '\n';
+            std::cout << "card " << i
+                      << " from the top: " << card.getData().getName() << '\n';
         }
     }
 } // namespace dandan::core

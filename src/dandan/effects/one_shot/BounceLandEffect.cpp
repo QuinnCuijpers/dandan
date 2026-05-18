@@ -14,7 +14,7 @@ namespace dandan::effects
         std::getline(game.istream(), input);
         int land_index{std::stoi(input)};
         std::cout << "Bouncing land at index " << land_index << "\n";
-        auto land{game.activePlayer().battlefield().getPermanent(land_index)};
+        auto land{game.activePlayer().battlefield().getLand(land_index)};
         game.activePlayer().hand().addCard(land);
         return nullptr;
     }

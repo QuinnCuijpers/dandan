@@ -105,22 +105,32 @@ namespace dandan::core
         // Render the full TUI
         clearScreen();
 
-        // Player name and hand (top)
+        // opponents name and hand (top)
         std::cout << nonActivePlayer().getName() << "'s Hand: ";
         printCards(nonActivePlayer().hand().getCards());
         std::cout << "\n";
 
-        // Player's battlefield
-        std::cout << nonActivePlayer().getName() << "'s Battlefield: ";
-        printCards(nonActivePlayer().battlefield().getPermanents());
-        std::cout << "\n\n"; // space between battlefields
-
-        // Opponent's battlefield
-        std::cout << activePlayer().getName() << "'s Battlefield: ";
-        printCards(activePlayer().battlefield().getPermanents());
+        // Opponents player's lands
+        std::cout << nonActivePlayer().getName() << "'s Lands: ";
+        printCards(nonActivePlayer().battlefield().getLands());
         std::cout << "\n";
 
-        // Opponent's hand and name
+        // Opponent's battlefield
+        std::cout << nonActivePlayer().getName() << "'s Battlefield: ";
+        printCards(nonActivePlayer().battlefield().getCreatures());
+        std::cout << "\n\n"; // space between battlefields
+
+        // Active player's creatures
+        std::cout << activePlayer().getName() << "'s Battlefield: ";
+        printCards(activePlayer().battlefield().getCreatures());
+        std::cout << "\n";
+
+        // Active player's lands
+        std::cout << activePlayer().getName() << "'s Lands: ";
+        printCards(activePlayer().battlefield().getLands());
+        std::cout << "\n";
+
+        // Active player's hand and name
         std::cout << activePlayer().getName() << "'s Hand: ";
         printCards(activePlayer().hand().getCards());
         std::cout << "\n";

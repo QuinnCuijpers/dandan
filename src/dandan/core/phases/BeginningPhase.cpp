@@ -27,11 +27,17 @@ namespace dandan::core
         {
         case Step::Untap:
             DLOGI << "Handling untap step\n";
-            // Go through all permanents and untap them
-            // as this could trigger effects, we need to go through the event
-            // manager so we apply an untap effect to all permanents and trigger
-            // any effects that trigger on untapping although all untaps resolve
-            // simultaneous and immediately
+
+            // untap all permanents for active player
+            for (auto &[type, cards] :
+                 game().activePlayer().battlefield().permanents())
+            {
+                for (auto &card : cards)
+                {
+                    card.setTapped(false);
+                }
+            }
+
             game().activePlayer().setPlayedLandThisTurn(false);
             game().render();
             m_step = Step::Upkeep;

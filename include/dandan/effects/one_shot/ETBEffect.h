@@ -10,7 +10,7 @@ namespace dandan::effects
     class ETBEffect : public IOneShotEffect
     {
     public:
-        ETBEffect(core::Card &card) : m_card{card}
+        explicit ETBEffect(core::Card &card) : m_card{card}
         {
         }
 

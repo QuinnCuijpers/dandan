@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "ReplacementManager.h"
 #include "Stack.h"
+#include "dandan/core/Card.h"
 #include "dandan/core/PreventionManager.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
@@ -13,6 +14,7 @@
 #include "dandan/core/phases/IPhase.h"
 #include <istream>
 #include <memory>
+#include <vector>
 
 namespace dandan::core
 {
@@ -134,6 +136,8 @@ namespace dandan::core
                 auto next_phase = m_phase->handle();
                 m_phase = std::move(next_phase);
             }
+            assert(m_phase &&
+                   "Phase should never be null during handlePhase()");
         }
 
         [[nodiscard]] bool isActionPrevented(const IAction &action) const

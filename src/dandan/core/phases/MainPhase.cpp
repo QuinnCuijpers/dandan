@@ -1,11 +1,30 @@
 #include "dandan/core/phases/MainPhase.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/PlayCardAction.h"
+#include "dandan/core/phases/CombatPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include <iterator>
+#include <memory>
 
 namespace dandan::core
 {
+    MainPhase::MainPhase(Game &game)
+        : IPhase(game), m_next_phase(std::make_unique<CombatPhase>(game))
+    {
+    }
+
+    MainPhase::MainPhase(Game &game, bool pre_combat)
+        : IPhase(game), m_pre_combat_main_phase(pre_combat)
+    {
+        if (!m_pre_combat_main_phase)
+        {
+            m_next_phase = std::make_unique<EndingPhase>(game);
+        }
+        else
+        {
+            m_next_phase = std::make_unique<CombatPhase>(game);
+        }
+    }
     [[nodiscard]] std::unique_ptr<IPhase> MainPhase::handle()
     {
         std::cout << "Handling main phase\n";
@@ -31,7 +50,14 @@ namespace dandan::core
             }
             if (input == "combat")
             {
-                m_next_phase = std::make_unique<CombatPhase>(game());
+                if (m_pre_combat_main_phase)
+                {
+                    m_next_phase = std::make_unique<CombatPhase>(game());
+                }
+                else
+                {
+                    std::cout << "you can't go back to combat phase\n";
+                }
                 break;
             }
             if (input.rfind("play ", 0) == 0)
