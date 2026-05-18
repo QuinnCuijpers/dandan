@@ -17,9 +17,7 @@ namespace dandan::core
     {
 
     public:
-        // TODO: if DANDAN_SERIALIZE is not defined then the deck will be
-        // empty. for testing purposes, we should have a defaultly defined deck
-    #ifdef DANDAN_SERIALIZE
+#ifdef DANDAN_SERIALIZE
         Deck();
         explicit Deck(std::filesystem::path path);
 #else

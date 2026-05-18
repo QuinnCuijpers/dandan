@@ -10,8 +10,8 @@ namespace dandan::effects
     {
         [[nodiscard]] bool appliesTo(
             const effects::IOneShotEffect &effect) const override;
-        effects::IOneShotEffect &replace(
-            dandan::effects::IOneShotEffect &effect) override;
+        [[nodiscard]] effects::IOneShotEffect &replace(
+            dandan::effects::IOneShotEffect &effect) const override;
     };
 } // namespace dandan::effects
 

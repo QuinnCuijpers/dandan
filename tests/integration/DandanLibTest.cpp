@@ -66,8 +66,6 @@ TEST(DandanLibTest, NoDrawFirstTurn)
 TEST(DandanLibTest, Bounceland)
 {
     dandan::core::PlayerID::reset();
-    auto cards = std::vector<dandan::Card>{};
-    auto card_data = std::vector<dandan::core::CardData *>{};
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
 

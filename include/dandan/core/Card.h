@@ -46,6 +46,16 @@ namespace dandan::core
             return m_controller_id;
         }
 
+        [[nodiscard]] bool getTapped() const
+        {
+            return m_tapped;
+        }
+
+        void setTapped(bool tapped)
+        {
+            m_tapped = tapped;
+        }
+
         [[nodiscard]] const CardData &getData() const
         {
             return *m_card_data;
@@ -62,11 +72,12 @@ namespace dandan::core
             {
                 ostream << "Card{ID: " << card.m_card_id.getID()
                         << ", controller ID: " << card.m_controller_id.id()
-                        << ", data: nullptr}";
+                        << ", tapped: " << card.m_tapped << ", data: nullptr}";
                 return ostream;
             }
             ostream << "Card{ID: " << card.m_card_id.getID()
                     << ", controller ID: " << card.m_controller_id.id()
+                    << ", tapped: " << card.m_tapped
                     << ", data: " << *card.m_card_data << '}';
             return ostream;
         }
@@ -74,6 +85,7 @@ namespace dandan::core
     private:
         CardID m_card_id;
         PlayerID m_controller_id;
+        bool m_tapped{false};
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each
         // instance

@@ -10,7 +10,7 @@ namespace dandan::effects
     class BounceLandEffect : public IOneShotEffect
     {
     public:
-        std::unique_ptr<events::IEvent> apply(core::Game &game) override;
+        std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
     };
 } // namespace dandan::effects
 

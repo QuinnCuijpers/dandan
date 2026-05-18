@@ -13,21 +13,28 @@ namespace dandan::core
         while (true)
         {
             game().render();
-            std::cout << "What do you want to do? (play [card index], pass, "
-                         "or quit) ";
+            std::cout
+                << "What do you want to do? (play [card index], pass, combat "
+                   "or quit) ";
             std::string input;
             std::getline(game().istream(), input);
             if (input == "pass")
             {
                 std::cout << "Passing turn\n";
-                return std::make_unique<EndingPhase>(game());
+                m_next_phase = std::make_unique<EndingPhase>(game());
+                break;
             }
             if (input == "quit")
             {
                 std::cout << "Quitting game\n";
                 exit(0);
             }
-            else if (input.rfind("play ", 0) == 0)
+            if (input == "combat")
+            {
+                m_next_phase = std::make_unique<CombatPhase>(game());
+                break;
+            }
+            if (input.rfind("play ", 0) == 0)
             {
                 try
                 {
@@ -45,9 +52,12 @@ namespace dandan::core
                         continue;
                     }
                     auto effect{action->createEffect()};
+                    const auto &final_effect{
+                        game().replacementManager().applyReplacementEffects(
+                            *effect, game())};
                     // should add to stack and resolve later, but for now just
                     // apply immediately as we only have cards
-                    auto event{effect->apply(game())};
+                    auto event{final_effect.apply(game())};
                     game().eventManager().notify(*event, game());
                 }
                 catch (const std::exception &e)

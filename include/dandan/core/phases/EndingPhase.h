@@ -12,7 +12,7 @@ namespace dandan::core
     class EndingPhase : public IPhase
     {
     public:
-        enum Step : uint8_t
+        enum class Step : uint8_t
         {
             End,
             Cleanup,
@@ -22,6 +22,11 @@ namespace dandan::core
         explicit EndingPhase(Game &game) : IPhase(game) {};
 
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;
+
+        [[nodiscard]] std::string name() const override
+        {
+            return "Ending Phase";
+        }
 
     private:
         Step m_step{Step::End};

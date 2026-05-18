@@ -10,7 +10,7 @@ namespace dandan::effects
     {
     public:
         std::unique_ptr<events::IEvent> apply(
-            [[maybe_unused]] core::Game &game) override
+            [[maybe_unused]] core::Game &game) const override
         {
             std::cout << "Resolving SelfSacrificeEffect: Sacrificing the "
                          "source card.\n";

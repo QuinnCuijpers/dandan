@@ -2,7 +2,6 @@
 #ifdef DANDAN_SERIALIZE
 #include "dandan/effects/one_shot/BounceLandEffect.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
-#include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/effects/one_shot/PeekEffect.h"
 #include "dandan/effects/one_shot/ScryEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
@@ -38,14 +37,6 @@ namespace dandan::serialization
             auto json = nlohmann::json{{"type", "DrawEffect"},
                                        {"data", nlohmann::json::object()}};
             json["data"]["amount"] = drawEffect->m_amount;
-            return json;
-        }
-        if (const auto *etbEffect =
-                dynamic_cast<const effects::ETBEffect *>(effect))
-        {
-            auto json = nlohmann::json{{"type", "ETBEffect"},
-                                       {"data", nlohmann::json::object()}};
-            json["data"]["tapped"] = etbEffect->m_tapped;
             return json;
         }
         if ([[maybe_unused]] const auto *bounceLandEffect =
@@ -88,15 +79,6 @@ namespace dandan::serialization
         {
             return std::make_unique<effects::DrawEffect>(
                 data.at("amount").get<int>());
-        }
-        if (type == "ETBEffect")
-        {
-            auto etbEffect = std::make_unique<effects::ETBEffect>();
-            if (data.contains("tapped"))
-            {
-                etbEffect->setTapped(data.at("tapped").get<bool>());
-            }
-            return etbEffect;
         }
         if (type == "BounceLandEffect")
         {

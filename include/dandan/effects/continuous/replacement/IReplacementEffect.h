@@ -11,8 +11,8 @@ namespace dandan::effects
     public:
         [[nodiscard]] virtual bool appliesTo(
             const effects::IOneShotEffect &effect) const = 0;
-        virtual effects::IOneShotEffect &replace(
-            effects::IOneShotEffect &effect) = 0;
+        [[nodiscard]] virtual effects::IOneShotEffect &replace(
+            effects::IOneShotEffect &effect) const = 0;
     };
 
 } // namespace dandan::effects

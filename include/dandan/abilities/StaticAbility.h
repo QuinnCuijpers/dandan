@@ -13,7 +13,7 @@ namespace dandan::abilities
     class StaticAbility final : public IAbility
     {
     public:
-        enum Type : uint8_t
+        enum class Type : uint8_t
         {
             CharacteristicDefining,
             Prevention,

@@ -28,7 +28,7 @@ namespace dandan::core
     class CardData
     {
     public:
-        enum Type : std::uint8_t
+        enum class Type : std::uint8_t
         {
             Land,
             Creature,
@@ -39,7 +39,7 @@ namespace dandan::core
             Planeswalker,
         };
 
-        enum SubType : std::uint8_t
+        enum class SubType : std::uint8_t
         {
             None,
             Forest,

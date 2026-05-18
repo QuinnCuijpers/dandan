@@ -20,11 +20,11 @@ namespace dandan::effects
         }
 
         std::unique_ptr<events::IEvent> apply(
-            [[maybe_unused]] core::Game &game) override
+            [[maybe_unused]] core::Game &game) const override
         {
             std::cout << "Applying PlayCardEffect\n";
             game.activePlayer().playCard(m_card);
-            if (m_card.getData().getType() == core::CardData::Land)
+            if (m_card.getData().getType() == core::CardData::Type::Land)
             {
                 game.activePlayer().setPlayedLandThisTurn(true);
             }

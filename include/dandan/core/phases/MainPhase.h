@@ -13,6 +13,11 @@ namespace dandan::core
 
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;
 
+        [[nodiscard]] std::string name() const override
+        {
+            return "Main Phase";
+        }
+
     private:
         std::unique_ptr<IPhase> m_next_phase{
             std::make_unique<CombatPhase>(game())};

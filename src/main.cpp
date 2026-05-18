@@ -99,13 +99,13 @@ void check_card_serialize()
         std::make_unique<dandan::effects::SelfSacrificeEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        dandan::abilities::StaticAbility::Prevention,
+        dandan::abilities::StaticAbility::Type::Prevention,
         std::make_unique<dandan::effects::AttackPreventionEffect>(
             std::make_unique<dandan::conditions::ControlsIslandCondition>())));
 
     dandan::CardData test_data{"Dandan",
                                std::make_unique<dandan::BlueMana>(2),
-                               dandan::core::CardData::Creature,
+                               dandan::core::CardData::Type::Creature,
                                dandan::core::CardData::SubType::Fish,
                                std::move(abilities),
                                dandan::Stats{4, 1}};

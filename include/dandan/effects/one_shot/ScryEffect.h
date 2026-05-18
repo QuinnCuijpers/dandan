@@ -16,7 +16,7 @@ namespace dandan::effects
         {
         }
 
-        std::unique_ptr<events::IEvent> apply(core::Game &game) override;
+        std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
     };
 } // namespace dandan::effects
 

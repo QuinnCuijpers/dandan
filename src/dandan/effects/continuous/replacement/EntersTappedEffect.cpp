@@ -11,7 +11,8 @@ namespace dandan::effects
         return dynamic_cast<const effects::ETBEffect *>(&effect) != nullptr;
     }
 
-    IOneShotEffect &EntersTappedEffect::replace(IOneShotEffect &effect)
+    effects::IOneShotEffect &EntersTappedEffect::replace(
+        effects::IOneShotEffect &effect) const
     {
 
         if (appliesTo(effect))

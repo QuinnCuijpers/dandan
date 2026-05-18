@@ -16,7 +16,7 @@ namespace dandan::conditions
                            [](const core::Card &card)
                            {
                                return card.getData().getType() ==
-                                          core::CardData::Land &&
+                                          core::CardData::Type::Land &&
                                       card.getData().getSubType() ==
                                           core::CardData::SubType::Island;
                            });

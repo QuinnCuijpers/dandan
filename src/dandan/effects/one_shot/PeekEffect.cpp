@@ -6,7 +6,7 @@ namespace dandan::effects
 {
 
     std::unique_ptr<events::IEvent> PeekEffect::apply(
-        [[maybe_unused]] core::Game &game)
+        [[maybe_unused]] core::Game &game) const
     {
         std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount
                   << " cards of the library\n";

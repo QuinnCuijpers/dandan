@@ -19,7 +19,7 @@
         {                                                                      \
             formatCardName(#name),                                             \
                 std::make_unique<dandan::mana::BlueMana>(2),                   \
-                dandan::core::CardData::Creature,                              \
+                dandan::core::CardData::Type::Creature,                        \
                 dandan::core::CardData::SubType::Fish, name##_Abilities(),     \
                 dandan::core::Stats{4, 1}                                      \
         }                                                                      \
@@ -34,7 +34,7 @@ static std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
         std::make_unique<dandan::effects::SelfSacrificeEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
-        dandan::abilities::StaticAbility::Prevention,
+        dandan::abilities::StaticAbility::Type::Prevention,
         std::make_unique<dandan::effects::AttackPreventionEffect>(
             std::make_unique<dandan::conditions::ControlsIslandCondition>())));
     return abilities;

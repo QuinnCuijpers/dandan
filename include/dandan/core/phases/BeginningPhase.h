@@ -16,7 +16,7 @@ namespace dandan::core
     class BeginningPhase : public IPhase
     {
     public:
-        enum Step : uint8_t
+        enum class Step : uint8_t
         {
             Untap,
             Upkeep,
@@ -32,6 +32,11 @@ namespace dandan::core
         }
 
         std::unique_ptr<IPhase> handle() override;
+
+        [[nodiscard]] std::string name() const override
+        {
+            return "Beginning Phase";
+        }
 
     private:
         Step m_step{Step::Untap};

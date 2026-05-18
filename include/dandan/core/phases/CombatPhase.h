@@ -22,6 +22,11 @@ namespace dandan::core
         {
             throw std::runtime_error("Combat phase not implemented yet");
         }
+
+        [[nodiscard]] std::string name() const override
+        {
+            return "Combat Phase";
+        }
     };
 } // namespace dandan::core
 

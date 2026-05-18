@@ -21,7 +21,8 @@ namespace dandan::core
         std::cout << "[";
         for (const auto &card : cards)
         {
-            std::cout << card.getData().getName() << ", ";
+            std::cout << card.getData().getName() << "(" << std::boolalpha
+                      << card.getTapped() << "), ";
         }
         std::cout << "]\n";
     }

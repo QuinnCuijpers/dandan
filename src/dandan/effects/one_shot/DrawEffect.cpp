@@ -6,7 +6,7 @@ namespace dandan::effects
 {
 
     std::unique_ptr<events::IEvent> DrawEffect::apply(
-        [[maybe_unused]] core::Game &game)
+        [[maybe_unused]] core::Game &game) const
     {
         std::cout << "Applying draw effect\n";
         return nullptr;

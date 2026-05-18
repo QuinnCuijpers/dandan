@@ -4,7 +4,7 @@ namespace dandan::effects
 {
 
     std::unique_ptr<events::IEvent> ScryEffect::apply(
-        [[maybe_unused]] core::Game &game)
+        [[maybe_unused]] core::Game &game) const
     {
         // Implement the logic for applying the scry effect here.
         // This is a placeholder implementation. In a real implementation, you

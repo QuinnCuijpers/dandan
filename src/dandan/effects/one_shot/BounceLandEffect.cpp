@@ -6,7 +6,7 @@
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> BounceLandEffect::apply(
-        [[maybe_unused]] core::Game &game)
+        [[maybe_unused]] core::Game &game) const
     {
         std::cout << "Applying BounceLandEffect\n";
         std::cout << "what land index to bounce? ";
