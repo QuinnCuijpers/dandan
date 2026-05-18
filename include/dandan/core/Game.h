@@ -131,13 +131,10 @@ namespace dandan::core
 
         void handlePhase()
         {
-            if (m_phase)
-            {
-                auto next_phase = m_phase->handle();
-                m_phase = std::move(next_phase);
-            }
             assert(m_phase &&
                    "Phase should never be null during handlePhase()");
+            auto next_phase = m_phase->handle();
+            m_phase = std::move(next_phase);
         }
 
         [[nodiscard]] bool isActionPrevented(const IAction &action) const

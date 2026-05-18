@@ -2,6 +2,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/CardDrawAction.h"
 #include "dandan/core/phases/IPhase.h"
+#include "dandan/effects/one_shot/UntapEffect.h"
 #include "dandan/log.h"
 #include <memory>
 
@@ -21,26 +22,32 @@ namespace dandan::core
         return std::move(m_next_phase);
     }
 
+    void BeginningPhase::handleUntapStep()
+    {
+        DLOGI << "Handling untap step\n";
+
+        // untap all permanents for active player
+        for (auto &[type, cards] :
+             game().activePlayer().battlefield().permanents())
+        {
+            for (auto &card : cards)
+            {
+                auto effect{std::make_unique<effects::UntapEffect>(card)};
+                // TODO: throw generated events onto a queue
+                effect->apply(game());
+            }
+        }
+        game().activePlayer().setPlayedLandThisTurn(false);
+        game().render();
+        m_step = Step::Upkeep;
+    }
+
     void BeginningPhase::handleNextStep()
     {
         switch (m_step)
         {
         case Step::Untap:
-            DLOGI << "Handling untap step\n";
-
-            // untap all permanents for active player
-            for (auto &[type, cards] :
-                 game().activePlayer().battlefield().permanents())
-            {
-                for (auto &card : cards)
-                {
-                    card.setTapped(false);
-                }
-            }
-
-            game().activePlayer().setPlayedLandThisTurn(false);
-            game().render();
-            m_step = Step::Upkeep;
+            handleUntapStep();
             break;
         case Step::Upkeep:
             DLOGI << "Handling upkeep step\n";

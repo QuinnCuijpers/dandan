@@ -33,13 +33,14 @@ TEST(DandanLibTest, GameSetup)
 
     std::vector<std::string> battlefield_card_names{};
 
+    auto getCardname = [](const auto &card)
+    { return std::string(card.getData().getName()); };
+
     for (const auto &[type, cards] :
          active_player.battlefield().getPermanents())
     {
-        for (const auto &card : cards)
-        {
-            battlefield_card_names.emplace_back(card.getData().getName());
-        }
+        std::transform(cards.begin(), cards.end(),
+                       std::back_inserter(battlefield_card_names), getCardname);
     }
 
     EXPECT_EQ(card_names, battlefield_card_names);

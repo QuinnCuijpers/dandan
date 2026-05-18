@@ -44,6 +44,9 @@ namespace dandan::core
             std::make_unique<MainPhase>(game())};
 
         void handleNextStep();
+        void handleUntapStep();
+        // void handleUpkeepStep();
+        // void handleDrawStep();
     };
 } // namespace dandan::core
 #endif
