@@ -5,7 +5,6 @@
 #include "dandan/core/actions/IAction.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
-#include "dandan/log.h"
 #include <memory>
 
 namespace dandan::core
@@ -19,12 +18,7 @@ namespace dandan::core
         {
         }
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect() override
-        {
-            DLOGI << "Executing card draw action\n";
-            m_game.activePlayer().drawCard(m_game.deck());
-            return std::make_unique<effects::DrawEffect>();
-        }
+        std::unique_ptr<effects::IOneShotEffect> createEffect() override;
 
     private:
         [[maybe_unused]] Game &m_game;

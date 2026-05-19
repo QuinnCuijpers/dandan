@@ -1,8 +1,8 @@
 #ifndef DANDAN_NOISLANDSTRIGGER_H
 #define DANDAN_NOISLANDSTRIGGER_H
 
+#include "ITrigger.h"
 #include "dandan/events/NoIslandsEvent.h"
-#include "dandan/triggers/ITrigger.h"
 
 namespace dandan::triggers
 {

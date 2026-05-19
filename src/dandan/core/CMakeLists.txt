@@ -15,7 +15,9 @@ target_sources(
           PreventionManager.cpp
           PlayerID.cpp
           ReplacementManager.cpp
-          phases/CombatPhase.cpp)
+          phases/CombatPhase.cpp
+          Card.cpp
+          actions/CardDrawAction.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)
@@ -35,6 +37,7 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 endif()
 
 target_include_directories(DandanCore PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(DandanCore PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 if(DANDAN_ENABLE_LOGGING)
   target_link_libraries(DandanCore PRIVATE plog::plog)

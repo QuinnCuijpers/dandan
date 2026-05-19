@@ -1,8 +1,9 @@
 add_library(DandanOneShotEffects OBJECT)
 
 target_sources(
-  DandanOneShotEffects PRIVATE DrawEffect.cpp ETBEffect.cpp PeekEffect.cpp
-                               ScryEffect.cpp BounceLandEffect.cpp)
+  DandanOneShotEffects
+  PRIVATE DrawEffect.cpp ETBEffect.cpp PeekEffect.cpp ScryEffect.cpp
+          BounceLandEffect.cpp UntapEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)
@@ -27,6 +28,8 @@ endif()
 
 target_include_directories(DandanOneShotEffects
                            PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+target_include_directories(DandanOneShotEffects PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 if(CODE_COVERAGE)
   target_code_coverage(DandanOneShotEffects)

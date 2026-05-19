@@ -8,10 +8,18 @@
 
 namespace dandan::abilities
 {
-
+    /** A triggered ability that activates when a specific trigger applies
+     * @class TriggeredAbility
+     *
+     * @implements IAbility
+     */
     class TriggeredAbility final : public IAbility
     {
     public:
+        /** Constructor
+         * @param trigger The trigger for the ability
+         * @param effect The effect of the ability
+         */
         TriggeredAbility(
             std::unique_ptr<dandan::triggers::ITrigger> trigger,
             std::unique_ptr<dandan::effects::IOneShotEffect> effect)
@@ -26,21 +34,25 @@ namespace dandan::abilities
             return m_trigger->triggersOn(event, context);
         }
 
+        /** Get the trigger for the ability as a const pointer
+         * @return The trigger for the ability
+         */
         [[nodiscard]] const dandan::triggers::ITrigger *trigger() const
         {
             return m_trigger.get();
         }
 
+        /** Get the trigger for the ability as a mutable pointer
+         * @return The trigger for the ability
+         */
         [[nodiscard]] dandan::triggers::ITrigger *trigger()
         {
             return m_trigger.get();
         }
 
-        [[nodiscard]] const dandan::effects::IOneShotEffect *effect() const
-        {
-            return m_effect.get();
-        }
-
+        /** Get the effect of the ability
+         * @return The effect of the ability
+         */
         [[nodiscard]] const dandan::effects::IOneShotEffect *getEffect() const
         {
             return m_effect.get();

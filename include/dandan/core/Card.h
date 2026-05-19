@@ -4,7 +4,6 @@
 #include "CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
-#include "dandan/log.h"
 
 #ifdef DANDAN_SERIALIZE
 #include "CardDataFactory.h"
@@ -19,23 +18,12 @@ namespace dandan::core
     public:
 #ifdef DANDAN_SERIALIZE
         explicit Card(std::string_view card_name,
-                      PlayerID controller_id = PlayerID::getInvalidID())
-            : m_card_id(CardID::generate()), m_controller_id(controller_id),
-              m_card_data(&CardDataFactory::createCardData(card_name))
-        {
-            DLOGI << "Creating card: " << card_name
-                  << " with ID: " << m_card_id.getID() << '\n';
-        }
+                      PlayerID controller_id = PlayerID::getInvalidID());
+
 #endif
 
         explicit Card(CardData *card_data,
-                      PlayerID controller_id = PlayerID::getInvalidID())
-            : m_card_id(CardID::generate()), m_controller_id(controller_id),
-              m_card_data(card_data)
-        {
-            DLOGI << "Creating card from CardData with ID: "
-                  << m_card_id.getID() << '\n';
-        }
+                      PlayerID controller_id = PlayerID::getInvalidID());
 
         [[nodiscard]] const CardID &getID() const
         {

@@ -3,6 +3,9 @@ add_library(DandanLib)
 target_sources(DandanLib PUBLIC FILE_SET HEADERS BASE_DIRS
                                 ${CMAKE_SOURCE_DIR}/include)
 
+target_sources(DandanLib PRIVATE FILE_SET internal_headers TYPE HEADERS
+                                 BASE_DIRS ${CMAKE_SOURCE_DIR}/src)
+
 target_compile_features(DandanLib PRIVATE cxx_std_17)
 
 if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
@@ -27,14 +30,21 @@ add_subdirectory(effects)
 add_subdirectory(events)
 add_subdirectory(costs)
 add_subdirectory(conditions)
+add_subdirectory(triggers)
 
 if(DANDAN_BUILD_SERIALIZE)
   add_subdirectory(serialization)
 endif()
 
 target_link_libraries(
-  DandanLib PRIVATE DandanCore DandanAbilities DandanEffects DandanEvents
-                    DandanCosts DandanConditions)
+  DandanLib
+  PRIVATE DandanCore
+          DandanAbilities
+          DandanEffects
+          DandanEvents
+          DandanCosts
+          DandanConditions
+          DandanTriggers)
 
 if(DANDAN_BUILD_SERIALIZE)
   target_link_libraries(DandanLib PRIVATE DandanSerialize

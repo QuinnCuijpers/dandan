@@ -10,25 +10,42 @@
 
 namespace dandan::abilities
 {
-
+    /** An ability that produces mana
+     * @class ManaAbility
+     *
+     * @implements IAbility
+     */
     class ManaAbility final : public IAbility
     {
     public:
+        /** Constructor
+         * @param manaList The list of mana to produce
+         */
         explicit ManaAbility(mana::ManaList manaList)
             : m_mana_list(std::move(manaList))
         {
         }
 
+        /** Constructor
+         * @param cost The cost to activate the ability
+         * @param manaList The list of mana to produce
+         */
         ManaAbility(std::unique_ptr<costs::ICost> cost, mana::ManaList manaList)
             : m_cost(std::move(cost)), m_mana_list(std::move(manaList))
         {
         }
 
+        /** Get the mana produced by the ability
+         * @return The mana produced by the ability
+         */
         [[nodiscard]] const mana::ManaList *getMana() const
         {
             return &m_mana_list;
         }
 
+        /** Get the cost of the ability
+         * @return The cost of the ability
+         */
         [[nodiscard]] const costs::ICost *getCost() const
         {
             return m_cost.get();

@@ -8,15 +8,14 @@
             "problemMatcher": {
                 "owner": "doxygen",
                 "fileLocation": [
-                    "relative",
-                    "${workspaceFolder}"
+                    "absolute",
                 ],
                 "pattern": {
-                    "regexp": "^(.*):(\\d+):\\s+warning:\\s+(.*)$",
+                    "regexp": "^(.*):(\\d+):\\s+(warning|error):\\s+(.*)$",
                     "file": 1,
                     "line": 2,
-                    "message": 3,
-                    "severity": 4
+                    "severity": 3,
+                    "message": 4
                 }
             },
             "group": "build"
@@ -35,11 +34,11 @@
                     "${workspaceFolder}"
                 ],
                 "pattern": {
-                    "regexp": "^(.*):(\\d+):\\s+warning:\\s+(.*)$",
+                    "regexp": "^(.*):(\\d+):\\s+(warning|error):\\s+(.*)$",
                     "file": 1,
                     "line": 2,
-                    "message": 3,
-                    "severity": 4
+                    "severity": 3,
+                    "message": 4
                 }
             },
             "group": "build",
@@ -59,13 +58,12 @@
                 "--cppcheck-build-dir=.cache/cppcheck",
                 "--project=build/compile_commands.json",
                 "--std=c++17",
-                "--enable=all",
                 "--check-level=exhaustive",
                 "--suppress=missingIncludeSystem",
-                "--suppress=\\*:external/\\*",
+                "--suppress=*:external/*",
                 "--suppress=missingInclude",
                 "--inconclusive",
-                "-j 4",
+                "-j4",
             ],
             "problemMatcher": {
                 "owner": "cppcheck",
