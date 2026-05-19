@@ -15,6 +15,7 @@ namespace dandan::effects
         explicit PeekEffect(int peek_amount) : m_peek_amount(peek_amount)
         {
         }
+        // TODO: should ask for rearranging similar to scry
         std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
     };
 } // namespace dandan::effects

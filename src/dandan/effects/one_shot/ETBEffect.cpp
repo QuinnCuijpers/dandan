@@ -9,6 +9,10 @@ namespace dandan::effects
     {
         std::cout << "Applying ETBEffect\n";
         m_card.setTapped(m_tapped);
+        if (m_card.getData().getType() == core::CardData::Type::Land)
+        {
+            game.activePlayer().setPlayedLandThisTurn(true);
+        }
         game.activePlayer().battlefield().addCard(m_card);
         return std::make_unique<events::ETBEvent>(m_card.getID(),
                                                   m_card.getControllerID());

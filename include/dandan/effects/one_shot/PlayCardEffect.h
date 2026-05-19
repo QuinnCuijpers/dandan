@@ -2,7 +2,6 @@
 #define DANDAN_PLAYCARDEFFECT_H
 
 #include "dandan/core/Card.h"
-#include "dandan/core/CardData.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/events/ETBEvent.h"
@@ -23,11 +22,8 @@ namespace dandan::effects
             [[maybe_unused]] core::Game &game) const override
         {
             std::cout << "Applying PlayCardEffect\n";
+            // TODO: move to stack instead of playing the card
             game.activePlayer().playCard(m_card);
-            if (m_card.getData().getType() == core::CardData::Type::Land)
-            {
-                game.activePlayer().setPlayedLandThisTurn(true);
-            }
             return std::make_unique<events::ETBEvent>(m_card.getID(),
                                                       m_card.getControllerID());
         }
