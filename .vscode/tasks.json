@@ -60,7 +60,7 @@
                 "--std=c++17",
                 "--check-level=exhaustive",
                 "--suppress=missingIncludeSystem",
-                "--suppress=*:external/*",
+                "--suppress='*:*external*'",
                 "--suppress=missingInclude",
                 "--inconclusive",
                 "-j4",
