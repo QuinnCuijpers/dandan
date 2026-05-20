@@ -4,7 +4,10 @@
 #include "dandan/core/Game.h"
 namespace dandan::conditions
 {
-
+    /**
+     * Base interface for conditions
+     * @class ICondition
+     */
     class ICondition
     {
     public:
@@ -15,6 +18,11 @@ namespace dandan::conditions
         ICondition &operator=(ICondition &&) = delete;
         virtual ~ICondition() = default;
 
+        /**
+         * @param game The game for which to check whether the condition is
+         * satisfied.
+         * @returns true if the condition is satisfied, false otherwise.
+         */
         virtual bool isSatisfied(const core::Game &game) = 0;
     };
 
