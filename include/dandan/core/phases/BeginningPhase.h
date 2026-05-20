@@ -13,19 +13,45 @@
 
 namespace dandan::core
 {
+    /**
+     * Beginning Phase
+     * @class BeginningPhase
+     *
+     * @implements IPhase
+     */
     class BeginningPhase : public IPhase
     {
     public:
+        /**
+         * The steps of the beginning phase
+         * @enum Step
+         */
         enum class Step : uint8_t
         {
+            /// The untap step, in which the active player untaps their
+            /// permanents
             Untap,
+            /// The upkeep step, in which "at the beginning of upkeep" triggers
             Upkeep,
+            /// The draw step, in which the active player draws a card, unless
+            /// they are the starting player on the first turn, in which case
+            /// they skip the draw
             Draw,
+            /// Indicates that there are no more steps and we should proceed to
+            /// the next phase
             Done
         };
 
+        /**
+         * Constructor
+         * @param game The game instance.
+         */
         explicit BeginningPhase(Game &game) : IPhase(game) {};
 
+        /**
+         * Sets the current step
+         * @param step The step to set
+         */
         void setStep(Step step)
         {
             m_step = step;

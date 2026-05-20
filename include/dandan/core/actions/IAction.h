@@ -5,6 +5,10 @@
 #include <memory>
 namespace dandan::core
 {
+    /**
+     * Base interface for actions
+     * @class IAction
+     */
     class IAction
     {
     public:
@@ -15,6 +19,10 @@ namespace dandan::core
         IAction &operator=(IAction &&) = delete;
         virtual ~IAction() = default;
 
+        /**
+         * Creates an effect associated with this action.
+         * @return A unique pointer to the created effect.
+         */
         virtual std::unique_ptr<effects::IOneShotEffect> createEffect() = 0;
     };
 } // namespace dandan::core

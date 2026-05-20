@@ -8,6 +8,12 @@
 
 namespace dandan::core
 {
+    /**
+     * An action that represents an attack.
+     * @class AttackAction
+     *
+     * @implements IAction
+     */
     class AttackAction : public IAction
     {
     public:

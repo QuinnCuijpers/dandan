@@ -14,9 +14,18 @@ namespace dandan::core
 {
     class MainPhase;
 
+    /**
+     * Combat Phase
+     * @class CombatPhase
+     *
+     * @implements IPhase
+     */
     class CombatPhase : public IPhase
     {
     public:
+        /** Constructor
+         * @param game The game instance.
+         */
         explicit CombatPhase(Game &game);
 
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;

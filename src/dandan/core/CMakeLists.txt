@@ -17,7 +17,8 @@ target_sources(
           ReplacementManager.cpp
           phases/CombatPhase.cpp
           Card.cpp
-          actions/CardDrawAction.cpp)
+          actions/CardDrawAction.cpp
+          actions/PlayCardAction.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)
