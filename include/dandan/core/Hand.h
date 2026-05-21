@@ -31,21 +31,26 @@ namespace dandan::core
             return card;
         }
 
-        void addCard(const Card &card)
+        void addCard(Card &card)
         {
+            card.setZone(Zone::HAND);
             m_cards.emplace_back(card);
         }
 
         void addCards(std::vector<Card> cards)
         {
-            std::transform(std::make_move_iterator(cards.begin()),
-                           std::make_move_iterator(cards.end()),
-                           std::back_inserter(m_cards),
-                           [](const Card &card) { return card; });
+            auto cardToHand = [](Card &card)
+            {
+                card.setZone(Zone::HAND);
+                return card;
+            };
+            std::transform(cards.begin(), cards.end(),
+                           std::back_inserter(m_cards), cardToHand);
         }
 
-        void insertAt(int index, const Card &card)
+        void insertAt(int index, Card &card)
         {
+            card.setZone(Zone::HAND);
             m_cards.insert(m_cards.begin() + index, card);
         }
 
@@ -56,6 +61,7 @@ namespace dandan::core
             // TODO: move to graveyard instead of just removing from hand
             // awaiting implementation of graveyard
             // and gamewise src -> dest moving of cards
+            m_cards[index].setZone(Zone::GRAVEYARD);
             m_cards.erase(m_cards.begin() + index);
         }
 

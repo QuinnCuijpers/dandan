@@ -1,6 +1,8 @@
 #include "dandan/core/Card.h"
 #include "dandan/log.h"
 
+#include "dandan/core/CardDataFactory.h"
+
 namespace dandan::core
 {
 

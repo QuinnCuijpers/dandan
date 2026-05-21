@@ -116,12 +116,12 @@ namespace dandan::core
         std::cout << "\n";
 
         // Opponent's battlefield
-        std::cout << nonActivePlayer().getName() << "'s Battlefield: ";
+        std::cout << nonActivePlayer().getName() << "'s Creatures: ";
         printCards(nonActivePlayer().battlefield().getCreatures());
         std::cout << "\n\n"; // space between battlefields
 
         // Active player's creatures
-        std::cout << activePlayer().getName() << "'s Battlefield: ";
+        std::cout << activePlayer().getName() << "'s Creatures: ";
         printCards(activePlayer().battlefield().getCreatures());
         std::cout << "\n";
 
@@ -134,5 +134,7 @@ namespace dandan::core
         std::cout << activePlayer().getName() << "'s Hand: ";
         printCards(activePlayer().hand().getCards());
         std::cout << "\n";
+
+        std::cout << "Cards in deck: " << m_deck.getCards().size() << "\n";
     }
 } // namespace dandan::core

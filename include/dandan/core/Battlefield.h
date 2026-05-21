@@ -18,6 +18,7 @@ namespace dandan::core
     public:
         void addCard(Card card)
         {
+            card.setZone(Zone::BATTLEFIELD);
             m_permanents[card.getData().getType()].emplace_back(card);
         }
 

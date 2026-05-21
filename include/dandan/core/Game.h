@@ -7,6 +7,7 @@
 #include "ReplacementManager.h"
 #include "Stack.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/CardID.h"
 #include "dandan/core/PreventionManager.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
@@ -14,6 +15,7 @@
 #include "dandan/core/phases/IPhase.h"
 #include <istream>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace dandan::core
@@ -23,8 +25,8 @@ namespace dandan::core
         std::cout << "[";
         for (const auto &card : cards)
         {
-            std::cout << card.getData().getName() << "(" << std::boolalpha
-                      << card.getTapped() << "), ";
+            std::cout << card.getData().getName() << "(" << card.getID().getID()
+                      << "), ";
         }
         std::cout << "]\n";
     }
@@ -153,6 +155,7 @@ namespace dandan::core
         ReplacementManager m_replacement_manager;
         std::unique_ptr<IPhase> m_phase;
         std::istream *m_input{&std::cin};
+        std::unordered_map<CardID, Card> m_card_map;
         bool m_first_turn{true};
         // Graveyard m_graveyard;
 

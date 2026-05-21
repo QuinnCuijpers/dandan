@@ -4,9 +4,9 @@
 #include "CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/core/Zone.h"
 
 #ifdef DANDAN_SERIALIZE
-#include "CardDataFactory.h"
 #include <string_view>
 #endif
 
@@ -44,6 +44,16 @@ namespace dandan::core
             m_tapped = tapped;
         }
 
+        [[nodiscard]] Zone getZone() const
+        {
+            return m_zone;
+        }
+
+        void setZone(Zone zone)
+        {
+            m_zone = zone;
+        }
+
         [[nodiscard]] const CardData &getData() const
         {
             return *m_card_data;
@@ -74,6 +84,8 @@ namespace dandan::core
         CardID m_card_id;
         PlayerID m_controller_id;
         bool m_tapped{false};
+        Zone m_zone{Zone::LIBRARY};
+
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each
         // instance
