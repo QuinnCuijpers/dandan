@@ -39,6 +39,16 @@ namespace dandan::core
             return m_name;
         };
 
+        [[nodiscard]] const PlayerID &getID() const
+        {
+            return m_player_id;
+        }
+
+        [[nodiscard]] int getLifeTotal() const
+        {
+            return m_life_total;
+        }
+
         [[nodiscard]] Hand &hand()
         {
             return m_hand;
@@ -52,11 +62,6 @@ namespace dandan::core
         void setHand(Hand &&hand)
         {
             m_hand = std::move(hand);
-        }
-
-        [[nodiscard]] int getLifeTotal() const
-        {
-            return m_life_total;
         }
 
         [[nodiscard]] Battlefield &battlefield()

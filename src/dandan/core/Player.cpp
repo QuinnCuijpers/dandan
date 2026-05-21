@@ -14,7 +14,9 @@ namespace dandan::core
                 return;
             }
             auto card_id = library.draw();
-            m_hand.addCard(*game.getCardByID(card_id));
+            auto *card{game.getCardByID(card_id)};
+            card->setControllerID(m_player_id);
+            m_hand.addCard(*card);
         };
     }
 } // namespace dandan::core

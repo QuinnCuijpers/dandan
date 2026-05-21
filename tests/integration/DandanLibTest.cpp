@@ -1,8 +1,10 @@
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/Constants.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/GenericMana.h"
 #include <algorithm>
+#include <cstddef>
 #include <gtest/gtest.h>
 #include <memory>
 #include <sstream>
@@ -15,8 +17,8 @@ static constexpr int TEST_DECK_SIZE{20};
 TEST(DandanLibTest, GameSetup)
 {
     dandan::core::PlayerID::reset();
-    auto library{createTestDeck(TEST_DECK_SIZE)};
-    auto game{dandan::Game::withLibrary(std::move(library))};
+    auto test_cards{createTestCards(TEST_DECK_SIZE)};
+    auto game{dandan::Game::withCards(std::move(test_cards))};
 
     auto &active_player = game.activePlayer();
 
@@ -52,8 +54,8 @@ TEST(DandanLibTest, GameSetup)
 TEST(DandanLibTest, NoDrawFirstTurn)
 {
     dandan::core::PlayerID::reset();
-    auto library{createTestDeck(TEST_DECK_SIZE)};
-    auto game{dandan::Game::withLibrary(std::move(library))};
+    auto test_cards{createTestCards(TEST_DECK_SIZE)};
+    auto game{dandan::Game::withCards(std::move(test_cards))};
 
     auto &active_player = game.activePlayer();
     auto &non_active_player = game.nonActivePlayer();
@@ -86,12 +88,22 @@ TEST(DandanLibTest, Bounceland)
         dandan::core::CardData::Type::Land,
         dandan::core::CardData::SubType::Island, std::move(abilities)};
 
-    auto library = createTestDeck(TEST_DECK_SIZE, &data);
+    auto test_cards = createTestCards(TEST_DECK_SIZE, &data);
+    std::stringstream stream{};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
 
-    std::istringstream input_stream(
-        "play 0\n0\npass\nplay 0\n0\npass\n0\nquit\n");
-    dandan::core::Game game{dandan::Game::withLibrary(std::move(library))};
-    game.setIstream(input_stream);
+    for (size_t i{}; i < dandan::core::AMOUNT_PLAYERS; ++i)
+    {
+        stream << "play "
+               << game.activePlayer().hand().getCards().front().getID() << "\n";
+        stream << "0\n";
+        stream << "pass\n";
+    }
+    // second player would need to discard to handsize
+    stream << game.activePlayer().hand().getCards().back().getID() << "\n";
+    stream << "quit\n";
+
+    game.setIstream(stream);
 
     game.run();
 }
@@ -100,8 +112,8 @@ TEST(DandanLibTest, Play1LandATurnTest)
 {
 
     dandan::core::PlayerID::reset();
-    auto library{createTestDeck(TEST_DECK_SIZE)};
-    dandan::core::Game game{dandan::Game::withLibrary(std::move(library))};
+    auto test_cards{createTestCards(TEST_DECK_SIZE)};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
     std::stringstream input_stream{};
     for (int i{}; i < STARTING_HAND_SIZE; ++i)
     {
@@ -120,10 +132,19 @@ TEST(DandanLibTest, DiscardToHandSize)
 {
     dandan::core::PlayerID::reset();
 
-    std::istringstream input_stream("pass\npass\n0\nquit\n");
-    auto library{createTestDeck(TEST_DECK_SIZE)};
-    dandan::core::Game game{dandan::Game::withLibrary(std::move(library))};
-    game.setIstream(input_stream);
+    auto test_cards{createTestCards(TEST_DECK_SIZE)};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
+
+    std::stringstream stream{};
+    for (size_t i{}; i < dandan::core::AMOUNT_PLAYERS; ++i)
+    {
+        stream << "pass\n";
+    }
+    // second player would need to discard to handsize
+    stream << game.activePlayer().hand().getCards().back().getID() << "\n";
+    stream << "quit\n";
+
+    game.setIstream(stream);
 
     game.run();
 

@@ -32,7 +32,7 @@ namespace dandan::core
 #endif
 
         static Game withIstream(std::istream &input);
-        static Game withLibrary(core::Library &&library);
+        static Game withCards(std::vector<Card> cards);
 
         [[nodiscard]] const Player &activePlayer() const
         {
@@ -157,7 +157,7 @@ namespace dandan::core
         [[nodiscard]] Card *getCardByID(CardID card_id);
         [[nodiscard]] Card *getCardByID(int card_id);
 
-        void moveCardFromZone(Card &card);
+        void moveCardFromZone(const Card &card);
 
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{
@@ -177,10 +177,11 @@ namespace dandan::core
         std::unordered_map<CardID, Card *> m_card_map;
         std::filesystem::path m_card_data_path{DANDAN_DECKLIST};
         bool m_first_turn{true};
+        // PlayerID m_priority_player_id{PlayerID::getInvalidID()};
         // Graveyard m_graveyard;
 
         explicit Game(std::istream &input);
-        explicit Game(Library &&library);
+        explicit Game(std::vector<Card> cards);
 
         void GameSetup();
 

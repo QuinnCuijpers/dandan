@@ -4,7 +4,7 @@
 #include "dandan/core/CardData.h"
 #include "dandan/dandan.h"
 
-inline dandan::core::Library createTestDeck(
+inline std::vector<dandan::Card> createTestCards(
     int amount_cards, dandan::core::CardData *cardData = nullptr)
 {
     if (cardData == nullptr)
@@ -28,7 +28,7 @@ inline dandan::core::Library createTestDeck(
         card_data.push_back(cardData);
         cards.emplace_back(card_data.back());
     };
-    return dandan::core::Library{cards};
+    return cards;
 }
 
 #endif

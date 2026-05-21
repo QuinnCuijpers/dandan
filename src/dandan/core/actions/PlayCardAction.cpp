@@ -18,6 +18,17 @@ namespace dandan::core
                 zoneToString(card->getZone()));
         }
 
+        // TODO: add priority system and check if player has priority here
+        // instead of just checking if the card is controlled by the active
+        // player
+        if (card->getControllerID().id() != m_game.activePlayer().getID().id())
+        {
+            throw std::runtime_error(
+                "Only active player can play cards, card is controlled by "
+                "player " +
+                std::to_string(card->getControllerID().id()));
+        }
+
         m_game.moveCardFromZone(*card);
 
         const auto &data = card->getData();

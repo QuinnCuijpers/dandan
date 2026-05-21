@@ -67,12 +67,6 @@ namespace dandan::core
                            std::back_inserter(m_cards), cardToHand);
         }
 
-        void insertAt(int index, Card &card)
-        {
-            card.setZone(Zone::HAND);
-            m_cards.insert(m_cards.begin() + index, card.getID());
-        }
-
         void discardCard(Card &card)
         {
             std::cout << "Discarding card " << card.getData().getName() << '\n';

@@ -6,13 +6,18 @@
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
 #include "dandan/log.h"
-#include <fstream>
 #include <memory>
 #include <random>
 #include <string>
+#include <utility>
+
+#ifdef DANDAN_SERIALIZE
+#include <fstream>
+#endif
 
 namespace dandan::core
 {
+#ifdef DANDAN_SERIALIZE
     void Game::loadCards(const std::filesystem::path &path)
     {
         std::ifstream file{path};
@@ -37,10 +42,13 @@ namespace dandan::core
             }
         }
     }
+#endif
 
     void Game::GameSetup()
     {
+#ifdef DANDAN_SERIALIZE
         loadCards(m_card_data_path);
+#endif
 
         for (auto &card : m_cards)
         {
@@ -90,9 +98,10 @@ namespace dandan::core
     }
 #endif
 
-    Game::Game(Library &&library) : m_library{std::move(library)}
+    Game::Game(std::vector<Card> cards)
+        : m_cards{std::deque<Card>{cards.begin(), cards.end()}}
     {
-        DLOGI << "Game constructed with explicit library\n";
+        DLOGI << "Game constructed with explicit cards\n";
         GameSetup();
     }
 
@@ -106,9 +115,9 @@ namespace dandan::core
         return Game{input};
     }
 
-    Game Game::withLibrary(core::Library &&library)
+    Game Game::withCards(std::vector<Card> cards)
     {
-        return Game(std::move(library));
+        return Game(std::move(cards));
     }
 
     void Game::run()
@@ -162,7 +171,7 @@ namespace dandan::core
         return getCardByID(CardID::fromInt(card_id));
     }
 
-    void Game::moveCardFromZone(Card &card)
+    void Game::moveCardFromZone(const Card &card)
     {
         switch (card.getZone())
         {
