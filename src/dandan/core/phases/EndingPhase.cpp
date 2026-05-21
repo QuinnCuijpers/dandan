@@ -37,11 +37,12 @@ namespace dandan::core
                         << " cards in hand, but your maximum hand size is "
                         << game().activePlayer().maxHandSize()
                         << ". Please choose a card to discard: ";
-                    int card_index{-1};
-                    game().istream() >> card_index;
+                    int card_id{-1};
+                    game().istream() >> card_id;
                     try
                     {
-                        game().activePlayer().discardCard(card_index);
+                        auto *card{game().getCardByID(card_id)};
+                        game().activePlayer().discardCard(*card);
                     }
                     catch (const std::exception &e)
                     {

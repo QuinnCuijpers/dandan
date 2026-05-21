@@ -2,8 +2,9 @@
 #define DANDAN_PLAYER_H
 
 #include "dandan/core/Battlefield.h"
-#include "dandan/core/Deck.h"
+#include "dandan/core/Card.h"
 #include "dandan/core/Hand.h"
+#include "dandan/core/Library.h"
 #include "dandan/mana/Mana.h"
 #include <cstddef>
 
@@ -12,6 +13,9 @@ const static int STARTING_LIFE_TOTAL{20};
 
 namespace dandan::core
 {
+
+    class Game;
+
     class Player
     {
 
@@ -80,35 +84,20 @@ namespace dandan::core
             return m_max_hand_size;
         }
 
-        void drawCard(Deck &deck)
-        {
-            if (deck.getCards().empty())
-            {
-                std::cout << "Deck is empty, cannot draw card\n";
-                return;
-            }
-            auto card = deck.draw()[0];
-            card.setControllerID(m_player_id);
-            m_hand.addCards({card});
-        }
+        void drawCard(Library &library, Game &game);
 
-        void playCard(const Card &card)
+        void playCard(Card &card)
         {
             std::cout << "Player is playing card " << card.getData().getName()
                       << " with ID " << card.getID().getID() << '\n';
             m_battlefield.addCard(card);
         }
 
-        void playCard(int index)
+        void discardCard(Card &card)
         {
-            std::cout << "Player is playing card at index " << index << '\n';
-            m_battlefield.addCard(m_hand.getCard(index));
-        }
-
-        void discardCard(int index)
-        {
-            std::cout << "Player is discarding card at index " << index << '\n';
-            m_hand.discardCard(index);
+            std::cout << "Player is discarding card "
+                      << card.getData().getName() << '\n';
+            m_hand.discardCard(card);
         }
 
     private:

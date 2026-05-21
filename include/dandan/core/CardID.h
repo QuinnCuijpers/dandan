@@ -19,6 +19,14 @@ namespace dandan::core
             static int current_id{0};
             return CardID{current_id++};
         }
+
+        /// Create a CardID from an integer.
+        /// As this can lead to collisions, use it with caution.
+        static CardID fromInt(int card_id)
+        {
+            return CardID{card_id};
+        }
+
         bool operator==(const CardID &other) const
         {
             return m_id == other.m_id;

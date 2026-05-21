@@ -15,26 +15,29 @@ static constexpr int TEST_DECK_SIZE{20};
 TEST(DandanLibTest, GameSetup)
 {
     dandan::core::PlayerID::reset();
-    auto deck{createTestDeck(TEST_DECK_SIZE)};
-    auto game{dandan::Game::withDeck(std::move(deck))};
+    auto library{createTestDeck(TEST_DECK_SIZE)};
+    auto game{dandan::Game::withLibrary(std::move(library))};
 
     auto &active_player = game.activePlayer();
 
     std::vector<std::string> card_names;
-    std::transform(active_player.hand().getCards().begin(),
-                   active_player.hand().getCards().end(),
-                   std::back_inserter(card_names), [](const auto &card)
-                   { return std::string(card.getData().getName()); });
+    std::transform(
+        active_player.hand().getCards().begin(),
+        active_player.hand().getCards().end(), std::back_inserter(card_names),
+        [&game](const auto &card)
+        { return std::string(game.getCardByID(card)->getData().getName()); });
 
     for (int i{}; i < STARTING_HAND_SIZE; ++i)
     {
-        active_player.playCard(0);
+        auto card_id = active_player.hand().getCards().front();
+        auto *card = game.getCardByID(card_id);
+        active_player.playCard(*card);
     }
 
     std::vector<std::string> battlefield_card_names{};
 
-    auto getCardname = [](const auto &card)
-    { return std::string(card.getData().getName()); };
+    auto getCardname = [&game](const auto &card)
+    { return std::string(game.getCardByID(card)->getData().getName()); };
 
     for (const auto &[type, cards] :
          active_player.battlefield().getPermanents())
@@ -49,8 +52,8 @@ TEST(DandanLibTest, GameSetup)
 TEST(DandanLibTest, NoDrawFirstTurn)
 {
     dandan::core::PlayerID::reset();
-    auto deck{createTestDeck(TEST_DECK_SIZE)};
-    auto game{dandan::Game::withDeck(std::move(deck))};
+    auto library{createTestDeck(TEST_DECK_SIZE)};
+    auto game{dandan::Game::withLibrary(std::move(library))};
 
     auto &active_player = game.activePlayer();
     auto &non_active_player = game.nonActivePlayer();
@@ -83,11 +86,11 @@ TEST(DandanLibTest, Bounceland)
         dandan::core::CardData::Type::Land,
         dandan::core::CardData::SubType::Island, std::move(abilities)};
 
-    auto deck = createTestDeck(TEST_DECK_SIZE, &data);
+    auto library = createTestDeck(TEST_DECK_SIZE, &data);
 
     std::istringstream input_stream(
         "play 0\n0\npass\nplay 0\n0\npass\n0\nquit\n");
-    dandan::core::Game game{dandan::Game::withDeck(std::move(deck))};
+    dandan::core::Game game{dandan::Game::withLibrary(std::move(library))};
     game.setIstream(input_stream);
 
     game.run();
@@ -97,8 +100,8 @@ TEST(DandanLibTest, Play1LandATurnTest)
 {
 
     dandan::core::PlayerID::reset();
-    auto deck{createTestDeck(TEST_DECK_SIZE)};
-    dandan::core::Game game{dandan::Game::withDeck(std::move(deck))};
+    auto library{createTestDeck(TEST_DECK_SIZE)};
+    dandan::core::Game game{dandan::Game::withLibrary(std::move(library))};
     std::stringstream input_stream{};
     for (int i{}; i < STARTING_HAND_SIZE; ++i)
     {
@@ -118,8 +121,8 @@ TEST(DandanLibTest, DiscardToHandSize)
     dandan::core::PlayerID::reset();
 
     std::istringstream input_stream("pass\npass\n0\nquit\n");
-    auto deck{createTestDeck(TEST_DECK_SIZE)};
-    dandan::core::Game game{dandan::Game::withDeck(std::move(deck))};
+    auto library{createTestDeck(TEST_DECK_SIZE)};
+    dandan::core::Game game{dandan::Game::withLibrary(std::move(library))};
     game.setIstream(input_stream);
 
     game.run();

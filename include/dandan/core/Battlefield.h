@@ -9,17 +9,17 @@
 namespace dandan::core
 {
 
-    using Permanent = Card;
+    using Permanent = CardID;
     using PermanentMap =
         std::unordered_map<CardData::Type, std::vector<Permanent>>;
 
     class Battlefield
     {
     public:
-        void addCard(Card card)
+        void addCard(Card &card)
         {
             card.setZone(Zone::BATTLEFIELD);
-            m_permanents[card.getData().getType()].emplace_back(card);
+            m_permanents[card.getData().getType()].emplace_back(card.getID());
         }
 
         [[nodiscard]] PermanentMap &permanents()

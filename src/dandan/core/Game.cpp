@@ -6,14 +6,47 @@
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
 #include "dandan/log.h"
+#include <fstream>
 #include <memory>
 #include <random>
 #include <string>
 
 namespace dandan::core
 {
+    void Game::loadCards(const std::filesystem::path &path)
+    {
+        std::ifstream file{path};
+        while (file)
+        {
+            std::string line;
+            std::getline(file, line);
+            if (!line.empty())
+            {
+                std::stringstream stream{line};
+                std::string name;
+                int amount{};
+                stream >> amount;
+                stream.ignore(1, ' '); // Ignore the space after the amount
+                std::getline(stream, name);
+                std::cout << "Adding " << amount << " copies of " << name
+                          << " to the library.\n";
+                for (int i = 0; i < amount; ++i)
+                {
+                    m_cards.emplace_back(name);
+                }
+            }
+        }
+    }
+
     void Game::GameSetup()
     {
+        loadCards(m_card_data_path);
+
+        for (auto &card : m_cards)
+        {
+            m_card_map.emplace(card.getID(), &card);
+            m_library.addCard(card);
+        }
 
         auto no_draw_starting_player{
             std::make_unique<effects::DrawPreventionEffect>(
@@ -41,8 +74,8 @@ namespace dandan::core
 
         for (int i{}; i < STARTING_HAND_SIZE; ++i)
         {
-            activePlayer().drawCard(m_deck);
-            nonActivePlayer().drawCard(m_deck);
+            activePlayer().drawCard(m_library, *this);
+            nonActivePlayer().drawCard(m_library, *this);
         }
         // TODO: Implement mulligan rules
         DLOGI << "Game constructed\n";
@@ -57,9 +90,9 @@ namespace dandan::core
     }
 #endif
 
-    Game::Game(Deck &&deck) : m_deck{std::move(deck)}
+    Game::Game(Library &&library) : m_library{std::move(library)}
     {
-        DLOGI << "Game constructed with explicit deck\n";
+        DLOGI << "Game constructed with explicit library\n";
         GameSetup();
     }
 
@@ -73,9 +106,9 @@ namespace dandan::core
         return Game{input};
     }
 
-    Game Game::withDeck(core::Deck &&deck)
+    Game Game::withLibrary(core::Library &&library)
     {
-        return Game(std::move(deck));
+        return Game(std::move(library));
     }
 
     void Game::run()
@@ -92,6 +125,56 @@ namespace dandan::core
             m_active_player_index =
                 (m_active_player_index + 1) % AMOUNT_PLAYERS;
             changePhase(std::make_unique<BeginningPhase>(*this));
+        }
+    }
+
+    const Card *Game::getCardByID(CardID card_id) const
+    {
+        auto iter = m_card_map.find(card_id);
+        if (iter == m_card_map.end())
+        {
+            throw std::runtime_error("Card with ID " +
+                                     std::to_string(card_id.getID()) +
+                                     " doesn't exist in the game");
+        }
+        return iter->second;
+    }
+
+    const Card *Game::getCardByID(int card_id) const
+    {
+        return getCardByID(CardID::fromInt(card_id));
+    }
+
+    Card *Game::getCardByID(CardID card_id)
+    {
+        auto iter = m_card_map.find(card_id);
+        if (iter == m_card_map.end())
+        {
+            throw std::runtime_error("Card with ID " +
+                                     std::to_string(card_id.getID()) +
+                                     " doesn't exist in the game");
+        }
+        return iter->second;
+    }
+
+    Card *Game::getCardByID(int card_id)
+    {
+        return getCardByID(CardID::fromInt(card_id));
+    }
+
+    void Game::moveCardFromZone(Card &card)
+    {
+        switch (card.getZone())
+        {
+        case Zone::HAND:
+            activePlayer().hand().removeCard(card);
+            break;
+        case Zone::LIBRARY:
+        case Zone::BATTLEFIELD:
+        case Zone::GRAVEYARD:
+        case Zone::EXILE:
+        case Zone::STACK:
+            break;
         }
     }
 
@@ -135,6 +218,7 @@ namespace dandan::core
         printCards(activePlayer().hand().getCards());
         std::cout << "\n";
 
-        std::cout << "Cards in deck: " << m_deck.getCards().size() << "\n";
+        std::cout << "Cards in library: " << m_library.getCards().size()
+                  << "\n";
     }
 } // namespace dandan::core

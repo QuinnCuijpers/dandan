@@ -64,25 +64,28 @@ namespace dandan::core
             {
                 try
                 {
-                    int card_index =
+                    int card_id =
                         std::stoi(input.substr(std::size("play ") - 1));
-                    // moves card out of hand
-                    auto card{game().activePlayer().hand().getCard(card_index)};
-                    auto action =
-                        std::make_unique<PlayCardAction>(card, game());
+
+                    // does not move the card out of the previous zone
+                    auto action = std::make_unique<PlayCardAction>(
+                        CardID::fromInt(card_id), game());
+
                     if (game().isActionPrevented(*action))
                     {
                         std::cout << "Action prevented\n";
-                        // return card to hand since action was prevented
-                        game().activePlayer().hand().insertAt(card_index, card);
                         continue;
                     }
+
+                    // action is allowed so we should remove the card from its
+                    // previous zone
+                    // game().moveCardFromZone(card);
+
                     auto effect{action->createEffect()};
                     const auto &final_effect{
                         game().replacementManager().applyReplacementEffects(
                             *effect, game())};
-                    // should add to stack and resolve later, but for now just
-                    // apply immediately as we only have cards
+
                     auto event{final_effect.apply(game())};
                     game().eventManager().notify(*event, game());
                 }

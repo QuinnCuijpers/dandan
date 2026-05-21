@@ -32,7 +32,8 @@ namespace dandan::core
         {
             for (auto &card : cards)
             {
-                auto effect{std::make_unique<effects::UntapEffect>(card)};
+                auto *cardp{game().getCardByID(card)};
+                auto effect{std::make_unique<effects::UntapEffect>(*cardp)};
                 // TODO: throw generated events onto a queue
                 effect->apply(game());
             }

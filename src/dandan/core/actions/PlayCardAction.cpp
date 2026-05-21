@@ -1,5 +1,6 @@
 #include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/abilities/StaticAbility.h"
+#include "dandan/core/Zone.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/effects/one_shot/PlayCardEffect.h"
 
@@ -8,15 +9,26 @@ namespace dandan::core
 
     std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect()
     {
+        // TODO: flashback will break this, but for now itll be fine
+        auto *card{m_game.getCardByID(m_card_id)};
+        if (card->getZone() != Zone::HAND)
+        {
+            throw std::runtime_error(
+                "Card must be in hand to be played instead of in " +
+                zoneToString(card->getZone()));
+        }
+
+        m_game.moveCardFromZone(*card);
+
+        const auto &data = card->getData();
         // lands dont use the stack and their effects are applied
         // immediately
-        const auto &data = m_card.getData();
         if (data.getType() == CardData::Type::Land)
         {
             std::cout << "Playing card: " << data.getName() << '\n';
-            m_game.eventManager().subscribe(m_card);
+            m_game.eventManager().subscribe(*card);
 
-            for (const auto &ability : m_card.getData().getAbilities())
+            for (const auto &ability : card->getData().getAbilities())
             {
                 if (const auto *static_ability =
                         dynamic_cast<const abilities::StaticAbility *>(
@@ -38,7 +50,7 @@ namespace dandan::core
             std::cout << m_game.eventManager().size()
                       << " effects subscribed\n";
             // lands dont use the stack and thus immediately enter
-            return std::make_unique<effects::ETBEffect>(m_card);
+            return std::make_unique<effects::ETBEffect>(*card);
         }
 
         // add paying mana cost
@@ -46,7 +58,7 @@ namespace dandan::core
         if (data.getType() == CardData::Type::Creature)
         {
             std::cout << "Playing card: " << data.getName() << '\n';
-            return std::make_unique<effects::PlayCardEffect>(m_card);
+            return std::make_unique<effects::PlayCardEffect>(*card);
         }
 
         throw std::runtime_error(

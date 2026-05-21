@@ -10,7 +10,14 @@ namespace dandan::effects
     {
         std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount
                   << " cards of the library\n";
-        game.deck().peek(3);
+        auto cards{game.library().peek(m_peek_amount)};
+        std::cout << "Peeked cards: [ ";
+        for (const auto &card : cards)
+        {
+            auto *cardp{game.getCardByID(card)};
+            std::cout << cardp->getData().getName() << ", ";
+        }
+        std::cout << " ]\n";
         return nullptr;
     }
 

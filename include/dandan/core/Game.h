@@ -1,18 +1,20 @@
 #ifndef DANDAN_GAME_H
 #define DANDAN_GAME_H
 
-#include "Deck.h"
 #include "EventManager.h"
 #include "Player.h"
 #include "ReplacementManager.h"
 #include "Stack.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/Constants.h"
+#include "dandan/core/Library.h"
 #include "dandan/core/PreventionManager.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
+#include <filesystem>
 #include <istream>
 #include <memory>
 #include <unordered_map>
@@ -20,16 +22,6 @@
 
 namespace dandan::core
 {
-    inline void printCards(const std::vector<Card> &cards)
-    {
-        std::cout << "[";
-        for (const auto &card : cards)
-        {
-            std::cout << card.getData().getName() << "(" << card.getID().getID()
-                      << "), ";
-        }
-        std::cout << "]\n";
-    }
     // TODO: implement builder pattern to make it easier to build
     // OR make the game setup be a function that needs to be called explicitly
     class Game
@@ -40,7 +32,7 @@ namespace dandan::core
 #endif
 
         static Game withIstream(std::istream &input);
-        static Game withDeck(core::Deck &&deck);
+        static Game withLibrary(core::Library &&library);
 
         [[nodiscard]] const Player &activePlayer() const
         {
@@ -62,9 +54,9 @@ namespace dandan::core
             return m_players.at(1 - m_active_player_index);
         }
 
-        [[nodiscard]] Deck &deck()
+        [[nodiscard]] Library &library()
         {
-            return m_deck;
+            return m_library;
         }
 
         [[nodiscard]] Stack &stack()
@@ -107,9 +99,9 @@ namespace dandan::core
             m_phase = std::move(phase);
         }
 
-        void setDeck(Deck &&deck)
+        void setLibrary(Library &&library)
         {
-            m_deck = std::move(deck);
+            m_library = std::move(library);
         }
 
         [[nodiscard]] bool isFirstTurn() const
@@ -118,6 +110,22 @@ namespace dandan::core
         }
 
         void run();
+
+        void printCards(const std::vector<CardID> &card_ids) const
+        {
+            std::cout << "[";
+            for (const auto &card_id : card_ids)
+            {
+                const auto *card = getCardByID(card_id);
+                if (card != nullptr)
+                {
+                    std::cout << card->getData().getName() << "("
+                              << card->getID().getID() << ", "
+                              << card->getZone() << "), ";
+                }
+            }
+            std::cout << "]\n";
+        }
 
         void render() const;
 
@@ -144,25 +152,39 @@ namespace dandan::core
             return m_prevention_manager.isPrevented(action, *this);
         }
 
+        [[nodiscard]] const Card *getCardByID(CardID card_id) const;
+        [[nodiscard]] const Card *getCardByID(int card_id) const;
+        [[nodiscard]] Card *getCardByID(CardID card_id);
+        [[nodiscard]] Card *getCardByID(int card_id);
+
+        void moveCardFromZone(Card &card);
+
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{
             Player(DEFAULT_NAMES.at(0)), Player(DEFAULT_NAMES.at(1))};
         int m_active_player_index{};
-        Deck m_deck;
+        Library m_library;
         Stack m_stack;
         EventManager m_event_manager;
         PreventionManager m_prevention_manager;
         ReplacementManager m_replacement_manager;
         std::unique_ptr<IPhase> m_phase;
         std::istream *m_input{&std::cin};
-        std::unordered_map<CardID, Card> m_card_map;
+        // stable container for all cards in the game
+        std::deque<Card> m_cards;
+        // map from card ID to pointer to card in m_cards for O(1) access to
+        // cards by ID
+        std::unordered_map<CardID, Card *> m_card_map;
+        std::filesystem::path m_card_data_path{DANDAN_DECKLIST};
         bool m_first_turn{true};
         // Graveyard m_graveyard;
 
         explicit Game(std::istream &input);
-        explicit Game(Deck &&deck);
+        explicit Game(Library &&library);
 
         void GameSetup();
+
+        void loadCards(const std::filesystem::path &path);
 
         static void clearScreen();
     };

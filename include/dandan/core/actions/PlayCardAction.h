@@ -1,7 +1,6 @@
 #ifndef DANDAN_PLAYCARDACTION_H
 #define DANDAN_PLAYCARDACTION_H
 
-#include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -20,10 +19,11 @@ namespace dandan::core
     public:
         /**
          * Constructs a new play card action.
-         * @param card The card to play.
+         * @param card_id The card_id of the card to play.
          * @param game The game instance.
          */
-        PlayCardAction(Card &card, Game &game) : m_card{card}, m_game{game}
+        PlayCardAction(CardID card_id, Game &game)
+            : m_card_id{card_id}, m_game{game}
         {
         }
 
@@ -34,7 +34,7 @@ namespace dandan::core
         // just pass it in as a parameter to createEffect, as the action itself
         // doesn't need to know about the game, only the effect does when it
         // gets applied.
-        Card m_card;
+        CardID m_card_id;
         Game &m_game;
     };
 } // namespace dandan::core

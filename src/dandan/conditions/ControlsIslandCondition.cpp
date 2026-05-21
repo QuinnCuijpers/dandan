@@ -9,10 +9,12 @@ namespace dandan::conditions
 {
     bool ControlsIslandCondition::isSatisfied(const core::Game &game)
     {
-        auto island_filter = [](const core::Card &card)
+        auto island_filter = [&game](const core::CardID &card_id)
         {
-            return card.getData().getType() == core::CardData::Type::Land &&
-                   card.getData().getSubType() ==
+            const auto *card = game.getCardByID(card_id);
+            return card &&
+                   card->getData().getType() == core::CardData::Type::Land &&
+                   card->getData().getSubType() ==
                        core::CardData::SubType::Island;
         };
         const core::Player &current_player = game.nonActivePlayer();

@@ -6,11 +6,12 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> ScryEffect::apply(
         [[maybe_unused]] core::Game &game) const
     {
-        auto cards = game.deck().draw(m_scry_amount);
+        auto cards = game.library().draw(m_scry_amount);
         std::cout << "Scryed cards: [ ";
         for (const auto &card : cards)
         {
-            std::cout << card.getData().getName() << " ,";
+            auto *cardp{game.getCardByID(card)};
+            std::cout << cardp->getData().getName() << " ,";
         }
         std::cout << " ]\n";
 
@@ -44,12 +45,12 @@ namespace dandan::effects
             std::getline(game.istream(), input);
             if (input == "top")
             {
-                game.deck().getCards().push_front(cards[card_index]);
+                game.library().getCards().push_front(cards[card_index]);
                 cards.erase(cards.begin() + card_index);
             }
             else if (input == "bottom")
             {
-                game.deck().getCards().push_back(cards[card_index]);
+                game.library().getCards().push_back(cards[card_index]);
                 cards.erase(cards.begin() + card_index);
             }
             else
