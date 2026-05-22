@@ -5,6 +5,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/TapCost.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/mana/ManaList.h"
 #include <memory>
 
@@ -38,7 +39,7 @@ namespace dandan::abilities
         /** Get the mana produced by the ability
          * @return The mana produced by the ability
          */
-        [[nodiscard]] const mana::ManaList *getMana() const
+        [[nodiscard]] const mana::ManaList *getManaList() const
         {
             return &m_mana_list;
         }
@@ -51,7 +52,13 @@ namespace dandan::abilities
             return m_cost.get();
         }
 
-        void resolve(core::Game &game, AbilityContext context) const override;
+        std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game, AbilityContext context) const override;
+
+        [[nodiscard]] bool canActivate() const override
+        {
+            return true; // TODO: should check if the cost can be paid
+        }
 
     private:
         std::unique_ptr<costs::ICost> m_cost{

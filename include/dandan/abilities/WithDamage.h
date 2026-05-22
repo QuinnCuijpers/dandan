@@ -43,7 +43,13 @@ namespace dandan::abilities
             return m_ability->appliesTo(event, context);
         }
 
-        void resolve(core::Game &game, AbilityContext context) const override;
+        std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game, AbilityContext context) const override;
+
+        [[nodiscard]] bool canActivate() const override
+        {
+            return m_ability->canActivate();
+        }
 
     private:
         int m_damage{1};

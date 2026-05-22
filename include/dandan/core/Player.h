@@ -89,6 +89,16 @@ namespace dandan::core
             return m_max_hand_size;
         }
 
+        [[nodiscard]] mana::Mana &manaPool()
+        {
+            return m_mana_pool;
+        }
+
+        [[nodiscard]] const mana::Mana &manaPool() const
+        {
+            return m_mana_pool;
+        }
+
         void drawCard(Library &library, Game &game);
 
         void playCard(Card &card)
@@ -111,7 +121,7 @@ namespace dandan::core
         int m_life_total{STARTING_LIFE_TOTAL};
         Battlefield m_battlefield;
         Hand m_hand;
-        mana::ManaMap m_mana_pool;
+        mana::Mana m_mana_pool;
         bool m_played_land_this_turn{false};
         size_t m_max_hand_size{STARTING_HAND_SIZE};
     };

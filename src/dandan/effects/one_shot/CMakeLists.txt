@@ -3,7 +3,8 @@ add_library(DandanOneShotEffects OBJECT)
 target_sources(
   DandanOneShotEffects
   PRIVATE DrawEffect.cpp ETBEffect.cpp PeekEffect.cpp ScryEffect.cpp
-          BounceLandEffect.cpp UntapEffect.cpp)
+          BounceLandEffect.cpp UntapEffect.cpp
+          AddManaEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

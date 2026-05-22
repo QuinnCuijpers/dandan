@@ -1,5 +1,6 @@
 #include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/abilities/StaticAbility.h"
+#include "dandan/core/Game.h"
 #include "dandan/core/Zone.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/effects/one_shot/PlayCardEffect.h"
@@ -7,10 +8,11 @@
 namespace dandan::core
 {
 
-    std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect()
+    std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect(
+        core::Game &game)
     {
         // TODO: flashback will break this, but for now itll be fine
-        auto *card{m_game.getCardByID(m_card_id)};
+        auto *card{game.getCardByID(m_card_id)};
         if (card->getZone() != Zone::HAND)
         {
             throw std::runtime_error(
@@ -21,7 +23,7 @@ namespace dandan::core
         // TODO: add priority system and check if player has priority here
         // instead of just checking if the card is controlled by the active
         // player
-        if (card->getControllerID().id() != m_game.activePlayer().getID().id())
+        if (card->getControllerID().id() != game.activePlayer().getID().id())
         {
             throw std::runtime_error(
                 "Only active player can play cards, card is controlled by "
@@ -29,7 +31,7 @@ namespace dandan::core
                 std::to_string(card->getControllerID().id()));
         }
 
-        m_game.moveCardFromZone(*card);
+        game.moveCardFromZone(*card);
 
         const auto &data = card->getData();
         // lands dont use the stack and their effects are applied
@@ -37,7 +39,7 @@ namespace dandan::core
         if (data.getType() == CardData::Type::Land)
         {
             std::cout << "Playing card: " << data.getName() << '\n';
-            m_game.eventManager().subscribe(*card);
+            game.eventManager().subscribe(*card);
 
             for (const auto &ability : card->getData().getAbilities())
             {
@@ -53,13 +55,12 @@ namespace dandan::core
                                 static_ability->getEffect());
                         std::cout << "Subscribing replacement ability to "
                                      "replacement manager\n";
-                        m_game.replacementManager().subscribe(
+                        game.replacementManager().subscribe(
                             replacement_ability);
                     }
                 }
             }
-            std::cout << m_game.eventManager().size()
-                      << " effects subscribed\n";
+            std::cout << game.eventManager().size() << " effects subscribed\n";
             // lands dont use the stack and thus immediately enter
             return std::make_unique<effects::ETBEffect>(*card);
         }

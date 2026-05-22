@@ -28,11 +28,8 @@ namespace dandan::abilities
         {
         }
 
-        /** Resolve the ability
-         * @param game The game object to mutate when the ability is resolving
-         * @param context The context for the ability's execution
-         */
-        void resolve(core::Game &game, AbilityContext context) const override;
+        std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game, AbilityContext context) const override;
 
         /** Get the cost of the ability
          * @return The cost of the ability
@@ -48,6 +45,12 @@ namespace dandan::abilities
         [[nodiscard]] const effects::IOneShotEffect *getEffect() const
         {
             return m_effect.get();
+        }
+
+        [[nodiscard]] bool canActivate() const override
+        {
+            // TODO: should check if the cost can be paid
+            return true;
         }
 
     private:

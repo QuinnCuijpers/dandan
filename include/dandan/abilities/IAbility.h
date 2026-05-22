@@ -2,6 +2,8 @@
 #define IABILITY_H
 
 #include "dandan/abilities/AbilityContext.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
+#include <memory>
 
 namespace dandan::core
 {
@@ -28,12 +30,13 @@ namespace dandan::abilities
         IAbility &operator=(IAbility &&) = delete;
         virtual ~IAbility() = default;
 
-        /** Resolve the ability
+        /** Create the effect for the ability
          * @param game The game object to mutate when the ability is resolving
          * @param context The context for the ability's execution
+         * @return The effect created by the ability
          */
-        virtual void resolve(core::Game &game,
-                             AbilityContext context) const = 0;
+        virtual std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game, AbilityContext context) const = 0;
 
         /** Determine if the ability applies to a given event
          * @param event The event to check
@@ -44,6 +47,11 @@ namespace dandan::abilities
         [[nodiscard]] virtual bool appliesTo(
             [[maybe_unused]] const events::IEvent &event,
             [[maybe_unused]] abilities::AbilityContext context) const
+        {
+            return false;
+        }
+
+        [[nodiscard]] virtual bool canActivate() const
         {
             return false;
         }

@@ -19,18 +19,10 @@ namespace dandan::core
     class CardDrawAction : public IAction
     {
     public:
-        /**
-         * Constructs a new card draw action.
-         * @param game The game instance.
-         */
-        explicit CardDrawAction(Game &game) : m_game{game}
-        {
-        }
+        CardDrawAction() = default;
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect() override;
-
-    private:
-        [[maybe_unused]] Game &m_game;
+        std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game) override;
     };
 } // namespace dandan::core
 

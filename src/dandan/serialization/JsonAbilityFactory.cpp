@@ -46,7 +46,7 @@ namespace dandan::serialization
                 JsonFactory<costs::ICost>::create_json(mana->getCost());
             json["data"]["mana_list"] =
                 JsonFactory<dandan::mana::ManaList>::create_json(
-                    mana->getMana());
+                    mana->getManaList());
 
             return json;
         }

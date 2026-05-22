@@ -35,7 +35,7 @@ namespace dandan::core
                     abilities::AbilityContext{CardID{card_id}}};
                 if (ability->appliesTo(event, ability_context))
                 {
-                    ability->resolve(game, ability_context);
+                    ability->createEffect(game, ability_context);
                 }
             }
         }

@@ -27,7 +27,8 @@ namespace dandan::core
         {
         }
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect() override;
+        std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game) override;
 
     private:
         // TODO: consider not having this take a game as member variable and

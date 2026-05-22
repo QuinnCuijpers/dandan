@@ -12,7 +12,7 @@ namespace dandan::conditions
         auto island_filter = [&game](const core::CardID &card_id)
         {
             const auto *card = game.getCardByID(card_id);
-            return card &&
+            return card != nullptr &&
                    card->getData().getType() == core::CardData::Type::Land &&
                    card->getData().getSubType() ==
                        core::CardData::SubType::Island;

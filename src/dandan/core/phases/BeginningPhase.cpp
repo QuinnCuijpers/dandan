@@ -58,7 +58,7 @@ namespace dandan::core
         case Step::Draw:
         {
             DLOGI << "Handling draw step\n";
-            auto draw_action = std::make_unique<core::CardDrawAction>(game());
+            auto draw_action = std::make_unique<core::CardDrawAction>();
             if (game().isActionPrevented(*draw_action))
             {
                 DLOGI << "Draw prevented\n";
@@ -67,7 +67,7 @@ namespace dandan::core
             {
                 // TODO: cast draweffect to game instead of handling in the
                 // createEffect of the action
-                draw_action->createEffect();
+                draw_action->createEffect(game());
             }
             game().render();
             m_step = Step::Done;

@@ -4,6 +4,7 @@
 #include "IAbility.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <cstdint>
 #include <memory>
 
@@ -58,7 +59,8 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        void resolve(core::Game &game, AbilityContext context) const override;
+        std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game, AbilityContext context) const override;
 
     private:
         Type m_type{};

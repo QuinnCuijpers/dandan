@@ -197,7 +197,15 @@ namespace dandan::core
         // Render the full TUI
         clearScreen();
 
-        // opponents name and hand (top)
+        // opponnet life total and mana pool
+        std::cout << nonActivePlayer().getName()
+                  << "'s Life Total: " << nonActivePlayer().getLifeTotal()
+                  << '\n';
+        std::cout << nonActivePlayer().getName() << "'s Mana Pool: ";
+        std::cout << nonActivePlayer().manaPool() << "\n";
+        std::cout << "\n";
+
+        // opponents hand (top)`
         std::cout << nonActivePlayer().getName() << "'s Hand: ";
         printCards(nonActivePlayer().hand().getCards());
         std::cout << "\n";
@@ -222,9 +230,16 @@ namespace dandan::core
         printCards(activePlayer().battlefield().getLands());
         std::cout << "\n";
 
-        // Active player's hand and name
+        // Active player's hand
         std::cout << activePlayer().getName() << "'s Hand: ";
         printCards(activePlayer().hand().getCards());
+        std::cout << "\n";
+
+        // active player life total and mana pool
+        std::cout << activePlayer().getName() << "'s Mana Pool: ";
+        std::cout << activePlayer().manaPool() << "\n";
+        std::cout << activePlayer().getName()
+                  << "'s Life Total: " << activePlayer().getLifeTotal() << '\n';
         std::cout << "\n";
 
         std::cout << "Cards in library: " << m_library.getCards().size()

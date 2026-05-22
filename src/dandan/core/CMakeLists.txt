@@ -20,7 +20,8 @@ target_sources(
           actions/CardDrawAction.cpp
           actions/PlayCardAction.cpp
           Zone.cpp
-          Player.cpp)
+          Player.cpp
+          actions/ActivateAbilityAction.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)

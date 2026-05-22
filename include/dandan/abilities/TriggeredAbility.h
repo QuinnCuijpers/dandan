@@ -58,7 +58,8 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        void resolve(core::Game &game, AbilityContext context) const override;
+        std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game, AbilityContext context) const override;
 
     private:
         std::unique_ptr<dandan::triggers::ITrigger> m_trigger;

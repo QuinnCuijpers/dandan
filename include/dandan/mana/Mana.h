@@ -83,30 +83,6 @@ namespace dandan::mana
 
     using ManaMap = std::map<ManaType, int>;
 
-    class Mana
-    {
-    public:
-        Mana() = default;
-        Mana(const Mana &) = delete;
-        Mana(Mana &&) = delete;
-        Mana &operator=(const Mana &) = delete;
-        Mana &operator=(Mana &&) = delete;
-        virtual ~Mana() = default;
-
-        virtual void addMana(ManaType type, int amount)
-        {
-            m_manaMap[type] += amount;
-        }
-
-        [[nodiscard]] virtual ManaMap getMana() const
-        {
-            return m_manaMap;
-        };
-
-    private:
-        ManaMap m_manaMap;
-    };
-
     [[maybe_unused]]
     static std::string ManaToSymbols(const ManaMap &mana_map)
     {
@@ -153,6 +129,49 @@ namespace dandan::mana
         }
         return symbols;
     }
+
+    inline std::ostream &operator<<(std::ostream &ostream,
+                                    const ManaMap &mana_map)
+    {
+        ostream << ManaToSymbols(mana_map);
+        return ostream;
+    }
+
+    class Mana
+    {
+    public:
+        Mana() = default;
+        Mana(const Mana &) = delete;
+        Mana(Mana &&) = delete;
+        Mana &operator=(const Mana &) = delete;
+        Mana &operator=(Mana &&) = delete;
+        virtual ~Mana() = default;
+
+        virtual void addMana(ManaType type, int amount)
+        {
+            m_manaMap[type] += amount;
+        }
+
+        [[nodiscard]] virtual ManaMap &getMana()
+        {
+            return m_manaMap;
+        }
+
+        [[nodiscard]] virtual const ManaMap &getMana() const
+        {
+            return m_manaMap;
+        };
+
+        friend std::ostream &operator<<(std::ostream &ostream, const Mana &mana)
+        {
+            ostream << ManaToSymbols(mana.getMana());
+            return ostream;
+        }
+
+    private:
+        ManaMap m_manaMap;
+    };
+
 } // namespace dandan::mana
 
 #endif // DANDAN_MANA_H

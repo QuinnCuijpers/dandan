@@ -5,6 +5,8 @@
 #include <memory>
 namespace dandan::core
 {
+
+    class Game;
     /**
      * Base interface for actions
      * @class IAction
@@ -21,9 +23,11 @@ namespace dandan::core
 
         /**
          * Creates an effect associated with this action.
+         * @param game The game instance to use when creating the effect.
          * @return A unique pointer to the created effect.
          */
-        virtual std::unique_ptr<effects::IOneShotEffect> createEffect() = 0;
+        virtual std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::Game &game) = 0;
     };
 } // namespace dandan::core
 

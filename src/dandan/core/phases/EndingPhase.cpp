@@ -2,6 +2,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/log.h"
 
+// TODO: clear mana pools at end of turn
 namespace dandan::core
 {
 

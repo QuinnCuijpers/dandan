@@ -1,20 +1,25 @@
 #include "dandan/abilities/ManaAbility.h"
-#include "dandan/core/Game.h"
+#include "dandan/effects/one_shot/AddManaEffect.h"
 #include "dandan/mana/Mana.h"
 #include "dandan/mana/ManaList.h"
-#include <iostream>
+#include <memory>
 
 namespace dandan::abilities
 {
 
-    void ManaAbility::resolve([[maybe_unused]] core::Game &game,
-                              [[maybe_unused]] AbilityContext context) const
+    std::unique_ptr<effects::IOneShotEffect> ManaAbility::createEffect(
+        [[maybe_unused]] core::Game &game,
+        [[maybe_unused]] AbilityContext context) const
     {
-        for (const auto &option : m_mana_list.getOptions())
+        if (context.chosen_mode_index.has_value())
         {
-            std::cout << "Resolving ManaAbility: "
-                      << mana::ManaToSymbols(option->getMana()) << " mana\n";
+            const auto &option =
+                m_mana_list.getOptions()[context.chosen_mode_index.value()];
+            return std::make_unique<effects::AddManaEffect>(option->getMana());
         }
+
+        return std::make_unique<effects::AddManaEffect>(
+            m_mana_list.getOptions()[0]->getMana());
     }
 
 } // namespace dandan::abilities
