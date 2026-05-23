@@ -56,6 +56,8 @@ namespace dandan::core
             m_library.addCard(card);
         }
 
+        m_library.shuffle();
+
         auto no_draw_starting_player{
             std::make_unique<effects::DrawPreventionEffect>(
                 std::make_unique<conditions::StartingPlayerCondition>())};

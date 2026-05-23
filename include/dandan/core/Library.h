@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <deque>
 #include <filesystem>
+#include <random>
 #include <vector>
 
 namespace dandan::core
@@ -22,6 +23,8 @@ namespace dandan::core
             std::transform(cards.begin(), cards.end(),
                            std::back_inserter(m_cards),
                            [](const Card &card) { return card.getID(); });
+            std::shuffle(m_cards.begin(), m_cards.end(),
+                         std::mt19937{std::random_device{}()});
         }
 
         void addCard(Card &card)
@@ -38,6 +41,12 @@ namespace dandan::core
         [[nodiscard]] const std::deque<CardID> &getCards() const
         {
             return m_cards;
+        }
+
+        void shuffle()
+        {
+            std::shuffle(m_cards.begin(), m_cards.end(),
+                         std::mt19937{std::random_device{}()});
         }
 
         CardID draw();

@@ -27,6 +27,11 @@ namespace dandan::core
         {
         }
 
+        [[nodiscard]] CardID getCardID() const
+        {
+            return m_card_id;
+        }
+
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game) override;
 

@@ -2,7 +2,7 @@
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/abilities/TriggeredAbility.h"
 #include "dandan/core/Card.h"
-#include "dandan/core/CardID.h"
+#include "dandan/core/Game.h"
 
 namespace dandan::core
 {
@@ -31,8 +31,9 @@ namespace dandan::core
         {
             for (const auto *ability : abilities)
             {
-                auto ability_context{
-                    abilities::AbilityContext{CardID{card_id}}};
+                auto *card{game.getCardByID(card_id)};
+                auto ability_context{abilities::AbilityContext{
+                    card->getID(), card->getControllerID()}};
                 if (ability->appliesTo(event, ability_context))
                 {
                     ability->createEffect(game, ability_context);

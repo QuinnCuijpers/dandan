@@ -51,7 +51,9 @@ namespace dandan::abilities
             return false;
         }
 
-        [[nodiscard]] virtual bool canActivate() const
+        [[nodiscard]] virtual bool canActivate(
+            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] AbilityContext context) const
         {
             return false;
         }

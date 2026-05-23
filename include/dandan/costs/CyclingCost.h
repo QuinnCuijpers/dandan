@@ -12,11 +12,26 @@ namespace dandan::costs
         explicit CyclingCost(std::unique_ptr<ICost> inner_cost)
             : m_inner_cost{std::move(inner_cost)} {};
 
-        void evaluate() override;
-
         [[nodiscard]] const ICost *getInnerCost() const
         {
             return m_inner_cost.get();
+        }
+
+        [[nodiscard]] bool canPay(const core::Card &source,
+                                  const core::Player &player) const override
+        {
+            if (source.getZone() != core::Zone::HAND)
+            {
+                return false;
+            }
+            return m_inner_cost->canPay(source, player);
+        }
+
+        void pay(
+            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] abilities::AbilityContext context) const override
+        {
+            m_inner_cost->pay(game, context);
         }
 
     private:

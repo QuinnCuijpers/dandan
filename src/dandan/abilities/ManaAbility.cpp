@@ -11,6 +11,7 @@ namespace dandan::abilities
         [[maybe_unused]] core::Game &game,
         [[maybe_unused]] AbilityContext context) const
     {
+        m_cost->pay(game, context);
         if (context.chosen_mode_index.has_value())
         {
             const auto &option =

@@ -31,8 +31,6 @@ namespace dandan::core
                 std::to_string(card->getControllerID().id()));
         }
 
-        game.moveCardFromZone(*card);
-
         const auto &data = card->getData();
         // lands dont use the stack and their effects are applied
         // immediately

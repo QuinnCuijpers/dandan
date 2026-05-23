@@ -21,10 +21,19 @@ namespace dandan::costs
             return {m_first.get(), m_second.get()};
         }
 
-        void evaluate() override
+        void pay(
+            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] abilities::AbilityContext context) const override
         {
-            m_first->evaluate();
-            m_second->evaluate();
+            m_first->pay(game, context);
+            m_second->pay(game, context);
+        }
+
+        [[nodiscard]] bool canPay(const core::Card &source,
+                                  const core::Player &player) const override
+        {
+            return m_first->canPay(source, player) &&
+                   m_second->canPay(source, player);
         }
 
     private:

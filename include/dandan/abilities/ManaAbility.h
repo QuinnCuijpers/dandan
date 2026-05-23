@@ -55,9 +55,16 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
-        [[nodiscard]] bool canActivate() const override
+        [[nodiscard]] bool canActivate(core::Game &game,
+                                       AbilityContext context) const override
         {
-            return true; // TODO: should check if the cost can be paid
+            if (m_cost)
+            {
+                auto *source{game.getCardByID(context.source_card_id)};
+                return m_cost->canPay(
+                    *source, game.getPlayer(source->getControllerID()));
+            }
+            return true;
         }
 
     private:

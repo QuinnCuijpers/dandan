@@ -1,6 +1,7 @@
 #ifndef DANDAN_MANA_H
 #define DANDAN_MANA_H
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <map>
@@ -161,6 +162,38 @@ namespace dandan::mana
         {
             return m_manaMap;
         };
+
+        [[nodiscard]] bool canPay(const Mana &cost) const
+        {
+            auto covers = [this](const auto &entry)
+            {
+                try
+                {
+                    const auto &[type, amount] = entry;
+                    return m_manaMap.at(type) >= amount;
+                }
+                catch (const std::out_of_range &)
+                {
+                    return false;
+                }
+            };
+
+            return std::all_of(cost.getMana().begin(), cost.getMana().end(),
+                               covers);
+        }
+
+        void pay(const Mana &cost)
+        {
+            // if (!canPay(cost))
+            // {
+            //     throw std::runtime_error("Cannot pay mana cost");
+            // }
+
+            for (const auto &[type, amount] : cost.getMana())
+            {
+                m_manaMap[type] -= amount;
+            }
+        }
 
         friend std::ostream &operator<<(std::ostream &ostream, const Mana &mana)
         {

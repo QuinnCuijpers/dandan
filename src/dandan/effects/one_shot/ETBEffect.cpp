@@ -7,6 +7,7 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> ETBEffect::apply(
         [[maybe_unused]] core::Game &game) const
     {
+        game.moveCardFromZone(m_card);
         std::cout << "Applying ETBEffect\n";
         m_card.setTapped(m_tapped);
         if (m_card.getData().getType() == core::CardData::Type::Land)

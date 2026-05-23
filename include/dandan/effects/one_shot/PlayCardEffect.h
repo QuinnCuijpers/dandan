@@ -23,6 +23,17 @@ namespace dandan::effects
         {
             std::cout << "Applying PlayCardEffect\n";
             // TODO: move to stack instead of playing the card
+            const auto *mana_cost = m_card.getData().getCost();
+            if (game.activePlayer().manaPool().canPay(*mana_cost))
+            {
+                game.activePlayer().manaPool().pay(*mana_cost);
+            }
+            else
+            {
+                throw std::runtime_error(
+                    "Not enough mana to play card " +
+                    std::string{m_card.getData().getName()});
+            }
             game.activePlayer().playCard(m_card);
             return std::make_unique<events::ETBEvent>(m_card.getID(),
                                                       m_card.getControllerID());

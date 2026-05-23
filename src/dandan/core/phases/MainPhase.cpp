@@ -111,15 +111,14 @@ namespace dandan::core
                     // does not move the card out of the previous zone
                     auto *cardp{game().getCardByID(card_id)};
 
-                    if (cardp->getZone() != Zone::BATTLEFIELD)
+                    if (cardp->getZone() != Zone::BATTLEFIELD &&
+                        cardp->getZone() != Zone::HAND)
                     {
-                        std::cout << "Card is not on the battlefield\n";
+                        std::cout
+                            << "Card is not on the battlefield or in hand\n";
                         continue;
                     }
 
-                    std::cout << "Which ability do you want to activate? "
-                                 "(enter the index of the "
-                                 "ability)\n";
                     size_t ability_index{};
                     int display_index{};
 
@@ -129,9 +128,12 @@ namespace dandan::core
                     auto ability_indices{std::vector<
                         std::pair<size_t, std::optional<size_t>>>{}};
 
+                    auto base_ability_context{abilities::AbilityContext{
+                        cardp->getID(), cardp->getControllerID()}};
+
                     for (const auto &ability : cardp->getData().getAbilities())
                     {
-                        if (!ability->canActivate())
+                        if (!ability->canActivate(game(), base_ability_context))
                         {
                             ++ability_index;
                             continue;
@@ -162,6 +164,16 @@ namespace dandan::core
                         ++ability_index;
                     }
 
+                    if (ability_indices.empty())
+                    {
+                        std::cout << "No activatable abilities\n";
+                        continue;
+                    }
+
+                    std::cout << "Which ability do you want to activate? "
+                                 "(enter the index of the "
+                                 "ability)\n";
+
                     std::string ability_input;
                     std::getline(game().istream(), ability_input);
                     size_t ability_index_input = std::stoull(ability_input);
@@ -177,8 +189,10 @@ namespace dandan::core
                         ability_indices[ability_index_input];
 
                     const auto *ability = abilities[real_index].get();
+
                     auto ability_context{abilities::AbilityContext{
-                        cardp->getID(), modal_index_opt}};
+                        cardp->getID(), cardp->getControllerID(),
+                        modal_index_opt}};
 
                     auto action = std::make_unique<ActivateAbilityAction>(
                         ability, ability_context);

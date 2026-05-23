@@ -34,6 +34,16 @@ namespace dandan::core
         static Game withIstream(std::istream &input);
         static Game withCards(std::vector<Card> cards);
 
+        [[nodiscard]] const Player &getPlayer(PlayerID player_id) const
+        {
+            return m_players.at(player_id.id());
+        }
+
+        [[nodiscard]] Player &getPlayer(PlayerID player_id)
+        {
+            return m_players.at(player_id.id());
+        }
+
         [[nodiscard]] const Player &activePlayer() const
         {
             return m_players.at(m_active_player_index);
@@ -120,8 +130,8 @@ namespace dandan::core
                 if (card != nullptr)
                 {
                     std::cout << card->getData().getName() << "("
-                              << card->getID().getID() << ", "
-                              << card->getZone() << "), ";
+                              << card->getID().getID() << ", " << std::boolalpha
+                              << card->getTapped() << "), ";
                 }
             }
             std::cout << "]\n";

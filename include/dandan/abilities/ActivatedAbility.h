@@ -2,6 +2,7 @@
 #define DANDAN_ACTIVATED_ABILITY_H
 
 #include "IAbility.h"
+#include "dandan/core/Game.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
@@ -47,9 +48,16 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        [[nodiscard]] bool canActivate() const override
+        [[nodiscard]] bool canActivate(core::Game &game,
+                                       AbilityContext context) const override
         {
-            // TODO: should check if the cost can be paid
+            if (m_cost)
+            {
+                auto *source_card = game.getCardByID(context.source_card_id);
+                return m_cost->canPay(
+                    *source_card,
+                    game.getPlayer(source_card->getControllerID()));
+            }
             return true;
         }
 

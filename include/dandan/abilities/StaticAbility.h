@@ -62,6 +62,12 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
+        bool canActivate([[maybe_unused]] core::Game &game,
+                         [[maybe_unused]] AbilityContext context) const override
+        {
+            return false;
+        }
+
     private:
         Type m_type{};
         std::unique_ptr<effects::IContinuousEffect> m_effect;

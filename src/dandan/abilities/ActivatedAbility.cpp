@@ -11,7 +11,7 @@ namespace dandan::abilities
         [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving Activated ability\n";
-        m_cost->evaluate();
+        m_cost->pay(game, context);
         return nullptr;
     }
 
