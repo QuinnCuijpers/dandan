@@ -1,85 +1,14 @@
 #ifndef DANDAN_MANA_H
 #define DANDAN_MANA_H
 
+#include "dandan/mana/ManaType.h"
 #include <cassert>
-#include <cstdint>
 #include <map>
-#include <stdexcept>
 #include <string>
 #include <string_view>
 
 namespace dandan::mana
 {
-
-    enum class ManaType : std::uint8_t
-    {
-        COLORLESS,
-        WHITE,
-        BLUE,
-        BLACK,
-        RED,
-        GREEN,
-        GENERIC,
-    };
-
-    [[maybe_unused]]
-    static std::string_view ManaTypeToString(ManaType type)
-    {
-        switch (type)
-        {
-        case ManaType::COLORLESS:
-            return "Colorless";
-        case ManaType::WHITE:
-            return "White";
-        case ManaType::BLUE:
-            return "Blue";
-        case ManaType::BLACK:
-            return "Black";
-        case ManaType::RED:
-            return "Red";
-        case ManaType::GREEN:
-            return "Green";
-        case ManaType::GENERIC:
-            return "Generic";
-        }
-
-        assert(false && "Unknown mana type in ManaTypeToString");
-    }
-
-    [[maybe_unused]]
-    static ManaType ManaTypeFromString(const std::string_view &str)
-    {
-        if (str == "Colorless")
-        {
-            return ManaType::COLORLESS;
-        }
-        if (str == "White")
-        {
-            return ManaType::WHITE;
-        }
-        if (str == "Blue")
-        {
-            return ManaType::BLUE;
-        }
-        if (str == "Black")
-        {
-            return ManaType::BLACK;
-        }
-        if (str == "Red")
-        {
-            return ManaType::RED;
-        }
-        if (str == "Green")
-        {
-            return ManaType::GREEN;
-        }
-        if (str == "Generic")
-        {
-            return ManaType::GENERIC;
-        }
-        throw std::invalid_argument("Invalid mana type string: " +
-                                    std::string(str));
-    }
 
     using ManaMap = std::map<ManaType, int>;
 
@@ -141,6 +70,9 @@ namespace dandan::mana
         return ostream;
     }
 
+    /** A class representing mana in the game.
+     * @class Mana
+     */
     class Mana
     {
     public:
@@ -151,21 +83,35 @@ namespace dandan::mana
         Mana &operator=(Mana &&) = delete;
         virtual ~Mana() = default;
 
+        /** Adds mana to the resource pool.
+         * @param type The type of mana to add.
+         * @param amount The amount of mana to add.
+         */
         virtual void addMana(ManaType type, int amount)
         {
             m_manaMap[type] += amount;
         }
 
+        /** Retrieves the underlying mana map mutably.
+         * @return A reference to the mana map.
+         */
         [[nodiscard]] virtual ManaMap &getMana()
         {
             return m_manaMap;
         }
 
+        /** Retrieves the underlying mana map.
+         * @return A const reference to the mana map.
+         */
         [[nodiscard]] virtual const ManaMap &getMana() const
         {
             return m_manaMap;
         };
 
+        /** Checks if the mana can cover the cost passed in.
+         * @param cost The cost to check.
+         * @return True if the mana can pay the cost, false otherwise.
+         */
         [[nodiscard]] bool canPay(const Mana &cost) const
         {
             int generic_cost = cost.getMana().at(ManaType::GENERIC);
@@ -185,13 +131,11 @@ namespace dandan::mana
             return available_generic >= generic_cost;
         }
 
+        /** Pays the cost of the mana passed in.
+         * @param cost The cost to pay.
+         */
         void pay(const Mana &cost)
         {
-            // if (!canPay(cost))
-            // {
-            //     throw std::runtime_error("Cannot pay mana cost");
-            // }
-
             int generic_cost = cost.getMana().at(ManaType::GENERIC);
 
             // TODO: generic mana is now paid by draining colors in order, which
@@ -211,6 +155,11 @@ namespace dandan::mana
             }
         }
 
+        /** Outputs the mana to an output stream.
+         * @param ostream The output stream.
+         * @param mana The mana to output.
+         * @return The output stream.
+         */
         friend std::ostream &operator<<(std::ostream &ostream, const Mana &mana)
         {
             ostream << ManaToSymbols(mana.getMana());

@@ -5,7 +5,11 @@
 
 namespace dandan::mana
 {
-
+    /** A class representing black mana.
+     * @class BlackMana
+     *
+     * @implements Mana
+     */
     class BlackMana : public Mana
     {
     public:
@@ -13,6 +17,11 @@ namespace dandan::mana
         {
             addMana(ManaType::BLACK, 1);
         }
+
+        /** Constructs a BlackMana instance with the specified amount of black
+         * mana.
+         * @param amount The amount of black mana to add.
+         */
         explicit BlackMana(int amount)
         {
             addMana(ManaType::BLACK, amount);

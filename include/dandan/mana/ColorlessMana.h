@@ -5,6 +5,11 @@
 
 namespace dandan::mana
 {
+    /** A class representing colorless mana.
+     * @class ColorlessMana
+     *
+     * @implements Mana
+     */
     class ColorlessMana : public Mana
     {
     public:
@@ -12,6 +17,11 @@ namespace dandan::mana
         {
             addMana(ManaType::COLORLESS, 1);
         }
+
+        /** Constructs a ColorlessMana instance with the specified amount of
+         * colorless mana.
+         * @param amount The amount of colorless mana to add.
+         */
         explicit ColorlessMana(int amount)
         {
             addMana(ManaType::COLORLESS, amount);

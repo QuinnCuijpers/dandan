@@ -5,18 +5,23 @@
 
 namespace dandan::mana
 {
-
+    /** A class representing white mana.
+     * @class WhiteMana
+     *
+     * @implements Mana
+     */
     class WhiteMana : public Mana
     {
     public:
-        /// Default constructor for creating a WhiteMana with 1 white mana
         WhiteMana()
         {
             addMana(ManaType::WHITE, 1);
         }
 
-        /// Constructor for creating a WhiteMana with a specific amount of white
-        /// mana
+        /** Constructs a WhiteMana instance with the specified amount of white
+         * mana.
+         * @param amount The amount of white mana to add.
+         */
         explicit WhiteMana(int amount)
         {
             addMana(ManaType::WHITE, amount);
