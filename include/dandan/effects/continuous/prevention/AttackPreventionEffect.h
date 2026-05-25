@@ -7,25 +7,25 @@
 
 namespace dandan::effects
 {
+    /** A prevention effect that prevents attacking under a provided condition.
+     * @class AttackPreventionEffect
+     *
+     * @implements IPreventionEffect
+     */
     class AttackPreventionEffect : public IPreventionEffect
     {
     public:
+        /** Constructs a new attack prevention effect with the given condition.
+         * @param condition The condition under which to prevent attacking.
+         */
         explicit AttackPreventionEffect(
             std::unique_ptr<conditions::ICondition> condition)
-            : m_condition(std::move(condition))
+            : IPreventionEffect(std::move(condition))
         {
-        }
-
-        [[nodiscard]] const conditions::ICondition *getCondition() const
-        {
-            return m_condition.get();
         }
 
         bool prevents(const core::IAction &action,
                       const core::Game &game) override;
-
-    private:
-        std::unique_ptr<conditions::ICondition> m_condition;
     };
 
 } // namespace dandan::effects

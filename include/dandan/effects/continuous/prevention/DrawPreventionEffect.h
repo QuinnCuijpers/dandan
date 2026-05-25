@@ -7,20 +7,26 @@
 
 namespace dandan::effects
 {
+    /** A prevention effect that prevents drawing cards under a provided
+     * condition.
+     * @class DrawPreventionEffect
+     *
+     * @implements IPreventionEffect
+     */
     class DrawPreventionEffect : public IPreventionEffect
     {
     public:
+        /** Constructs a new draw prevention effect with the given condition.
+         * @param condition The condition under which to prevent drawing cards.
+         */
         explicit DrawPreventionEffect(
             std::unique_ptr<conditions::ICondition> condition)
-            : m_condition(std::move(condition))
+            : IPreventionEffect(std::move(condition))
         {
         }
 
         [[nodiscard]] bool prevents(const core::IAction &action,
                                     const core::Game &game) override;
-
-    private:
-        std::unique_ptr<conditions::ICondition> m_condition;
     };
 } // namespace dandan::effects
 
