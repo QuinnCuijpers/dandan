@@ -10,7 +10,7 @@
 namespace dandan::core
 {
     /**
-     * An action that represents an attack.
+     * @brief An action that represents an attack.
      * @class AttackAction
      *
      * @implements IAction

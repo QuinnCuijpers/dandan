@@ -8,7 +8,7 @@
 
 namespace dandan::triggers
 {
-    /** A trigger that activates when the card it's attached to in the
+    /** @brief A trigger that activates when the card it's attached to in the
      * `EventManager` enters the battlefield.
      * @class SelfETBTrigger
      *

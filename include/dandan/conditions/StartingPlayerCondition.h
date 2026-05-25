@@ -7,7 +7,7 @@
 namespace dandan::conditions
 {
     /**
-     * A condition that checks if the player is the starting player and it is
+     * @brief A condition that checks if the player is the starting player and it is
      * the first turn. This is used to determine whether the player should draw
      * a card at the beginning of their turn.
      * @class StartingPlayerCondition

@@ -6,7 +6,7 @@
 namespace dandan::effects
 {
 
-    /** Represents the effect of looking at the top few cards of the library
+    /** @brief Represents the effect of looking at the top few cards of the library
      * @struct PeekEffect
      *
      * @implements @IOneShotEffect

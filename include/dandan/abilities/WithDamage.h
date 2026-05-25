@@ -5,7 +5,7 @@
 
 namespace dandan::abilities
 {
-    /** An ability decorator that adds self damage to an ability
+    /** @brief An ability decorator that adds self damage to an ability
      * @class WithDamage
      *
      * @implements IAbilityDecorator

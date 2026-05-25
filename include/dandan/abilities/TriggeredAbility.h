@@ -8,7 +8,7 @@
 
 namespace dandan::abilities
 {
-    /** A triggered ability that activates when a specific trigger applies
+    /** @brief A triggered ability that activates when a specific trigger applies
      * @class TriggeredAbility
      *
      * @implements IAbility

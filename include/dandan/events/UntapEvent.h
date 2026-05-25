@@ -6,7 +6,7 @@
 
 namespace dandan::events
 {
-    /** Event generated when a card becomes untapped
+    /** @brief Event generated when a card becomes untapped
      * @class UntapEvent
      *
      * @implements IEvent

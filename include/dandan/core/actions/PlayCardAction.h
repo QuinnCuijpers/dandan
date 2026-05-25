@@ -9,7 +9,7 @@
 namespace dandan::core
 {
     /**
-     * An action that represents playing a card.
+     * @brief An action that represents playing a card.
      * @class PlayCardAction
      *
      * @implements IAction

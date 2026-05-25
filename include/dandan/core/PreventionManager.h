@@ -8,7 +8,7 @@
 
 namespace dandan::core
 {
-    /** The class that manages prevention effects.
+    /** @brief The class that manages prevention effects.
      * @class PreventionManager
      */
     class PreventionManager

@@ -8,7 +8,7 @@
 
 namespace dandan::costs
 {
-    /** A cost that requires a specific amount of mana to be paid.
+    /** @brief A cost that requires a specific amount of mana to be paid.
      * @class ManaCost
      *
      * @implements ICost

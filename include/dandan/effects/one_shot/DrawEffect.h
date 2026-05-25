@@ -7,7 +7,7 @@
 
 namespace dandan::effects
 {
-    /** Represents drawing cards as an effect.
+    /** @brief Represents drawing cards as an effect.
      * @struct DrawEffect
      *
      *@implements IOneShotEffect

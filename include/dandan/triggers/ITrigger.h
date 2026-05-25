@@ -6,7 +6,7 @@
 
 namespace dandan::triggers
 {
-    /** An interface for defining triggers.
+    /** @brief An interface for defining triggers.
      * @class ITrigger
      */
     class ITrigger

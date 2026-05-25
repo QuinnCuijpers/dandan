@@ -6,7 +6,7 @@
 
 namespace dandan::core
 {
-    /** A class that represents the ID of a player using an auto-incrementing
+    /** @brief A class that represents the ID of a player using an auto-incrementing
      * integer.
      * @class PlayerID
      */

@@ -6,7 +6,7 @@
 
 namespace dandan::abilities
 {
-    /** An interface for ability decorators to use the decorator pattern with
+    /** @brief An interface for ability decorators to use the decorator pattern with
      * abilities
      * @class IAbilityDecorator
      *

@@ -7,7 +7,7 @@
 
 namespace dandan::mana
 {
-    /** A class representing a list of different mana options
+    /** @brief A class representing a list of different mana options
      * @class ManaList
      */
     class ManaList

@@ -8,7 +8,7 @@
 #include <memory>
 namespace dandan::effects
 {
-    /** Represents an effect for adding mana
+    /** @brief Represents an effect for adding mana
      *  @class AddManaEffect
      *
      *  @implements IOneShotEffect

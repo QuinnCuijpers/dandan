@@ -6,7 +6,7 @@
 
 namespace dandan::triggers
 {
-    /** A trigger that activates when no islands are present.
+    /** @brief A trigger that activates when no islands are present.
      * @class NoIslandsTrigger
      */
     class NoIslandsTrigger : public ITrigger

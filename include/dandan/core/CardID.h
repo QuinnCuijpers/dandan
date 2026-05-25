@@ -6,7 +6,7 @@
 
 namespace dandan::core
 {
-    /** A unique identifier for a card. Created through a static counter to
+    /** @brief A unique identifier for a card. Created through a static counter to
      * ensure uniqueness.
      * @class CardID
      */

@@ -6,7 +6,7 @@
 
 namespace dandan::costs
 {
-    /** A cost that requires the player to sacrifice one of their own cards.
+    /** @brief A cost that requires the player to sacrifice one of their own cards.
      * @class SelfSacrificeCost
      * @implements ICost
      */

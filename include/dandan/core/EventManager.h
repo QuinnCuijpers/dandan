@@ -10,7 +10,7 @@
 
 namespace dandan::core
 {
-    /** Manages triggered abilities and event notifications.
+    /** @brief Manages triggered abilities and event notifications.
      * @class EventManager
      */
     class EventManager

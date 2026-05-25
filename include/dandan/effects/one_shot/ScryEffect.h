@@ -5,7 +5,7 @@
 
 namespace dandan::effects
 {
-    /** Reprents the effect of scrying
+    /** @brief Reprents the effect of scrying
      * @struct ScryEffect
      *
      * @implements IOneShotEffect

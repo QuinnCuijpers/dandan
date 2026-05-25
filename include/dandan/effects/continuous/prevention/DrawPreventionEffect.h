@@ -7,7 +7,7 @@
 
 namespace dandan::effects
 {
-    /** A prevention effect that prevents drawing cards under a provided
+    /** @brief A prevention effect that prevents drawing cards under a provided
      * condition.
      * @class DrawPreventionEffect
      *

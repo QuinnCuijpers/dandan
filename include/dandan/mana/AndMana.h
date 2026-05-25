@@ -6,7 +6,7 @@
 
 namespace dandan::mana
 {
-    /** A class representing the logical AND of two mana resources.
+    /** @brief A class representing the logical AND of two mana resources.
      * @class AndMana
      *
      * @implements Mana

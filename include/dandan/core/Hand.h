@@ -8,7 +8,7 @@
 
 namespace dandan::core
 {
-    /** A class that represents the hand of the game.
+    /** @brief A class that represents the hand of the game.
      * @class Hand
      */
     class Hand

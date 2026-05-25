@@ -12,7 +12,7 @@ namespace dandan::core
     // TODO: improve docs for main phase and add more details about what happens
     // in the main phase, and what actions can be taken, etc.
     /**
-     * Main Phase
+     * @brief Main Phase
      * @class MainPhase
      *
      * @implements IPhase

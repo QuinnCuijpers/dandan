@@ -7,7 +7,7 @@
 
 namespace dandan::core
 {
-    /** The class that represents the stack that holds effects that are about to
+    /** @brief The class that represents the stack that holds effects that are about to
      * `apply`
      * @class Stack
      */

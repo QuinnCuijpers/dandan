@@ -6,7 +6,7 @@
 
 namespace dandan::events
 {
-    /** Event generated when a card enters the battlefield
+    /** @brief Event generated when a card enters the battlefield
      * @class ETBEvent
      *
      * @implements IEvent

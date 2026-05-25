@@ -5,7 +5,7 @@
 
 namespace dandan::events
 {
-    /** Event generated when a cplayer controls no islands
+    /** @brief Event generated when a cplayer controls no islands
      * @class NoIslandsEvent
      *
      * @implements IEvent

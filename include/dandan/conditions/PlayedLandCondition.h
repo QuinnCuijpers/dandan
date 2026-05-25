@@ -6,7 +6,7 @@
 namespace dandan::conditions
 {
     /**
-     * A condition that checks if the player has played a land this turn.
+     * @brief A condition that checks if the player has played a land this turn.
      * @class PlayedLandCondition
      *
      * @implements ICondition

@@ -6,7 +6,7 @@
 
 namespace dandan::costs
 {
-    /** The cost representing the cost part of the cycling ability. It is a
+    /** @brief The cost representing the cost part of the cycling ability. It is a
      * decorator around an inner cost.
      * @class CyclingCost
      *

@@ -9,7 +9,7 @@ namespace dandan::core
 namespace dandan::conditions
 {
     /**
-     * Base interface for conditions
+     * @brief Base interface for conditions
      * @class ICondition
      */
     class ICondition

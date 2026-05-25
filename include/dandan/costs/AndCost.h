@@ -8,7 +8,7 @@
 namespace dandan::costs
 {
     // TODO: consider renaming to CostList
-    /** A composite cost that requires its left and right sub-costs to be
+    /** @brief A composite cost that requires its left and right sub-costs to be
      * satisfied.
      * @class AndCost
      *

@@ -7,7 +7,7 @@
 
 namespace dandan::effects
 {
-    /** Represents bouncing a land you control back to your hand
+    /** @brief Represents bouncing a land you control back to your hand
      * @class BounceLandEffect
      *
      * @implements IOneShotEffect

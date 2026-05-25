@@ -14,7 +14,7 @@
 namespace dandan::core
 {
     /**
-     * Beginning Phase
+     * @brief Beginning Phase
      * @class BeginningPhase
      *
      * @implements IPhase

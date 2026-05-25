@@ -14,7 +14,7 @@ namespace dandan::core
         std::unordered_map<CardData::Type, std::vector<Permanent>>;
 
     // TODO: expand docs
-    /** A class representing the battlefield.
+    /** @brief A class representing the battlefield.
      * @class Battlefield
      */
     class Battlefield

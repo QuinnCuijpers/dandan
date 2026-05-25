@@ -11,7 +11,7 @@ namespace dandan::core
     class Game;
 
     /**
-     * An action that represents drawing a card.
+     * @brief An action that represents drawing a card.
      * @class CardDrawAction
      *
      * @implements IAction

@@ -10,7 +10,7 @@ namespace dandan::core
     class Game;
 
     /**
-     * Base interface for phases
+     * @brief Base interface for phases
      * @class IPhase
      */
     class IPhase

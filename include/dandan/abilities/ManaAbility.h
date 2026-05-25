@@ -11,7 +11,7 @@
 
 namespace dandan::abilities
 {
-    /** An ability that produces mana
+    /** @brief An ability that produces mana
      * @class ManaAbility
      *
      * @implements IAbility
