@@ -14,6 +14,10 @@ namespace dandan::events
     class ETBEvent : public IEvent
     {
     public:
+        /** Constructor
+         * @param card_id The CardID of the source card that generated the event
+         * @param controller The Controller of the source card
+         */
         explicit ETBEvent(core::CardID card_id, core::PlayerID controller)
             : IEvent{card_id, controller}
         {

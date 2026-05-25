@@ -6,9 +6,18 @@
 
 namespace dandan::events
 {
+    /** Event generated when a card becomes untapped
+     * @class UntapEvent
+     *
+     * @implements IEvent
+     */
+
     class UntapEvent : public IEvent
     {
     public:
+        /** Constructor
+         * @param card The card that was untapped
+         */
         explicit UntapEvent(core::Card &card)
             : IEvent(card.getID(), card.getControllerID())
         {
