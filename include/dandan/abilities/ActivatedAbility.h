@@ -49,17 +49,7 @@ namespace dandan::abilities
         }
 
         [[nodiscard]] bool canActivate(core::Game &game,
-                                       AbilityContext context) const override
-        {
-            if (m_cost)
-            {
-                auto *source_card = game.getCardByID(context.source_card_id);
-                return m_cost->canPay(
-                    *source_card,
-                    game.getPlayer(source_card->getControllerID()));
-            }
-            return true;
-        }
+                                       AbilityContext context) const override;
 
     private:
         std::unique_ptr<costs::ICost> m_cost;

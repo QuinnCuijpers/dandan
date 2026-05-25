@@ -39,7 +39,7 @@ namespace dandan::core
             }
         }
         game().activePlayer().setPlayedLandThisTurn(false);
-        // game().render();
+        game().render();
         m_step = Step::Upkeep;
     }
 
@@ -52,7 +52,7 @@ namespace dandan::core
             break;
         case Step::Upkeep:
             DLOGI << "Handling upkeep step\n";
-            // game().render();
+            game().render();
             m_step = Step::Draw;
             break;
         case Step::Draw:
@@ -69,7 +69,7 @@ namespace dandan::core
                 // createEffect of the action
                 draw_action->createEffect(game());
             }
-            // game().render();
+            game().render();
             m_step = Step::Done;
             break;
         }

@@ -51,6 +51,12 @@ namespace dandan::abilities
             return false;
         }
 
+        /** Determine if the ability can be activated
+         * @param game The game object to check for activation conditions
+         * @param context The context for the ability's execution
+         * @return True if the ability can be activated, false otherwise.
+         * The default implementation returns false.
+         */
         [[nodiscard]] virtual bool canActivate(
             [[maybe_unused]] core::Game &game,
             [[maybe_unused]] AbilityContext context) const

@@ -15,4 +15,16 @@ namespace dandan::abilities
         return m_effect ? m_effect->clone() : nullptr;
     }
 
+    [[nodiscard]] bool ActivatedAbility::canActivate(
+        core::Game &game, AbilityContext context) const
+    {
+        if (m_cost)
+        {
+            auto *source_card = game.getCardByID(context.source_card_id);
+            return m_cost->canPay(
+                *source_card, game.getPlayer(source_card->getControllerID()));
+        }
+        return true;
+    }
+
 } // namespace dandan::abilities

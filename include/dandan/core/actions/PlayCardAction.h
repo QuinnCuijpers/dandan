@@ -25,6 +25,9 @@ namespace dandan::core
         {
         }
 
+        /** Get the card ID of the card to play.
+         * @return The card ID of the card to play.
+         */
         [[nodiscard]] CardID getCardID() const
         {
             return m_card_id;

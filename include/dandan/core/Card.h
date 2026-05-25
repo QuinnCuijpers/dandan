@@ -13,6 +13,12 @@
 namespace dandan::core
 {
 
+    /** A class representing a card instance in the game.
+     * @class Card
+     * All variable traits of the card instance are stored in this class,
+     * while the static traits of the card are stored in CardData accesible
+     * through `getData()`.
+     */
     class Card
     {
     public:
@@ -22,48 +28,81 @@ namespace dandan::core
 
 #endif
 
+        /** Constructor for creating a card instance.
+         * @param card_data A pointer to the static card data.
+         * @param controller_id The ID of the player who controls the card.
+         */
         explicit Card(CardData *card_data,
                       PlayerID controller_id = PlayerID::getInvalidID());
 
+        /** Get the ID of the card.
+         * @return The ID of the card.
+         */
         [[nodiscard]] const CardID &getID() const
         {
             return m_card_id;
         }
+        /** Get the ID of the player who controls the card.
+         * @return The ID of the player who controls the card.
+         */
         [[nodiscard]] PlayerID getControllerID() const
         {
             return m_controller_id;
         }
 
+        /** Get the tapped status of the card.
+         * @return The tapped status of the card.
+         */
         [[nodiscard]] bool getTapped() const
         {
             return m_tapped;
         }
 
+        /** Set the tapped status of the card.
+         * @param tapped The new tapped status of the card.
+         */
         void setTapped(bool tapped)
         {
             m_tapped = tapped;
         }
 
+        /** Get the zone the card is currently in.
+         * @return The zone the card is currently in.
+         */
         [[nodiscard]] Zone getZone() const
         {
             return m_zone;
         }
 
+        /** Set the zone the card is currently in.
+         * @param zone The new zone the card is in.
+         */
         void setZone(Zone zone)
         {
             m_zone = zone;
         }
 
+        /** Get the static data of the card.
+         * @return A const reference to the static card data.
+         */
         [[nodiscard]] const CardData &getData() const
         {
             return *m_card_data;
         }
 
+        /** Set the ID of the player who controls the card.
+         * @param new_controller_id The new controller ID.
+         */
         void setControllerID(PlayerID new_controller_id)
         {
             m_controller_id = new_controller_id;
         }
 
+        /** Output the card to an ostream.
+         * @param ostream The ostream to output the card to.
+         * @param card The card to output.
+         * @return The ostream.
+         */
         friend std::ostream &operator<<(std::ostream &ostream, const Card &card)
         {
             if (card.m_card_data == nullptr)

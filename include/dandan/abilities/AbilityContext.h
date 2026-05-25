@@ -30,8 +30,11 @@ namespace dandan::abilities
 
         /// The CardID of the card that generated the ability.
         core::CardID source_card_id;
+        /// The PlayerID of the player who controls the source of the ability.
+        /// generally this is also the player who controls the ability
         core::PlayerID controller_id;
-        std::optional<size_t> chosen_mode_index; // for modal abilities
+        /// for modal abilities this represents the index of the chosen mode
+        std::optional<size_t> chosen_mode_index;
     };
 } // namespace dandan::abilities
 

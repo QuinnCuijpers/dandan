@@ -8,12 +8,23 @@
 
 namespace dandan::costs
 {
+    /** A cost that requires a specific amount of mana to be paid.
+     * @class ManaCost
+     *
+     * @implements ICost
+     */
     class ManaCost : public ICost
     {
     public:
+        /** Constructs a ManaCost with a specific amount of mana.
+         * @param mana The mana requirement for the cost.
+         */
         explicit ManaCost(std::unique_ptr<mana::Mana> mana)
             : m_mana{std::move(mana)} {};
 
+        /** Gets the mana requirement.
+         * @return A pointer to the mana requirement.
+         */
         [[nodiscard]] mana::Mana *getMana() const
         {
             return m_mana.get();

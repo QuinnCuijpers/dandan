@@ -6,12 +6,24 @@
 
 namespace dandan::costs
 {
+    /** The cost representing the cost part of the cycling ability. It is a
+     * decorator around an inner cost.
+     * @class CyclingCost
+     *
+     * @implements ICost
+     */
     class CyclingCost final : public ICost
     {
     public:
+        /** Constructs a CyclingCost with an inner cost.
+         * @param inner_cost The inner cost to decorate.
+         */
         explicit CyclingCost(std::unique_ptr<ICost> inner_cost)
             : m_inner_cost{std::move(inner_cost)} {};
 
+        /** Gets the inner cost.
+         * @return A pointer to the inner cost.
+         */
         [[nodiscard]] const ICost *getInnerCost() const
         {
             return m_inner_cost.get();

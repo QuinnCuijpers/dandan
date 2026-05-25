@@ -39,7 +39,7 @@ namespace dandan::core
 
         while (true)
         {
-            // game().render();
+            game().render();
             std::cout << "What do you want to do? (play [card index], activate "
                          "[card index], pass, next "
                          "or quit) ";

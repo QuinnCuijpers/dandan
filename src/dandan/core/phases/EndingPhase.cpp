@@ -13,7 +13,7 @@ namespace dandan::core
         {
         case Step::End:
             std::cout << "Handling end step\n";
-            // game().render();
+            game().render();
             m_step = Step::Cleanup;
             break;
         case Step::Cleanup:
@@ -22,7 +22,7 @@ namespace dandan::core
             // seven), they discard enough cards to reduce their hand size to
             // that number. This turn-based action doesn’t use the stack.
             std::cout << "Handling cleanup step\n";
-            // game().render();
+            game().render();
             // TODO: both players discard down to their maximum hand size, not
             // just active player
             if (game().activePlayer().hand().getCards().size() >

@@ -10,13 +10,31 @@
 
 namespace dandan::core
 {
+    /** Manages triggered abilities and event notifications.
+     * @class EventManager
+     */
     class EventManager
     {
     public:
+        /** Subscribes a card to the event manager.
+         * @param card The card to subscribe.
+         */
         void subscribe(const Card &card);
+
+        /** Unsubscribes a card from the event manager.
+         * @param card The card to unsubscribe.
+         */
         void unsubscribe(const Card &card);
+
+        /** Notifies all subscribers of an event.
+         * @param event The event to notify subscribers of.
+         * @param game The game instance.
+         */
         void notify(const events::IEvent &event, core::Game &game) const;
 
+        /** Gets the number of subscribers.
+         * @return The number of subscribers.
+         */
         [[nodiscard]] size_t size() const
         {
             return m_subscribers.size();

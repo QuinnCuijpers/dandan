@@ -23,4 +23,16 @@ namespace dandan::abilities
             m_mana_list.getOptions()[0]->getMana());
     }
 
+    [[nodiscard]] bool ManaAbility::canActivate(core::Game &game,
+                                                AbilityContext context) const
+    {
+        if (m_cost)
+        {
+            auto *source{game.getCardByID(context.source_card_id)};
+            return m_cost->canPay(*source,
+                                  game.getPlayer(source->getControllerID()));
+        }
+        return true;
+    }
+
 } // namespace dandan::abilities

@@ -8,6 +8,12 @@
 namespace dandan::costs
 {
 
+    /**
+     * A cost that requires the player to tap the source card.
+     * @class TapCost
+     *
+     * @implements ICost
+     */
     class TapCost : public ICost
     {
     public:

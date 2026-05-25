@@ -13,54 +13,65 @@ namespace dandan::core
     using PermanentMap =
         std::unordered_map<CardData::Type, std::vector<Permanent>>;
 
+    // TODO: expand docs
+    /** A class representing the battlefield.
+     * @class Battlefield
+     */
     class Battlefield
     {
     public:
+        /** Add a card to the battlefield.
+         * @param card The card to add.
+         */
         void addCard(Card &card)
         {
             card.setZone(Zone::BATTLEFIELD);
             m_permanents[card.getData().getType()].emplace_back(card.getID());
         }
 
+        /** Get the permanents on the battlefield mutably.
+         * @return A reference to the permanents map.
+         */
         [[nodiscard]] PermanentMap &permanents()
         {
             return m_permanents;
         }
 
-        [[nodiscard]] const PermanentMap &getPermanents() const
+        /** Get the permanents on the battlefield immutably.
+         * @return A const reference to the permanents map.
+         */
+        [[nodiscard]] const PermanentMap &permanents() const
         {
             return m_permanents;
         }
 
-        // [[nodiscard]] Permanent getPermanent(int card_index)
-        // {
-        //     auto card{m_permanents[card_index]};
-        //     // erase chosen over pop and swap as we want to maintain card
-        //     order
-        //     // in hand while in the backend it is more effiecient to pop and
-        //     // swap, the order of cards remaining constant makes UI later
-        //     easier
-        //     // to implement
-        //     m_permanents.erase(m_permanents.begin() + card_index);
-        //     return card;
-        // }
-
+        /** Get the lands on the battlefield.
+         * @return A const reference to the lands vector.
+         */
         [[nodiscard]] const std::vector<Permanent> &getLands() const
         {
             return m_permanents.at(CardData::Type::Land);
         }
 
+        /** Get the creatures on the battlefield.
+         * @return A const reference to the creatures vector.
+         */
+        [[nodiscard]] const std::vector<Permanent> &getCreatures() const
+        {
+            return m_permanents.at(CardData::Type::Creature);
+        }
+
+        /** Get a land from the battlefield, the land is removed from the
+         * battlefield.
+         * @param card_index The index of the land to get.
+         * @return The land at the specified index.
+         */
         [[nodiscard]] Permanent getLand(int card_index)
         {
             auto &vec = m_permanents.at(CardData::Type::Land);
             auto card = vec[card_index];
             vec.erase(vec.begin() + card_index);
             return card;
-        }
-
-        [[nodiscard]] const std::vector<Permanent> &getCreatures() const
-        {
-            return m_permanents.at(CardData::Type::Creature);
         }
 
     private:
