@@ -20,10 +20,8 @@ namespace dandan::core
         /**
          * Constructs a new play card action.
          * @param card_id The card_id of the card to play.
-         * @param game The game instance.
          */
-        PlayCardAction(CardID card_id, Game &game)
-            : m_card_id{card_id}, m_game{game}
+        PlayCardAction(CardID card_id) : m_card_id{card_id}
         {
         }
 
@@ -36,12 +34,7 @@ namespace dandan::core
             core::Game &game) override;
 
     private:
-        // TODO: consider not having this take a game as member variable and
-        // just pass it in as a parameter to createEffect, as the action itself
-        // doesn't need to know about the game, only the effect does when it
-        // gets applied.
         CardID m_card_id;
-        Game &m_game;
     };
 } // namespace dandan::core
 

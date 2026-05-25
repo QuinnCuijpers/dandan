@@ -43,6 +43,9 @@ namespace dandan::core
     private:
         std::unique_ptr<IPhase> m_next_phase;
         bool m_pre_combat_main_phase{true};
+
+        void handlePlay(const std::string &input);
+        void handleActivate(const std::string &input);
     };
 } // namespace dandan::core
 

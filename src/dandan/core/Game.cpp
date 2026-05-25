@@ -47,7 +47,10 @@ namespace dandan::core
     void Game::GameSetup()
     {
 #ifdef DANDAN_SERIALIZE
-        loadCards(m_card_data_path);
+        if (m_cards.empty())
+        {
+            loadCards(m_card_data_path);
+        }
 #endif
 
         for (auto &card : m_cards)
@@ -124,18 +127,30 @@ namespace dandan::core
 
     void Game::run()
     {
-        while (true)
+        try
         {
-            while (m_phase != nullptr)
+            while (true)
             {
-                render();
-                handlePhase();
+                while (m_phase != nullptr)
+                {
+                    render();
+                    handlePhase();
+                }
+                DLOGI << "Passing turn\n";
+                m_first_turn = false;
+                m_active_player_index =
+                    (m_active_player_index + 1) % AMOUNT_PLAYERS;
+                changePhase(std::make_unique<BeginningPhase>(*this));
             }
-            DLOGI << "Passing turn\n";
-            m_first_turn = false;
-            m_active_player_index =
-                (m_active_player_index + 1) % AMOUNT_PLAYERS;
-            changePhase(std::make_unique<BeginningPhase>(*this));
+        }
+        catch (const std::runtime_error &e)
+        {
+            if (std::string(e.what()) == "Game quit by user")
+            {
+                DLOGI << "Game quit by user\n";
+                return;
+            }
+            DLOGI << "Game ended: " << e.what() << '\n';
         }
     }
 

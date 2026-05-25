@@ -1,6 +1,7 @@
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/Game.h"
 #include "dandan/log.h"
+#include <string>
 
 // TODO: clear mana pools at end of turn
 namespace dandan::core
@@ -12,7 +13,7 @@ namespace dandan::core
         {
         case Step::End:
             std::cout << "Handling end step\n";
-            game().render();
+            // game().render();
             m_step = Step::Cleanup;
             break;
         case Step::Cleanup:
@@ -21,7 +22,7 @@ namespace dandan::core
             // seven), they discard enough cards to reduce their hand size to
             // that number. This turn-based action doesn’t use the stack.
             std::cout << "Handling cleanup step\n";
-            game().render();
+            // game().render();
             // TODO: both players discard down to their maximum hand size, not
             // just active player
             if (game().activePlayer().hand().getCards().size() >
@@ -38,10 +39,11 @@ namespace dandan::core
                         << " cards in hand, but your maximum hand size is "
                         << game().activePlayer().maxHandSize()
                         << ". Please choose a card to discard: ";
-                    int card_id{-1};
-                    game().istream() >> card_id;
+                    std::string input;
                     try
                     {
+                        std::getline(game().istream(), input);
+                        int card_id = std::stoi(input);
                         auto *card{game().getCardByID(card_id)};
                         game().activePlayer().discardCard(*card);
                     }

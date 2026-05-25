@@ -1,7 +1,6 @@
 #ifndef DANDAN_MANA_H
 #define DANDAN_MANA_H
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <map>
@@ -117,6 +116,10 @@ namespace dandan::mana
                 symbol = "G";
                 break;
             case ManaType::GENERIC:
+                if (amount == 0 && !symbols.empty())
+                {
+                    break;
+                }
                 symbols += "(" + std::to_string(amount) + ")";
                 continue;
             default:
@@ -165,21 +168,21 @@ namespace dandan::mana
 
         [[nodiscard]] bool canPay(const Mana &cost) const
         {
-            auto covers = [this](const auto &entry)
+            int generic_cost = cost.getMana().at(ManaType::GENERIC);
+            int available_generic{};
+            for (const auto &[type, amount] : cost.getMana())
             {
-                try
+                if (type == ManaType::GENERIC)
                 {
-                    const auto &[type, amount] = entry;
-                    return m_manaMap.at(type) >= amount;
+                    continue;
                 }
-                catch (const std::out_of_range &)
+                if (m_manaMap.at(type) < amount)
                 {
                     return false;
                 }
-            };
-
-            return std::all_of(cost.getMana().begin(), cost.getMana().end(),
-                               covers);
+                available_generic += m_manaMap.at(type) - amount;
+            }
+            return available_generic >= generic_cost;
         }
 
         void pay(const Mana &cost)
@@ -189,9 +192,22 @@ namespace dandan::mana
             //     throw std::runtime_error("Cannot pay mana cost");
             // }
 
+            int generic_cost = cost.getMana().at(ManaType::GENERIC);
+
+            // TODO: generic mana is now paid by draining colors in order, which
+            // is not how it works in MTG. Fix this by allowing the caller to
+            // specify how to pay generic mana
             for (const auto &[type, amount] : cost.getMana())
             {
+                if (type == ManaType::GENERIC)
+                {
+                    continue;
+                }
                 m_manaMap[type] -= amount;
+                if (m_manaMap[type] > 0)
+                {
+                    m_manaMap[type] -= std::min(m_manaMap[type], generic_cost);
+                }
             }
         }
 
@@ -202,7 +218,12 @@ namespace dandan::mana
         }
 
     private:
-        ManaMap m_manaMap;
+        ManaMap m_manaMap{
+            {ManaType::COLORLESS, 0}, {ManaType::WHITE, 0},
+            {ManaType::BLUE, 0},      {ManaType::BLACK, 0},
+            {ManaType::RED, 0},       {ManaType::GREEN, 0},
+            {ManaType::GENERIC, 0},
+        };
     };
 
 } // namespace dandan::mana

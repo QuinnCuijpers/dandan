@@ -10,6 +10,11 @@ namespace dandan::effects
     {
         int m_scry_amount{1};
 
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        {
+            return std::make_unique<ScryEffect>(m_scry_amount);
+        }
+
         ScryEffect() = default;
 
         explicit ScryEffect(int scry_amount) : m_scry_amount(scry_amount)

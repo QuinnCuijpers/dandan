@@ -10,6 +10,11 @@ namespace dandan::effects
     {
         int m_peek_amount{3};
 
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        {
+            return std::make_unique<PeekEffect>(m_peek_amount);
+        }
+
         PeekEffect() = default;
 
         explicit PeekEffect(int peek_amount) : m_peek_amount(peek_amount)

@@ -14,6 +14,13 @@ namespace dandan::effects
         {
         }
 
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        {
+            auto cloned_effect = std::make_unique<ETBEffect>(m_card);
+            cloned_effect->setTapped(m_tapped);
+            return cloned_effect;
+        }
+
         std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
 
         void setTapped(bool tapped)

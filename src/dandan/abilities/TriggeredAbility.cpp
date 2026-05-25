@@ -8,11 +8,11 @@ namespace dandan::abilities
 {
 
     std::unique_ptr<effects::IOneShotEffect> TriggeredAbility::createEffect(
-        core::Game &game, [[maybe_unused]] AbilityContext context) const
+        [[maybe_unused]] core::Game &game,
+        [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving triggered ability\n";
-        m_effect->apply(game);
-        return nullptr;
+        return m_effect ? m_effect->clone() : nullptr;
     }
 
 } // namespace dandan::abilities

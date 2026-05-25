@@ -16,6 +16,7 @@ namespace dandan::effects
         std::cout << "Bouncing land at index " << land_index << "\n";
         auto land{game.activePlayer().battlefield().getLand(land_index)};
         auto *card{game.getCardByID(land.getID())};
+        game.eventManager().unsubscribe(*card);
         game.activePlayer().hand().addCard(*card);
         return nullptr;
     }

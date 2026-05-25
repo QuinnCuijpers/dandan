@@ -2,6 +2,7 @@
 #define DANDAN_TAPCOST_H
 
 #include "dandan/core/Game.h"
+#include "dandan/core/Zone.h"
 #include "dandan/costs/ICost.h"
 
 namespace dandan::costs
@@ -16,7 +17,8 @@ namespace dandan::costs
             const core::Card &source,
             [[maybe_unused]] const core::Player &player) const override
         {
-            return !source.getTapped();
+            return !source.getTapped() &&
+                   source.getZone() == core::Zone::BATTLEFIELD;
         }
 
         void pay(

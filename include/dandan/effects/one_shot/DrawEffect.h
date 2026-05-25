@@ -12,6 +12,11 @@ namespace dandan::effects
     public:
         int m_amount{1};
 
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        {
+            return std::make_unique<DrawEffect>(m_amount);
+        }
+
         DrawEffect() = default;
         explicit DrawEffect(int amount) : m_amount(amount)
         {

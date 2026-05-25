@@ -29,6 +29,12 @@ namespace dandan::effects
         explicit UntapEffect(core::Card &card) : m_card{card}
         {
         }
+
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        {
+            return std::make_unique<UntapEffect>(m_card);
+        }
+
         /**
          * Apply the untap effect and generate the corresponding event.
          * @param game The game state to apply the effect to.

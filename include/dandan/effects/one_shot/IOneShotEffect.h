@@ -19,6 +19,9 @@ namespace dandan::effects
         IOneShotEffect &operator=(const IOneShotEffect &) = delete;
         IOneShotEffect &operator=(IOneShotEffect &&) = delete;
         virtual ~IOneShotEffect() = default;
+
+        [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> clone() const = 0;
+
         virtual std::unique_ptr<events::IEvent> apply(
             core::Game &game) const = 0;
     };

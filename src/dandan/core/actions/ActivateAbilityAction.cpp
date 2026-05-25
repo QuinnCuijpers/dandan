@@ -1,5 +1,6 @@
 
 #include "dandan/core/actions/ActivateAbilityAction.h"
+#include "dandan/abilities/ActivatedAbility.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
@@ -14,6 +15,12 @@ namespace dandan::core
         {
             return mana_ability->createEffect(game, m_context);
         }
-        return nullptr;
+        if (const auto *activated_ability =
+                dynamic_cast<const abilities::ActivatedAbility *>(m_ability))
+        {
+            return activated_ability->createEffect(game, m_context);
+        }
+        throw std::runtime_error(
+            "Unknown ability type for activated ability action");
     }
 } // namespace dandan::core

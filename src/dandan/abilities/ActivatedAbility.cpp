@@ -12,7 +12,7 @@ namespace dandan::abilities
     {
         std::cout << "Resolving Activated ability\n";
         m_cost->pay(game, context);
-        return nullptr;
+        return m_effect ? m_effect->clone() : nullptr;
     }
 
 } // namespace dandan::abilities

@@ -15,6 +15,11 @@ namespace dandan::effects
         {
         }
 
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        {
+            return std::make_unique<AddManaEffect>(m_mana);
+        }
+
         std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
 
     private:
