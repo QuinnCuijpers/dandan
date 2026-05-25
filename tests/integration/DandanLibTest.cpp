@@ -123,7 +123,7 @@ TEST(DandanLibTest, Play1LandATurnTest)
     auto test_cards{createTestCards(TEST_DECK_SIZE)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
     std::stringstream input_stream{};
-    auto hand_cards = game.activePlayer().hand().getCards();
+    const auto &hand_cards = game.activePlayer().hand().getCards();
     for (int i{}; i < STARTING_HAND_SIZE; ++i)
     {
         input_stream << "play " << hand_cards[i].getID() << '\n';
@@ -227,7 +227,7 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
 
     std::stringstream stream{};
-    auto hand_cards = game.activePlayer().hand().getCards();
+    const auto &hand_cards = game.activePlayer().hand().getCards();
     for (size_t i{}; i < STARTING_HAND_SIZE - 1; ++i)
     {
         auto card_id = hand_cards[i];

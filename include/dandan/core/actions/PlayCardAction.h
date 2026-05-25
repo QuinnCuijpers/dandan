@@ -21,7 +21,7 @@ namespace dandan::core
          * Constructs a new play card action.
          * @param card_id The card_id of the card to play.
          */
-        PlayCardAction(CardID card_id) : m_card_id{card_id}
+        explicit PlayCardAction(CardID card_id) : m_card_id{card_id}
         {
         }
 

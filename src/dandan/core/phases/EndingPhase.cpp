@@ -39,9 +39,9 @@ namespace dandan::core
                         << " cards in hand, but your maximum hand size is "
                         << game().activePlayer().maxHandSize()
                         << ". Please choose a card to discard: ";
-                    std::string input;
                     try
                     {
+                        std::string input;
                         std::getline(game().istream(), input);
                         int card_id = std::stoi(input);
                         auto *card{game().getCardByID(card_id)};

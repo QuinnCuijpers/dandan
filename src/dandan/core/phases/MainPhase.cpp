@@ -55,7 +55,6 @@ namespace dandan::core
             {
                 std::cout << "Quitting game\n";
                 throw std::runtime_error("Game quit by user");
-                break;
             }
             if (input == "next")
             {
@@ -81,8 +80,7 @@ namespace dandan::core
             }
             // TODO: improve error handling for invalid input
             throw std::invalid_argument(
-                "Invalid input: " +
-                ((input.size() != 0U) ? input : "empty input"));
+                "Invalid input: " + (input.empty() ? input : "empty input"));
         }
         return std::move(m_next_phase);
     }
