@@ -16,7 +16,7 @@ namespace dandan::core
 
     class Game;
 
-    /** The class that represents a player in the game.
+    /** @brief The class that represents a player in the game.
      * @class Player
      */
     class Player

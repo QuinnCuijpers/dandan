@@ -9,7 +9,7 @@ namespace dandan::core
     // TODO: consider implementing this as a map of cardID's like the event
     // manager
 
-    /** The class that manages replacement effects.
+    /** @brief The class that manages replacement effects.
      * @class ReplacementManager
      */
     class ReplacementManager

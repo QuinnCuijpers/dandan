@@ -5,7 +5,7 @@
 
 namespace dandan::mana
 {
-    /** A class representing black mana.
+    /** @brief A class representing black mana.
      * @class BlackMana
      *
      * @implements Mana

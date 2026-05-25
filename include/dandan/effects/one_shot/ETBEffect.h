@@ -7,7 +7,7 @@
 #include <memory>
 namespace dandan::effects
 {
-    /** Represents the effect of a card entering the battlefield.
+    /** @brief Represents the effect of a card entering the battlefield.
      * @class ETBEffect
      *
      * @implements IOneShotEffect

@@ -19,7 +19,7 @@
 namespace dandan::core
 {
 
-    /** A struct to hold the stats (power and toughness) of a creature card.
+    /** @brief A struct to hold the stats (power and toughness) of a creature card.
      * @struct Stats
      */
     struct Stats
@@ -31,7 +31,7 @@ namespace dandan::core
         int toughness{1};
     };
 
-    /** A class to hold the static data for a card.
+    /** @brief A class to hold the static data for a card.
      * @class CardData
      */
     class CardData

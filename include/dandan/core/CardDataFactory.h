@@ -10,7 +10,7 @@
 
 namespace dandan::core
 {
-    /** A caching factory for creating CardData instances keyed by name.
+    /** @brief A caching factory for creating CardData instances keyed by name.
      * @class CardDataFactory
      */
     class CardDataFactory

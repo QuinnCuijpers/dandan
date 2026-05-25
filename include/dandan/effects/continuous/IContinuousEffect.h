@@ -3,7 +3,7 @@
 
 namespace dandan::effects
 {
-    /** A marker class for continuous effects.
+    /** @brief A marker class for continuous effects.
      * This is used to distinguish between one-shot effects and continuous
      * effects.
      * @class IContinuousEffect

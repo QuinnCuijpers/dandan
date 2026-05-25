@@ -8,7 +8,7 @@
 
 namespace dandan::effects
 {
-    /** A prevention effect that prevents playing cards under a provided
+    /** @brief A prevention effect that prevents playing cards under a provided
      * condition.
      * @class PlayCardPreventionEffect
      *

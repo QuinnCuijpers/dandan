@@ -10,7 +10,7 @@
 namespace dandan::core
 {
     /**
-     * Ending Phase
+     * @brief Ending Phase
      * @class EndingPhase
      *
      * @implements IPhase

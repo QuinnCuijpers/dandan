@@ -8,7 +8,7 @@
 namespace dandan::core
 {
     /**
-     * An action that represents activating an ability.
+     * @brief An action that represents activating an ability.
      * @class ActivateAbilityAction
      *
      * @implements IAction

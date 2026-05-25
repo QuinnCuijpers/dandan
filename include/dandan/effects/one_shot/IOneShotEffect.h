@@ -11,7 +11,7 @@ namespace dandan::core
 namespace dandan::effects
 {
     /**
-     * The base interface for One shot Effects.
+     * @brief The base interface for One shot Effects.
      * @class IOneShotEffect
      */
     class IOneShotEffect

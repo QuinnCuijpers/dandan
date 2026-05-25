@@ -25,7 +25,7 @@ namespace dandan::core
     // TODO: implement builder pattern to make it easier to build
     // OR make the game setup be a function that needs to be called explicitly
 
-    /** A class that represents the game state.
+    /** @brief A class that represents the game state.
      * @class Game
      */
     class Game

@@ -4,7 +4,7 @@
 #include "dandan/core/Player.h"
 namespace dandan::costs
 {
-    /** Base class for all cost types.
+    /** @brief Base class for all cost types.
      * @class ICost
      */
     class ICost

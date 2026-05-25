@@ -7,7 +7,7 @@
 
 namespace dandan::effects
 {
-    /** A prevention effect that prevents attacking under a provided condition.
+    /** @brief A prevention effect that prevents attacking under a provided condition.
      * @class AttackPreventionEffect
      *
      * @implements IPreventionEffect

@@ -9,7 +9,7 @@
 
 namespace dandan::abilities
 {
-    /** An activated ability is any ability that can be activated by a player at
+    /** @brief An activated ability is any ability that can be activated by a player at
      * instant speed. It consists of a cost that must be paid to activate the
      * ability and an effect that is applied when the ability resolves.
      * @class ActivatedAbility

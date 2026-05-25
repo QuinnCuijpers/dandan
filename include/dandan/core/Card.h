@@ -13,7 +13,7 @@
 namespace dandan::core
 {
 
-    /** A class representing a card instance in the game.
+    /** @brief A class representing a card instance in the game.
      * @class Card
      * All variable traits of the card instance are stored in this class,
      * while the static traits of the card are stored in CardData accesible

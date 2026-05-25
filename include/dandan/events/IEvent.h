@@ -6,7 +6,7 @@
 
 namespace dandan::events
 {
-    /** Abstract class represeting the base for all events
+    /** @brief Abstract class represeting the base for all events
      *@class IEvent
      */
     class IEvent

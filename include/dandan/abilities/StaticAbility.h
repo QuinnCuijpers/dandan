@@ -11,7 +11,7 @@
 namespace dandan::abilities
 {
 
-    /** A static ability that modifies the game state
+    /** @brief A static ability that modifies the game state
      * @class StaticAbility
      *
      * @implements IAbility

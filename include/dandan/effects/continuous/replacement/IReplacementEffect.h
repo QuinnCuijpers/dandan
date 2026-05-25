@@ -6,7 +6,7 @@
 
 namespace dandan::effects
 {
-    /** The interface class for replacement effects.
+    /** @brief The interface class for replacement effects.
      * @class IReplacementEffect
      * @implements IContinuousEffect
      */

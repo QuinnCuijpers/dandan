@@ -9,7 +9,7 @@
 
 namespace dandan::triggers
 {
-    /** A trigger that activates when a card enters the battlefield.
+    /** @brief A trigger that activates when a card enters the battlefield.
      * @class ETBTrigger
      *
      * @implements ITrigger

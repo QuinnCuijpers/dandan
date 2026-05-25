@@ -8,7 +8,7 @@
 
 namespace dandan::abilities
 {
-    /** Context for an ability's execution
+    /** @brief Context for an ability's execution
      * @struct AbilityContext
      */
     struct AbilityContext

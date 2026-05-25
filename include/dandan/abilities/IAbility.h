@@ -17,7 +17,7 @@ namespace dandan::events
 
 namespace dandan::abilities
 {
-    /** The interface for all abilities
+    /** @brief The interface for all abilities
      * @class IAbility
      */
     class IAbility

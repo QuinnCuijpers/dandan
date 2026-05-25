@@ -7,7 +7,7 @@
 namespace dandan::conditions
 {
     /**
-     * A condition that checks if the player controls the island.
+     * @brief A condition that checks if the player controls the island.
      * @class ControlsIslandCondition
      *
      * @implements ICondition

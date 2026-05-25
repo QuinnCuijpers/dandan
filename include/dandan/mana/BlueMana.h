@@ -5,7 +5,7 @@
 
 namespace dandan::mana
 {
-    /** A class representing blue mana.
+    /** @brief A class representing blue mana.
      * @class BlueMana
      *
      * @implements Mana

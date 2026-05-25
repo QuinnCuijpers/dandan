@@ -15,7 +15,7 @@ namespace dandan::core
     class MainPhase;
 
     /**
-     * Combat Phase
+     * @brief Combat Phase
      * @class CombatPhase
      *
      * @implements IPhase

@@ -70,7 +70,7 @@ namespace dandan::mana
         return ostream;
     }
 
-    /** A class representing mana in the game.
+    /** @brief A class representing mana in the game.
      * @class Mana
      */
     class Mana

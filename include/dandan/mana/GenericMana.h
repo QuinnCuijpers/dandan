@@ -5,7 +5,7 @@
 
 namespace dandan::mana
 {
-    /** A class representing generic mana.
+    /** @brief A class representing generic mana.
      * @class GenericMana
      * @implements Mana
      */

@@ -12,7 +12,7 @@
 // TODO: add doc explaining how this is different from ETBEffect
 namespace dandan::effects
 {
-    /** Represents the effect of playing a card.
+    /** @brief Represents the effect of playing a card.
      * @class PlayCardEffect
      *
      * @implements IOneShotEffect

@@ -8,7 +8,7 @@ namespace dandan::core
 
     class Game;
     /**
-     * Base interface for actions
+     * @brief Base interface for actions
      * @class IAction
      */
     class IAction

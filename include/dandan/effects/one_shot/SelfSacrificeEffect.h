@@ -8,7 +8,7 @@
 namespace dandan::effects
 {
     /**
-     * Represents an effect that sacrifices the underlying card
+     * @brief Represents an effect that sacrifices the underlying card
      *@class SelfSacrificeEffect
      *
      *@implements IOneShotEffect

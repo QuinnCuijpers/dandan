@@ -12,7 +12,7 @@
 namespace dandan::core
 {
 
-    /** A class that represents the library of the game.
+    /** @brief A class that represents the library of the game.
      * @class Library
      */
     class Library
