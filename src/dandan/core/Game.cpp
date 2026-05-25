@@ -166,11 +166,6 @@ namespace dandan::core
         return iter->second;
     }
 
-    const Card *Game::getCardByID(int card_id) const
-    {
-        return getCardByID(CardID::fromInt(card_id));
-    }
-
     Card *Game::getCardByID(CardID card_id)
     {
         auto iter = m_card_map.find(card_id);

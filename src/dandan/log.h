@@ -5,15 +5,10 @@
 #include <filesystem>
 #include <plog/Log.h>
 
-// NOLINTNEXTLINE
 #define DLOGI PLOGI
-// NOLINTNEXTLINE
 #define DLOGD PLOGD
-// NOLINTNEXTLINE
 #define DLOGW PLOGW
-// NOLINTNEXTLINE
 #define DLOGE PLOGE
-// NOLINTNEXTLINE
 #define DLOGF PLOGF
 
 namespace dandan
@@ -26,27 +21,19 @@ namespace dandan
 
 #else
 
-#include <ostream>
-
 namespace dandan::log
 {
+    /** A stream that discards all output.
+     * @class NullStream
+     */
     struct NullStream
     {
         template <typename T>
+        /** A function that discards all output.
+         * @return A reference to the null stream.
+         */
         constexpr const NullStream &operator<<(
             const T & /*unused*/) const noexcept
-        {
-            return *this;
-        }
-
-        constexpr const NullStream &operator<<(
-            std::ostream &(* /*unused*/)(std::ostream &)) const noexcept
-        {
-            return *this;
-        }
-
-        constexpr const NullStream &operator<<(
-            std::ios_base &(* /*unused*/)(std::ios_base &)) const noexcept
         {
             return *this;
         }

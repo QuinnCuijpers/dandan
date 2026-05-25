@@ -6,6 +6,9 @@
 
 namespace dandan::triggers
 {
+    /** An interface for defining triggers.
+     * @class ITrigger
+     */
     class ITrigger
     {
     public:
@@ -15,6 +18,13 @@ namespace dandan::triggers
         ITrigger &operator=(const ITrigger &) = delete;
         ITrigger &operator=(ITrigger &&) = delete;
         virtual ~ITrigger() = default;
+
+        /** Determines if the trigger should trigger based on the given event
+         * and context.
+         * @param other The event to check against.
+         * @param context The context in which the event occurred.
+         * @return True if the trigger should activate, false otherwise.
+         */
         [[nodiscard]] virtual bool triggersOn(
             const events::IEvent &other,
             abilities::AbilityContext context) const = 0;

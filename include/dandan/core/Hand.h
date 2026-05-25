@@ -8,25 +8,43 @@
 
 namespace dandan::core
 {
+    /** A class that represents the hand of the game.
+     * @class Hand
+     */
     class Hand
     {
     public:
         Hand() = default;
 
+        /** Constructs a hand with the given cards.
+         * @param cards The cards vector to initialize the hand with.
+         */
         explicit Hand(std::vector<CardID> cards) : m_cards{std::move(cards)}
         {
         }
 
+        /** Gets the cards in the hand immutably.
+         * @return A const reference to the vector of card IDs in the hand.
+         */
         [[nodiscard]] const std::vector<CardID> &getCards() const
         {
             return m_cards;
         }
 
+        /** Gets a card from the hand at the specified index.
+         * @param index The index of the card to get.
+         * @return The card ID at the specified index.
+         */
         [[nodiscard]] CardID getCard(int index) const
         {
             return m_cards[index];
         }
 
+        /** Gets a card from the hand at the specified index and removes it from
+         * the hand.
+         * @param index The index of the card to get.
+         * @return The card ID at the specified index.
+         */
         [[nodiscard]] CardID getCard(int index)
         {
             auto card{m_cards[index]};
@@ -38,6 +56,9 @@ namespace dandan::core
             return card;
         }
 
+        /** Removes a card from the hand.
+         * @param card The card to remove.
+         */
         void removeCard(const Card &card)
         {
             auto card_id = card.getID();
@@ -50,12 +71,18 @@ namespace dandan::core
             }
         }
 
+        /** Adds a card to the hand.
+         * @param card The card to add.
+         */
         void addCard(Card &card)
         {
             card.setZone(Zone::HAND);
             m_cards.emplace_back(card.getID());
         }
 
+        /** Adds multiple cards to the hand.
+         * @param cards The vector of cards to add.
+         */
         void addCards(std::vector<Card> &cards)
         {
             auto cardToHand = [](Card &card)
@@ -67,6 +94,9 @@ namespace dandan::core
                            std::back_inserter(m_cards), cardToHand);
         }
 
+        /** Discards a card from the hand.
+         * @param card The card to discard.
+         */
         void discardCard(Card &card)
         {
             std::cout << "Discarding card " << card.getData().getName() << '\n';

@@ -24,6 +24,10 @@ namespace dandan::core
 {
     // TODO: implement builder pattern to make it easier to build
     // OR make the game setup be a function that needs to be called explicitly
+
+    /** A class that represents the game state.
+     * @class Game
+     */
     class Game
     {
     public:
@@ -31,96 +35,163 @@ namespace dandan::core
         Game();
 #endif
 
+        /** Constructs a game with the given input stream.
+         * @param input The input stream to initialize the game with.
+         * @return The constructed game instance.
+         */
         static Game withIstream(std::istream &input);
+
+        /** Constructs a game with the given cards.
+         * @param cards The cards vector to initialize the game with.
+         * @return The constructed game instance.
+         */
         static Game withCards(std::vector<Card> cards);
 
+        /** Gets a player from the game accosiated with the given ID immutably.
+         * @param player_id The ID of the player to get.
+         * @return A const reference to the player at the specified ID.
+         */
         [[nodiscard]] const Player &getPlayer(PlayerID player_id) const
         {
             return m_players.at(player_id.id());
         }
 
+        /** Gets a player from the game accosiated with the given ID mutably.
+         * @param player_id The ID of the player to get.
+         * @return A reference to the player at the specified ID.
+         */
         [[nodiscard]] Player &getPlayer(PlayerID player_id)
         {
             return m_players.at(player_id.id());
         }
 
+        /** Gets the current active player immutably.
+         * @return A const reference to the active player.
+         */
         [[nodiscard]] const Player &activePlayer() const
         {
             return m_players.at(m_active_player_index);
         }
 
+        /** Gets the current active player mutably.
+         * @return A reference to the active player.
+         */
         [[nodiscard]] Player &activePlayer()
         {
             return m_players.at(m_active_player_index);
         }
 
+        /** Gets the non-active player immutably.
+         * @return A const reference to the non-active player.
+         */
         [[nodiscard]] const Player &nonActivePlayer() const
         {
             return m_players.at(1 - m_active_player_index);
         }
 
+        /** Gets the non-active player mutably.
+         * @return A reference to the non-active player.
+         */
         [[nodiscard]] Player &nonActivePlayer()
         {
             return m_players.at(1 - m_active_player_index);
         }
 
+        /** Gets the library mutably.
+         * @return A reference to the library.
+         */
         [[nodiscard]] Library &library()
         {
             return m_library;
         }
 
+        /** Gets the stack mutably.
+         * @return A reference to the stack.
+         */
         [[nodiscard]] Stack &stack()
         {
             return m_stack;
         }
 
+        /** Gets the event manager mutably.
+         * @return A reference to the event manager.
+         */
         [[nodiscard]] EventManager &eventManager()
         {
             return m_event_manager;
         }
 
+        /** Gets the event manager immutably.
+         * @return A const reference to the event manager.
+         */
         [[nodiscard]] const EventManager &eventManager() const
         {
             return m_event_manager;
         }
 
+        /** Gets the replacement manager mutably.
+         * @return A reference to the replacement manager.
+         */
         [[nodiscard]] ReplacementManager &replacementManager()
         {
             return m_replacement_manager;
         }
 
+        /** Gets the replacement manager immutably.
+         * @return A const reference to the replacement manager.
+         */
         [[nodiscard]] const ReplacementManager &replacementManager() const
         {
             return m_replacement_manager;
         }
 
+        /** Gets the input stream mutably.
+         * @return A reference to the input stream.
+         */
         [[nodiscard]] std::istream &istream()
         {
             return *m_input;
         }
 
+        /** Sets the input stream.
+         * @param istream The input stream to set.
+         */
         void setIstream(std::istream &istream)
         {
             m_input = &istream;
         }
 
+        /** Changes the current phase.
+         * @param phase The new phase.
+         */
         void changePhase(std::unique_ptr<IPhase> &&phase)
         {
             m_phase = std::move(phase);
         }
 
+        /** Sets the library.
+         * @param library The library to set.
+         */
         void setLibrary(Library &&library)
         {
             m_library = std::move(library);
         }
 
+        /** Checks if it is the first turn of the first player.
+         * @return True if it is the first turn, false otherwise.
+         */
         [[nodiscard]] bool isFirstTurn() const
         {
             return m_first_turn;
         }
 
+        /** Runs the game loop.
+         */
         void run();
 
+        /** Prints the names and IDs of the specified cards.
+         * @param card_ids The IDs of the cards to print.
+         */
         void printCards(const std::vector<CardID> &card_ids) const
         {
             std::cout << "[";
@@ -137,10 +208,14 @@ namespace dandan::core
             std::cout << "]\n";
         }
 
+        /** Renders the game state.
+         */
         void render() const;
 
         // TODO: this is a temporary solution, should be replaced with proper
         // turn structure and phase handling
+        /** Passes the turn to the next player.
+         */
         void passTurn()
         {
             changePhase(std::make_unique<EndingPhase>(*this));
@@ -149,6 +224,8 @@ namespace dandan::core
             changePhase(std::make_unique<BeginningPhase>(*this));
         }
 
+        /** Handles the current phase and transitions to the next phase.
+         */
         void handlePhase()
         {
             assert(m_phase &&
@@ -157,16 +234,45 @@ namespace dandan::core
             m_phase = std::move(next_phase);
         }
 
+        /** Checks if an action is prevented.
+         * @param action The action to check.
+         * @return True if the action is prevented, false otherwise.
+         */
         [[nodiscard]] bool isActionPrevented(const IAction &action) const
         {
             return m_prevention_manager.isPrevented(action, *this);
         }
 
+        /** Gets a card by its ID immutably.
+         * @param card_id The ID of the card to get.
+         * @return A pointer to the card if found, throws otherwise.
+         */
         [[nodiscard]] const Card *getCardByID(CardID card_id) const;
-        [[nodiscard]] const Card *getCardByID(int card_id) const;
+
+        /** Gets a card by int id immutably.
+         * @param card_id The ID of the card to get.
+         * @return A pointer to the card if found, throws otherwise.
+         */
+        [[nodiscard]] const Card *getCardByID(int card_id) const
+        {
+            return getCardByID(CardID::fromInt(card_id));
+        }
+
+        /** Gets a card by int mutably.
+         * @param card_id The ID of the card to get.
+         * @return A pointer to the card if found, throws otherwise.
+         */
         [[nodiscard]] Card *getCardByID(CardID card_id);
+
+        /** Gets a card by int id mutably.
+         * @param card_id The ID of the card to get.
+         * @return A pointer to the card if found, throws otherwise.
+         */
         [[nodiscard]] Card *getCardByID(int card_id);
 
+        /** Clears the card from its current zone.
+         * @param card The card to clear.
+         */
         void moveCardFromZone(const Card &card);
 
     private:

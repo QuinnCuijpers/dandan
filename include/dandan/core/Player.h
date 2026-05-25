@@ -16,6 +16,9 @@ namespace dandan::core
 
     class Game;
 
+    /** The class that represents a player in the game.
+     * @class Player
+     */
     class Player
     {
 
@@ -28,79 +31,130 @@ namespace dandan::core
             std::getline(std::cin, m_name);
         }
 
+        /** Constructs a player with the given name.
+         * @param name The name of the player.
+         */
         explicit Player(std::string name)
             : m_player_id(PlayerID::generate()), m_name(std::move(name))
         {
             std::cout << "Constructed player with name " << m_name << '\n';
         }
 
+        /** Gets the name of the player.
+         * @return a const reference to the name of the player.
+         */
         [[nodiscard]] const std::string &getName() const
         {
             return m_name;
         };
 
+        /** Gets the ID of the player.
+         * @return a const reference to the ID of the player.
+         */
         [[nodiscard]] const PlayerID &getID() const
         {
             return m_player_id;
         }
 
+        /** Gets the life total of the player.
+         * @return The life total of the player.
+         */
         [[nodiscard]] int getLifeTotal() const
         {
             return m_life_total;
         }
 
+        /** Gets the hand of the player mutably.
+         * @return A reference to the hand of the player.
+         */
         [[nodiscard]] Hand &hand()
         {
             return m_hand;
         }
 
+        /** Gets the hand of the player immutably.
+         * @return A const reference to the hand of the player.
+         */
         [[nodiscard]] const Hand &hand() const
         {
             return m_hand;
         }
 
+        /** Sets the hand of the player.
+         * @param hand The new hand for the player.
+         */
         void setHand(Hand &&hand)
         {
             m_hand = std::move(hand);
         }
 
+        /** Gets the battlefield of the player mutably.
+         * @return A reference to the battlefield of the player.
+         */
         [[nodiscard]] Battlefield &battlefield()
         {
             return m_battlefield;
         }
 
+        /** Gets the battlefield of the player immutably.
+         * @return A const reference to the battlefield of the player.
+         */
         [[nodiscard]] const Battlefield &battlefield() const
         {
             return m_battlefield;
         }
 
+        /** Checks if the player has played a land this turn.
+         * @return True if the player has played a land this turn, false
+         * otherwise.
+         */
         [[nodiscard]] bool playedLandThisTurn() const
         {
             return m_played_land_this_turn;
         }
 
+        /** Sets whether the player has played a land this turn.
+         * @param played True if the player has played a land this turn, false
+         * otherwise.
+         */
         void setPlayedLandThisTurn(bool played)
         {
             m_played_land_this_turn = played;
         }
 
+        /** Gets the maximum hand size of the player.
+         * @return The maximum hand size of the player.
+         */
         [[nodiscard]] size_t maxHandSize() const
         {
             return m_max_hand_size;
         }
 
+        /** Gets the mana pool of the player mutably.
+         * @return A reference to the mana pool of the player.
+         */
         [[nodiscard]] mana::Mana &manaPool()
         {
             return m_mana_pool;
         }
 
+        /** Gets the mana pool of the player immutably.
+         * @return A const reference to the mana pool of the player.
+         */
         [[nodiscard]] const mana::Mana &manaPool() const
         {
             return m_mana_pool;
         }
 
+        /** Draws a card from the library.
+         * @param library The library to draw from.
+         * @param game The game instance.
+         */
         void drawCard(Library &library, Game &game);
 
+        /** Plays a card from the player's hand.
+         * @param card The card to play.
+         */
         void playCard(Card &card)
         {
             std::cout << "Player is playing card " << card.getData().getName()
@@ -108,6 +162,9 @@ namespace dandan::core
             m_battlefield.addCard(card);
         }
 
+        /** Discards a card from the player's hand.
+         * @param card The card to discard.
+         */
         void discardCard(Card &card)
         {
             std::cout << "Player is discarding card "

@@ -9,17 +9,29 @@
 
 namespace dandan::triggers
 {
-
+    /** A trigger that activates when a card enters the battlefield.
+     * @class ETBTrigger
+     *
+     * @implements ITrigger
+     */
     class ETBTrigger : public ITrigger
     {
     public:
         ETBTrigger() = default;
 
+        /** Sets whether to only trigger on tapped ETB events or not.
+         * @param tapped The tapped status to set.
+         */
         void setTapped(bool tapped)
         {
             m_tapped = tapped;
         }
 
+        /** Returns whether the trigger is set to only trigger on tapped ETB
+         * events.
+         * @return True if the trigger is set to only trigger on tapped ETB
+         * events, false otherwise.
+         */
         [[nodiscard]] bool isTapped() const
         {
             return m_tapped.value_or(false);

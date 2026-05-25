@@ -6,10 +6,19 @@
 
 namespace dandan::core
 {
+    /** A class that represents the ID of a player using an auto-incrementing
+     * integer.
+     * @class PlayerID
+     */
     class PlayerID
     {
     public:
+        /// The next ID to be assigned to a player.
         static int next_id;
+
+        /** Generates the next PlayerID.
+         * @return The generated PlayerID.
+         */
         static PlayerID generate()
         {
             if (next_id >= AMOUNT_PLAYERS)
@@ -20,16 +29,24 @@ namespace dandan::core
             return PlayerID{next_id++};
         }
 
+        /** Resets the PlayerID generator back to the zero id.
+         */
         static void reset()
         {
             next_id = 0;
         }
 
+        /** Gets the invalid PlayerID represented by -1.
+         * @return The invalid PlayerID.
+         */
         static PlayerID getInvalidID()
         {
             return PlayerID{-1};
         }
 
+        /** Gets the underlying integer for the ID of the player.
+         * @return The ID of the player.
+         */
         [[nodiscard]] int id() const
         {
             return m_id;

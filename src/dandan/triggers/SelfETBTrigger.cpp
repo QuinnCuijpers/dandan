@@ -1,4 +1,5 @@
 #include "dandan/triggers/SelfETBtrigger.h"
+#include "dandan/events/ETBEvent.h"
 #include "dandan/log.h"
 
 namespace dandan::triggers
