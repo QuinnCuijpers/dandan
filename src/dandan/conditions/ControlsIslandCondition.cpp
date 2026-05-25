@@ -7,7 +7,7 @@
 
 namespace dandan::conditions
 {
-    bool ControlsIslandCondition::isSatisfied(const core::Game &game)
+    bool ControlsIslandCondition::isSatisfied(const core::Game &game) const
     {
         auto island_filter = [&game](const core::CardID &card_id)
         {

@@ -1,7 +1,11 @@
 #ifndef DANDAN_ICONDITION_H
 #define DANDAN_ICONDITION_H
 
-#include "dandan/core/Game.h"
+namespace dandan::core
+{
+    class Game;
+}
+
 namespace dandan::conditions
 {
     /**
@@ -23,7 +27,8 @@ namespace dandan::conditions
          * satisfied.
          * @returns true if the condition is satisfied, false otherwise.
          */
-        virtual bool isSatisfied(const core::Game &game) = 0;
+        [[nodiscard]] virtual bool isSatisfied(
+            const core::Game &game) const = 0;
     };
 
 } // namespace dandan::conditions

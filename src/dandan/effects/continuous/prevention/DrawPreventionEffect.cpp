@@ -5,12 +5,12 @@
 namespace dandan::effects
 {
     bool DrawPreventionEffect::prevents(const core::IAction &action,
-                                        const core::Game &game)
+                                        const core::Game &game) const
     {
         if ([[maybe_unused]] const auto *card_draw_action =
                 dynamic_cast<const core::CardDrawAction *>(&action))
         {
-            if (m_condition->isSatisfied(game))
+            if (getCondition()->isSatisfied(game))
             {
                 DLOGI << "Draw prevention effect prevents drawing card\n";
                 return true;

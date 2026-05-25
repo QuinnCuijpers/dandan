@@ -15,7 +15,7 @@ namespace dandan::conditions
     class ControlsIslandCondition : public ICondition
     {
     public:
-        bool isSatisfied(const core::Game &game) override;
+        [[nodiscard]] bool isSatisfied(const core::Game &game) const override;
     };
 } // namespace dandan::conditions
 

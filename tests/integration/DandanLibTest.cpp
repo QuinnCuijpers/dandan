@@ -43,8 +43,7 @@ TEST(DandanLibTest, GameSetup)
     auto getCardname = [&game](const auto &card)
     { return std::string(game.getCardByID(card)->getData().getName()); };
 
-    for (const auto &[type, cards] :
-         active_player.battlefield().getPermanents())
+    for (const auto &[type, cards] : active_player.battlefield().permanents())
     {
         std::transform(cards.begin(), cards.end(),
                        std::back_inserter(battlefield_card_names), getCardname);

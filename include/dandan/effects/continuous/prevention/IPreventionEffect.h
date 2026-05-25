@@ -2,16 +2,12 @@
 #define DANDAN_IPREVENTION_EFFECT_H
 
 #include "../IContinuousEffect.h"
+#include "dandan/conditions/ICondition.h"
 #include "dandan/core/actions/IAction.h"
 
 namespace dandan::core
 {
     class Game;
-}
-
-namespace dandan::conditions
-{
-    class ICondition;
 }
 
 namespace dandan::effects
@@ -43,7 +39,7 @@ namespace dandan::effects
          * otherwise.
          */
         [[nodiscard]] virtual bool prevents(const core::IAction &action,
-                                            const core::Game &game) = 0;
+                                            const core::Game &game) const = 0;
 
         /** Gets the condition associated with this prevention effect.
          * @return A pointer to the condition associated with this prevention

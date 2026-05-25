@@ -28,7 +28,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] bool prevents(const core::IAction &action,
-                                    const core::Game &game) override;
+                                    const core::Game &game) const override;
     };
 } // namespace dandan::effects
 

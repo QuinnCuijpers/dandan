@@ -6,7 +6,11 @@
 
 namespace dandan::events
 {
-
+    /** Event generated when a card enters the battlefield
+     * @class ETBEvent
+     *
+     * @implements IEvent
+     */
     class ETBEvent : public IEvent
     {
     public:
@@ -15,11 +19,14 @@ namespace dandan::events
         {
         }
 
-        void setTapped(bool tapped)
-        {
-            m_tapped = tapped;
-        }
+        // void setTapped(bool tapped)
+        // {
+        //     m_tapped = tapped;
+        // }
 
+        /** query whether the card entered tapped
+         * @returns a boolean representing whether the card entered tapped
+         */
         [[nodiscard]] bool isTapped() const
         {
             return m_tapped.value_or(false);

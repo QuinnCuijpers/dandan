@@ -2,6 +2,7 @@
 #define DANDAN_STARTINGPLAYERCONDITION_H
 
 #include "dandan/conditions/ICondition.h"
+#include "dandan/core/Game.h"
 
 namespace dandan::conditions
 {
@@ -16,7 +17,7 @@ namespace dandan::conditions
     class StartingPlayerCondition : public ICondition
     {
     public:
-        bool isSatisfied(const core::Game &game) override
+        [[nodiscard]] bool isSatisfied(const core::Game &game) const override
         {
             return game.isFirstTurn();
         }

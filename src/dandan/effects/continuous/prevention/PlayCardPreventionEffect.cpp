@@ -5,13 +5,13 @@
 namespace dandan::effects
 {
     bool PlayCardPreventionEffect::prevents(const core::IAction &action,
-                                            const core::Game &game)
+                                            const core::Game &game) const
     {
         if (const auto *play_card_action =
                 dynamic_cast<const core::PlayCardAction *>(&action))
         {
             const auto *card{game.getCardByID(play_card_action->getCardID())};
-            if (m_condition->isSatisfied(game) &&
+            if (getCondition()->isSatisfied(game) &&
                 card->getData().getType() == core::CardData::Type::Land)
             {
                 DLOGI << "Play card prevention effect prevents playing card\n";
