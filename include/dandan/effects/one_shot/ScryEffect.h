@@ -5,9 +5,14 @@
 
 namespace dandan::effects
 {
-
+    /** Reprents the effect of scrying
+     * @struct ScryEffect
+     *
+     * @implements IOneShotEffect
+     */
     struct ScryEffect final : public IOneShotEffect
     {
+        /// The amount of cards to scry
         int m_scry_amount{1};
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
@@ -17,6 +22,9 @@ namespace dandan::effects
 
         ScryEffect() = default;
 
+        /** Constructor
+         * @param scry_amount the amount of cards to scry
+         */
         explicit ScryEffect(int scry_amount) : m_scry_amount(scry_amount)
         {
         }

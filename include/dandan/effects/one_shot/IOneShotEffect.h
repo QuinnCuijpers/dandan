@@ -10,6 +10,10 @@ namespace dandan::core
 
 namespace dandan::effects
 {
+    /**
+     * The base interface for One shot Effects.
+     * @class IOneShotEffect
+     */
     class IOneShotEffect
     {
     public:
@@ -20,8 +24,18 @@ namespace dandan::effects
         IOneShotEffect &operator=(IOneShotEffect &&) = delete;
         virtual ~IOneShotEffect() = default;
 
+        /**
+         * creates a new Effect that clones the underlying effect.
+         *
+         * @returns A unique ptr to the cloned effect.
+         */
         [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> clone() const = 0;
 
+        /**
+         * apply the Effect to the game state by mutating it.
+         * @param game the game to apply the effect to
+         * @return an event to notify that the effect happened
+         */
         virtual std::unique_ptr<events::IEvent> apply(
             core::Game &game) const = 0;
     };

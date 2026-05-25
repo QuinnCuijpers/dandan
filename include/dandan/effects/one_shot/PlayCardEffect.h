@@ -9,11 +9,20 @@
 #include <iostream>
 #include <memory>
 
+// TODO: add doc explaining how this is different from ETBEffect
 namespace dandan::effects
 {
+    /** Represents the effect of playing a card.
+     * @class PlayCardEffect
+     *
+     * @implements IOneShotEffect
+     */
     class PlayCardEffect : public IOneShotEffect
     {
     public:
+        /** Constructor
+         *@param card The card that would be played
+         */
         explicit PlayCardEffect(core::Card &card) : m_card{card}
         {
         }

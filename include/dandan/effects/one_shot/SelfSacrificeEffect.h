@@ -4,8 +4,15 @@
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <iostream>
 
+// should take a card as member variable, but cant rn due to serialization
 namespace dandan::effects
 {
+    /**
+     * Represents an effect that sacrifices the underlying card
+     *@class SelfSacrificeEffect
+     *
+     *@implements IOneShotEffect
+     */
     class SelfSacrificeEffect : public IOneShotEffect
     {
     public:

@@ -7,9 +7,15 @@
 
 namespace dandan::effects
 {
+    /** Represents drawing cards as an effect.
+     * @struct DrawEffect
+     *
+     *@implements IOneShotEffect
+     */
     struct DrawEffect final : public IOneShotEffect
     {
     public:
+        /// the amount of cards to draw with this effect
         int m_amount{1};
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
@@ -18,6 +24,9 @@ namespace dandan::effects
         }
 
         DrawEffect() = default;
+        /** Constructor
+         * @param amount the amount of cards this effect would draw
+         */
         explicit DrawEffect(int amount) : m_amount(amount)
         {
         }

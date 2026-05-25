@@ -8,10 +8,18 @@
 #include <memory>
 namespace dandan::effects
 {
+    /** Represents an effect for adding mana
+     *  @class AddManaEffect
+     *
+     *  @implements IOneShotEffect
+     */
     class AddManaEffect : public IOneShotEffect
     {
     public:
-        explicit AddManaEffect(mana::ManaMap m_mana) : m_mana(std::move(m_mana))
+        /** Constructor
+         * @param mana the mana that this effect will add.
+         */
+        explicit AddManaEffect(mana::ManaMap mana) : m_mana(std::move(mana))
         {
         }
 

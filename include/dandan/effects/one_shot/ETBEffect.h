@@ -7,9 +7,17 @@
 #include <memory>
 namespace dandan::effects
 {
+    /** Represents the effect of a card entering the battlefield.
+     * @class ETBEffect
+     *
+     * @implements IOneShotEffect
+     */
     class ETBEffect : public IOneShotEffect
     {
     public:
+        /** Constructor
+         * @param card the card that would be entering the battlefield
+         */
         explicit ETBEffect(core::Card &card) : m_card{card}
         {
         }
@@ -23,6 +31,10 @@ namespace dandan::effects
 
         std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
 
+        /** Set whether the ETB should be tapped or untapped
+         * @param tapped boolean representing whether or not the ETB should be
+         * tapped or not.
+         */
         void setTapped(bool tapped)
         {
             m_tapped = tapped;
