@@ -19,7 +19,7 @@ namespace dandan::effects
         /** Constructs a new attack prevention effect with the given condition.
          * @param condition The condition under which to prevent attacking.
          */
-        AttackPreventionEffect(
+        explicit AttackPreventionEffect(
             std::unique_ptr<conditions::ICondition> condition)
             : IPreventionEffect(std::move(condition))
         {

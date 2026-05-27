@@ -63,12 +63,11 @@ namespace dandan::core
                 // check with CR
                 if (viable_attackers.empty())
                 {
-                    m_step = Step::DeclareBlockers;
                     break;
                 }
 
                 int index{};
-                for (const auto &creature : viable_attackers)
+                for (const auto *creature : viable_attackers)
                 {
                     std::cout << index << " attacker: " << creature << '\n';
                 }
@@ -83,7 +82,6 @@ namespace dandan::core
                 if (0 < card_index ||
                     card_index >= static_cast<int>(viable_attackers.size()))
                 {
-                    m_step = Step::DeclareBlockers;
                     break;
                 }
                 auto attack_action{std::make_unique<core::AttackAction>(
