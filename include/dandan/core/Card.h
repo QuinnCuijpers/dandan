@@ -98,6 +98,23 @@ namespace dandan::core
             m_controller_id = new_controller_id;
         }
 
+        /** Get whether the card has summoning sickness.
+         * @return True if the card has summoning sickness, false otherwise.
+         */
+        [[nodiscard]] bool getSummoningSickness() const
+        {
+            return m_summoning_sick;
+        }
+
+        /** Set the state of summoning sickness.
+         * @param sickness the boolean value to set the summoning sickness to
+         */
+        void setSummoningSickness(bool sickness)
+
+        {
+            m_summoning_sick = sickness;
+        }
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.
@@ -124,6 +141,7 @@ namespace dandan::core
         PlayerID m_controller_id;
         bool m_tapped{false};
         Zone m_zone{Zone::LIBRARY};
+        bool m_summoning_sick{true};
 
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each

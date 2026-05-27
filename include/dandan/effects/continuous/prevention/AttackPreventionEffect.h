@@ -7,7 +7,8 @@
 
 namespace dandan::effects
 {
-    /** @brief A prevention effect that prevents attacking under a provided condition.
+    /** @brief A prevention effect that prevents attacking under a provided
+     * condition.
      * @class AttackPreventionEffect
      *
      * @implements IPreventionEffect
@@ -18,7 +19,7 @@ namespace dandan::effects
         /** Constructs a new attack prevention effect with the given condition.
          * @param condition The condition under which to prevent attacking.
          */
-        explicit AttackPreventionEffect(
+        AttackPreventionEffect(
             std::unique_ptr<conditions::ICondition> condition)
             : IPreventionEffect(std::move(condition))
         {
@@ -26,6 +27,8 @@ namespace dandan::effects
 
         [[nodiscard]] bool prevents(const core::IAction &action,
                                     const core::Game &game) const override;
+
+    private:
     };
 
 } // namespace dandan::effects

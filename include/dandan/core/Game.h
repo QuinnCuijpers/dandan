@@ -30,6 +30,7 @@ namespace dandan::core
      */
     class Game
     {
+
     public:
 #ifdef DANDAN_SERIALIZE
         Game();
@@ -145,6 +146,22 @@ namespace dandan::core
             return m_replacement_manager;
         }
 
+        /** Gets the prevention manager mutably.
+         * @return A reference to the prevention manager.
+         */
+        [[nodiscard]] PreventionManager &preventionManager()
+        {
+            return m_prevention_manager;
+        }
+
+        /** Gets the prevention manager immutably.
+         * @return A const reference to the prevention manager.
+         */
+        [[nodiscard]] const PreventionManager &preventionManager() const
+        {
+            return m_prevention_manager;
+        }
+
         /** Gets the input stream mutably.
          * @return A reference to the input stream.
          */
@@ -202,7 +219,7 @@ namespace dandan::core
                 {
                     std::cout << card->getData().getName() << "("
                               << card->getID().getID() << ", " << std::boolalpha
-                              << card->getTapped() << "), ";
+                              << card->getSummoningSickness() << "), ";
                 }
             }
             std::cout << "]\n";

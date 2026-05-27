@@ -1,6 +1,7 @@
 #ifndef DANDAN_ATTACK_ACTION_H
 #define DANDAN_ATTACK_ACTION_H
 
+#include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -18,7 +19,20 @@ namespace dandan::core
     class AttackAction : public IAction
     {
     public:
-        AttackAction() = default;
+        /** Constructor
+         * @param creature the creature card that would attack
+         */
+        explicit AttackAction(core::Card &creature) : m_creature{creature}
+        {
+        }
+
+        /** Get the creature that would attack under this action
+         * @returns the creature that would attack under this action
+         */
+        core::Card &getCreature()
+        {
+            return m_creature;
+        }
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             [[maybe_unused]] core::Game &game) override
@@ -26,6 +40,9 @@ namespace dandan::core
             std::cout << "Executing attack action\n";
             return {nullptr};
         }
+
+    private:
+        Card &m_creature;
     };
 } // namespace dandan::core
 
