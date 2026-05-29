@@ -257,10 +257,13 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
 
-    auto data = dandan::core::CardData{
-        "Test Card ", std::make_unique<dandan::mana::BlueMana>(1),
-        dandan::core::CardData::Type::Creature,
-        dandan::core::CardData::SubType::None, std::move(abilities)};
+    auto data =
+        dandan::core::CardData{"Test Card ",
+                               std::make_unique<dandan::mana::BlueMana>(1),
+                               dandan::core::CardData::Type::Creature,
+                               dandan::core::CardData::SubType::None,
+                               std::move(abilities),
+                               dandan::core::Stats{2, 2}};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -283,11 +286,14 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
     // combat phase player 1
     stream << "next\n"; // pass to combat phase
     stream << "0\n";    // choose the first creature as attacker
+    stream << "none\n"; // choose not to block with creature
     stream << "pass\n"; // pass to next player
 
     // combat phase player 2
     stream << "next\n"; // pass to combat phase
     stream << "0\n";    // choose the first creature as attacker
+
+    // quit
     stream << "quit\n"; // quit to avoid discard logic
 
     game.setIstream(stream);
@@ -314,4 +320,7 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
     const auto *non_active_creature = game.getCardByID(non_active_creature_id);
     EXPECT_TRUE(active_creature->isAttacking());
     EXPECT_TRUE(non_active_creature->isAttacking());
+
+    EXPECT_EQ(game.activePlayer().getLifeTotal(), STARTING_LIFE_TOTAL - 2);
+    EXPECT_EQ(game.nonActivePlayer().getLifeTotal(), STARTING_LIFE_TOTAL - 2);
 }

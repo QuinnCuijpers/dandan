@@ -101,6 +101,52 @@ namespace dandan::core
 
         m_step = Step::DeclareBlockers;
     }
+    void CombatPhase::handleDeclareBlockersStep()
+    {
+        std::cout << "Declare blockers step\n";
+        // should give some form of priority here
+        if (m_attackers.empty())
+        {
+            std::cout
+                << "No attackers declared, skipping declare blockers step\n";
+            m_step = Step::CombatDamage;
+            return;
+        }
+        auto *blocking_player{&game().nonActivePlayer()};
+        game().render();
+        for (const auto &creature_id :
+             blocking_player->battlefield().getCreatures())
+        {
+            auto *creature{game().getCardByID(creature_id)};
+            if (creature->getTapped() || creature->isBlocking())
+            {
+                continue;
+            }
+            std::cout << "Which attacker would you like to block with "
+                      << creature->getData().getName()
+                      << " (or none to not block with it): ";
+            std::string input{};
+            std::getline(game().istream(), input);
+            if (input == "none")
+            {
+                continue;
+            }
+            // for now let this be a card ID instead of index
+            int card_id{std::stoi(input)};
+            auto *attacking_creature{game().getCardByID(card_id)};
+            if (attacking_creature == nullptr ||
+                !attacking_creature->isAttacking())
+            {
+                std::cout << "Invalid attacker chosen\n";
+                continue;
+            }
+            attacking_creature->setBlocked(true);
+            creature->setBlocking(true);
+            std::cout << creature->getData().getName() << " is blocking "
+                      << attacking_creature->getData().getName() << '\n';
+        }
+        m_step = Step::CombatDamage;
+    }
 
     void CombatPhase::handleNextStep()
     {
@@ -120,11 +166,22 @@ namespace dandan::core
             handleDeclareAttackersStep();
             break;
         case Step::DeclareBlockers:
-            std::cout << "Declare blockers step\n";
-            m_step = Step::CombatDamage;
+            handleDeclareBlockersStep();
             break;
         case Step::CombatDamage:
             std::cout << "Combat damage step\n";
+            for (const auto &creature_id :
+                 game().activePlayer().battlefield().getCreatures())
+            {
+                auto *creature{game().getCardByID(creature_id)};
+                if (creature->isAttacking() && !creature->isBlocked())
+                {
+                    std::cout << "Dealing damage to opponent from "
+                              << creature->getData().getName() << '\n';
+                    game().nonActivePlayer().takeDamage(creature->getPower(),
+                                                        game());
+                }
+            }
             m_step = Step::EndOfCombat;
             break;
         case Step::EndOfCombat:

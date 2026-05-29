@@ -1,8 +1,10 @@
 #ifndef DANDAN_COMBATPHASE_H
 #define DANDAN_COMBATPHASE_H
 
+#include "dandan/core/Card.h"
 #include "dandan/core/phases/IPhase.h"
 #include <cstdint>
+#include <vector>
 
 // 506. Combat Phase
 // 507. Beginning of Combat Step
@@ -62,12 +64,23 @@ namespace dandan::core
             return "Combat Phase";
         }
 
+        /** Adds an attacking creature to the list of attackers.
+         * @param creature The creature to add as an attacker.
+         */
+        void addAttacker(Card *creature)
+        {
+            m_attackers.emplace_back(creature);
+        }
+
     private:
         Step m_step{Step::BeginningOfCombat};
         std::unique_ptr<IPhase> m_next_phase;
 
+        std::vector<Card *> m_attackers;
+
         void handleNextStep();
         void handleDeclareAttackersStep();
+        void handleDeclareBlockersStep();
     };
 } // namespace dandan::core
 

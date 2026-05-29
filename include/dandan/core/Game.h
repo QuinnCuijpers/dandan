@@ -202,6 +202,14 @@ namespace dandan::core
             return m_first_turn;
         }
 
+        /** Gets the current phase.
+         * @return A reference to the current phase.
+         */
+        [[nodiscard]] std::unique_ptr<IPhase> &phase()
+        {
+            return m_phase;
+        }
+
         /** Runs the game loop.
          */
         void run();
@@ -219,10 +227,8 @@ namespace dandan::core
                 {
                     std::cout << card->getData().getName() << "("
                               << "CardID: " << card->getID().getID() << ", "
-                              << std::boolalpha << "Summoning Sickness: "
-                              << card->getSummoningSickness() << ", "
-                              << "Is Attacking: " << card->isAttacking()
-                              << " )";
+                              << std::boolalpha
+                              << "Is Tapped: " << card->getTapped() << " )";
                 }
             }
             std::cout << "]\n";

@@ -131,6 +131,54 @@ namespace dandan::core
             return m_is_attacking;
         }
 
+        /** Get whether the card is blocked.
+         * @return True if the card is blocked, false otherwise.
+         */
+        [[nodiscard]] bool isBlocked() const
+        {
+            return m_is_blocked;
+        }
+
+        /** Set the blocked status of the card.
+         * @param is_blocked The new blocked status of the card.
+         */
+        void setBlocked(bool is_blocked)
+        {
+            m_is_blocked = is_blocked;
+        }
+
+        /** Set the blocking status of the card.
+         * @param is_blocking The new blocking status of the card.
+         */
+        void setBlocking(bool is_blocking)
+        {
+            m_blocking = is_blocking;
+        }
+
+        /** Get whether the card is blocking.
+         * @return True if the card is blocking, false otherwise.
+         */
+        [[nodiscard]] bool isBlocking() const
+        {
+            return m_blocking;
+        }
+
+        /** Get the power of the card.
+         * @return The power of the card.
+         */
+        [[nodiscard]] int getPower() const
+        {
+            return m_current_power;
+        }
+
+        /** Get the toughness of the card.
+         * @return The toughness of the card.
+         */
+        [[nodiscard]] int getToughness() const
+        {
+            return m_current_toughness;
+        }
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.
@@ -161,11 +209,26 @@ namespace dandan::core
         Zone m_zone{Zone::LIBRARY};
         bool m_summoning_sick{true};
         bool m_is_attacking{false};
+        bool m_is_blocked{false};
+        bool m_blocking{false};
+
+        int m_current_power{};
+        int m_current_toughness{};
 
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each
         // instance
         CardData *m_card_data;
+
+        void setCurrentPower(int power)
+        {
+            m_current_power = power;
+        }
+
+        void setCurrentToughness(int toughness)
+        {
+            m_current_toughness = toughness;
+        }
     };
 } // namespace dandan::core
 

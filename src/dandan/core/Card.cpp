@@ -14,6 +14,15 @@ namespace dandan::core
     {
         DLOGI << "Creating card: " << card_name
               << " with ID: " << m_card_id.getID() << '\n';
+        if (m_card_data != nullptr)
+        {
+            auto stats = m_card_data->getStats();
+            if (stats.has_value())
+            {
+                setCurrentPower(stats->power);
+                setCurrentToughness(stats->toughness);
+            }
+        }
     }
 #endif
 
@@ -23,5 +32,14 @@ namespace dandan::core
     {
         DLOGI << "Creating card: " << card_data->getName()
               << " with ID: " << m_card_id.getID() << '\n';
+        if (m_card_data != nullptr)
+        {
+            auto stats = m_card_data->getStats();
+            if (stats.has_value())
+            {
+                setCurrentPower(stats->power);
+                setCurrentToughness(stats->toughness);
+            }
+        }
     }
 } // namespace dandan::core

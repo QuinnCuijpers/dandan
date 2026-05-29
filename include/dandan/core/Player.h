@@ -172,6 +172,18 @@ namespace dandan::core
             m_hand.discardCard(card);
         }
 
+        /** Takes damage
+         * @param damage The amount of damage to take.
+         * @param game The game instance.
+         */
+        void takeDamage(int damage, [[maybe_unused]] Game &game)
+        {
+            m_life_total -= damage;
+            // TODO: death check should be some state based action not checked
+            // here
+            // TODO: this should notify a damage event
+        }
+
     private:
         PlayerID m_player_id;
         std::string m_name;
