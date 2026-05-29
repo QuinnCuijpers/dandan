@@ -257,6 +257,8 @@ namespace dandan::core
             assert(m_phase &&
                    "Phase should never be null during handlePhase()");
             auto next_phase = m_phase->handle();
+            activePlayer().manaPool().empty();
+            nonActivePlayer().manaPool().empty();
             m_phase = std::move(next_phase);
         }
 

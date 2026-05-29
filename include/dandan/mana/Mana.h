@@ -155,6 +155,16 @@ namespace dandan::mana
             }
         }
 
+        /** Empties the mana pool.
+         */
+        void empty()
+        {
+            for (auto &[type, amount] : m_manaMap)
+            {
+                amount = 0;
+            }
+        }
+
         /** Outputs the mana to an output stream.
          * @param ostream The output stream.
          * @param mana The mana to output.

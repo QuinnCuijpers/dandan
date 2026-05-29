@@ -259,7 +259,7 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
 
     auto data =
         dandan::core::CardData{"Test Card ",
-                               std::make_unique<dandan::mana::BlueMana>(1),
+                               std::make_unique<dandan::mana::BlueMana>(0),
                                dandan::core::CardData::Type::Creature,
                                dandan::core::CardData::SubType::None,
                                std::move(abilities),
@@ -302,8 +302,9 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
     game.handlePhase();
 
     // main phase
-    game.activePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE, 1);
-    game.nonActivePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE, 1);
+    // game.activePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE, 1);
+    // game.nonActivePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE,
+    // 1);
 
     // combat phase, should not be able to attack with creatures due to
     // summoning sickness
