@@ -74,7 +74,7 @@ namespace dandan::mana
         {
             return ManaType::GENERIC;
         }
-        throw std::invalid_argument("Invalid mana type string: " +
+        throw std::invalid_argument(std::string("Invalid mana type string: ") +
                                     std::string(str));
     }
 
