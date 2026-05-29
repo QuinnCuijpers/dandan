@@ -42,6 +42,7 @@ namespace dandan::core
             {
                 continue;
             }
+
             for (const auto *ability : iter->second)
             {
                 auto *card{game.getCardByID(card_id)};

@@ -24,7 +24,9 @@ namespace dandan::effects
                 std::make_unique<conditions::SummoningSicknessCondition>(
                     m_card))};
 
-        game.preventionManager().subscribe(std::move(summoning_sickness));
+        game.preventionManager().subscribe(m_card.getID(),
+                                           std::move(summoning_sickness));
+
         return std::make_unique<events::ETBEvent>(m_card.getID(),
                                                   m_card.getControllerID());
     }

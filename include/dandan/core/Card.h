@@ -115,6 +115,22 @@ namespace dandan::core
             m_summoning_sick = sickness;
         }
 
+        /** Set the attacking status of the card.
+         * @param is_attacking The new attacking status of the card.
+         */
+        void setAttacking(bool is_attacking)
+        {
+            m_is_attacking = is_attacking;
+        }
+
+        /** Get whether the card is attacking.
+         * @return True if the card is attacking, false otherwise.
+         */
+        [[nodiscard]] bool isAttacking() const
+        {
+            return m_is_attacking;
+        }
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.
@@ -126,12 +142,14 @@ namespace dandan::core
             {
                 ostream << "Card{ID: " << card.m_card_id.getID()
                         << ", controller ID: " << card.m_controller_id.id()
-                        << ", tapped: " << card.m_tapped << ", data: nullptr}";
+                        << ", tapped: " << card.m_tapped << ", data: nullptr}"
+                        << ", summoning sick: " << card.m_summoning_sick << '}';
                 return ostream;
             }
             ostream << "Card{ID: " << card.m_card_id.getID()
                     << ", controller ID: " << card.m_controller_id.id()
                     << ", tapped: " << card.m_tapped
+                    << ", summoning sick: " << card.m_summoning_sick
                     << ", data: " << *card.m_card_data << '}';
             return ostream;
         }
@@ -142,6 +160,7 @@ namespace dandan::core
         bool m_tapped{false};
         Zone m_zone{Zone::LIBRARY};
         bool m_summoning_sick{true};
+        bool m_is_attacking{false};
 
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each

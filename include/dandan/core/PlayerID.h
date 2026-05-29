@@ -6,8 +6,8 @@
 
 namespace dandan::core
 {
-    /** @brief A class that represents the ID of a player using an auto-incrementing
-     * integer.
+    /** @brief A class that represents the ID of a player using an
+     * auto-incrementing integer.
      * @class PlayerID
      */
     class PlayerID
@@ -50,6 +50,24 @@ namespace dandan::core
         [[nodiscard]] int id() const
         {
             return m_id;
+        }
+
+        /** Checks if two PlayerIDs are equal.
+         * @param other The other PlayerID to compare with.
+         * @return True if the PlayerIDs are equal, false otherwise.
+         */
+        bool operator==(const PlayerID &other) const
+        {
+            return m_id == other.m_id;
+        }
+
+        /** Checks if two PlayerIDs are not equal.
+         * @param other The other PlayerID to compare with.
+         * @return True if the PlayerIDs are not equal, false otherwise.
+         */
+        bool operator!=(const PlayerID &other) const
+        {
+            return m_id != other.m_id;
         }
 
     private:

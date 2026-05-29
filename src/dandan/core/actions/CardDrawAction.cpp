@@ -8,7 +8,7 @@ namespace dandan::core
         core::Game &game)
     {
         DLOGI << "Executing card draw action\n";
-        game.activePlayer().drawCard(game.library(), game);
+        game.getPlayer(m_player).drawCard(game.library(), game);
         return std::make_unique<effects::DrawEffect>();
     }
 } // namespace dandan::core

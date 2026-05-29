@@ -12,10 +12,10 @@ namespace dandan::core
 
 namespace dandan::effects
 {
-    /** @brief The abstract class for prevention effects. Prevention effects prevent
-     * certain actions from being performed. They listen to actions as they are
-     * being performed and can prevent them from being executed by returning
-     * true from the `prevents` method.
+    /** @brief The abstract class for prevention effects. Prevention effects
+     * prevent certain actions from being performed. They listen to actions as
+     * they are being performed and can prevent them from being executed by
+     * returning true from the `prevents` method.
      * @class IPreventionEffect
      * @implements IContinuousEffect
      */

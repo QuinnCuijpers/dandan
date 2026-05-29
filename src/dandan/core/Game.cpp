@@ -62,16 +62,9 @@ namespace dandan::core
 
         m_library.shuffle();
 
-        auto no_draw_starting_player{
-            std::make_unique<effects::DrawPreventionEffect>(
-                std::make_unique<conditions::StartingPlayerCondition>())};
-
         auto one_land_a_turn{
             std::make_unique<effects::PlayCardPreventionEffect>(
                 std::make_unique<conditions::PlayedLandCondition>())};
-
-        m_prevention_manager.subscribe(std::move(no_draw_starting_player));
-        m_prevention_manager.subscribe(std::move(one_land_a_turn));
 
         // Randomize whom is starting player
         // TODO: Implement proper dice rolling to determine starting player
@@ -82,6 +75,14 @@ namespace dandan::core
 
         int starting_player_index = dist(gen);
         m_active_player_index = starting_player_index;
+
+        auto no_draw_starting_player{
+            std::make_unique<effects::DrawPreventionEffect>(
+                std::make_unique<conditions::StartingPlayerCondition>())};
+
+        m_prevention_manager.subscribe(activePlayer().getID(),
+                                        std::move(no_draw_starting_player));
+        m_prevention_manager.subscribe(std::move(one_land_a_turn));
 
         DLOGI << "Active player: " << activePlayer().getName() << '\n';
         DLOGI << "Non-active player: " << nonActivePlayer().getName() << '\n';

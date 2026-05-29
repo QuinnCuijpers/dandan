@@ -6,8 +6,8 @@
 
 namespace dandan::core
 {
-    /** @brief A unique identifier for a card. Created through a static counter to
-     * ensure uniqueness.
+    /** @brief A unique identifier for a card. Created through a static counter
+     * to ensure uniqueness.
      * @class CardID
      */
     class CardID
@@ -48,6 +48,15 @@ namespace dandan::core
         bool operator==(const CardID &other) const
         {
             return m_id == other.m_id;
+        }
+
+        /** Checks if two CardIDs are not equal.
+         * @param other The other CardID to compare with.
+         * @return True if the CardIDs are not equal, false otherwise.
+         */
+        bool operator!=(const CardID &other) const
+        {
+            return m_id != other.m_id;
         }
 
         /** Gets the integer ID of the card.

@@ -4,6 +4,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/IAction.h"
+#include "dandan/effects/one_shot/AttackEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <iostream>
 #include <memory>
@@ -34,11 +35,16 @@ namespace dandan::core
             return m_creature;
         }
 
+        [[nodiscard]] ActionActor getActor() const override
+        {
+            return m_creature.getID();
+        }
+
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             [[maybe_unused]] core::Game &game) override
         {
             std::cout << "Executing attack action\n";
-            return {nullptr};
+            return std::make_unique<effects::AttackEffect>(m_creature);
         }
 
     private:

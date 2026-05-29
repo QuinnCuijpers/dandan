@@ -218,8 +218,11 @@ namespace dandan::core
                 if (card != nullptr)
                 {
                     std::cout << card->getData().getName() << "("
-                              << card->getID().getID() << ", " << std::boolalpha
-                              << card->getSummoningSickness() << "), ";
+                              << "CardID: " << card->getID().getID() << ", "
+                              << std::boolalpha << "Summoning Sickness: "
+                              << card->getSummoningSickness() << ", "
+                              << "Is Attacking: " << card->isAttacking()
+                              << " )";
                 }
             }
             std::cout << "]\n";

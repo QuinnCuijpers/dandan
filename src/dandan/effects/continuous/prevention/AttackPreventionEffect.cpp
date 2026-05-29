@@ -13,11 +13,11 @@ namespace dandan::effects
             std::cout << "Checking attack prevention effect condition\n";
             if (getCondition()->isSatisfied(game))
             {
-                std::cout << "Condition met, preventing attack\n";
+                std::cout
+                    << "Attack prevention effect prevents attack action\n";
                 return true;
             }
         }
         return false;
     }
-
 } // namespace dandan::effects

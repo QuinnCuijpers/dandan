@@ -3,8 +3,8 @@
 
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
+#include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
-#include "dandan/events/ETBEvent.h"
 #include "dandan/events/IEvent.h"
 #include <iostream>
 #include <memory>
@@ -48,9 +48,9 @@ namespace dandan::effects
                     "Not enough mana to play card " +
                     std::string{m_card.getData().getName()});
             }
-            game.activePlayer().playCard(m_card);
-            return std::make_unique<events::ETBEvent>(m_card.getID(),
-                                                      m_card.getControllerID());
+            // TODO: should move card to stack
+            auto etb_effect{std::make_unique<ETBEffect>(m_card)};
+            return etb_effect->apply(game);
         }
 
     private:

@@ -250,3 +250,68 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
     EXPECT_EQ(size, TEST_DECK_SIZE - (2 * STARTING_HAND_SIZE) -
                         (STARTING_HAND_SIZE - 1));
 }
+
+TEST(DandanLibTest, AttackWithSummoningSickness)
+{
+    dandan::core::PlayerID::reset();
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
+
+    auto data = dandan::core::CardData{
+        "Test Card ", std::make_unique<dandan::mana::BlueMana>(1),
+        dandan::core::CardData::Type::Creature,
+        dandan::core::CardData::SubType::None, std::move(abilities)};
+
+    auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
+
+    std::stringstream stream{};
+    // play creature for active player and pass
+    stream << "play " << game.activePlayer().hand().getCards().front().getID()
+           << '\n';
+    stream << "next\n"; // should move to combat phase where player can choose
+                        // to attack with creature with summoning sickness
+    stream << "pass\n";
+
+    // play creature for non active player and pass
+    stream << "play "
+           << game.nonActivePlayer().hand().getCards().front().getID() << '\n';
+    stream << "next\n"; // should not find any attackers and move to next main
+                        // phase
+    stream << "pass\n";
+
+    // combat phase player 1
+    stream << "next\n"; // pass to combat phase
+    stream << "0\n";    // choose the first creature as attacker
+    stream << "pass\n"; // pass to next player
+
+    // combat phase player 2
+    stream << "next\n"; // pass to combat phase
+    stream << "0\n";    // choose the first creature as attacker
+    stream << "quit\n"; // quit to avoid discard logic
+
+    game.setIstream(stream);
+
+    // beginning phase
+    game.handlePhase();
+
+    // main phase
+    game.activePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE, 1);
+    game.nonActivePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE, 1);
+
+    // combat phase, should not be able to attack with creatures due to
+    // summoning sickness
+    game.run();
+
+    EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(), 1);
+    EXPECT_EQ(game.nonActivePlayer().battlefield().getCreatures().size(), 1);
+
+    auto active_creature_id =
+        game.activePlayer().battlefield().getCreatures().front();
+    auto non_active_creature_id =
+        game.nonActivePlayer().battlefield().getCreatures().front();
+    const auto *active_creature = game.getCardByID(active_creature_id);
+    const auto *non_active_creature = game.getCardByID(non_active_creature_id);
+    EXPECT_TRUE(active_creature->isAttacking());
+    EXPECT_TRUE(non_active_creature->isAttacking());
+}

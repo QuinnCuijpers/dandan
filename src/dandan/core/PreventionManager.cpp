@@ -2,33 +2,113 @@
 #include "dandan/core/Game.h"
 #include <algorithm>
 #include <memory>
+#include <variant>
 
 namespace dandan::core
 {
     void PreventionManager::subscribe(
         std::unique_ptr<effects::IPreventionEffect> effect)
     {
-        m_prevention_effects.push_back(std::move(effect));
+        m_global_preventions.push_back(std::move(effect));
+    }
+
+    void PreventionManager::subscribe(
+        PlayerID player, std::unique_ptr<effects::IPreventionEffect> effect)
+    {
+        m_player_preventions[player.id()].push_back(std::move(effect));
+    }
+
+    void PreventionManager::subscribe(
+        CardID card, std::unique_ptr<effects::IPreventionEffect> effect)
+    {
+        m_card_preventions[card.getID()].push_back(std::move(effect));
+    }
+
+    void PreventionManager::removeFromPreventionList(
+        PreventionList &list, const effects::IPreventionEffect *effect)
+    {
+        list.erase(
+            std::remove_if(
+                list.begin(), list.end(),
+                [effect](const std::unique_ptr<effects::IPreventionEffect>
+                             &candidate) { return candidate.get() == effect; }),
+            list.end());
     }
 
     void PreventionManager::unsubscribe(
         const effects::IPreventionEffect *effect)
     {
-        m_prevention_effects.erase(
-            std::remove_if(
-                m_prevention_effects.begin(), m_prevention_effects.end(),
-                [effect](const std::unique_ptr<effects::IPreventionEffect>
-                             &candidate) { return candidate.get() == effect; }),
-            m_prevention_effects.end());
+
+        removeFromPreventionList(m_global_preventions, effect);
+
+        for (auto player_it = m_player_preventions.begin();
+             player_it != m_player_preventions.end();)
+        {
+            removeFromPreventionList(player_it->second, effect);
+            if (player_it->second.empty())
+            {
+                player_it = m_player_preventions.erase(player_it);
+            }
+            else
+            {
+                ++player_it;
+            }
+        }
+
+        for (auto card_it = m_card_preventions.begin();
+             card_it != m_card_preventions.end();)
+        {
+            removeFromPreventionList(card_it->second, effect);
+            if (card_it->second.empty())
+            {
+                card_it = m_card_preventions.erase(card_it);
+            }
+            else
+            {
+                ++card_it;
+            }
+        }
+    }
+
+    bool PreventionManager::isPreventedByPreventionList(
+        const PreventionList &list, const IAction &action, const Game &game)
+    {
+        return std::any_of(list.begin(), list.end(),
+                           [&action, &game](const auto &effect)
+                           { return effect->prevents(action, game); });
     }
 
     bool PreventionManager::isPrevented(const IAction &action,
                                         const Game &game) const
     {
-        return std::any_of(
-            m_prevention_effects.begin(), m_prevention_effects.end(),
-            [&action, &game](
-                const std::unique_ptr<effects::IPreventionEffect> &candidate)
-            { return candidate->prevents(action, game); });
+
+        if (isPreventedByPreventionList(m_global_preventions, action, game))
+        {
+            return true;
+        }
+
+        const auto actor = action.getActor();
+
+        if (std::holds_alternative<PlayerID>(actor))
+        {
+            const auto player_id = std::get<PlayerID>(actor).id();
+            if (const auto player_it = m_player_preventions.find(player_id);
+                player_it != m_player_preventions.end() &&
+                isPreventedByPreventionList(player_it->second, action, game))
+            {
+                return true;
+            }
+        }
+        else if (std::holds_alternative<CardID>(actor))
+        {
+            const auto card_id = std::get<CardID>(actor).getID();
+            if (const auto card_it = m_card_preventions.find(card_id);
+                card_it != m_card_preventions.end() &&
+                isPreventedByPreventionList(card_it->second, action, game))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 } // namespace dandan::core

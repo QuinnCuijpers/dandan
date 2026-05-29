@@ -72,7 +72,8 @@ namespace dandan::core
         case Step::Draw:
         {
             DLOGI << "Handling draw step\n";
-            auto draw_action = std::make_unique<core::CardDrawAction>();
+            auto draw_action = std::make_unique<core::CardDrawAction>(
+                game().activePlayer().getID());
             if (game().isActionPrevented(*draw_action))
             {
                 DLOGI << "Draw prevented\n";

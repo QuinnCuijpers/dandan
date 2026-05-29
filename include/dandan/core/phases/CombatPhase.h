@@ -67,6 +67,7 @@ namespace dandan::core
         std::unique_ptr<IPhase> m_next_phase;
 
         void handleNextStep();
+        void handleDeclareAttackersStep();
     };
 } // namespace dandan::core
 
