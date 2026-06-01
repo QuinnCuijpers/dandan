@@ -1,12 +1,13 @@
-#include "dandan/mana/BlueMana.h"
-#include "dandan/triggers/NoIslandsTrigger.h"
 #ifdef DANDAN_SERIALIZE
+#include "DeserializeTest.h"
 #include "common.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
+#include "dandan/mana/BlueMana.h"
+#include "dandan/triggers/NoIslandsTrigger.h"
 #include "gtest/gtest.h"
 #include <memory>
 #include <string>
@@ -47,7 +48,9 @@ static const std::vector<const dandan::Card *> &getCards()
     return cards;
 };
 
-INSTANTIATE_TEST_SUITE_P(CreatureTests, DeserializeTest,
-                         testing::ValuesIn(getCards()), CardParamName);
+INSTANTIATE_TEST_SUITE_P(
+    CreatureTests, DeserializeTest, testing::ValuesIn(getCards()),
+    [](::testing::TestParamInfo<const dandan::Card *> info)
+    { return CardParamName(info.param->getData().getName()); });
 
 #endif

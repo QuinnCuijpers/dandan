@@ -31,8 +31,8 @@ namespace dandan::abilities
         for (size_t i{1}; i < m_mana_list.getOptions().size(); ++i)
         {
             res += " or ";
-            const auto *mana{m_mana_list.getOptions().at(i).get()};
-            res += mana::ManaToSymbols(mana->getMana());
+            const auto *mana_option{m_mana_list.getOptions().at(i).get()};
+            res += mana::ManaToSymbols(mana_option->getMana());
         }
         return res;
     }

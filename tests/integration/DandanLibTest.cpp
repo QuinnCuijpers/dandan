@@ -12,7 +12,7 @@
 #include <sstream>
 #include <vector>
 
-#include "common.h"
+#include "TestCardsCreate.h"
 
 static constexpr int TEST_DECK_SIZE{20};
 

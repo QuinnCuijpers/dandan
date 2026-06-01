@@ -7,7 +7,6 @@
 #include "gtest/gtest.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <string>
 
 class DeserializeTest : public testing::TestWithParam<const dandan::Card *>
 {
@@ -35,37 +34,6 @@ protected:
         m_received = nlohmann::json(card->getData());
     }
 };
-
-inline std::string CardParamName(
-    const testing::TestParamInfo<const dandan::Card *> &info)
-{
-    const std::string raw_name{info.param->getData().getName()};
-    std::string name;
-    std::copy_if(raw_name.begin(), raw_name.end(), std::back_inserter(name),
-                 [](char char_) { return std::isalnum(char_); });
-    if (name.empty())
-    {
-        name = "unnamed";
-    }
-    return name;
-}
-
-inline static std::string formatCardName(std::string_view name)
-{
-    std::string result{};
-    for (char char_ : name)
-    {
-        if (char_ == '_')
-        {
-            result += ' ';
-        }
-        else
-        {
-            result += char_;
-        }
-    }
-    return result;
-}
 
 #endif
 

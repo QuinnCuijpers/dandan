@@ -2,6 +2,9 @@ add_executable(DandanUnitTests)
 
 target_sources(DandanUnitTests PRIVATE core/CardDataTest.cpp)
 
+target_sources(DandanUnitTests PRIVATE FILE_SET HEADERS BASE_DIRS
+                                       ${CMAKE_SOURCE_DIR}/tests)
+
 target_compile_features(DandanUnitTests PRIVATE cxx_std_17)
 
 if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")

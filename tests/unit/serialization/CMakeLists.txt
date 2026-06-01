@@ -1,7 +1,13 @@
 if(DANDAN_BUILD_SERIALIZE)
-  add_executable(
-    DandanLibSerializationTest common.cpp DandanLandsSerializationTest.cpp
-                               DandanCreatureSerializationTest.cpp)
+  add_executable(DandanLibSerializationTest)
+
+  target_sources(
+    DandanLibSerializationTest
+    PRIVATE DeserializeTest.cpp DandanLandsSerializationTest.cpp
+            DandanCreatureSerializationTest.cpp)
+
+  target_sources(DandanLibSerializationTest PRIVATE FILE_SET HEADERS BASE_DIRS
+                                                    ${CMAKE_SOURCE_DIR}/tests)
 
   target_compile_features(DandanLibSerializationTest PRIVATE cxx_std_17)
   target_compile_definitions(DandanLibSerializationTest

@@ -1,4 +1,5 @@
 #ifdef DANDAN_SERIALIZE
+#include "DeserializeTest.h"
 #include "common.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/costs/AndCost.h"
@@ -184,7 +185,9 @@ static const std::vector<const dandan::Card *> &getCards()
     return cards;
 };
 
-INSTANTIATE_TEST_SUITE_P(LandTests, DeserializeTest,
-                         testing::ValuesIn(getCards()), CardParamName);
+INSTANTIATE_TEST_SUITE_P(
+    LandTests, DeserializeTest, testing::ValuesIn(getCards()),
+    [](const ::testing::TestParamInfo<const dandan::Card *> &info)
+    { return CardParamName(info.param->getData().getName()); });
 
 #endif
