@@ -4,6 +4,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include <algorithm>
+#include <stdexcept>
 #include <vector>
 
 namespace dandan::core
@@ -105,7 +106,13 @@ namespace dandan::core
             // and gamewise src -> dest moving of cards
             card.setZone(Zone::GRAVEYARD);
             auto card_id = card.getID();
-            m_cards.erase(std::find(m_cards.begin(), m_cards.end(), card_id));
+            auto iter = std::find(m_cards.begin(), m_cards.end(), card_id);
+            if (iter == m_cards.end())
+            {
+                throw std::runtime_error(
+                    "Card is not in hand and cannot be discarded");
+            }
+            m_cards.erase(iter);
         }
 
     private:
