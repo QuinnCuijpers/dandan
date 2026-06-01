@@ -18,6 +18,11 @@ namespace dandan::costs
         ICost &operator=(ICost &&) = delete;
         virtual ~ICost() = default;
 
+        /** @brief Get the display string for the cost
+         * @param isFinal Whether the cost is the last cost in the cost
+         * sequence, defaults to true
+         * @return The display string
+         */
         [[nodiscard]] virtual std::string display(
             [[maybe_unused]] bool isFinal = true) const
         {

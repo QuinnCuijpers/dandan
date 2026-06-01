@@ -31,11 +31,18 @@ namespace dandan::abilities
         IAbility &operator=(IAbility &&) = delete;
         virtual ~IAbility() = default;
 
+        /** @brief Get the display string for the ability
+         * @return The display string
+         */
         [[nodiscard]] virtual std::string display() const
         {
             throw std::runtime_error("Unimplemented display");
         }
 
+        /** @brief Get the display string for a specific option of the ability
+         * @param index The index of the option
+         * @return The display string for the option
+         */
         [[nodiscard]] virtual std::string displayOption(
             [[maybe_unused]] size_t index) const
         {
@@ -77,6 +84,9 @@ namespace dandan::abilities
             return false;
         }
 
+        /** @brief Get the number of options for the ability
+         * @return The number of options
+         */
         [[nodiscard]] virtual size_t optionsAmount() const
         {
             throw std::runtime_error("Unimplemented options count for ability");

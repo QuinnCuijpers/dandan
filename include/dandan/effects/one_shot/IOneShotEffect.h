@@ -25,7 +25,10 @@ namespace dandan::effects
         IOneShotEffect &operator=(IOneShotEffect &&) = delete;
         virtual ~IOneShotEffect() = default;
 
-        [[nodiscard]] std::string virtual display() const
+        /** @brief Get the display string for the effect
+         * @return The display string
+         */
+        [[nodiscard]] virtual std::string display() const
         {
             throw std::runtime_error("Unimplemented display");
         }

@@ -149,7 +149,7 @@ TEST(DandanLibTest, DiscardToHandSize)
         stream << "pass\n";
     }
     // second player would need to discard to handsize
-    stream << game.activePlayer().hand().getCards().back().getID() << '\n';
+    stream << game.activePlayer().hand().getCards().front().getID() << '\n';
     stream << "quit\n";
 
     game.setIstream(stream);
