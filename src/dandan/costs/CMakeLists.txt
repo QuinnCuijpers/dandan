@@ -1,8 +1,8 @@
 add_library(DandanCosts OBJECT)
 
 target_sources(DandanCosts PRIVATE CyclingCost.cpp ManaCost.cpp
-  SelfSacrificeCost.cpp
-  TapCost.cpp)
+                                   SelfSacrificeCost.cpp TapCost.cpp
+                                   AndCost.cpp)
 
 target_sources(DandanCosts PUBLIC FILE_SET HEADERS BASE_DIRS
                                   ${CMAKE_SOURCE_DIR}/include)
@@ -26,6 +26,7 @@ if(DANDAN_ENABLE_LOGGING)
 endif()
 
 target_include_directories(DandanCosts PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(DandanOneShotEffects PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 if(CODE_COVERAGE)
   target_code_coverage(DandanCosts)

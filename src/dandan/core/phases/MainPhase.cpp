@@ -1,6 +1,7 @@
 #include "dandan/core/phases/MainPhase.h"
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/ActivateAbilityAction.h"
 #include "dandan/core/actions/PlayCardAction.h"
@@ -126,7 +127,6 @@ namespace dandan::core
         size_t ability_index{};
         int display_index{};
 
-        // TODO: shortcut if there is only one ability
         const auto &abilities = cardp->getData().getAbilities();
 
         auto ability_indices{
@@ -142,15 +142,16 @@ namespace dandan::core
                 ++ability_index;
                 continue;
             }
-            if (const auto *mana_ability =
-                    dynamic_cast<const abilities::ManaAbility *>(ability.get()))
+            // TODO: decorator types dont split correctly
+            if (ability->optionsAmount() > 1)
             {
                 size_t modal_index{};
-                for (const auto &option :
-                     mana_ability->getManaList()->getOptions())
+                for (size_t option_index{};
+                     option_index < ability->optionsAmount(); ++option_index)
                 {
-                    std::cout << "ManaAbility " << display_index++ << ": "
-                              << typeid(option).name() << '\n';
+                    std::cout << "Ability " << display_index++ << ": ";
+                    std::cout << ability->displayOption(option_index);
+                    std::cout << ".\n";
                     ability_indices.emplace_back(ability_index, modal_index);
                     ++modal_index;
                 }
@@ -158,7 +159,8 @@ namespace dandan::core
             else
             {
                 std::cout << "Ability " << display_index++ << ": "
-                          << typeid(ability).name() << '\n';
+                          << ability->display();
+                std::cout << ".\n";
                 ability_indices.emplace_back(ability_index, std::nullopt);
             }
             ++ability_index;
@@ -193,8 +195,8 @@ namespace dandan::core
                 std::cout << "Invalid ability index\n";
                 return;
             }
-            real_index = ability_indices[0].first;
-            modal_index_opt = ability_indices[0].second;
+            real_index = ability_indices[ability_index_input].first;
+            modal_index_opt = ability_indices[ability_index_input].second;
         }
 
         const auto *ability = abilities[real_index].get();

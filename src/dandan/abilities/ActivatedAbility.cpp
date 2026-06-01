@@ -6,6 +6,33 @@
 
 namespace dandan::abilities
 {
+    std::string ActivatedAbility::display() const
+    {
+        std::string res{};
+        if (m_cost)
+        {
+            res += m_cost->display();
+        }
+        if (m_effect)
+        {
+            res += m_effect->display();
+        }
+        return res;
+    }
+
+    // TODO: for now there are no activated abilities with options
+    std::string ActivatedAbility::displayOption(
+        [[maybe_unused]] size_t index) const
+    {
+        return display();
+    }
+
+    // TODO: for now there are no activated abilities with options
+    size_t ActivatedAbility::optionsAmount() const
+    {
+        return 1;
+    }
+
     std::unique_ptr<effects::IOneShotEffect> ActivatedAbility::createEffect(
         [[maybe_unused]] core::Game &game,
         [[maybe_unused]] AbilityContext context) const

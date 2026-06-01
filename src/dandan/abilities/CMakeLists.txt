@@ -7,6 +7,9 @@ target_sources(
 target_sources(DandanAbilities PUBLIC FILE_SET HEADERS BASE_DIRS
                                       ${CMAKE_SOURCE_DIR}/include)
 
+target_sources(DandanAbilities PRIVATE FILE_SET internal TYPE HEADERS BASE_DIRS
+                                       ${CMAKE_SOURCE_DIR}/src)
+
 target_compile_features(DandanAbilities PRIVATE cxx_std_17)
 
 if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")

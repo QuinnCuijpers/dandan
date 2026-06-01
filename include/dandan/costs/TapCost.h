@@ -19,6 +19,9 @@ namespace dandan::costs
     public:
         TapCost() = default;
 
+        [[nodiscard]] std::string display(
+            [[maybe_unused]] bool isFinal = true) const override;
+
         [[nodiscard]] bool canPay(
             const core::Card &source,
             [[maybe_unused]] const core::Player &player) const override

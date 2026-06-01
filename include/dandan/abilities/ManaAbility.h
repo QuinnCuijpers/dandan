@@ -27,6 +27,10 @@ namespace dandan::abilities
         {
         }
 
+        [[nodiscard]] std::string display() const override;
+
+        [[nodiscard]] std::string displayOption(size_t index) const override;
+
         /** Constructor
          * @param cost The cost to activate the ability
          * @param manaList The list of mana to produce
@@ -57,6 +61,11 @@ namespace dandan::abilities
 
         [[nodiscard]] bool canActivate(core::Game &game,
                                        AbilityContext context) const override;
+
+        [[nodiscard]] size_t optionsAmount() const override
+        {
+            return m_mana_list.getOptions().size();
+        }
 
     private:
         std::unique_ptr<costs::ICost> m_cost{

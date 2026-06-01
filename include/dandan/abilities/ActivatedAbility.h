@@ -9,9 +9,10 @@
 
 namespace dandan::abilities
 {
-    /** @brief An activated ability is any ability that can be activated by a player at
-     * instant speed. It consists of a cost that must be paid to activate the
-     * ability and an effect that is applied when the ability resolves.
+    /** @brief An activated ability is any ability that can be activated by a
+     * player at instant speed. It consists of a cost that must be paid to
+     * activate the ability and an effect that is applied when the ability
+     * resolves.
      * @class ActivatedAbility
      *
      * @implements IAbility
@@ -28,6 +29,11 @@ namespace dandan::abilities
             : m_cost(std::move(cost)), m_effect(std::move(effect))
         {
         }
+
+        [[nodiscard]] std::string display() const override;
+        [[nodiscard]] std::string displayOption(size_t index) const override;
+
+        [[nodiscard]] size_t optionsAmount() const override;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;

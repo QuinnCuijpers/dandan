@@ -26,6 +26,9 @@ namespace dandan::costs
         {
         }
 
+        [[nodiscard]] std::string display(
+            [[maybe_unused]] bool isFinal = true) const override;
+
         /** Gets the sub-costs.
          * @return A vector of the sub-costs.
          */

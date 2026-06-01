@@ -2,6 +2,7 @@
 #define DANDAN_I_COST
 
 #include "dandan/core/Player.h"
+#include <stdexcept>
 namespace dandan::costs
 {
     /** @brief Base class for all cost types.
@@ -16,6 +17,12 @@ namespace dandan::costs
         ICost &operator=(const ICost &) = delete;
         ICost &operator=(ICost &&) = delete;
         virtual ~ICost() = default;
+
+        [[nodiscard]] virtual std::string display(
+            [[maybe_unused]] bool isFinal = true) const
+        {
+            throw std::runtime_error("Unimplemented display");
+        }
 
         /** Checks if the cost can be paid.
          * @param source The card generating the cost.

@@ -226,9 +226,7 @@ namespace dandan::core
                 if (card != nullptr)
                 {
                     std::cout << card->getData().getName() << "("
-                              << "CardID: " << card->getID().getID() << ", "
-                              << std::boolalpha
-                              << "Is Tapped: " << card->getTapped() << " )";
+                              << "CardID: " << card->getID().getID() << ") ";
                 }
             }
             std::cout << "]\n";

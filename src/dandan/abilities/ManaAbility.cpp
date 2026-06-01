@@ -7,6 +7,36 @@
 namespace dandan::abilities
 {
 
+    std::string ManaAbility::displayOption(size_t index) const
+    {
+        std::string res{};
+        res += m_cost->display();
+        res += "Add ";
+        auto *option{m_mana_list.getOptions().at(index).get()};
+        res += mana::ManaToSymbols(option->getMana());
+        return res;
+    }
+
+    std::string ManaAbility::display() const
+    {
+        std::string res{};
+        res += m_cost->display();
+        res += "Add ";
+
+        assert(!getManaList()->getOptions().empty() &&
+               "Mana List was empty when trying to display ManaAbility");
+        const auto *mana{m_mana_list.getOptions().at(0).get()};
+        res += mana::ManaToSymbols(mana->getMana());
+
+        for (size_t i{1}; i < m_mana_list.getOptions().size(); ++i)
+        {
+            res += " or ";
+            const auto *mana{m_mana_list.getOptions().at(i).get()};
+            res += mana::ManaToSymbols(mana->getMana());
+        }
+        return res;
+    }
+
     std::unique_ptr<effects::IOneShotEffect> ManaAbility::createEffect(
         [[maybe_unused]] core::Game &game,
         [[maybe_unused]] AbilityContext context) const

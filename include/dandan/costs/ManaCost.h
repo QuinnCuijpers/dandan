@@ -22,6 +22,9 @@ namespace dandan::costs
         explicit ManaCost(std::unique_ptr<mana::Mana> mana)
             : m_mana{std::move(mana)} {};
 
+        [[nodiscard]] std::string display(
+            [[maybe_unused]] bool isFinal = true) const override;
+
         /** Gets the mana requirement.
          * @return A pointer to the mana requirement.
          */

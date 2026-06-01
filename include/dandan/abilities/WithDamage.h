@@ -28,6 +28,9 @@ namespace dandan::abilities
         {
         }
 
+        [[nodiscard]] std::string display() const override;
+        [[nodiscard]] std::string displayOption(size_t index) const override;
+
         /** Get the damage amount
          * @return The damage amount
          */
@@ -41,6 +44,11 @@ namespace dandan::abilities
             abilities::AbilityContext context) const override
         {
             return m_ability->appliesTo(event, context);
+        }
+
+        [[nodiscard]] size_t optionsAmount() const override
+        {
+            return m_ability->optionsAmount();
         }
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(

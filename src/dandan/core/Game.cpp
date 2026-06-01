@@ -81,7 +81,7 @@ namespace dandan::core
                 std::make_unique<conditions::StartingPlayerCondition>())};
 
         m_prevention_manager.subscribe(activePlayer().getID(),
-                                        std::move(no_draw_starting_player));
+                                       std::move(no_draw_starting_player));
         m_prevention_manager.subscribe(std::move(one_land_a_turn));
 
         DLOGI << "Active player: " << activePlayer().getName() << '\n';
@@ -152,7 +152,7 @@ namespace dandan::core
                 DLOGI << "Game quit by user\n";
                 return;
             }
-            DLOGI << "Game ended: " << e.what() << '\n';
+            std::cout << "Game ended: " << e.what() << '\n';
         }
     }
 

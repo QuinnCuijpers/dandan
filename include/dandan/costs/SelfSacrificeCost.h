@@ -6,7 +6,8 @@
 
 namespace dandan::costs
 {
-    /** @brief A cost that requires the player to sacrifice one of their own cards.
+    /** @brief A cost that requires the player to sacrifice one of their own
+     * cards.
      * @class SelfSacrificeCost
      * @implements ICost
      */
@@ -14,6 +15,9 @@ namespace dandan::costs
     {
     public:
         SelfSacrificeCost() = default;
+
+        [[nodiscard]] std::string display(
+            [[maybe_unused]] bool isFinal = true) const override;
 
         [[nodiscard]] bool canPay(const core::Card &source,
                                   const core::Player &player) const override

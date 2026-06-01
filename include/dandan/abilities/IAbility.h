@@ -4,6 +4,7 @@
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
+#include <stdexcept>
 
 namespace dandan::core
 {
@@ -29,6 +30,18 @@ namespace dandan::abilities
         IAbility &operator=(const IAbility &) = delete;
         IAbility &operator=(IAbility &&) = delete;
         virtual ~IAbility() = default;
+
+        [[nodiscard]] virtual std::string display() const
+        {
+            throw std::runtime_error("Unimplemented display");
+        }
+
+        [[nodiscard]] virtual std::string displayOption(
+            [[maybe_unused]] size_t index) const
+        {
+            throw std::runtime_error(
+                "Unimplemented display option for ability");
+        }
 
         /** Create the effect for the ability
          * @param game The game object to mutate when the ability is resolving
@@ -62,6 +75,11 @@ namespace dandan::abilities
             [[maybe_unused]] AbilityContext context) const
         {
             return false;
+        }
+
+        [[nodiscard]] virtual size_t optionsAmount() const
+        {
+            throw std::runtime_error("Unimplemented options count for ability");
         }
     };
 }; // namespace dandan::abilities

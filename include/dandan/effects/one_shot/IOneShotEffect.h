@@ -3,6 +3,7 @@
 
 #include "dandan/events/IEvent.h"
 #include <memory>
+#include <stdexcept>
 namespace dandan::core
 {
     class Game;
@@ -23,6 +24,11 @@ namespace dandan::effects
         IOneShotEffect &operator=(const IOneShotEffect &) = delete;
         IOneShotEffect &operator=(IOneShotEffect &&) = delete;
         virtual ~IOneShotEffect() = default;
+
+        [[nodiscard]] std::string virtual display() const
+        {
+            throw std::runtime_error("Unimplemented display");
+        }
 
         /**
          * creates a new Effect that clones the underlying effect.

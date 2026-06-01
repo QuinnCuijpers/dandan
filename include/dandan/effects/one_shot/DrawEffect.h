@@ -18,6 +18,8 @@ namespace dandan::effects
         /// the amount of cards to draw with this effect
         int m_amount{1};
 
+        [[nodiscard]] std::string display() const override;
+
         [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
         {
             return std::make_unique<DrawEffect>(m_amount);
