@@ -67,11 +67,19 @@ namespace dandan::core
             return m_players.at(player_id.id());
         }
 
-        /** Gets all players in the game.
+        /** Gets all players in the game immutably.
          * @return A const reference to the array of players.
          */
         [[nodiscard]] const std::array<Player, AMOUNT_PLAYERS> &getPlayers()
             const
+        {
+            return m_players;
+        }
+
+        /** Gets all players in the game mutably.
+         * @return A reference to the array of players.
+         */
+        [[nodiscard]] std::array<Player, AMOUNT_PLAYERS> &getPlayers()
         {
             return m_players;
         }

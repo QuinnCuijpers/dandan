@@ -1,3 +1,4 @@
+#include "common.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Player.h"
@@ -6,12 +7,15 @@
 #include "dandan/mana/BlueMana.h"
 #include "dandan/mana/GenericMana.h"
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <gtest/gtest.h>
 #include <memory>
 #include <sstream>
+#include <unordered_map>
 #include <vector>
 
+#include "LandDefinitions.h"
 #include "TestCardsCreate.h"
 
 static constexpr int TEST_DECK_SIZE{20};
@@ -78,11 +82,7 @@ TEST(DandanLibTest, Bounceland)
 {
     dandan::core::PlayerID::reset();
 
-    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
-
-    abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::ETBTrigger>(),
-        std::make_unique<dandan::BounceLandEffect>()));
+    auto abilities{Izzet_Boilerworks_Abilities()};
 
     auto data = dandan::core::CardData{
         "Test Card ", std::make_unique<dandan::mana::GenericMana>(0),
@@ -210,17 +210,11 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
 {
     dandan::core::PlayerID::reset();
 
-    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
-
-    abilities.emplace_back(std::make_unique<dandan::ActivatedAbility>(
-        std::make_unique<dandan::CyclingCost>(
-            std::make_unique<dandan::ManaCost>(
-                std::make_unique<dandan::mana::GenericMana>(2))),
-        std::make_unique<dandan::DrawEffect>()));
+    auto abilities{Remote_Isle_Abilities()};
 
     auto data = dandan::core::CardData{
-        "Test Card ", std::make_unique<dandan::mana::BlueMana>(2),
-        dandan::core::CardData::Type::Creature,
+        "Test Card ", std::make_unique<dandan::mana::BlueMana>(0),
+        dandan::core::CardData::Type::Land,
         dandan::core::CardData::SubType::None, std::move(abilities)};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
@@ -320,4 +314,68 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
 
     EXPECT_EQ(attacking_creature->getDamageMarked(), 2);
     EXPECT_EQ(blocking_creature->getDamageMarked(), 2);
+}
+
+TEST(DandanLibTest, ManaAbilities)
+{
+    dandan::core::PlayerID::reset();
+
+    std::vector<dandan::Card> lands{
+        LAND(Island, dandan::CardData::SubType::Island),
+        LAND(Remote_Isle, dandan::CardData::SubType::None),
+        LAND(Lonely_Sandbar, dandan::CardData::SubType::None),
+        LAND(Shivan_Reef, dandan::CardData::SubType::None),
+        LAND(Temple_of_Epiphany, dandan::CardData::SubType::None),
+        LAND(Izzet_Boilerworks, dandan::CardData::SubType::None),
+        LAND(Svyelunite_Temple, dandan::CardData::SubType::None)};
+
+    std::unordered_map<std::string, bool> requires_option{
+        {"Island", false},
+        {"Remote Isle", false},
+        {"Lonely Sandbar", false},
+        {"Shivan Reef", true},
+        {"Temple of Epiphany", true},
+        {"Izzet Boilerworks", false},
+        {"Svyelunite Temple", true}};
+
+    std::unordered_map<std::string, size_t> desired_option{
+        {"Shivan Reef", 2},
+        {"Temple of Epiphany", 1},
+        {"Svyelunite Temple", 1}};
+
+    auto game{dandan::Game::withCards(std::move(lands))};
+
+    // add n copies of a land to each players battlefield where n is the
+    // amount
+    // of options for the player to choose from when activating mana
+    // abilities
+    for (auto &player : game.getPlayers())
+    {
+        for (const auto &land : player.hand().getCards())
+        {
+            auto *card{game.getCardByID(land)};
+            // Adds a copy of the land in hand to the battlefield
+            player.playCard(*card);
+        }
+    }
+
+    std::stringstream stream{};
+
+    for (auto &player : game.getPlayers())
+    {
+        for (const auto &permanent : player.battlefield().getLands())
+        {
+            auto *card{game.getCardByID(permanent)};
+            stream << "activate " << card->getID().getID() << '\n';
+            if (requires_option[std::string(card->getData().getName())])
+            {
+                stream << desired_option[std::string(card->getData().getName())]
+                       << '\n';
+            }
+        }
+    }
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
 }
