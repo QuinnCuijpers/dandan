@@ -185,15 +185,16 @@ namespace dandan::core
         return getCardByID(CardID::fromInt(card_id));
     }
 
-    void Game::moveCardFromZone(const Card &card)
+    void Game::moveCardFromZone(Player &player, const Card &card)
     {
         switch (card.getZone())
         {
         case Zone::HAND:
-            activePlayer().hand().removeCard(card);
+            player.hand().removeCard(card);
             break;
         case Zone::LIBRARY:
         case Zone::BATTLEFIELD:
+            player.battlefield().removeCard(card);
         case Zone::GRAVEYARD:
         case Zone::EXILE:
         case Zone::STACK:

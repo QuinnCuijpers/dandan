@@ -3,6 +3,7 @@
 #include "dandan/core/Constants.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/core/Zone.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/BlueMana.h"
 #include "dandan/mana/GenericMana.h"
@@ -246,7 +247,7 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
                         (STARTING_HAND_SIZE - 1));
 }
 
-TEST(DandanLibTest, AttackWithSummoningSickness)
+TEST(DandanLibTest, CombatTest)
 {
     dandan::core::PlayerID::reset();
 
@@ -258,7 +259,7 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
                                dandan::core::CardData::Type::Creature,
                                dandan::core::CardData::SubType::None,
                                std::move(abilities),
-                               dandan::core::Stats{2, 3}};
+                               dandan::core::Stats{4, 3}};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -287,10 +288,6 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
            << '\n';     // choose to block the attacking creature
     stream << "pass\n"; // pass to next player
 
-    // combat phase player 2
-    stream << "next\n"; // pass to combat phase
-    stream << "0\n";    // choose the first creature as attacker
-
     // quit
     stream << "quit\n"; // quit to avoid discard logic
 
@@ -300,20 +297,28 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
     // summoning sickness
     game.run();
 
-    EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(), 1);
-    EXPECT_EQ(game.nonActivePlayer().battlefield().getCreatures().size(), 1);
+    EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(), 0);
+    EXPECT_EQ(game.nonActivePlayer().battlefield().getCreatures().size(), 0);
 
     const auto *attacking_creature = game.getCardByID(attacker_id);
     const auto *blocking_creature = game.getCardByID(defender_id);
 
-    EXPECT_TRUE(attacking_creature->isAttacking());
-    EXPECT_TRUE(blocking_creature->isAttacking());
+    // both creatures should have died in combat
+    EXPECT_EQ(game.graveyard().getCards().size(), 2);
 
-    EXPECT_TRUE(attacking_creature->isBlocked());
-    EXPECT_TRUE(blocking_creature->isBlocking());
+    EXPECT_EQ(attacking_creature->getZone(), dandan::core::Zone::GRAVEYARD);
+    EXPECT_EQ(blocking_creature->getZone(), dandan::core::Zone::GRAVEYARD);
 
-    EXPECT_EQ(attacking_creature->getDamageMarked(), 2);
-    EXPECT_EQ(blocking_creature->getDamageMarked(), 2);
+    // neither creature should be marked as attacking or blocking since they
+    // should have died
+    EXPECT_FALSE(attacking_creature->isAttacking());
+    EXPECT_FALSE(blocking_creature->isAttacking());
+
+    EXPECT_FALSE(attacking_creature->isBlocked());
+    EXPECT_FALSE(blocking_creature->isBlocking());
+
+    EXPECT_EQ(attacking_creature->getDamageMarked(), 0);
+    EXPECT_EQ(blocking_creature->getDamageMarked(), 0);
 }
 
 TEST(DandanLibTest, ManaAbilities)

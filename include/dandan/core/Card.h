@@ -190,6 +190,20 @@ namespace dandan::core
             m_marked_damage += damage;
         }
 
+        void destroy(Game &game);
+
+        // TODO: check this thoroughly
+        void resetState()
+        {
+            m_summoning_sick = true;
+            m_is_attacking = false;
+            m_is_blocked = false;
+            m_blocking = false;
+            m_current_power = getData().getStats()->power;
+            m_current_toughness = getData().getStats()->toughness;
+            m_marked_damage = 0;
+        }
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.

@@ -35,7 +35,7 @@ namespace dandan::core
     [[nodiscard]] std::unique_ptr<IPhase> MainPhase::handle()
     {
         std::cout << "Handling " << name() << '\n';
-
+        game().priorityManager().setPriorityToActivePlayer(game());
         while (true)
         {
             game().render();

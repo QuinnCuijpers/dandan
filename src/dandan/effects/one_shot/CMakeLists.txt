@@ -9,7 +9,8 @@ target_sources(
           BounceLandEffect.cpp
           UntapEffect.cpp
           AddManaEffect.cpp
-          AttackEffect.cpp)
+          AttackEffect.cpp
+          DestroyEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

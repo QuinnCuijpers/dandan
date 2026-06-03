@@ -3,6 +3,7 @@
 
 #include "Card.h"
 #include "dandan/core/CardData.h"
+#include <algorithm>
 #include <unordered_map>
 #include <vector>
 
@@ -72,6 +73,21 @@ namespace dandan::core
             auto card = vec[card_index];
             vec.erase(vec.begin() + card_index);
             return card;
+        }
+
+        void removeCard(const Card &card)
+        {
+            auto card_id = card.getID();
+            auto &vec = m_permanents.at(card.getData().getType());
+            auto iter = std::find_if(vec.begin(), vec.end(),
+                                     [&card_id](const Permanent &other)
+                                     { return card_id == other; });
+            std::cout << "Removing card " << card.getData().getName()
+                      << " with ID " << card_id.getID() << '\n';
+            if (iter != vec.end())
+            {
+                vec.erase(iter);
+            }
         }
 
     private:

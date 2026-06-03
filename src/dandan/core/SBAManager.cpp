@@ -1,5 +1,6 @@
 #include "dandan/core/SBAManager.h"
 #include "dandan/core/Game.h"
+#include "dandan/effects/one_shot/DestroyEffect.h"
 
 namespace dandan::core
 {
@@ -47,6 +48,12 @@ namespace dandan::core
                               << " with ID " << card->getID().getID()
                               << " has been dealt lethal damage and is "
                                  "destroyed.\n";
+                    auto destroy_effect{
+                        std::make_unique<effects::DestroyEffect>(*card)};
+                    auto final_effect{
+                        game.replacementManager().applyReplacementEffects(
+                            *destroy_effect, game)};
+                    final_effect->apply(game);
                 }
             }
         }

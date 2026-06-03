@@ -13,6 +13,7 @@ namespace dandan::core
         {
         case Step::End:
             std::cout << "Handling end step\n";
+            game().priorityManager().setPriorityToActivePlayer(game());
             game().render();
             m_step = Step::Cleanup;
             break;
@@ -23,12 +24,11 @@ namespace dandan::core
             // that number. This turn-based action doesn’t use the stack.
             std::cout << "Handling cleanup step\n";
             game().render();
-            // TODO: both players discard down to their maximum hand size, not
-            // just active player
             if (game().activePlayer().hand().getCards().size() >
                 game().activePlayer().maxHandSize())
             {
-                DLOGI << "Active player has more cards than their maximum hand "
+                DLOGI << "Active player has more cards than their maximum "
+                         "hand "
                          "size, discarding down to max hand size\n";
                 while (game().activePlayer().hand().getCards().size() >
                        game().activePlayer().maxHandSize())

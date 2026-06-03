@@ -8,8 +8,10 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Constants.h"
+#include "dandan/core/Graveyard.h"
 #include "dandan/core/Library.h"
 #include "dandan/core/PreventionManager.h"
+#include "dandan/core/PriorityManager.h"
 #include "dandan/core/SBAManager.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
@@ -116,6 +118,15 @@ namespace dandan::core
             return m_players.at(1 - m_active_player_index);
         }
 
+        /** Gets the next player ID in turn order.
+         * @param player_id The ID of the current player.
+         * @return The ID of the next player.
+         */
+        [[nodiscard]] PlayerID getNextPlayerID(PlayerID player_id) const
+        {
+            return m_players.at((player_id.id() + 1) % AMOUNT_PLAYERS).getID();
+        }
+
         /** Gets the library mutably.
          * @return A reference to the library.
          */
@@ -130,6 +141,11 @@ namespace dandan::core
         [[nodiscard]] Stack &stack()
         {
             return m_stack;
+        }
+
+        Graveyard &graveyard()
+        {
+            return m_graveyard;
         }
 
         /** Gets the event manager mutably.
@@ -188,6 +204,16 @@ namespace dandan::core
         SBAManager const &sbaManager() const
         {
             return m_sba_manager;
+        }
+
+        PriorityManager &priorityManager()
+        {
+            return m_priority_manager;
+        }
+
+        const PriorityManager &priorityManager() const
+        {
+            return m_priority_manager;
         }
 
         /** Gets the input stream mutably.
@@ -327,7 +353,7 @@ namespace dandan::core
         /** Clears the card from its current zone.
          * @param card The card to clear.
          */
-        void moveCardFromZone(const Card &card);
+        static void moveCardFromZone(Player &player, const Card &card);
 
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{
@@ -338,6 +364,7 @@ namespace dandan::core
         EventManager m_event_manager;
         PreventionManager m_prevention_manager;
         ReplacementManager m_replacement_manager;
+        PriorityManager m_priority_manager{m_players.at(0).getID()};
         SBAManager m_sba_manager;
         std::unique_ptr<IPhase> m_phase;
         std::istream *m_input{&std::cin};
@@ -348,8 +375,7 @@ namespace dandan::core
         std::unordered_map<CardID, Card *> m_card_map;
         std::filesystem::path m_card_data_path{DANDAN_DECKLIST};
         bool m_first_turn{true};
-        // PlayerID m_priority_player_id{PlayerID::getInvalidID()};
-        // Graveyard m_graveyard;
+        Graveyard m_graveyard;
 
         explicit Game(std::istream &input);
         explicit Game(std::vector<Card> cards);
