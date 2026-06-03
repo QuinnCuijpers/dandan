@@ -391,3 +391,44 @@ TEST(DandanLibTest, ManaAbilities)
     game.setIstream(stream);
     game.run();
 }
+
+TEST(DandanLibTest, TempleOfEpiphanyTest)
+{
+    dandan::core::PlayerID::reset();
+
+    auto abilities{Temple_of_Epiphany_Abilities()};
+
+    auto data = dandan::core::CardData{
+        "Test Card ", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land,
+        dandan::core::CardData::SubType::None, std::move(abilities)};
+
+    auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
+
+    std::stringstream stream{};
+
+    auto next_top_card_id{game.library().getCards().front()};
+    auto next_next_top_card_id{game.library().getCards()[1]};
+
+    stream << "play " << game.activePlayer().hand().getCards().front().getID()
+           << '\n';
+    stream << "top\n"; // choose to scry to top
+    stream << "pass\n";
+
+    stream << "play " << next_top_card_id.getID()
+           << '\n'; // play the card that was on top of the library to ensure it
+                    // was scryed to the top correctly
+    stream << "bottom\n";
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    EXPECT_EQ(game.activePlayer().battlefield().getLands().size(), 1);
+    EXPECT_EQ(game.activePlayer().battlefield().getLands().front(),
+              next_top_card_id); // scryed to top
+
+    EXPECT_EQ(game.library().getCards().back(),
+              next_next_top_card_id); // scryed to bottom
+}
