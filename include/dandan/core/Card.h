@@ -179,6 +179,17 @@ namespace dandan::core
             return m_current_toughness;
         }
 
+        [[nodiscard]] int getDamageMarked() const
+        {
+            return m_marked_damage;
+        }
+
+        // TODO: should generate a damage event
+        void takeDamage(int damage, [[maybe_unused]] Game &game)
+        {
+            m_marked_damage += damage;
+        }
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.
@@ -207,6 +218,7 @@ namespace dandan::core
         PlayerID m_controller_id;
         bool m_tapped{false};
         Zone m_zone{Zone::LIBRARY};
+
         bool m_summoning_sick{true};
         bool m_is_attacking{false};
         bool m_is_blocked{false};
@@ -214,6 +226,7 @@ namespace dandan::core
 
         int m_current_power{};
         int m_current_toughness{};
+        int m_marked_damage{};
 
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each

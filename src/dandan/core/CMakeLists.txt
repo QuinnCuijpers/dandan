@@ -22,7 +22,8 @@ target_sources(
           Zone.cpp
           Player.cpp
           actions/ActivateAbilityAction.cpp
-          CardID.cpp)
+          CardID.cpp
+          SBAManager.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)

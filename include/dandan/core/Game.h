@@ -10,6 +10,7 @@
 #include "dandan/core/Constants.h"
 #include "dandan/core/Library.h"
 #include "dandan/core/PreventionManager.h"
+#include "dandan/core/SBAManager.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
@@ -64,6 +65,15 @@ namespace dandan::core
         [[nodiscard]] Player &getPlayer(PlayerID player_id)
         {
             return m_players.at(player_id.id());
+        }
+
+        /** Gets all players in the game.
+         * @return A const reference to the array of players.
+         */
+        [[nodiscard]] const std::array<Player, AMOUNT_PLAYERS> &getPlayers()
+            const
+        {
+            return m_players;
         }
 
         /** Gets the current active player immutably.
@@ -160,6 +170,16 @@ namespace dandan::core
         [[nodiscard]] const PreventionManager &preventionManager() const
         {
             return m_prevention_manager;
+        }
+
+        SBAManager &sbaManager()
+        {
+            return m_sba_manager;
+        }
+
+        SBAManager const &sbaManager() const
+        {
+            return m_sba_manager;
         }
 
         /** Gets the input stream mutably.
@@ -310,6 +330,7 @@ namespace dandan::core
         EventManager m_event_manager;
         PreventionManager m_prevention_manager;
         ReplacementManager m_replacement_manager;
+        SBAManager m_sba_manager;
         std::unique_ptr<IPhase> m_phase;
         std::istream *m_input{&std::cin};
         // stable container for all cards in the game

@@ -122,6 +122,16 @@ namespace dandan::core
             m_played_land_this_turn = played;
         }
 
+        void setDrewCardFromEmptyLibrary(bool drew)
+        {
+            m_drew_card_from_empty_library = drew;
+        }
+
+        [[nodiscard]] bool drewCardFromEmptyLibrary() const
+        {
+            return m_drew_card_from_empty_library;
+        }
+
         /** Gets the maximum hand size of the player.
          * @return The maximum hand size of the player.
          */
@@ -192,6 +202,7 @@ namespace dandan::core
         Hand m_hand;
         mana::Mana m_mana_pool;
         bool m_played_land_this_turn{false};
+        bool m_drew_card_from_empty_library{false};
         size_t m_max_hand_size{STARTING_HAND_SIZE};
     };
 } // namespace dandan::core

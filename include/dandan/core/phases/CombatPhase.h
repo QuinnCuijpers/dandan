@@ -4,6 +4,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/phases/IPhase.h"
 #include <cstdint>
+#include <unordered_map>
 #include <vector>
 
 // 506. Combat Phase
@@ -72,10 +73,16 @@ namespace dandan::core
             m_attackers.emplace_back(creature);
         }
 
+        void addBlocker(Card *attacking_creature, Card *blocking_creature)
+        {
+            m_blockers[attacking_creature].emplace_back(blocking_creature);
+        }
+
     private:
         Step m_step{Step::BeginningOfCombat};
         std::unique_ptr<IPhase> m_next_phase;
 
+        std::unordered_map<Card *, std::vector<Card *>> m_blockers;
         std::vector<Card *> m_attackers;
 
         void handleNextStep();

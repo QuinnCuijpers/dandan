@@ -142,6 +142,7 @@ namespace dandan::core
             }
             attacking_creature->setBlocked(true);
             creature->setBlocking(true);
+            m_blockers[attacking_creature].emplace_back(creature);
             std::cout << creature->getData().getName() << " is blocking "
                       << attacking_creature->getData().getName() << '\n';
         }
@@ -170,16 +171,30 @@ namespace dandan::core
             break;
         case Step::CombatDamage:
             std::cout << "Combat damage step\n";
-            for (const auto &creature_id :
-                 game().activePlayer().battlefield().getCreatures())
+            for (auto *creature : m_attackers)
             {
-                auto *creature{game().getCardByID(creature_id)};
-                if (creature->isAttacking() && !creature->isBlocked())
+                if (!creature->isBlocked())
                 {
                     std::cout << "Dealing damage to opponent from "
                               << creature->getData().getName() << '\n';
                     game().nonActivePlayer().takeDamage(creature->getPower(),
                                                         game());
+                }
+                else if (creature->isBlocked())
+                {
+                    std::cout << "Dealing damage to blocking creature from "
+                              << creature->getData().getName() << '\n';
+                    for (auto *blocking_creature : m_blockers[creature])
+                    {
+                        std::cout << "Dealing damage to attacking creature "
+                                  << creature->getID().getID()
+                                  << " from blocking creature "
+                                  << blocking_creature->getID().getID() << '\n';
+                        creature->takeDamage(blocking_creature->getPower(),
+                                             game());
+                        blocking_creature->takeDamage(creature->getPower(),
+                                                      game());
+                    }
                 }
             }
             m_step = Step::EndOfCombat;

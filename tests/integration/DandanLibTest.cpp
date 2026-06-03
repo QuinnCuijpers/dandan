@@ -149,8 +149,7 @@ TEST(DandanLibTest, DiscardToHandSize)
         stream << "pass\n";
     }
     // the non-active player will be the one prompted to discard on cleanup
-    stream << game.nonActivePlayer().hand().getCards().front().getID()
-           << '\n';
+    stream << game.nonActivePlayer().hand().getCards().front().getID() << '\n';
     stream << "quit\n";
 
     game.setIstream(stream);
@@ -265,22 +264,24 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
                                dandan::core::CardData::Type::Creature,
                                dandan::core::CardData::SubType::None,
                                std::move(abilities),
-                               dandan::core::Stats{2, 2}};
+                               dandan::core::Stats{2, 3}};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
 
     std::stringstream stream{};
+
+    auto attacker_id{game.activePlayer().hand().getCards().front()};
+    auto defender_id{game.nonActivePlayer().hand().getCards().front()};
+
     // play creature for active player and pass
-    stream << "play " << game.activePlayer().hand().getCards().front().getID()
-           << '\n';
+    stream << "play " << attacker_id.getID() << '\n';
     stream << "next\n"; // should move to combat phase where player can choose
                         // to attack with creature with summoning sickness
     stream << "pass\n";
 
     // play creature for non active player and pass
-    stream << "play "
-           << game.nonActivePlayer().hand().getCards().front().getID() << '\n';
+    stream << "play " << defender_id.getID() << '\n';
     stream << "next\n"; // should not find any attackers and move to next main
                         // phase
     stream << "pass\n";
@@ -288,7 +289,8 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
     // combat phase player 1
     stream << "next\n"; // pass to combat phase
     stream << "0\n";    // choose the first creature as attacker
-    stream << "none\n"; // choose not to block with creature
+    stream << attacker_id.getID()
+           << '\n';     // choose to block the attacking creature
     stream << "pass\n"; // pass to next player
 
     // combat phase player 2
@@ -300,14 +302,6 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
 
     game.setIstream(stream);
 
-    // beginning phase
-    game.handlePhase();
-
-    // main phase
-    // game.activePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE, 1);
-    // game.nonActivePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE,
-    // 1);
-
     // combat phase, should not be able to attack with creatures due to
     // summoning sickness
     game.run();
@@ -315,15 +309,15 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
     EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(), 1);
     EXPECT_EQ(game.nonActivePlayer().battlefield().getCreatures().size(), 1);
 
-    auto active_creature_id =
-        game.activePlayer().battlefield().getCreatures().front();
-    auto non_active_creature_id =
-        game.nonActivePlayer().battlefield().getCreatures().front();
-    const auto *active_creature = game.getCardByID(active_creature_id);
-    const auto *non_active_creature = game.getCardByID(non_active_creature_id);
-    EXPECT_TRUE(active_creature->isAttacking());
-    EXPECT_TRUE(non_active_creature->isAttacking());
+    auto *attacking_creature = game.getCardByID(attacker_id);
+    auto *blocking_creature = game.getCardByID(defender_id);
 
-    EXPECT_EQ(game.activePlayer().getLifeTotal(), STARTING_LIFE_TOTAL - 2);
-    EXPECT_EQ(game.nonActivePlayer().getLifeTotal(), STARTING_LIFE_TOTAL - 2);
+    EXPECT_TRUE(attacking_creature->isAttacking());
+    EXPECT_TRUE(blocking_creature->isAttacking());
+
+    EXPECT_TRUE(attacking_creature->isBlocked());
+    EXPECT_TRUE(blocking_creature->isBlocking());
+
+    EXPECT_EQ(attacking_creature->getDamageMarked(), 2);
+    EXPECT_EQ(blocking_creature->getDamageMarked(), 2);
 }
