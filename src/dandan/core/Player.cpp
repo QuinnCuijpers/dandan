@@ -4,19 +4,18 @@
 namespace dandan::core
 {
     // TODO: does this need to take library?
-    void Player::drawCard(Library &library, Game &game)
+    void Player::drawCard(Game &game)
     {
-
+        auto &library{game.library()};
+        if (library.getCards().empty())
         {
-            if (library.getCards().empty())
-            {
-                std::cout << "library is empty, cannot draw card\n";
-                return;
-            }
-            auto card_id = library.draw();
-            auto *card{game.getCardByID(card_id)};
-            card->setControllerID(m_player_id);
-            m_hand.addCard(*card);
-        };
+            std::cout << "library is empty, cannot draw card\n";
+            setDrewCardFromEmptyLibrary(true);
+            return;
+        }
+        auto card_id = library.draw();
+        auto *card{game.getCardByID(card_id)};
+        card->setControllerID(m_player_id);
+        m_hand.addCard(*card);
     }
 } // namespace dandan::core

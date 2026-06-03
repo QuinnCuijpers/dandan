@@ -4,7 +4,6 @@
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Hand.h"
-#include "dandan/core/Library.h"
 #include "dandan/mana/Mana.h"
 #include <cstddef>
 
@@ -157,10 +156,9 @@ namespace dandan::core
         }
 
         /** Draws a card from the library.
-         * @param library The library to draw from.
          * @param game The game instance.
          */
-        void drawCard(Library &library, Game &game);
+        void drawCard(Game &game);
 
         /** Plays a card from the player's hand.
          * @param card The card to play.

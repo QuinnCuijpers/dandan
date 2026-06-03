@@ -140,9 +140,7 @@ namespace dandan::core
                 std::cout << "Invalid attacker chosen\n";
                 continue;
             }
-            attacking_creature->setBlocked(true);
-            creature->setBlocking(true);
-            m_blockers[attacking_creature].emplace_back(creature);
+            addBlocker(attacking_creature, creature);
             std::cout << creature->getData().getName() << " is blocking "
                       << attacking_creature->getData().getName() << '\n';
         }
@@ -180,7 +178,7 @@ namespace dandan::core
                     game().nonActivePlayer().takeDamage(creature->getPower(),
                                                         game());
                 }
-                else if (creature->isBlocked())
+                else
                 {
                     std::cout << "Dealing damage to blocking creature from "
                               << creature->getData().getName() << '\n';

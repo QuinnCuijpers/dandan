@@ -75,6 +75,8 @@ namespace dandan::core
 
         void addBlocker(Card *attacking_creature, Card *blocking_creature)
         {
+            attacking_creature->setBlocked(true);
+            blocking_creature->setBlocking(true);
             m_blockers[attacking_creature].emplace_back(blocking_creature);
         }
 

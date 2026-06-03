@@ -309,8 +309,8 @@ TEST(DandanLibTest, AttackWithSummoningSickness)
     EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(), 1);
     EXPECT_EQ(game.nonActivePlayer().battlefield().getCreatures().size(), 1);
 
-    auto *attacking_creature = game.getCardByID(attacker_id);
-    auto *blocking_creature = game.getCardByID(defender_id);
+    const auto *attacking_creature = game.getCardByID(attacker_id);
+    const auto *blocking_creature = game.getCardByID(defender_id);
 
     EXPECT_TRUE(attacking_creature->isAttacking());
     EXPECT_TRUE(blocking_creature->isAttacking());
