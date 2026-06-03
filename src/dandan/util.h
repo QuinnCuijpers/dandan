@@ -4,7 +4,7 @@
 #include <array>
 #include <string>
 
-// taken from https://www.geeksforgeeks.org/dsa/convert-number-to-words/
+// modified from https://www.geeksforgeeks.org/dsa/convert-number-to-words/
 namespace dandan::utils
 {
 
@@ -71,7 +71,7 @@ namespace dandan::utils
                 temp += std::string(multiplier.at(group)) + " ";
 
                 // Add this group result to overall result
-                res += temp;
+                res = temp.append(res);
             }
             n /= THOUSAND;
             group++;

@@ -62,7 +62,7 @@ namespace dandan::core
     }
     [[nodiscard]] std::unique_ptr<IPhase> EndingPhase::handle()
     {
-        std::cout << "Handling ending phase\n";
+        std::cout << "Handling " << name() << '\n';
         while (m_step != Step::Done)
         {
             handleNextStep();

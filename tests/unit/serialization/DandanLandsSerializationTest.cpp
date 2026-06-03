@@ -10,17 +10,6 @@
 #include <string>
 #include <vector>
 
-#define LAND(name, subtype)                                                    \
-    dandan::Card                                                               \
-    {                                                                          \
-        new dandan::CardData                                                   \
-        {                                                                      \
-            formatCardName(#name),                                             \
-                std::make_unique<dandan::mana::GenericMana>(0),                \
-                dandan::CardData::Type::Land, subtype, name##_Abilities()      \
-        }                                                                      \
-    }
-
 static std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};

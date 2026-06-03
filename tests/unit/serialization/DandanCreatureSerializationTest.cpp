@@ -6,25 +6,11 @@
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
-#include "dandan/mana/BlueMana.h"
 #include "dandan/triggers/NoIslandsTrigger.h"
 #include "gtest/gtest.h"
 #include <memory>
 #include <string>
 #include <vector>
-
-#define CREATURE(name)                                                         \
-    dandan::core::Card                                                         \
-    {                                                                          \
-        new dandan::CardData                                                   \
-        {                                                                      \
-            formatCardName(#name),                                             \
-                std::make_unique<dandan::mana::BlueMana>(2),                   \
-                dandan::core::CardData::Type::Creature,                        \
-                dandan::core::CardData::SubType::Fish, name##_Abilities(),     \
-                dandan::core::Stats{4, 1}                                      \
-        }                                                                      \
-    }
 
 static std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
 {

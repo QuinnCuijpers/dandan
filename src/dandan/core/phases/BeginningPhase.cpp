@@ -19,7 +19,7 @@ namespace dandan::core
 
     std::unique_ptr<IPhase> BeginningPhase::handle()
     {
-        DLOGI << "Handling beginning phase\n";
+        DLOGI << "Handling " << name() << '\n';
         while (m_step != Step::Done)
         {
             handleNextStep();

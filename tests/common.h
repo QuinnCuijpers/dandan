@@ -5,6 +5,30 @@
 #include <gtest/gtest.h>
 #include <string>
 
+#define CREATURE(name)                                                         \
+    dandan::core::Card                                                         \
+    {                                                                          \
+        new dandan::CardData                                                   \
+        {                                                                      \
+            formatCardName(#name),                                             \
+                std::make_unique<dandan::mana::BlueMana>(2),                   \
+                dandan::core::CardData::Type::Creature,                        \
+                dandan::core::CardData::SubType::Fish, name##_Abilities(),     \
+                dandan::core::Stats{4, 1}                                      \
+        }                                                                      \
+    }
+
+#define LAND(name, subtype)                                                    \
+    dandan::Card                                                               \
+    {                                                                          \
+        new dandan::CardData                                                   \
+        {                                                                      \
+            formatCardName(#name),                                             \
+                std::make_unique<dandan::mana::GenericMana>(0),                \
+                dandan::CardData::Type::Land, subtype, name##_Abilities()      \
+        }                                                                      \
+    }
+
 inline std::string CardParamName(const std::string_view raw_name)
 {
     std::string name;

@@ -16,7 +16,7 @@ namespace dandan::core
 
     [[nodiscard]] std::unique_ptr<IPhase> CombatPhase::handle()
     {
-        std::cout << "Handling combat phase\n";
+        std::cout << "Handling " << name() << '\n';
         while (m_step != Step::Done)
         {
             handleNextStep();

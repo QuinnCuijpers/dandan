@@ -34,7 +34,7 @@ namespace dandan::core
 
     [[nodiscard]] std::unique_ptr<IPhase> MainPhase::handle()
     {
-        std::cout << "Handling main phase\n";
+        std::cout << "Handling " << name() << '\n';
 
         while (true)
         {
