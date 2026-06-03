@@ -97,23 +97,9 @@ namespace dandan::core
 
         /** Discards a card from the hand.
          * @param card The card to discard.
+         * @param game The game instance.
          */
-        void discardCard(Card &card)
-        {
-            std::cout << "Discarding card " << card.getData().getName() << '\n';
-            // TODO: move to graveyard instead of just removing from hand
-            // awaiting implementation of graveyard
-            // and gamewise src -> dest moving of cards
-            card.setZone(Zone::GRAVEYARD);
-            auto card_id = card.getID();
-            auto iter = std::find(m_cards.begin(), m_cards.end(), card_id);
-            if (iter == m_cards.end())
-            {
-                throw std::runtime_error(
-                    "Card is not in hand and cannot be discarded");
-            }
-            m_cards.erase(iter);
-        }
+        void discardCard(Card &card, Game &game);
 
     private:
         std::vector<CardID> m_cards;

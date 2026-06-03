@@ -199,8 +199,12 @@ namespace dandan::core
             m_is_attacking = false;
             m_is_blocked = false;
             m_blocking = false;
-            m_current_power = getData().getStats()->power;
-            m_current_toughness = getData().getStats()->toughness;
+            if (getData().getStats().has_value())
+            {
+                auto stats = getData().getStats().value();
+                m_current_power = stats.power;
+                m_current_toughness = stats.toughness;
+            }
             m_marked_damage = 0;
         }
 

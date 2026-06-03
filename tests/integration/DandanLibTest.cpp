@@ -106,14 +106,21 @@ TEST(DandanLibTest, Bounceland)
            << game.nonActivePlayer().hand().getCards().front().getID() << '\n';
     stream << "0\n";
     stream << "pass\n";
+    stream << game.nonActivePlayer().hand().getCards().front().getID() << '\n';
 
-    // second player would need to discard to handsize
-    stream << game.nonActivePlayer().hand().getCards().back().getID() << '\n';
+    stream << "play " << game.activePlayer().hand().getCards().front().getID()
+           << '\n';
+    stream << "0\n";
+    stream << "pass\n";
+    stream << game.activePlayer().hand().getCards().front().getID() << '\n';
+
     stream << "quit\n";
 
     game.setIstream(stream);
 
     game.run();
+
+    EXPECT_EQ(game.graveyard().getCards().size(), 2);
 }
 
 TEST(DandanLibTest, Play1LandATurnTest)

@@ -172,12 +172,13 @@ namespace dandan::core
 
         /** Discards a card from the player's hand.
          * @param card The card to discard.
+         * @param game The game instance.
          */
-        void discardCard(Card &card)
+        void discardCard(Card &card, Game &game)
         {
             std::cout << "Player is discarding card "
                       << card.getData().getName() << '\n';
-            m_hand.discardCard(card);
+            m_hand.discardCard(card, game);
         }
 
         /** Takes damage
