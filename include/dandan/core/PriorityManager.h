@@ -7,6 +7,9 @@ namespace dandan::core
 
     class Game;
 
+    /** @brief A class that manages the priority of players in the game.
+     * @class PriorityManager
+     */
     class PriorityManager
     {
         // 117.3. Which player has priority is determined by the following
@@ -56,7 +59,10 @@ namespace dandan::core
          */
         void setPriorityToActivePlayer(Game &game);
 
-        void passPriority(Game &game);
+        /** Passes priority to the next player in turn order.
+         * @param game The game object to get the next player from.
+         */
+        void passPriority(const Game &game);
 
     private:
         PlayerID m_current_player_with_priority;

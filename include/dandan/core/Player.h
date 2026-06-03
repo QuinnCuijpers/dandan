@@ -121,11 +121,20 @@ namespace dandan::core
             m_played_land_this_turn = played;
         }
 
+        /** Sets whether the player drew a card from an empty library this turn.
+         * @param drew True if the player drew a card from an empty library this
+         * turn, false otherwise. Used to determine if the player should lose
+         * the game for drawing from an empty library.
+         */
         void setDrewCardFromEmptyLibrary(bool drew)
         {
             m_drew_card_from_empty_library = drew;
         }
 
+        /** Checks if the player drew a card from an empty library this turn.
+         * @return True if the player drew a card from an empty library this
+         * turn, false otherwise.
+         */
         [[nodiscard]] bool drewCardFromEmptyLibrary() const
         {
             return m_drew_card_from_empty_library;

@@ -73,6 +73,11 @@ namespace dandan::core
             m_attackers.emplace_back(creature);
         }
 
+        /** Adds a blocker to the specified attacking creature.
+         * @param attacking_creature The attacking creature to add the blocker
+         * to.
+         * @param blocking_creature The creature to add as a blocker.
+         */
         void addBlocker(Card *attacking_creature, Card *blocking_creature)
         {
             attacking_creature->setBlocked(true);

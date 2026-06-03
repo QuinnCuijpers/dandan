@@ -143,7 +143,10 @@ namespace dandan::core
             return m_stack;
         }
 
-        Graveyard &graveyard()
+        /** Gets the graveyard mutably.
+         * @return A reference to the graveyard.
+         */
+        [[nodiscard]] Graveyard &graveyard()
         {
             return m_graveyard;
         }
@@ -196,22 +199,34 @@ namespace dandan::core
             return m_prevention_manager;
         }
 
-        SBAManager &sbaManager()
+        /** Gets the SBA manager mutably.
+         * @return A reference to the SBA manager.
+         */
+        [[nodiscard]] SBAManager &sbaManager()
         {
             return m_sba_manager;
         }
 
-        SBAManager const &sbaManager() const
+        /** Gets the SBA manager immutably.
+         * @return A const reference to the SBA manager.
+         */
+        [[nodiscard]] const SBAManager &sbaManager() const
         {
             return m_sba_manager;
         }
 
-        PriorityManager &priorityManager()
+        /** Gets the priority manager mutably.
+         * @return A reference to the priority manager.
+         */
+        [[nodiscard]] PriorityManager &priorityManager()
         {
             return m_priority_manager;
         }
 
-        const PriorityManager &priorityManager() const
+        /** Gets the priority manager immutably.
+         * @return A const reference to the priority manager.
+         */
+        [[nodiscard]] const PriorityManager &priorityManager() const
         {
             return m_priority_manager;
         }
@@ -351,6 +366,7 @@ namespace dandan::core
         [[nodiscard]] Card *getCardByID(int card_id);
 
         /** Clears the card from its current zone.
+         * @param player The player whose card is to be cleared.
          * @param card The card to clear.
          */
         static void moveCardFromZone(Player &player, const Card &card);

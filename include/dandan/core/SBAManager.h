@@ -13,6 +13,7 @@ namespace dandan::core
     {
     public:
         /** Checks for state-based actions and handles them.
+         * @param game The game instance to check for state-based actions in.
          */
         static void checkSBAs(Game &game);
     };

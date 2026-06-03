@@ -75,6 +75,9 @@ namespace dandan::core
             return card;
         }
 
+        /** Remove a card from the battlefield.
+         * @param card The card to remove.
+         */
         void removeCard(const Card &card)
         {
             auto card_id = card.getID();

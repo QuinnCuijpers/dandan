@@ -179,20 +179,32 @@ namespace dandan::core
             return m_current_toughness;
         }
 
+        /** Get the damage marked on the card.
+         * @return The damage marked on the card.
+         */
         [[nodiscard]] int getDamageMarked() const
         {
             return m_marked_damage;
         }
 
         // TODO: should generate a damage event
+        /** Take damage.
+         * @param damage The damage to take.
+         * @param game The game instance.
+         */
         void takeDamage(int damage, [[maybe_unused]] Game &game)
         {
             m_marked_damage += damage;
         }
 
+        /** Destroy the card.
+         * @param game The game instance.
+         */
         void destroy(Game &game);
 
         // TODO: check this thoroughly
+        /** Reset the state of the card.
+         */
         void resetState()
         {
             m_summoning_sick = true;

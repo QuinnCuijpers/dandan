@@ -7,6 +7,13 @@
 
 namespace dandan::core
 {
+    /**
+     * @brief A class representing the graveyard.
+     *
+     * @class Graveyard
+     * The graveyard is a zone where cards go when they are destroyed or
+     * discarded.
+     */
     class Graveyard
     {
     public:
@@ -22,6 +29,9 @@ namespace dandan::core
             m_cards.emplace_back(card.getID());
         }
 
+        /** Gets the cards in the graveyard.
+         * @return A const reference to the vector of card IDs.
+         */
         [[nodiscard]] const std::vector<CardID> &getCards() const
         {
             return m_cards;

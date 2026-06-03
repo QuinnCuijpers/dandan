@@ -7,9 +7,17 @@
 
 namespace dandan::effects
 {
+    /** @brief A class that represents the effect of destroying a card.
+     * @class DestroyEffect
+     *
+     * @implements IOneShotEffect
+     */
     class DestroyEffect : public IOneShotEffect
     {
     public:
+        /** @brief Constructs a new destroy effect with the specified card.
+         * @param card The card to destroy.
+         */
         explicit DestroyEffect(core::Card &card) : m_card{card}
         {
         }
