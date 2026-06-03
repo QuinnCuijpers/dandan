@@ -89,8 +89,8 @@ namespace dandan::core
 
         for (int i{}; i < STARTING_HAND_SIZE; ++i)
         {
-            activePlayer().drawCard(m_library, *this);
-            nonActivePlayer().drawCard(m_library, *this);
+            activePlayer().drawCard(*this);
+            nonActivePlayer().drawCard(*this);
         }
         // TODO: Implement mulligan rules
         DLOGI << "Game constructed\n";

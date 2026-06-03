@@ -27,7 +27,7 @@ namespace dandan::effects
         std::cout << "Applying draw effect\n";
         for (int i = 0; i < m_amount; ++i)
         {
-            game.activePlayer().drawCard(game.library(), game);
+            game.activePlayer().drawCard(game);
         }
 
         return nullptr;

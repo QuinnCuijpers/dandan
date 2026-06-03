@@ -5,10 +5,9 @@
 namespace dandan::core
 {
     std::unique_ptr<effects::IOneShotEffect> CardDrawAction::createEffect(
-        core::Game &game)
+        [[maybe_unused]] core::Game &game)
     {
         DLOGI << "Executing card draw action\n";
-        game.getPlayer(m_player).drawCard(game.library(), game);
         return std::make_unique<effects::DrawEffect>();
     }
 } // namespace dandan::core

@@ -30,7 +30,7 @@ namespace dandan::core
          * @param game The game instance.
          * @return The modified effect.
          */
-        const effects::IOneShotEffect &applyReplacementEffects(
+        std::unique_ptr<effects::IOneShotEffect> applyReplacementEffects(
             effects::IOneShotEffect &effect, Game &game) const;
 
     private:

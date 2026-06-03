@@ -92,7 +92,7 @@ namespace dandan::core
                 game().replacementManager().applyReplacementEffects(*effect,
                                                                     game())};
 
-            auto event{final_effect.apply(game())};
+            auto event{final_effect->apply(game())};
             if (event != nullptr)
             {
                 game().eventManager().notify(*event, game());

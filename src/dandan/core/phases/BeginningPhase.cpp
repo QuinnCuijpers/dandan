@@ -6,6 +6,7 @@
 #include "dandan/effects/one_shot/UntapEffect.h"
 #include "dandan/log.h"
 #include <memory>
+#include <utility>
 
 // 302.6. A creature’s activated ability with the tap symbol or the untap symbol
 // in its activation cost can’t be activated unless the creature has been under
@@ -82,7 +83,11 @@ namespace dandan::core
             {
                 // TODO: cast draweffect to game instead of handling in the
                 // createEffect of the action
-                draw_action->createEffect(game());
+                auto draw_effect{draw_action->createEffect(game())};
+                const auto &final_effect{
+                    game().replacementManager().applyReplacementEffects(
+                        *draw_effect, game())};
+                final_effect->apply(game());
             }
             game().render();
             m_step = Step::Done;

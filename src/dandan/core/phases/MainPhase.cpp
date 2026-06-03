@@ -1,7 +1,5 @@
 #include "dandan/core/phases/MainPhase.h"
 #include "dandan/abilities/AbilityContext.h"
-#include "dandan/abilities/ManaAbility.h"
-#include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/ActivateAbilityAction.h"
 #include "dandan/core/actions/PlayCardAction.h"
@@ -106,7 +104,7 @@ namespace dandan::core
             game().replacementManager().applyReplacementEffects(*effect,
                                                                 game())};
 
-        auto event{final_effect.apply(game())};
+        auto event{final_effect->apply(game())};
         game().eventManager().notify(*event, game());
     }
 
@@ -219,7 +217,7 @@ namespace dandan::core
             game().replacementManager().applyReplacementEffects(*effect,
                                                                 game())};
 
-        auto event{final_effect.apply(game())};
+        auto event{final_effect->apply(game())};
         if (event)
         {
             game().eventManager().notify(*event, game());

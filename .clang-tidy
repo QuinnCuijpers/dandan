@@ -4,7 +4,8 @@ Checks: >
     modernize-*,
     performance-*,
     readability-*,
-    -modernize-use-trailing-return-type
+    -modernize-use-trailing-return-type,
+    -clang-diagnostic-ignored-optimization-argument
 
 HeaderFilterRegex: '.*/(include/dandan|src/dandan|src/main\.cpp).*'
 WarningsAsErrors: '*'

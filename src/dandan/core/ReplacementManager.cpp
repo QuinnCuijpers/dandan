@@ -1,5 +1,7 @@
 #include "dandan/core/ReplacementManager.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <algorithm>
+#include <memory>
 
 namespace dandan::core
 {
@@ -18,10 +20,11 @@ namespace dandan::core
                                     m_replacement_effects.end());
     }
 
-    const effects::IOneShotEffect &ReplacementManager::applyReplacementEffects(
-        effects::IOneShotEffect &effect, [[maybe_unused]] Game &game) const
+    std::unique_ptr<effects::IOneShotEffect> ReplacementManager::
+        applyReplacementEffects(effects::IOneShotEffect &effect,
+                                [[maybe_unused]] Game &game) const
     {
-        effects::IOneShotEffect *current_effect = &effect;
+        effects::IOneShotEffect *current_effect{&effect};
         for (const auto *replacement_effect : m_replacement_effects)
         {
             if (replacement_effect->appliesTo(*current_effect))
@@ -29,6 +32,6 @@ namespace dandan::core
                 current_effect = &replacement_effect->replace(*current_effect);
             }
         }
-        return *current_effect;
+        return current_effect->clone();
     }
 } // namespace dandan::core
