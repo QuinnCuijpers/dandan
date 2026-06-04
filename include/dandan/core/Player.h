@@ -164,6 +164,14 @@ namespace dandan::core
             return m_mana_pool;
         }
 
+        /** Checks if the player has lost the game.
+         * @return True if the player has lost the game, false otherwise.
+         */
+        [[nodiscard]] bool lost() const
+        {
+            return m_lost_game;
+        }
+
         /** Draws a card from the library.
          * @param game The game instance.
          */
@@ -212,6 +220,8 @@ namespace dandan::core
         bool m_played_land_this_turn{false};
         bool m_drew_card_from_empty_library{false};
         size_t m_max_hand_size{STARTING_HAND_SIZE};
+        // bool m_won_game{false};
+        bool m_lost_game{false};
     };
 } // namespace dandan::core
 

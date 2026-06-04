@@ -260,4 +260,15 @@ namespace dandan::core
         std::cout << "Cards in library: " << m_library.getCards().size()
                   << "\n";
     }
+
+    void Game::quit(const Player &player)
+    {
+        // Implementation for quitting the game
+        // for now we only support 2 players so we can just end the game
+        auto winner_id{getNextPlayerID(player.getID())};
+        auto &winner{getPlayer(winner_id)};
+        std::cout << "Player " << winner.getName() << " wins the game!\n";
+        std::cout << "Quitting the game...\n";
+        std::exit(0);
+    }
 } // namespace dandan::core

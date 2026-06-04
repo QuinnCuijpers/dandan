@@ -17,8 +17,8 @@ namespace dandan::conditions
                    card->getData().getSubType() ==
                        core::CardData::SubType::Island;
         };
-        const core::Player &current_player = game.nonActivePlayer();
-        const auto &battlefield{current_player.battlefield()};
+        const core::Player &defending_player = game.nonActivePlayer();
+        const auto &battlefield{defending_player.battlefield()};
         return std::any_of(battlefield.getLands().begin(),
                            battlefield.getLands().end(), island_filter);
     }

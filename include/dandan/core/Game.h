@@ -371,6 +371,11 @@ namespace dandan::core
          */
         static void moveCardFromZone(Player &player, const Card &card);
 
+        /** Quits the game for the specified player.
+         * @param player The player who is quitting the game.
+         */
+        void quit(const Player &player);
+
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{
             Player(DEFAULT_NAMES.at(0)), Player(DEFAULT_NAMES.at(1))};

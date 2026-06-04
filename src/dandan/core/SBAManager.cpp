@@ -1,6 +1,7 @@
 #include "dandan/core/SBAManager.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/DestroyEffect.h"
+#include "dandan/effects/one_shot/LoseGameEffect.h"
 
 namespace dandan::core
 {
@@ -15,6 +16,12 @@ namespace dandan::core
             {
                 std::cout << player.getName()
                           << " has 0 or less life and loses the game.\n";
+                auto lose_effect{
+                    std::make_unique<effects::LoseGameEffect>(player.getID())};
+                auto final_effect{
+                    game.replacementManager().applyReplacementEffects(
+                        *lose_effect, game)};
+                final_effect->apply(game);
             }
         }
 
@@ -28,6 +35,12 @@ namespace dandan::core
                 std::cout << player.getName()
                           << " attempted to draw from an empty library and "
                              "loses the game.\n";
+                auto lose_effect{
+                    std::make_unique<effects::LoseGameEffect>(player.getID())};
+                auto final_effect{
+                    game.replacementManager().applyReplacementEffects(
+                        *lose_effect, game)};
+                final_effect->apply(game);
             }
         }
 

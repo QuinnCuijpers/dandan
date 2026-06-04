@@ -56,6 +56,16 @@ namespace dandan::core
                         game.replacementManager().subscribe(
                             replacement_ability);
                     }
+                    else if (static_ability->getType() ==
+                             abilities::StaticAbility::Type::Prevention)
+                    {
+                        // const auto *prevention_effect{
+                        //     static_ability->getEffect()};
+                        // std::cout << "Subscribing prevention ability to "
+                        //              "prevention manager\n";
+                        // game.preventionManager().subscribe(card->getID(),
+                        //                                    prevention_effect);
+                    }
                 }
             }
             std::cout << game.eventManager().size() << " effects subscribed\n";

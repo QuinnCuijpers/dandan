@@ -432,3 +432,89 @@ TEST(DandanLibTest, TempleOfEpiphanyTest)
     EXPECT_EQ(game.library().getCards().back(),
               next_next_top_card_id); // scryed to bottom
 }
+
+TEST(DandanLibTest, HalimarDepthsAbilities)
+{
+    dandan::core::PlayerID::reset();
+
+    auto abilities{Halimar_Depths_Abilities()};
+
+    auto data = dandan::core::CardData{
+        "Test Card ", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land,
+        dandan::core::CardData::SubType::None, std::move(abilities)};
+
+    auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
+
+    std::stringstream stream{};
+
+    // auto top_1{game.library().getCards().front()};
+    auto top_2{game.library().getCards()[1]};
+    auto top_3{game.library().getCards()[2]};
+    // auto top_4{game.library().getCards()[3]};
+
+    stream << "play " << game.activePlayer().hand().getCards().front().getID()
+           << '\n';  // play halimar depths
+    stream << "0\n"; // choose to put the first card peeked to the bottom of the
+                     // peeked stack
+    stream << "0\n"; // choose to put the second card peeked to the bottom of
+                     // the peeked stack
+    stream << "0\n"; // choose to put the third card peeked to the bottom of the
+                     // peeked stack
+    stream << "pass\n";
+
+    stream << "play " << top_3.getID()
+           << '\n'; // play the card that was on top of the library to ensure it
+                    // was peeked to the top correctly
+    // keep in the same order
+    stream << "2\n";
+    stream << "1\n";
+    stream << "0\n";
+    stream << "pass\n";
+
+    stream << "play " << top_2.getID()
+           << '\n'; // play the card that was on top of the library to ensure it
+    stream << "0\n";
+    stream << "0\n";
+    stream << "0\n";
+
+    stream << "quit\n";
+    game.setIstream(stream);
+    game.run();
+}
+
+TEST(DandanLibTest, DieFromEmptyLibrary)
+{
+    dandan::core::PlayerID::reset();
+
+    const int MIN_LIB_SIZE = 14;
+    auto test_cards{createTestCards(MIN_LIB_SIZE)};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
+
+    std::stringstream stream{};
+
+    // pass until the library is empty and the active player tries to draw from
+    // an empty library
+    stream << "pass\n"; // first player passes, second player draws for turn and
+                        // dies, game should end before the second player can
+                        // input anything
+
+    game.setIstream(stream);
+    game.run();
+
+    EXPECT_TRUE(game.activePlayer().lost());
+}
+
+TEST(DandanLibTest, DieFromNoLife)
+{
+    dandan::core::PlayerID::reset();
+
+    auto test_cards{createTestCards(TEST_DECK_SIZE)};
+    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
+
+    game.activePlayer().takeDamage(game.activePlayer().getLifeTotal(), game);
+    game.run();
+
+    EXPECT_TRUE(game.activePlayer().lost());
+}

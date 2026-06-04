@@ -28,6 +28,8 @@ namespace dandan::effects
         game.preventionManager().subscribe(m_card.getID(),
                                            std::move(summoning_sickness));
 
+        // TODO: register all other effects as well
+
         return std::make_unique<events::ETBEvent>(m_card.getID(),
                                                   m_card.getControllerID());
     }
