@@ -4,6 +4,7 @@
 #include "../IContinuousEffect.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/actions/IAction.h"
+#include <memory>
 
 namespace dandan::core
 {
@@ -41,6 +42,10 @@ namespace dandan::effects
         [[nodiscard]] virtual bool prevents(const core::IAction &action,
                                             const core::Game &game) const = 0;
 
+        /** Creates a copy of the prevention effect. */
+        [[nodiscard]] virtual std::unique_ptr<IPreventionEffect> clone()
+            const = 0;
+
         /** Gets the condition associated with this prevention effect.
          * @return A pointer to the condition associated with this prevention
          * effect.
@@ -48,6 +53,12 @@ namespace dandan::effects
         [[nodiscard]] const conditions::ICondition *getCondition() const
         {
             return m_condition.get();
+        }
+
+        [[nodiscard]] std::unique_ptr<conditions::ICondition> cloneCondition()
+            const
+        {
+            return m_condition->clone();
         }
 
     private:

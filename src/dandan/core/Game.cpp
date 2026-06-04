@@ -259,6 +259,9 @@ namespace dandan::core
 
         std::cout << "Cards in library: " << m_library.getCards().size()
                   << "\n";
+        std::cout << "Graveyard: ";
+        printCards(graveyard().getCards());
+        std::cout << "\n";
     }
 
     void Game::quit(const Player &player)

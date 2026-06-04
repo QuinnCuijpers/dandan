@@ -1,6 +1,8 @@
 #ifndef DANDAN_ICONDITION_H
 #define DANDAN_ICONDITION_H
 
+#include <memory>
+
 namespace dandan::core
 {
     class Game;
@@ -29,6 +31,12 @@ namespace dandan::conditions
          */
         [[nodiscard]] virtual bool isSatisfied(
             const core::Game &game) const = 0;
+
+        /**
+         * Creates a copy of the condition.
+         * @returns A unique pointer to a cloned condition.
+         */
+        [[nodiscard]] virtual std::unique_ptr<ICondition> clone() const = 0;
     };
 
 } // namespace dandan::conditions

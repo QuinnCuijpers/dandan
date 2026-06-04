@@ -19,7 +19,7 @@
                     "data": {
                         "condition": {
                             "data": {},
-                            "type": "ControlsIslandCondition"
+                            "type": "ControlsNoIslandCondition"
                         }
                     },
                     "type": "AttackPreventionEffect"

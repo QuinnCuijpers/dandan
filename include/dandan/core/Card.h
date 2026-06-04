@@ -79,6 +79,9 @@ namespace dandan::core
          */
         void setZone(Zone zone)
         {
+            std::cout << "Setting zone of card " << getData().getName()
+                      << " with ID: " << getID().getID() << " to "
+                      << zoneToString(zone) << '\n';
             m_zone = zone;
         }
 

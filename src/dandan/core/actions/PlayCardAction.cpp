@@ -23,10 +23,12 @@ namespace dandan::core
         // TODO: add priority system and check if player has priority here
         // instead of just checking if the card is controlled by the active
         // player
-        if (card->getControllerID().id() != game.activePlayer().getID().id())
+        if (card->getControllerID().id() !=
+            game.priorityManager().getPlayerWithPriority().id())
         {
             throw std::runtime_error(
-                "Only active player can play cards, card is controlled by "
+                "Only player with priority can play cards, card is controlled "
+                "by "
                 "player " +
                 std::to_string(card->getControllerID().id()));
         }
@@ -34,7 +36,9 @@ namespace dandan::core
         const auto &data = card->getData();
         // lands dont use the stack and their effects are applied
         // immediately
-        if (data.getType() == CardData::Type::Land)
+        // TODO: check logic of registering creatures immediately as well
+        if (data.getType() == CardData::Type::Land ||
+            data.getType() == CardData::Type::Creature)
         {
             std::cout << "Playing card: " << data.getName() << '\n';
             game.eventManager().subscribe(*card);
@@ -45,26 +49,33 @@ namespace dandan::core
                         dynamic_cast<const abilities::StaticAbility *>(
                             ability.get()))
                 {
+                    std::cout << "Subscribing static ability to a manager\n";
                     if (static_ability->getType() ==
                         abilities::StaticAbility::Type::Replacement)
                     {
-                        const auto *replacement_ability =
+                        const auto *replacement_effect =
                             dynamic_cast<const effects::IReplacementEffect *>(
                                 static_ability->getEffect());
                         std::cout << "Subscribing replacement ability to "
                                      "replacement manager\n";
-                        game.replacementManager().subscribe(
-                            replacement_ability);
+                        game.replacementManager().subscribe(replacement_effect);
                     }
                     else if (static_ability->getType() ==
                              abilities::StaticAbility::Type::Prevention)
                     {
-                        // const auto *prevention_effect{
-                        //     static_ability->getEffect()};
-                        // std::cout << "Subscribing prevention ability to "
-                        //              "prevention manager\n";
-                        // game.preventionManager().subscribe(card->getID(),
-                        //                                    prevention_effect);
+                        const auto *prevention_effect_ptr =
+                            dynamic_cast<const effects::IPreventionEffect *>(
+                                static_ability->getEffect());
+                        if (prevention_effect_ptr == nullptr)
+                        {
+                            throw std::runtime_error(
+                                "Static ability marked as prevention did not "
+                                "store a prevention effect");
+                        }
+                        std::cout << "Subscribing prevention ability to "
+                                     "prevention manager\n";
+                        game.preventionManager().subscribe(
+                            card->getID(), prevention_effect_ptr->clone());
                     }
                 }
             }

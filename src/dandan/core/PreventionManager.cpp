@@ -82,6 +82,7 @@ namespace dandan::core
                                         const Game &game) const
     {
 
+        std::cout << "Checking global-scoped preventions\n";
         if (isPreventedByPreventionList(m_global_preventions, action, game))
         {
             return true;
@@ -91,6 +92,8 @@ namespace dandan::core
 
         if (std::holds_alternative<PlayerID>(actor))
         {
+            std::cout << "Checking player-scoped prevention effects for player "
+                      << std::get<PlayerID>(actor).id() << '\n';
             const auto player_id = std::get<PlayerID>(actor).id();
             if (const auto player_it = m_player_preventions.find(player_id);
                 player_it != m_player_preventions.end() &&
@@ -101,6 +104,8 @@ namespace dandan::core
         }
         else if (std::holds_alternative<CardID>(actor))
         {
+            std::cout << "Checking card-scoped prevention effects for card "
+                      << std::get<CardID>(actor).getID() << '\n';
             const auto card_id = std::get<CardID>(actor).getID();
             if (const auto card_it = m_card_preventions.find(card_id);
                 card_it != m_card_preventions.end() &&

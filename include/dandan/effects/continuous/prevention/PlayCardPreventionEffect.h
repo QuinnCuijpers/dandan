@@ -29,6 +29,11 @@ namespace dandan::effects
 
         [[nodiscard]] bool prevents(const core::IAction &action,
                                     const core::Game &game) const override;
+
+        [[nodiscard]] std::unique_ptr<IPreventionEffect> clone() const override
+        {
+            return std::make_unique<PlayCardPreventionEffect>(cloneCondition());
+        }
     };
 } // namespace dandan::effects
 

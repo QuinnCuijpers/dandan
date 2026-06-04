@@ -9,10 +9,10 @@ namespace dandan::serialization
         [[maybe_unused]] const conditions::ICondition *condition)
     {
         if ([[maybe_unused]] const auto *controlsIslandCondition =
-                dynamic_cast<const conditions::ControlsIslandCondition *>(
+                dynamic_cast<const conditions::ControlsNoIslandCondition *>(
                     condition))
         {
-            auto json = nlohmann::json{{"type", "ControlsIslandCondition"},
+            auto json = nlohmann::json{{"type", "ControlsNoIslandCondition"},
                                        {"data", nlohmann::json::object()}};
             return json;
         }
@@ -28,9 +28,9 @@ namespace dandan::serialization
         const std::string type{json.at("type").get<std::string>()};
         // const nlohmann::json &data{json.at("data")};
 
-        if (type == "ControlsIslandCondition")
+        if (type == "ControlsNoIslandCondition")
         {
-            return std::make_unique<conditions::ControlsIslandCondition>();
+            return std::make_unique<conditions::ControlsNoIslandCondition>();
         }
 
         throw std::runtime_error(

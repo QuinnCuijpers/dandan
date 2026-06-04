@@ -151,6 +151,14 @@ namespace dandan::core
             return m_graveyard;
         }
 
+        /** Gets the graveyard immutably.
+         * @return A const reference to the graveyard.
+         */
+        [[nodiscard]] const Graveyard &graveyard() const
+        {
+            return m_graveyard;
+        }
+
         /** Gets the event manager mutably.
          * @return A reference to the event manager.
          */
@@ -295,7 +303,8 @@ namespace dandan::core
                 if (card != nullptr)
                 {
                     std::cout << card->getData().getName() << "("
-                              << "CardID: " << card->getID().getID() << ") ";
+                              << "CardID: " << card->getID().getID() << ", ";
+                    std::cout << "Zone: " << card->getZone() << ")";
                 }
             }
             std::cout << "]\n";

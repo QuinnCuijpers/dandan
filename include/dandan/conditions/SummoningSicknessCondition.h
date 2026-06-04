@@ -23,6 +23,11 @@ namespace dandan::conditions
         }
         [[nodiscard]] bool isSatisfied(const core::Game &game) const override;
 
+        [[nodiscard]] std::unique_ptr<ICondition> clone() const override
+        {
+            return std::make_unique<SummoningSicknessCondition>(m_card);
+        }
+
     private:
         core::Card &m_card;
     };

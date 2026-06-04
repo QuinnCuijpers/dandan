@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "CreatureDefinitions.h"
 #include "LandDefinitions.h"
 #include "TestCardsCreate.h"
 
@@ -258,23 +259,44 @@ TEST(DandanLibTest, CombatTest)
 {
     dandan::core::PlayerID::reset();
 
-    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
+    // dandan can't attack unless the defending player controls an island
+    auto abilities{Dandan_Abilities()};
+    auto island1{LAND(Island, dandan::core::CardData::SubType::Island)};
+    auto island2{LAND(Island, dandan::core::CardData::SubType::Island)};
 
     auto data =
-        dandan::core::CardData{"Test Card ",
+        dandan::core::CardData{"Dandan",
                                std::make_unique<dandan::mana::BlueMana>(0),
                                dandan::core::CardData::Type::Creature,
                                dandan::core::CardData::SubType::None,
                                std::move(abilities),
-                               dandan::core::Stats{4, 3}};
+                               dandan::core::Stats{4, 1}};
+    auto dandan_cards{createTestCards(TEST_DECK_SIZE, &data)};
+    auto island_cards{std::vector<dandan::Card>{island1, island2}};
+    dandan_cards.insert(dandan_cards.end(), island_cards.begin(),
+                        island_cards.end());
+    dandan::core::Game game{dandan::Game::withCards(std::move(dandan_cards))};
 
-    auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
-    dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
+    // find the first dandan in both players hands
+    auto find_dandan = [&game](const auto &card_id)
+    {
+        const auto *card = game.getCardByID(card_id);
+        return card != nullptr && card->getData().getName() == "Dandan";
+    };
+    auto attacker_it{std::find_if(game.activePlayer().hand().getCards().begin(),
+                                  game.activePlayer().hand().getCards().end(),
+                                  find_dandan)};
+    auto defender_it{std::find_if(
+        game.nonActivePlayer().hand().getCards().begin(),
+        game.nonActivePlayer().hand().getCards().end(), find_dandan)};
+
+    const auto attacker_id = *attacker_it;
+    const auto defender_id = *defender_it;
+
+    game.activePlayer().battlefield().addCard(island1);
+    game.nonActivePlayer().battlefield().addCard(island2);
 
     std::stringstream stream{};
-
-    auto attacker_id{game.activePlayer().hand().getCards().front()};
-    auto defender_id{game.nonActivePlayer().hand().getCards().front()};
 
     // play creature for active player and pass
     stream << "play " << attacker_id.getID() << '\n';
@@ -299,16 +321,13 @@ TEST(DandanLibTest, CombatTest)
     stream << "quit\n"; // quit to avoid discard logic
 
     game.setIstream(stream);
-
-    // combat phase, should not be able to attack with creatures due to
-    // summoning sickness
     game.run();
 
     EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(), 0);
     EXPECT_EQ(game.nonActivePlayer().battlefield().getCreatures().size(), 0);
 
-    const auto *attacking_creature = game.getCardByID(attacker_id);
-    const auto *blocking_creature = game.getCardByID(defender_id);
+    const auto *attacking_creature{game.getCardByID(attacker_id)};
+    const auto *blocking_creature{game.getCardByID(defender_id)};
 
     // both creatures should have died in combat
     EXPECT_EQ(game.graveyard().getCards().size(), 2);

@@ -101,7 +101,8 @@ void check_card_serialize()
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Prevention,
         std::make_unique<dandan::effects::AttackPreventionEffect>(
-            std::make_unique<dandan::conditions::ControlsIslandCondition>())));
+            std::make_unique<
+                dandan::conditions::ControlsNoIslandCondition>())));
 
     dandan::CardData test_data{"Dandan",
                                std::make_unique<dandan::BlueMana>(2),

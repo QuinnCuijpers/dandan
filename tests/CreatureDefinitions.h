@@ -20,7 +20,8 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Prevention,
         std::make_unique<dandan::effects::AttackPreventionEffect>(
-            std::make_unique<dandan::conditions::ControlsIslandCondition>())));
+            std::make_unique<
+                dandan::conditions::ControlsNoIslandCondition>())));
     return abilities;
 }
 

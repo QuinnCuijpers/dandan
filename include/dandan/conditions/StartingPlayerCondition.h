@@ -3,6 +3,7 @@
 
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Game.h"
+#include <memory>
 
 namespace dandan::conditions
 {
@@ -20,6 +21,11 @@ namespace dandan::conditions
         [[nodiscard]] bool isSatisfied(const core::Game &game) const override
         {
             return game.isFirstTurn();
+        }
+
+        [[nodiscard]] std::unique_ptr<ICondition> clone() const override
+        {
+            return std::make_unique<StartingPlayerCondition>();
         }
     };
 } // namespace dandan::conditions
