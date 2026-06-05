@@ -48,6 +48,9 @@ namespace dandan::effects
                     std::string{m_card.getData().getName()});
             }
             // TODO: should move card to stack
+            game.moveCardFromZone(game.getPlayer(m_card.getControllerID()),
+                                  m_card);
+            m_card.setZone(core::Zone::STACK);
             game.stack().push(m_card);
             return nullptr;
         }

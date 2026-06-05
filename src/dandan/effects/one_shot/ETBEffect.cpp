@@ -10,27 +10,26 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> ETBEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
-        dandan::core::Game::moveCardFromZone(
-            game.getPlayer(m_card.getControllerID()), m_card);
+        auto *card{game.getCardByID(m_card.getID())};
+
+        game.moveCardFromZone(game.getPlayer(card->getControllerID()), m_card);
         std::cout << "Applying ETBEffect\n";
-        m_card.setTapped(m_tapped);
-        if (m_card.getData().getType() == core::CardData::Type::Land)
+        card->setTapped(m_tapped);
+        if (card->getData().getType() == core::CardData::Type::Land)
         {
             game.activePlayer().setPlayedLandThisTurn(true);
         }
-        game.activePlayer().battlefield().addCard(m_card);
+        game.activePlayer().battlefield().addCard(*card);
 
         std::unique_ptr<effects::IPreventionEffect> summoning_sickness{
             std::make_unique<effects::AttackPreventionEffect>(
                 std::make_unique<conditions::SummoningSicknessCondition>(
-                    m_card))};
+                    card->getID()))};
 
-        game.preventionManager().subscribe(m_card.getID(),
+        game.preventionManager().subscribe(card->getID(),
                                            std::move(summoning_sickness));
 
-        // TODO: register all other effects as well
-
-        return std::make_unique<events::ETBEvent>(m_card.getID(),
-                                                  m_card.getControllerID());
+        return std::make_unique<events::ETBEvent>(card->getID(),
+                                                  card->getControllerID());
     }
 } // namespace dandan::effects

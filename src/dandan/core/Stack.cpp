@@ -14,18 +14,32 @@ namespace dandan::core
             return;
         }
 
-        auto object{m_stack.back()};
+        auto &object{m_stack.back()};
 
         std::cout << "Resolving object on stack\n";
-        m_stack.pop_back();
 
         auto effect{std::visit(
             overloaded{
                 [](Card &card) -> std::unique_ptr<effects::IOneShotEffect>
                 { return std::make_unique<effects::ETBEffect>(card); },
-                [&game](const abilities::BoundAbility &ability)
+                [&game, this](const abilities::BoundAbility &ability)
                     -> std::unique_ptr<effects::IOneShotEffect>
-                { return ability.createEffect(game); }},
+                {
+                    m_stack.pop_back();
+                    return ability.createEffect(game);
+                }},
             object)};
+
+        if (effect)
+        {
+            auto final_effect{game.replacementManager().applyReplacementEffects(
+                *effect, game)};
+            auto event{final_effect->apply(game)};
+            if (event)
+            {
+                std::cout << "Notifying event\n";
+                game.eventManager().notify(*event, game);
+            }
+        }
     }
 } // namespace dandan::core

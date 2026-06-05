@@ -196,9 +196,15 @@ namespace dandan::core
         case Zone::LIBRARY:
         case Zone::BATTLEFIELD:
             player.battlefield().removeCard(card);
+            break;
         case Zone::GRAVEYARD:
         case Zone::EXILE:
         case Zone::STACK:
+            auto object{stack().pop()};
+            assert(
+                std::get<Card>(object).getID() == card.getID() &&
+                "Card popped from stack should be the same as the card being "
+                "moved");
             break;
         }
     }

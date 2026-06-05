@@ -41,6 +41,11 @@ namespace dandan::core
          */
         void unsubscribe(const effects::IPreventionEffect *effect);
 
+        /** Unsubscribe all prevention effects for a card.
+         * @param card_id The ID of the card.
+         */
+        void unsubscribe(CardID card_id);
+
         /** Check if an action is prevented.
          * @param action The action to check.
          * @param game The game instance.

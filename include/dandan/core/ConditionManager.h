@@ -40,6 +40,11 @@ namespace dandan::core
             m_trigger_records[source] = {ability, false};
         }
 
+        void removeCardConditions(CardID card_id)
+        {
+            m_trigger_records.erase(card_id);
+        }
+
         void checkConditions(const Game &game)
         {
             for (auto &[card_id, triggered_record] : m_trigger_records)

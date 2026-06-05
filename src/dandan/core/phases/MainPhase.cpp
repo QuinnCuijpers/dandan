@@ -70,11 +70,13 @@ namespace dandan::core
             if (input.rfind("play ", 0) == 0)
             {
                 handlePlay(input);
+                game().priorityManager().setPriorityToActivePlayer(game());
                 continue;
             }
             if (input.rfind("activate ", 0) == 0)
             {
                 handleActivate(input);
+                game().priorityManager().setPriorityToActivePlayer(game());
                 continue;
             }
             // TODO: improve error handling for invalid input

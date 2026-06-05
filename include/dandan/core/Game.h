@@ -403,7 +403,7 @@ namespace dandan::core
          * @param player The player whose card is to be cleared.
          * @param card The card to clear.
          */
-        static void moveCardFromZone(Player &player, const Card &card);
+        void moveCardFromZone(Player &player, const Card &card);
 
         /** Quits the game for the specified player.
          * @param player The player who is quitting the game.

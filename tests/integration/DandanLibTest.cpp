@@ -315,9 +315,6 @@ TEST(DandanLibTest, CombatTest)
     stream << "0\n";    // choose the first creature as attacker
     stream << attacker_id.getID()
            << '\n';     // choose to block the attacking creature
-    stream << "pass\n"; // pass to next player
-
-    // quit
     stream << "quit\n"; // quit to avoid discard logic
 
     game.setIstream(stream);

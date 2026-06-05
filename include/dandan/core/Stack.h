@@ -25,10 +25,21 @@ namespace dandan::core
         /** Pushes a StackObject onto the stack.
          * @param object The object to push.
          */
-        void push(StackObject object)
+        void push(const StackObject &object)
         {
             std::cout << "Pushing object onto stack\n";
             m_stack.push_back(object);
+        }
+
+        StackObject pop()
+        {
+            if (m_stack.empty())
+            {
+                throw std::runtime_error("Cannot pop from an empty stack");
+            }
+            auto object = m_stack.back();
+            m_stack.pop_back();
+            return object;
         }
 
         /** Checks if the stack is empty.

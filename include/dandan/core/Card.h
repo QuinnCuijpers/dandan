@@ -203,7 +203,7 @@ namespace dandan::core
         /** Destroy the card.
          * @param game The game instance.
          */
-        void destroy(Game &game);
+        void destroy(Game &game) const;
 
         // TODO: check this thoroughly
         /** Reset the state of the card.

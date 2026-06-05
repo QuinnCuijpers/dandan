@@ -109,7 +109,7 @@ namespace dandan::core
         /** Gets the name of the card.
          * @return The name of the card.
          */
-        [[nodiscard]] std::string_view getName() const
+        [[nodiscard]] const std::string &getName() const
         {
             return m_name;
         }

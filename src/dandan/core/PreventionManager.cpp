@@ -70,6 +70,11 @@ namespace dandan::core
         }
     }
 
+    void PreventionManager::unsubscribe(CardID card_id)
+    {
+        m_card_preventions.erase(card_id.getID());
+    }
+
     bool PreventionManager::isPreventedByPreventionList(
         const PreventionList &list, const IAction &action, const Game &game)
     {

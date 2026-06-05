@@ -16,20 +16,21 @@ namespace dandan::conditions
     {
     public:
         /** Constructor
-         * @param card The card to check for summoning sickness
+         * @param card_id The ID of the card to check for summoning sickness
          */
-        explicit SummoningSicknessCondition(core::Card &card) : m_card(card)
+        explicit SummoningSicknessCondition(core::CardID card_id)
+            : m_card_id(card_id)
         {
         }
         [[nodiscard]] bool isSatisfied(const core::Game &game) const override;
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override
         {
-            return std::make_unique<SummoningSicknessCondition>(m_card);
+            return std::make_unique<SummoningSicknessCondition>(m_card_id);
         }
 
     private:
-        core::Card &m_card;
+        core::CardID m_card_id;
     };
 } // namespace dandan::conditions
 

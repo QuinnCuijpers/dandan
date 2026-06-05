@@ -44,11 +44,16 @@ namespace dandan::core
         }
     }
 
-    void Card::destroy([[maybe_unused]] Game &game)
+    void Card::destroy([[maybe_unused]] Game &game) const
     {
         std::cout << "Destroying card " << getData().getName() << '\n';
-        auto &player{game.getPlayer(getControllerID())};
-        dandan::core::Game::moveCardFromZone(player, *this);
-        game.graveyard().addCard(*this);
+        auto *card{game.getCardByID(getID())};
+        auto &player{game.getPlayer(card->getControllerID())};
+        game.moveCardFromZone(player, *card);
+        // remove from managers
+        game.eventManager().unsubscribe(*card);
+        game.conditionManager().removeCardConditions(card->getID());
+        game.preventionManager().unsubscribe(card->getID());
+        game.graveyard().addCard(*card);
     }
 } // namespace dandan::core
