@@ -1,6 +1,7 @@
 #ifndef DANDAN_CORE_EVENTMANAGER_H
 #define DANDAN_CORE_EVENTMANAGER_H
 
+#include "dandan/abilities/EventTriggeredAbility.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
@@ -41,7 +42,8 @@ namespace dandan::core
         }
 
     private:
-        std::unordered_map<CardID, std::vector<const abilities::IAbility *>>
+        std::unordered_map<
+            CardID, std::vector<const abilities::EventTriggeredAbility *>>
             m_subscribers;
     };
 } // namespace dandan::core

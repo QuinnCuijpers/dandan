@@ -1,0 +1,26 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "data": {
+                            "amount": 3
+                        },
+                        "type": "DrawEffect"
+                    },
+                    {
+                        "data": {
+                            "amount": 2
+                        },
+                        "type": "PutCardOnTopEffect"
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Brainstorm",
+    "type": "Instant",
+    "cost": "U"
+}

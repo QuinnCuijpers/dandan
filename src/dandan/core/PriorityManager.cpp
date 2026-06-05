@@ -13,5 +13,11 @@ namespace dandan::core
     {
         SBAManager::checkSBAs(game);
         m_current_player_with_priority = game.activePlayer().getID();
+        // TODO: move to correct place
+        if (!game.stack().isEmpty())
+        {
+            game.stack().resolveNext(game);
+            setPriorityToActivePlayer(game);
+        }
     }
 } // namespace dandan::core

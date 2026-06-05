@@ -18,7 +18,13 @@ namespace dandan::events
 
 namespace dandan::abilities
 {
-    /** @brief The interface for all abilities
+    /** @brief The interface for all abilities.
+     *
+     *It defines the definition of an
+     * ability, all cards instead hold BoundAbilities that are attached to a
+     * specific card and player, but the definition of the ability is shared
+     * between all instances of that ability.
+     *
      * @class IAbility
      */
     class IAbility
@@ -36,7 +42,8 @@ namespace dandan::abilities
          */
         [[nodiscard]] virtual std::string display() const
         {
-            throw std::runtime_error("Unimplemented display");
+            throw std::runtime_error("Unimplemented display for " +
+                                     std::string(typeid(*this).name()));
         }
 
         /** @brief Get the display string for a specific option of the ability
@@ -47,7 +54,8 @@ namespace dandan::abilities
             [[maybe_unused]] size_t index) const
         {
             throw std::runtime_error(
-                "Unimplemented display option for ability");
+                "Unimplemented display option for ability " +
+                std::string(typeid(*this).name()));
         }
 
         /** Create the effect for the ability
@@ -57,19 +65,6 @@ namespace dandan::abilities
          */
         virtual std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const = 0;
-
-        /** Determine if the ability applies to a given event
-         * @param event The event to check
-         * @param context The context for the ability's execution
-         * @return True if the ability applies to the event, false otherwise.
-         * The default implementation returns false.
-         */
-        [[nodiscard]] virtual bool appliesTo(
-            [[maybe_unused]] const events::IEvent &event,
-            [[maybe_unused]] abilities::AbilityContext context) const
-        {
-            return false;
-        }
 
         /** Determine if the ability can be activated
          * @param game The game object to check for activation conditions
@@ -89,8 +84,14 @@ namespace dandan::abilities
          */
         [[nodiscard]] virtual size_t optionsAmount() const
         {
-            throw std::runtime_error("Unimplemented options count for ability");
+            throw std::runtime_error(
+                "Unimplemented options count for ability " +
+                std::string(typeid(*this).name()));
         }
+
+        // private:
+        //     core::CardID m_source;
+        //     core::PlayerID m_controller;
     };
 }; // namespace dandan::abilities
 

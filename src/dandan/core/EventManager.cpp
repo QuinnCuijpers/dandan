@@ -50,15 +50,8 @@ namespace dandan::core
                     card->getID(), card->getControllerID()}};
                 if (ability->appliesTo(event, ability_context))
                 {
-                    auto effect{ability->createEffect(game, ability_context)};
-                    if (effect)
-                    {
-                        auto generated_event{effect->apply(game)};
-                        if (generated_event)
-                        {
-                            notify(*generated_event, game);
-                        }
-                    }
+                    game.stack().push(
+                        abilities::BoundAbility{*ability, ability_context});
                 }
             }
         }

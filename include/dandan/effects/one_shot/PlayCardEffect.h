@@ -3,7 +3,6 @@
 
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
-#include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/events/IEvent.h"
 #include <iostream>
@@ -49,8 +48,8 @@ namespace dandan::effects
                     std::string{m_card.getData().getName()});
             }
             // TODO: should move card to stack
-            auto etb_effect{std::make_unique<ETBEffect>(m_card)};
-            return etb_effect->apply(game);
+            game.stack().push(m_card);
+            return nullptr;
         }
 
     private:

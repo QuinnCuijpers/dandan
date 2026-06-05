@@ -105,7 +105,10 @@ namespace dandan::core
                                                                 game())};
 
         auto event{final_effect->apply(game())};
-        game().eventManager().notify(*event, game());
+        if (event)
+        {
+            game().eventManager().notify(*event, game());
+        }
     }
 
     void MainPhase::handleActivate(const std::string &input)
@@ -212,6 +215,11 @@ namespace dandan::core
         }
 
         auto effect{action->createEffect(game())};
+        if (!effect)
+        {
+            std::cout << "No effect created for ability activation\n";
+            return;
+        }
         std::cout << "Created effect for ability activation\n";
         const auto &final_effect{
             game().replacementManager().applyReplacementEffects(*effect,

@@ -9,10 +9,6 @@ namespace dandan::core
 {
     using ActionActor = std::variant<std::monostate, PlayerID, CardID>;
 
-    template <typename... Ts> struct overloaded : Ts...
-    {
-        using Ts::operator()...;
-    };
 } // namespace dandan::core
 
 #endif

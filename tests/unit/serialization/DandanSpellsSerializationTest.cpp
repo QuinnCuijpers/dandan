@@ -1,0 +1,18 @@
+#include "DeserializeTest.h"
+#include "SpellDefinitions.h"
+#include "common.h"
+#include "dandan/dandan.h"
+#include <gtest/gtest.h>
+#include <memory>
+
+static const std::vector<const dandan::Card *> &getCards()
+{
+    static const std::vector<const dandan::Card *> cards = {new SPELL(
+        Brainstorm, std::make_unique<dandan::mana::BlueMana>(1), Instant)};
+    return cards;
+};
+
+INSTANTIATE_TEST_SUITE_P(
+    SpellTests, DeserializeTest, testing::ValuesIn(getCards()),
+    [](const ::testing::TestParamInfo<const dandan::Card *> &info)
+    { return CardParamName(info.param->getData().getName()); });

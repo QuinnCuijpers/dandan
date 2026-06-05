@@ -105,6 +105,21 @@ namespace dandan::serialization
             json["data"]["kind"] = "state";
             return json;
         }
+        if (const auto *spellAbility =
+                dynamic_cast<const SpellAbility *>(ability))
+        {
+            auto json = nlohmann::json{{"type", "SpellAbility"},
+                                       {"data", nlohmann::json::object()}};
+            auto effect_list = nlohmann::json::array();
+            for (const auto &effect : spellAbility->effects())
+            {
+                effect_list.push_back(
+                    JsonFactory<effects::IOneShotEffect>::create_json(
+                        effect.get()));
+            }
+            json["data"]["effect_list"] = effect_list;
+            return json;
+        }
 
         throw std::runtime_error("Unknown ability type for JSON serialization");
     }
@@ -186,6 +201,17 @@ namespace dandan::serialization
                 return std::make_unique<StateTriggeredAbility>(
                     std::move(condition), std::move(effect));
             }
+        }
+        if (type == "SpellAbility")
+        {
+            std::vector<std::unique_ptr<effects::IOneShotEffect>> effect_list;
+            for (const auto &effect_json : data.at("effect_list"))
+            {
+                effect_list.push_back(
+                    JsonFactory<effects::IOneShotEffect>::create_product(
+                        effect_json));
+            }
+            return std::make_unique<SpellAbility>(std::move(effect_list));
         }
 
         throw std::runtime_error("Unknown ability type in JSON: " + type);

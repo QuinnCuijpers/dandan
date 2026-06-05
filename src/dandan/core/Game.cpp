@@ -6,6 +6,7 @@
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
 #include "dandan/log.h"
+#include "dandan/overloadVisitor.h"
 #include <memory>
 #include <random>
 #include <sstream>
@@ -261,6 +262,23 @@ namespace dandan::core
                   << "\n";
         std::cout << "Graveyard: ";
         printCards(graveyard().getCards());
+        std::cout << "Stack: ";
+        auto stack_objects = stack().getStackObjects();
+        for (const auto &object : stack_objects)
+        {
+            std::visit(overloaded{[](const Card &card)
+                                  {
+                                      std::cout << card.getData().getName()
+                                                << " (Card)\n";
+                                  },
+                                  [](const abilities::BoundAbility &ability)
+                                  {
+                                      std::cout
+                                          << ability.definition().display()
+                                          << " (Ability)\n";
+                                  }},
+                       object);
+        }
         std::cout << "\n";
     }
 

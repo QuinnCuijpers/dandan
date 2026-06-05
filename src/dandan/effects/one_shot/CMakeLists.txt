@@ -11,7 +11,8 @@ target_sources(
           AddManaEffect.cpp
           AttackEffect.cpp
           DestroyEffect.cpp
-          IOneShotEffect.cpp)
+          IOneShotEffect.cpp
+          PutCardOnTopEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

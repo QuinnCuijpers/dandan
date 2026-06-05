@@ -14,17 +14,24 @@ namespace dandan::core
         if (const auto *mana_ability =
                 dynamic_cast<const abilities::ManaAbility *>(m_ability))
         {
-            return mana_ability->createEffect(game, m_context);
+            auto effect = mana_ability->createEffect(game, m_context);
+            if (effect)
+            {
+                return effect;
+            }
         }
         if (const auto *activated_ability =
                 dynamic_cast<const abilities::ActivatedAbility *>(m_ability))
         {
-            return activated_ability->createEffect(game, m_context);
+            game.stack().push(
+                abilities::BoundAbility{*activated_ability, m_context});
+            return nullptr;
         }
         if (const auto *with_damage =
                 dynamic_cast<const abilities::WithDamage *>(m_ability))
         {
-            return with_damage->createEffect(game, m_context);
+            game.stack().push(abilities::BoundAbility{*with_damage, m_context});
+            return nullptr;
         }
         throw std::runtime_error(
             "Unknown ability type for activated ability action");

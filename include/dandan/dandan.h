@@ -5,6 +5,7 @@
 #include "dandan/abilities/EventTriggeredAbility.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/abilities/SpellAbility.h"
 #include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/WithDamage.h"
@@ -40,6 +41,7 @@ namespace dandan
     using abilities::EventTriggeredAbility;
     using abilities::IAbility;
     using abilities::ManaAbility;
+    using abilities::SpellAbility;
     using abilities::StateTriggeredAbility;
     using abilities::StaticAbility;
     using abilities::WithDamage;

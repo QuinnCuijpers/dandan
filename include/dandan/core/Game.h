@@ -144,6 +144,14 @@ namespace dandan::core
             return m_stack;
         }
 
+        /** Gets the stack immutably.
+         * @return A const reference to the stack.
+         */
+        [[nodiscard]] const Stack &stack() const
+        {
+            return m_stack;
+        }
+
         /** Gets the graveyard mutably.
          * @return A reference to the graveyard.
          */

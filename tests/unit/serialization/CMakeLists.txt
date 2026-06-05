@@ -4,7 +4,8 @@ if(DANDAN_BUILD_SERIALIZE)
   target_sources(
     DandanLibSerializationTest
     PRIVATE DeserializeTest.cpp DandanLandsSerializationTest.cpp
-            DandanCreatureSerializationTest.cpp)
+            DandanCreatureSerializationTest.cpp
+            DandanSpellsSerializationTest.cpp)
 
   target_sources(DandanLibSerializationTest PRIVATE FILE_SET HEADERS BASE_DIRS
                                                     ${CMAKE_SOURCE_DIR}/tests)

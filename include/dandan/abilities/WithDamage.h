@@ -2,6 +2,7 @@
 #define WITHDAMAGE_H
 
 #include "IAbilityDecorator.h"
+#include "dandan/abilities/EventTriggeredAbility.h"
 
 namespace dandan::abilities
 {
@@ -39,11 +40,16 @@ namespace dandan::abilities
             return m_damage;
         }
 
-        [[nodiscard]] bool appliesTo(
-            const events::IEvent &event,
-            abilities::AbilityContext context) const override
+        [[nodiscard]] bool appliesTo(const events::IEvent &event,
+                                     abilities::AbilityContext context) const
         {
-            return m_ability->appliesTo(event, context);
+            if (const auto *eventTriggeredAbility =
+                    dynamic_cast<const EventTriggeredAbility *>(
+                        m_ability.get()))
+            {
+                return eventTriggeredAbility->appliesTo(event, context);
+            }
+            return false;
         }
 
         [[nodiscard]] size_t optionsAmount() const override

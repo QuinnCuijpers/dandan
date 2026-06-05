@@ -28,9 +28,8 @@ namespace dandan::abilities
         {
         }
 
-        [[nodiscard]] bool appliesTo(
-            const events::IEvent &event,
-            abilities::AbilityContext context) const override
+        [[nodiscard]] bool appliesTo(const events::IEvent &event,
+                                     abilities::AbilityContext context) const
         {
             return m_trigger->triggersOn(event, context);
         }

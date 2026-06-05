@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
+#include "dandan/effects/one_shot/PutCardOnTopEffect.h"
 #ifdef DANDAN_SERIALIZE
 #include "dandan/effects/one_shot/BounceLandEffect.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
@@ -53,6 +54,14 @@ namespace dandan::serialization
                                        {"data", nlohmann::json::object()}};
             return json;
         }
+        if (const auto *putCardOnTopEffect =
+                dynamic_cast<const effects::PutCardOnTopEffect *>(effect))
+        {
+            auto json = nlohmann::json{{"type", "PutCardOnTopEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["amount"] = putCardOnTopEffect->getAmount();
+            return json;
+        }
 
         throw std::runtime_error(
             "Unknown effect type for JSON serialization: " +
@@ -87,6 +96,11 @@ namespace dandan::serialization
         if (type == "SelfSacrificeEffect")
         {
             return std::make_unique<effects::SelfSacrificeEffect>();
+        }
+        if (type == "PutCardOnTopEffect")
+        {
+            return std::make_unique<effects::PutCardOnTopEffect>(
+                data.at("amount").get<int>());
         }
         throw std::runtime_error("Unknown effect type: " + type);
     }

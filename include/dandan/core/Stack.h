@@ -1,14 +1,20 @@
 #ifndef DANDAN_CORE_STACK_H
 #define DANDAN_CORE_STACK_H
 
+#include "dandan/abilities/BoundAbility.h"
+#include "dandan/abilities/IAbility.h"
+#include "dandan/core/Card.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
-#include <memory>
+#include <variant>
 #include <vector>
 
 namespace dandan::core
 {
-    /** @brief The class that represents the stack that holds effects that are about to
-     * `apply`
+
+    using StackObject = std::variant<Card, abilities::BoundAbility>;
+
+    /** @brief The class that represents the stack that holds effects that
+     * are about to `apply`
      * @class Stack
      */
     class Stack
@@ -16,21 +22,38 @@ namespace dandan::core
     public:
         Stack() = default;
 
-        /** Pushes an effect onto the stack.
-         * @param effect The effect to push.
+        /** Pushes a StackObject onto the stack.
+         * @param object The object to push.
          */
-        void push(std::unique_ptr<effects::IOneShotEffect> &&effect)
+        void push(StackObject object)
         {
-            m_stack.push_back(std::move(effect));
+            std::cout << "Pushing object onto stack\n";
+            m_stack.push_back(object);
         }
 
-        /** Resolves the next effect in the stack and pops it from the stack.
+        /** Checks if the stack is empty.
+         * @return True if the stack is empty, false otherwise.
+         */
+        [[nodiscard]] bool isEmpty() const
+        {
+            return m_stack.empty();
+        }
+
+        /** Resolves the next object in the stack and pops it from the stack.
          * @param game The game instance.
          */
         void resolveNext(core::Game &game);
 
+        /** Gets the stack objects immutably.
+         * @return A const reference to the vector of stack objects.
+         */
+        [[nodiscard]] const std::vector<StackObject> &getStackObjects() const
+        {
+            return m_stack;
+        }
+
     private:
-        std::vector<std::unique_ptr<effects::IOneShotEffect>> m_stack;
+        std::vector<StackObject> m_stack;
     };
 } // namespace dandan::core
 

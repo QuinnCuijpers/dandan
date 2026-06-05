@@ -29,6 +29,16 @@
         }                                                                      \
     }
 
+#define SPELL(name, cost, type)                                                \
+    dandan::Card                                                               \
+    {                                                                          \
+        new dandan::CardData                                                   \
+        {                                                                      \
+            formatCardName(#name), cost, dandan::CardData::Type::type,         \
+                dandan::core::CardData::SubType::None, name##_Abilities()      \
+        }                                                                      \
+    }
+
 inline std::string CardParamName(const std::string_view raw_name)
 {
     std::string name;
