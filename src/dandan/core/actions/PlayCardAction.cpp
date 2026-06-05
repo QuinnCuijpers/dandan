@@ -1,4 +1,5 @@
 #include "dandan/core/actions/PlayCardAction.h"
+#include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/Zone.h"
@@ -11,8 +12,9 @@ namespace dandan::core
     std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect(
         core::Game &game)
     {
-        // TODO: flashback will break this, but for now itll be fine
         auto *card{game.getCardByID(m_card_id)};
+
+        // TODO: flashback will break this, but for now itll be fine
         if (card->getZone() != Zone::HAND)
         {
             throw std::runtime_error(
@@ -34,65 +36,66 @@ namespace dandan::core
         }
 
         const auto &data = card->getData();
-        // lands dont use the stack and their effects are applied
-        // immediately
-        // TODO: check logic of registering creatures immediately as well
-        if (data.getType() == CardData::Type::Land ||
-            data.getType() == CardData::Type::Creature)
-        {
-            std::cout << "Playing card: " << data.getName() << '\n';
-            game.eventManager().subscribe(*card);
 
-            for (const auto &ability : card->getData().getAbilities())
+        std::cout << "Playing card: " << data.getName() << '\n';
+        game.eventManager().subscribe(*card);
+
+        for (const auto &ability : card->getData().getAbilities())
+        {
+            if (const auto *static_ability =
+                    dynamic_cast<const abilities::StaticAbility *>(
+                        ability.get()))
             {
-                if (const auto *static_ability =
-                        dynamic_cast<const abilities::StaticAbility *>(
-                            ability.get()))
+                std::cout << "Subscribing static ability to a manager\n";
+                if (static_ability->getType() ==
+                    abilities::StaticAbility::Type::Replacement)
                 {
-                    std::cout << "Subscribing static ability to a manager\n";
-                    if (static_ability->getType() ==
-                        abilities::StaticAbility::Type::Replacement)
+                    const auto *replacement_effect =
+                        dynamic_cast<const effects::IReplacementEffect *>(
+                            static_ability->getEffect());
+                    std::cout << "Subscribing replacement ability to "
+                                 "replacement manager\n";
+                    game.replacementManager().subscribe(replacement_effect);
+                }
+                else if (static_ability->getType() ==
+                         abilities::StaticAbility::Type::Prevention)
+                {
+                    const auto *prevention_effect_ptr =
+                        dynamic_cast<const effects::IPreventionEffect *>(
+                            static_ability->getEffect());
+                    if (prevention_effect_ptr == nullptr)
                     {
-                        const auto *replacement_effect =
-                            dynamic_cast<const effects::IReplacementEffect *>(
-                                static_ability->getEffect());
-                        std::cout << "Subscribing replacement ability to "
-                                     "replacement manager\n";
-                        game.replacementManager().subscribe(replacement_effect);
+                        throw std::runtime_error(
+                            "Static ability marked as prevention did not "
+                            "store a prevention effect");
                     }
-                    else if (static_ability->getType() ==
-                             abilities::StaticAbility::Type::Prevention)
-                    {
-                        const auto *prevention_effect_ptr =
-                            dynamic_cast<const effects::IPreventionEffect *>(
-                                static_ability->getEffect());
-                        if (prevention_effect_ptr == nullptr)
-                        {
-                            throw std::runtime_error(
-                                "Static ability marked as prevention did not "
-                                "store a prevention effect");
-                        }
-                        std::cout << "Subscribing prevention ability to "
-                                     "prevention manager\n";
-                        game.preventionManager().subscribe(
-                            card->getID(), prevention_effect_ptr->clone());
-                    }
+                    std::cout << "Subscribing prevention ability to "
+                                 "prevention manager\n";
+                    game.preventionManager().subscribe(
+                        card->getID(), prevention_effect_ptr->clone());
                 }
             }
-            std::cout << game.eventManager().size() << " effects subscribed\n";
-            // lands dont use the stack and thus immediately enter
-            return std::make_unique<effects::ETBEffect>(*card);
+            else if (auto *state_triggered_ability =
+                         dynamic_cast<abilities::StateTriggeredAbility *>(
+                             ability.get()))
+            {
+                game.conditionManager().addStateTriggeredAbility(
+                    card->getID(), state_triggered_ability);
+            }
         }
-
-        // add paying mana cost
-        // add moving onto the stack
-        if (data.getType() == CardData::Type::Creature)
+        // lands dont use the stack and thus immediately enter
+        switch (data.getType())
         {
+        case CardData::Type::Land:
+            return std::make_unique<effects::ETBEffect>(*card);
+
+        case CardData::Type::Creature:
             std::cout << "Playing card: " << data.getName() << '\n';
             return std::make_unique<effects::PlayCardEffect>(*card);
-        }
 
-        throw std::runtime_error(
-            "Only land/creature cards can be played for now");
+        default:
+            throw std::runtime_error(
+                "Only land/creature cards can be played for now");
+        }
     }
 } // namespace dandan::core

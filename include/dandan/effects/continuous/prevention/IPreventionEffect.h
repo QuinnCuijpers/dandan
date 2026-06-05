@@ -42,7 +42,9 @@ namespace dandan::effects
         [[nodiscard]] virtual bool prevents(const core::IAction &action,
                                             const core::Game &game) const = 0;
 
-        /** Creates a copy of the prevention effect. */
+        /** Creates a copy of the prevention effect.
+         * @return A unique pointer to the cloned prevention effect.
+         */
         [[nodiscard]] virtual std::unique_ptr<IPreventionEffect> clone()
             const = 0;
 
@@ -55,6 +57,10 @@ namespace dandan::effects
             return m_condition.get();
         }
 
+        /** Creates a copy of the condition associated with this prevention
+         * effect.
+         * @return A unique pointer to the cloned condition.
+         */
         [[nodiscard]] std::unique_ptr<conditions::ICondition> cloneCondition()
             const
         {

@@ -5,7 +5,7 @@
 
 namespace dandan::effects
 {
-    std::unique_ptr<events::IEvent> BounceLandEffect::apply(
+    std::unique_ptr<events::IEvent> BounceLandEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
         std::cout << "Applying BounceLandEffect\n";

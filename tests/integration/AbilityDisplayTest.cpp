@@ -29,11 +29,17 @@ TEST_P(AbilityDisplayTest, DisplaysExpectedActivatableAbilities)
         {
             continue;
         }
-        if (dynamic_cast<const dandan::abilities::TriggeredAbility *>(
+        if (dynamic_cast<const dandan::abilities::EventTriggeredAbility *>(
                 ability.get()) != nullptr)
         {
             continue;
         }
+        if (dynamic_cast<const dandan::abilities::StateTriggeredAbility *>(
+                ability.get()) != nullptr)
+        {
+            continue;
+        }
+
         actual += ability->display() + '\n';
     }
     EXPECT_EQ(actual, test_case.expected_display);

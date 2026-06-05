@@ -4,7 +4,7 @@
 
 namespace dandan::effects
 {
-    std::unique_ptr<events::IEvent> UntapEffect::apply(
+    std::unique_ptr<events::IEvent> UntapEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
         DLOGI << "Untapping " << m_card.getData().getName() << " with ID "

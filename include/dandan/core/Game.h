@@ -7,6 +7,7 @@
 #include "Stack.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/ConditionManager.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Graveyard.h"
 #include "dandan/core/Library.h"
@@ -239,6 +240,22 @@ namespace dandan::core
             return m_priority_manager;
         }
 
+        /** Gets the condition manager mutably.
+         * @return A reference to the condition manager.
+         */
+        [[nodiscard]] ConditionManager &conditionManager()
+        {
+            return m_condition_manager;
+        }
+
+        /** Gets the condition manager immutably.
+         * @return A const reference to the condition manager.
+         */
+        [[nodiscard]] const ConditionManager &conditionManager() const
+        {
+            return m_condition_manager;
+        }
+
         /** Gets the input stream mutably.
          * @return A reference to the input stream.
          */
@@ -391,11 +408,14 @@ namespace dandan::core
         int m_active_player_index{};
         Library m_library;
         Stack m_stack;
+
         EventManager m_event_manager;
         PreventionManager m_prevention_manager;
         ReplacementManager m_replacement_manager;
         PriorityManager m_priority_manager{m_players.at(0).getID()};
+        ConditionManager m_condition_manager;
         SBAManager m_sba_manager;
+
         std::unique_ptr<IPhase> m_phase;
         std::istream *m_input{&std::cin};
         // stable container for all cards in the game

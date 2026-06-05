@@ -1,6 +1,6 @@
 #include "dandan/core/EventManager.h"
 #include "dandan/abilities/AbilityContext.h"
-#include "dandan/abilities/TriggeredAbility.h"
+#include "dandan/abilities/EventTriggeredAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 
@@ -11,7 +11,7 @@ namespace dandan::core
         for (const auto &ability : card.getData().getAbilities())
         {
             if (const auto *triggered =
-                    dynamic_cast<const abilities::TriggeredAbility *>(
+                    dynamic_cast<const abilities::EventTriggeredAbility *>(
                         ability.get()))
             {
                 m_subscribers[card.getID()].push_back(triggered);

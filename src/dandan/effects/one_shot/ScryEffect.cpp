@@ -3,7 +3,7 @@
 namespace dandan::effects
 {
 
-    std::unique_ptr<events::IEvent> ScryEffect::apply(
+    std::unique_ptr<events::IEvent> ScryEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
         auto cards = game.library().draw(m_scry_amount);

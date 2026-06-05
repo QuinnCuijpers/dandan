@@ -7,7 +7,7 @@
 
 namespace dandan::effects
 {
-    std::unique_ptr<events::IEvent> ETBEffect::apply(
+    std::unique_ptr<events::IEvent> ETBEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
         dandan::core::Game::moveCardFromZone(

@@ -32,11 +32,17 @@ TEST_P(AbilityOptionsDisplayTest, DisplaysExpectedActivatableAbilities)
         {
             continue;
         }
-        if (dynamic_cast<const dandan::abilities::TriggeredAbility *>(
+        if (dynamic_cast<const dandan::abilities::StateTriggeredAbility *>(
                 ability.get()) != nullptr)
         {
             continue;
         }
+        if (dynamic_cast<const dandan::abilities::EventTriggeredAbility *>(
+                ability.get()) != nullptr)
+        {
+            continue;
+        }
+
         for (size_t i{0}; i < ability->optionsAmount(); ++i)
         {
             actual += ability->displayOption(i) + '\n';

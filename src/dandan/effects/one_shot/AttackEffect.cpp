@@ -4,7 +4,7 @@
 
 namespace dandan::effects
 {
-    std::unique_ptr<events::IEvent> AttackEffect::apply(
+    std::unique_ptr<events::IEvent> AttackEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
         std::cout << "Applying attack effect\n";

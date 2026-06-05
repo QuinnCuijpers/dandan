@@ -2,7 +2,8 @@
 
 namespace dandan::effects
 {
-    std::unique_ptr<events::IEvent> DestroyEffect::apply(core::Game &game) const
+    std::unique_ptr<events::IEvent> DestroyEffect::apply_impl(
+        core::Game &game) const
     {
         m_card.destroy(game);
         return nullptr;

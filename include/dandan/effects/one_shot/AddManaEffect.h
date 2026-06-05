@@ -28,7 +28,8 @@ namespace dandan::effects
             return std::make_unique<AddManaEffect>(m_mana);
         }
 
-        std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
+        std::unique_ptr<events::IEvent> apply_impl(
+            core::Game &game) const override;
 
     private:
         mana::ManaMap m_mana;

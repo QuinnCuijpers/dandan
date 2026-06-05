@@ -20,7 +20,7 @@ namespace dandan::effects
         {
         }
 
-        [[nodiscard]] std::unique_ptr<events::IEvent> apply(
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override

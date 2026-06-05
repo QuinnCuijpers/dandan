@@ -2,10 +2,11 @@
 #define DANDAN_H
 
 #include "dandan/abilities/ActivatedAbility.h"
+#include "dandan/abilities/EventTriggeredAbility.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
-#include "dandan/abilities/TriggeredAbility.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
@@ -36,10 +37,11 @@
 namespace dandan
 {
     using abilities::ActivatedAbility;
+    using abilities::EventTriggeredAbility;
     using abilities::IAbility;
     using abilities::ManaAbility;
+    using abilities::StateTriggeredAbility;
     using abilities::StaticAbility;
-    using abilities::TriggeredAbility;
     using abilities::WithDamage;
 
     using core::Card;

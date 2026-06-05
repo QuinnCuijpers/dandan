@@ -1,5 +1,5 @@
-#ifndef TRIGGEREDABILITY_H
-#define TRIGGEREDABILITY_H
+#ifndef DANDAN_EVENTTRIGGEREDABILITY_H
+#define DANDAN_EVENTTRIGGEREDABILITY_H
 
 #include "IAbility.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -8,19 +8,20 @@
 
 namespace dandan::abilities
 {
-    /** @brief A triggered ability that activates when a specific trigger applies
-     * @class TriggeredAbility
+    /** @brief A triggered ability that activates when a specific trigger event
+     * occurs.
+     * @class EventTriggeredAbility
      *
      * @implements IAbility
      */
-    class TriggeredAbility final : public IAbility
+    class EventTriggeredAbility final : public IAbility
     {
     public:
         /** Constructor
          * @param trigger The trigger for the ability
          * @param effect The effect of the ability
          */
-        TriggeredAbility(
+        EventTriggeredAbility(
             std::unique_ptr<dandan::triggers::ITrigger> trigger,
             std::unique_ptr<dandan::effects::IOneShotEffect> effect)
             : m_trigger(std::move(trigger)), m_effect(std::move(effect))

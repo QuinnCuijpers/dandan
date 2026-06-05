@@ -8,7 +8,6 @@
 #include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
-#include "dandan/triggers/NoIslandsTrigger.h"
 #include <exception>
 #include <filesystem>
 #include <fstream>
@@ -94,8 +93,8 @@ void check_card_serialize()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
-    abilities.emplace_back(std::make_unique<dandan::TriggeredAbility>(
-        std::make_unique<dandan::triggers::NoIslandsTrigger>(),
+    abilities.emplace_back(std::make_unique<dandan::StateTriggeredAbility>(
+        std::make_unique<dandan::conditions::ControlsNoIslandCondition>(),
         std::make_unique<dandan::effects::SelfSacrificeEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(

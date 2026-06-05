@@ -4,6 +4,7 @@
 #include "dandan/events/IEvent.h"
 #include <memory>
 #include <stdexcept>
+
 namespace dandan::core
 {
     class Game;
@@ -42,10 +43,13 @@ namespace dandan::effects
 
         /**
          * apply the Effect to the game state by mutating it.
+         * also updates the condition manager
          * @param game the game to apply the effect to
          * @return an event to notify that the effect happened
          */
-        virtual std::unique_ptr<events::IEvent> apply(
+        std::unique_ptr<events::IEvent> apply(core::Game &game) const;
+
+        virtual std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const = 0;
     };
 

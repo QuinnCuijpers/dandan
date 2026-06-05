@@ -70,5 +70,24 @@ namespace dandan::core
                 }
             }
         }
+
+        // check state triggers
+        for (const auto &[card_id, triggered_record] :
+             game.conditionManager().getTriggerRecords())
+        {
+            if (triggered_record.satisfied)
+            {
+                std::cout << "Triggering state triggered ability on card "
+                          << card_id.getID() << '\n';
+                PlayerID controller_id{
+                    game.getCardByID(card_id)->getControllerID()};
+                abilities::AbilityContext context{card_id, controller_id};
+                auto final_effect{
+                    game.replacementManager().applyReplacementEffects(
+                        *triggered_record.ability->createEffect(game, context),
+                        game)};
+                final_effect->apply(game);
+            }
+        }
     }
 } // namespace dandan::core

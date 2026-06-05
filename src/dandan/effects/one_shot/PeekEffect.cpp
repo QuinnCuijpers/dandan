@@ -18,7 +18,7 @@ namespace dandan::effects
         std::cout << " ]\n";
     }
 
-    std::unique_ptr<events::IEvent> PeekEffect::apply(
+    std::unique_ptr<events::IEvent> PeekEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
         std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount

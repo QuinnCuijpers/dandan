@@ -21,7 +21,7 @@ namespace dandan::effects
             return std::make_unique<SelfSacrificeEffect>();
         }
 
-        std::unique_ptr<events::IEvent> apply(
+        std::unique_ptr<events::IEvent> apply_impl(
             [[maybe_unused]] core::Game &game) const override
         {
             std::cout << "Resolving SelfSacrificeEffect: Sacrificing the "

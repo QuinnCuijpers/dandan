@@ -40,7 +40,7 @@ namespace dandan::effects
          * @param game The game state to apply the effect to.
          * @return The event generated from applying the effect.
          */
-        std::unique_ptr<events::IEvent> apply(
+        std::unique_ptr<events::IEvent> apply_impl(
             [[maybe_unused]] core::Game &game) const override;
 
     private:

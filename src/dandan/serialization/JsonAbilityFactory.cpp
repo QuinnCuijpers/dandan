@@ -76,7 +76,7 @@ namespace dandan::serialization
         }
 
         if (const auto *triggered =
-                dynamic_cast<const TriggeredAbility *>(ability))
+                dynamic_cast<const EventTriggeredAbility *>(ability))
         {
             auto json = nlohmann::json{{"type", "TriggeredAbility"},
                                        {"data", nlohmann::json::object()}};
@@ -87,6 +87,22 @@ namespace dandan::serialization
             json["data"]["effect"] =
                 JsonFactory<effects::IOneShotEffect>::create_json(
                     triggered->getEffect());
+            json["data"]["kind"] = "event";
+            return json;
+        }
+        if (const auto *stateTriggered =
+                dynamic_cast<const StateTriggeredAbility *>(ability))
+        {
+            auto json = nlohmann::json{{"type", "TriggeredAbility"},
+                                       {"data", nlohmann::json::object()}};
+
+            json["data"]["condition"] =
+                JsonFactory<conditions::ICondition>::create_json(
+                    stateTriggered->condition());
+            json["data"]["effect"] =
+                JsonFactory<effects::IOneShotEffect>::create_json(
+                    stateTriggered->getEffect());
+            json["data"]["kind"] = "state";
             return json;
         }
 
@@ -144,15 +160,32 @@ namespace dandan::serialization
 
         if (type == "TriggeredAbility")
         {
-            auto trigger{
-                JsonFactory<dandan::triggers::ITrigger>::create_product(
-                    data.at("trigger"))};
+            auto kind{data.at("kind").get<std::string>()};
+            if (kind == "event")
+            {
+                auto trigger{
+                    JsonFactory<dandan::triggers::ITrigger>::create_product(
+                        data.at("trigger"))};
 
-            auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
-                data.at("effect"))};
+                auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
+                    data.at("effect"))};
 
-            return std::make_unique<TriggeredAbility>(std::move(trigger),
-                                                      std::move(effect));
+                return std::make_unique<EventTriggeredAbility>(
+                    std::move(trigger), std::move(effect));
+            }
+
+            if (kind == "state")
+            {
+                auto condition{
+                    JsonFactory<dandan::conditions::ICondition>::create_product(
+                        data.at("condition"))};
+
+                auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
+                    data.at("effect"))};
+
+                return std::make_unique<StateTriggeredAbility>(
+                    std::move(condition), std::move(effect));
+            }
         }
 
         throw std::runtime_error("Unknown ability type in JSON: " + type);

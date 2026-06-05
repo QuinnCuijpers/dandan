@@ -4,7 +4,8 @@
 
 namespace dandan::effects
 {
-    std::unique_ptr<events::IEvent> AddManaEffect::apply(core::Game &game) const
+    std::unique_ptr<events::IEvent> AddManaEffect::apply_impl(
+        core::Game &game) const
     {
         for (const auto &[type, amount] : m_mana)
         {

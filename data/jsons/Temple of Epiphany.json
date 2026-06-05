@@ -25,6 +25,7 @@
         },
         {
             "data": {
+                "kind": "event",
                 "effect": {
                     "data": {
                         "scry_amount": 1

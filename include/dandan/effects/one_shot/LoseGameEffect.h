@@ -22,7 +22,8 @@ namespace dandan::effects
         {
         }
 
-        std::unique_ptr<events::IEvent> apply(core::Game &game) const override
+        std::unique_ptr<events::IEvent> apply_impl(
+            core::Game &game) const override
         {
             const auto &player = game.getPlayer(m_player);
             std::cout << player.getName() << " has lost the game!" << '\n';

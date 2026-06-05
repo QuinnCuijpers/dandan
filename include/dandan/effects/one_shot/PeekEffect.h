@@ -6,7 +6,8 @@
 namespace dandan::effects
 {
 
-    /** @brief Represents the effect of looking at the top few cards of the library
+    /** @brief Represents the effect of looking at the top few cards of the
+     * library
      * @struct PeekEffect
      *
      * @implements @IOneShotEffect
@@ -30,7 +31,8 @@ namespace dandan::effects
         {
         }
         // TODO: should ask for rearranging similar to scry
-        std::unique_ptr<events::IEvent> apply(core::Game &game) const override;
+        std::unique_ptr<events::IEvent> apply_impl(
+            core::Game &game) const override;
     };
 } // namespace dandan::effects
 

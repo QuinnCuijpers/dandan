@@ -2,13 +2,14 @@
     "abilities": [
         {
             "data": {
+                "kind": "state",
                 "effect": {
                     "data": {},
                     "type": "SelfSacrificeEffect"
                 },
-                "trigger": {
+                "condition": {
                     "data": {},
-                    "type": "NoIslandsTrigger"
+                    "type": "ControlsNoIslandCondition"
                 }
             },
             "type": "TriggeredAbility"
