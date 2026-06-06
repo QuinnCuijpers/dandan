@@ -165,11 +165,6 @@ TEST(DandanLibTest, DiscardToHandSize)
 
     game.run();
 
-    // TODO:
-    //  both players should be down to 7 cards in hand after discarding down to
-    //  hand size at the end of the turn
-    //  quit is only chosen in main phase for now, so active player has
-    //  STARTING_HAND_SIZE + 1 as they drew for turn
     EXPECT_EQ(game.activePlayer().hand().getCards().size(),
               STARTING_HAND_SIZE + 1);
     EXPECT_EQ(game.nonActivePlayer().hand().getCards().size(),

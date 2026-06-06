@@ -145,7 +145,6 @@ namespace dandan::core
                 ++ability_index;
                 continue;
             }
-            // TODO: decorator types dont split correctly
             if (ability->optionsAmount() > 1)
             {
                 size_t modal_index{};

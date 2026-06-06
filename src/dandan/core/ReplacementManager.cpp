@@ -32,6 +32,8 @@ namespace dandan::core
                 current_effect = &replacement_effect->replace(*current_effect);
             }
         }
+        // TODO: clone doesnt clone the next chain, so we need to make sure to
+        // clone the entire chain
         return current_effect->clone();
     }
 } // namespace dandan::core

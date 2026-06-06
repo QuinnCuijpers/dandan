@@ -3,7 +3,6 @@
 
 namespace dandan::core
 {
-    // TODO: does this need to take library?
     void Player::drawCard(Game &game)
     {
         auto &library{game.library()};

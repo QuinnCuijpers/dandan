@@ -22,9 +22,6 @@ namespace dandan::core
                 zoneToString(card->getZone()));
         }
 
-        // TODO: add priority system and check if player has priority here
-        // instead of just checking if the card is controlled by the active
-        // player
         if (card->getControllerID().id() !=
             game.priorityManager().getPlayerWithPriority().id())
         {

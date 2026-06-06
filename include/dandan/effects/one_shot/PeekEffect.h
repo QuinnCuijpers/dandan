@@ -2,7 +2,6 @@
 #define DANDAN_PEEK_EFFECT_H
 
 #include "IOneShotEffect.h"
-// TODO: change into reordering top effect
 namespace dandan::effects
 {
 
@@ -30,7 +29,6 @@ namespace dandan::effects
         explicit PeekEffect(int peek_amount) : m_peek_amount(peek_amount)
         {
         }
-        // TODO: should ask for rearranging similar to scry
         std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const override;
     };

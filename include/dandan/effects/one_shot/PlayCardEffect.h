@@ -35,7 +35,6 @@ namespace dandan::effects
             [[maybe_unused]] core::Game &game) const override
         {
             std::cout << "Applying PlayCardEffect\n";
-            // TODO: move to stack instead of playing the card
             const auto *mana_cost = m_card.getData().getCost();
             if (game.activePlayer().manaPool().canPay(*mana_cost))
             {
@@ -47,7 +46,6 @@ namespace dandan::effects
                     "Not enough mana to play card " +
                     std::string{m_card.getData().getName()});
             }
-            // TODO: should move card to stack
             game.moveCardFromZone(game.getPlayer(m_card.getControllerID()),
                                   m_card);
             m_card.setZone(core::Zone::STACK);

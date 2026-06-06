@@ -24,8 +24,6 @@ namespace dandan::core
         {
             handleNextStep();
         }
-        // TODO: add proper streaming to phases such that we can remove the
-        // typeid name
         DLOGI << "Switching phases to " << m_next_phase->name() << "\n";
         return std::move(m_next_phase);
     }

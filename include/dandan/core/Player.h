@@ -204,10 +204,8 @@ namespace dandan::core
          */
         void takeDamage(int damage, [[maybe_unused]] Game &game)
         {
+            // TODO: add took damage event
             m_life_total -= damage;
-            // TODO: death check should be some state based action not checked
-            // here
-            // TODO: this should notify a damage event
         }
 
     private:
