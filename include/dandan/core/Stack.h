@@ -3,15 +3,15 @@
 
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/IAbility.h"
-#include "dandan/core/Card.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include <iostream>
 #include <variant>
 #include <vector>
 
 namespace dandan::core
 {
 
-    using StackObject = std::variant<Card, abilities::BoundAbility>;
+    using StackObject = std::variant<CardID, abilities::BoundAbility>;
 
     /** @brief The class that represents the stack that holds effects that
      * are about to `apply`

@@ -202,7 +202,7 @@ namespace dandan::core
         case Zone::STACK:
             auto object{stack().pop()};
             assert(
-                std::get<Card>(object).getID() == card.getID() &&
+                std::get<CardID>(object) == card.getID() &&
                 "Card popped from stack should be the same as the card being "
                 "moved");
             break;
@@ -272,9 +272,10 @@ namespace dandan::core
         auto stack_objects = stack().getStackObjects();
         for (const auto &object : stack_objects)
         {
-            std::visit(overloaded{[](const Card &card)
+            std::visit(overloaded{[this](const CardID &card_id)
                                   {
-                                      std::cout << card.getData().getName()
+                                      const auto *card = getCardByID(card_id);
+                                      std::cout << card->getData().getName()
                                                 << " (Card)\n";
                                   },
                                   [](const abilities::BoundAbility &ability)

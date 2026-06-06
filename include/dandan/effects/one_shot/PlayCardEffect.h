@@ -51,7 +51,7 @@ namespace dandan::effects
             game.moveCardFromZone(game.getPlayer(m_card.getControllerID()),
                                   m_card);
             m_card.setZone(core::Zone::STACK);
-            game.stack().push(m_card);
+            game.stack().push(m_card.getID());
             return nullptr;
         }
 

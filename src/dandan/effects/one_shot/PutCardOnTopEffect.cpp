@@ -47,4 +47,10 @@ namespace dandan::effects
         return std::make_unique<PutCardOnTopEffect>(m_amount);
     }
 
+    std::string PutCardOnTopEffect::display() const
+    {
+        return "Put " + std::to_string(m_amount) +
+               " card(s) from your hand on top of your library";
+    }
+
 } // namespace dandan::effects

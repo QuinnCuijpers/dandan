@@ -20,9 +20,9 @@ namespace dandan::abilities
          * @param chosen_mode_index The index of the chosen mode for modal
          * ability
          */
-        explicit AbilityContext(
-            core::CardID source_card_id, core::PlayerID controller_id,
-            std::optional<size_t> chosen_mode_index = std::nullopt)
+        AbilityContext(core::CardID source_card_id,
+                       core::PlayerID controller_id,
+                       std::optional<size_t> chosen_mode_index = std::nullopt)
             : source_card_id(source_card_id), controller_id(controller_id),
               chosen_mode_index(chosen_mode_index)
         {

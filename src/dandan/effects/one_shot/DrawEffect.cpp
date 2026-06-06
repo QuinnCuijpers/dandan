@@ -24,15 +24,17 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> DrawEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
-        std::cout << "Applying draw effect\n";
 
         if (m_amount == 1)
         {
+            std::cout << "Applying draw effect\n";
             game.activePlayer().drawCard(game);
             return nullptr;
         }
         // Break down the draw effect into multiple single card draws to trigger
         // any relevant state triggers
+
+        std::cout << "Applying draw effect for " << m_amount << " cards\n";
         for (int i = 0; i < m_amount; ++i)
         {
             auto draw_effect{std::make_unique<DrawEffect>(1)};

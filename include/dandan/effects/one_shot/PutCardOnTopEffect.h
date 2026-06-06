@@ -20,6 +20,8 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override;
 
+        [[nodiscard]] std::string display() const override;
+
         [[nodiscard]] int getAmount() const
         {
             return m_amount;
