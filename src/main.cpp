@@ -1,3 +1,4 @@
+#include "dandan/conditions/ControlsNoIslandCondition.h"
 #include "dandan/dandan.h"
 #include "dandan/log.h"
 
@@ -5,7 +6,6 @@
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/abilities/StaticAbility.h"
-#include "dandan/conditions/ControlsIslandCondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include <exception>

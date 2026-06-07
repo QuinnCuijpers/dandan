@@ -1,6 +1,6 @@
 #include "dandan/serialization/JsonConditionFactory.h"
 #ifdef DANDAN_SERIALIZE
-#include "dandan/conditions/ControlsIslandCondition.h"
+#include "dandan/conditions/ControlsNoIslandCondition.h"
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -8,7 +8,7 @@ namespace dandan::serialization
     nlohmann::json JsonFactory<conditions::ICondition>::create_json(
         [[maybe_unused]] const conditions::ICondition *condition)
     {
-        if ([[maybe_unused]] const auto *controlsIslandCondition =
+        if ([[maybe_unused]] const auto *controlsNoIslandCondition =
                 dynamic_cast<const conditions::ControlsNoIslandCondition *>(
                     condition))
         {

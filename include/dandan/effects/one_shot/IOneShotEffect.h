@@ -49,6 +49,10 @@ namespace dandan::effects
          */
         std::unique_ptr<events::IEvent> apply(core::Game &game) const;
 
+        /** @brief Apply the effect specific implementation.
+         * @param game The game instance.
+         * @return The event to notify that the effect happened.
+         */
         virtual std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const = 0;
     };

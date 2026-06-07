@@ -7,10 +7,18 @@
 
 namespace dandan::abilities
 {
+    /** @brief A spell ability that can have multiple effects.
+     * @class SpellAbility
+     *
+     * @implements IAbility
+     */
     class SpellAbility : public IAbility
     {
     public:
-        SpellAbility(
+        /** @brief Construct a spell ability with the given effects.
+         * @param effects The vector of effects for the spell ability.
+         */
+        explicit SpellAbility(
             std::vector<std::unique_ptr<effects::IOneShotEffect>> &&effects)
             : m_effects(std::move(effects))
         {
@@ -19,6 +27,9 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
+        /** @brief Get the effects of the spell ability.
+         * @return The vector of effects for the spell ability.
+         */
         [[nodiscard]] const std::vector<
             std::unique_ptr<effects::IOneShotEffect>> &
         effects() const

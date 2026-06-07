@@ -3,20 +3,27 @@
 
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include <algorithm>
 #include <memory>
 #include <vector>
 
 namespace dandan::effects
 {
+    /** @brief A list of one-shot effects.
+     * @class EffectList
+     */
     class EffectList : public IOneShotEffect
     {
     public:
-        EffectList(const std::vector<std::unique_ptr<IOneShotEffect>> &effects)
+        /** @brief Construct an EffectList with a vector of one-shot effects.
+         * @param effects The vector of one-shot effects.
+         */
+        explicit EffectList(
+            const std::vector<std::unique_ptr<IOneShotEffect>> &effects)
         {
-            for (const auto &effect : effects)
-            {
-                m_effects.push_back(effect->clone());
-            }
+            std::transform(effects.begin(), effects.end(),
+                           std::back_inserter(m_effects),
+                           [](const auto &effect) { return effect->clone(); });
         }
 
         [[nodiscard]] std::string display() const override
@@ -33,10 +40,9 @@ namespace dandan::effects
         {
             std::vector<std::unique_ptr<IOneShotEffect>> cloned_effects;
             cloned_effects.reserve(m_effects.size());
-            for (const auto &effect : m_effects)
-            {
-                cloned_effects.push_back(effect->clone());
-            }
+            std::transform(m_effects.begin(), m_effects.end(),
+                           std::back_inserter(cloned_effects),
+                           [](const auto &effect) { return effect->clone(); });
             return std::make_unique<EffectList>(cloned_effects);
         }
 

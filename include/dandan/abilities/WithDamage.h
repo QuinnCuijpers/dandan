@@ -40,6 +40,11 @@ namespace dandan::abilities
             return m_damage;
         }
 
+        /** Check if the decorated ability applies to a given event and context.
+         * @param event The event to check.
+         * @param context The ability context.
+         * @return True if the ability applies, false otherwise.
+         */
         [[nodiscard]] bool appliesTo(const events::IEvent &event,
                                      abilities::AbilityContext context) const
         {

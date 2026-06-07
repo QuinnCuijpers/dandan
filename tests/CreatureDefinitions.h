@@ -1,7 +1,7 @@
 #ifndef DANDAN_TEST_CREATUREDEFINITIONS_H
 #define DANDAN_TEST_CREATUREDEFINITIONS_H
 
-#include "dandan/conditions/ControlsIslandCondition.h"
+#include "dandan/conditions/ControlsNoIslandCondition.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"

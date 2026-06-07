@@ -1,4 +1,4 @@
-#include "dandan/conditions/ControlsIslandCondition.h"
+#include "dandan/conditions/ControlsNoIslandCondition.h"
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
@@ -10,7 +10,7 @@ namespace dandan::conditions
 
     bool ControlsNoIslandCondition::isSatisfied(const core::Game &game) const
     {
-        std::cout << "Checking ControlsIslandCondition\n";
+        std::cout << "Checking ControlsNoIslandCondition\n";
         auto island_filter = [&game](const core::CardID &card_id)
         {
             const auto *card = game.getCardByID(card_id);
@@ -19,7 +19,7 @@ namespace dandan::conditions
                    card->getData().getSubType() ==
                        core::CardData::SubType::Island;
         };
-        std::cout << "Checking ControlsIslandCondition for player "
+        std::cout << "Checking ControlsNoIslandCondition for player "
                   << game.nonActivePlayer().getID().id() << '\n';
         const core::Player &defending_player = game.nonActivePlayer();
         const auto &battlefield{defending_player.battlefield()};

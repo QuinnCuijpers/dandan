@@ -29,27 +29,29 @@ namespace dandan::core
                     if (card->getData().getType() == CardData::Type::Instant ||
                         card->getData().getType() == CardData::Type::Sorcery)
                     {
-                        for (const auto &ability :
-                             card->getData().getAbilities())
-                        {
-                            // every spell should have one spell ability, so we
-                            // can just return the first one we find
-                            if (const auto *spell_ability = dynamic_cast<
-                                    const abilities::SpellAbility *>(
-                                    ability.get()))
-                            {
-                                abilities::AbilityContext context{
-                                    card->getID(), card->getControllerID()};
 
-                                game.moveCardFromZone(
-                                    game.getPlayer(card->getControllerID()),
-                                    *card);
-                                game.graveyard().addCard(*card);
-                                auto effect{
-                                    spell_ability->createEffect(game, context)};
-                                return effect;
-                            }
-                        }
+                        auto spell_ability_it{std::find_if(
+                            card->getData().getAbilities().begin(),
+                            card->getData().getAbilities().end(),
+                            [](const auto &ability)
+                            {
+                                return dynamic_cast<
+                                           const abilities::SpellAbility *>(
+                                           ability.get()) != nullptr;
+                            })};
+
+                        const auto *spell_ability =
+                            dynamic_cast<const abilities::SpellAbility *>(
+                                spell_ability_it->get());
+
+                        abilities::AbilityContext context{
+                            card->getID(), card->getControllerID()};
+
+                        game.moveCardFromZone(
+                            game.getPlayer(card->getControllerID()), *card);
+                        game.graveyard().addCard(*card);
+                        auto effect{spell_ability->createEffect(game, context)};
+                        return effect;
                     }
                     return std::make_unique<effects::ETBEffect>(
                         *game.getCardByID(card->getID()));

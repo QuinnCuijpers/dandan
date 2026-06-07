@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonAbilityFactory.h"
+#include <algorithm>
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/dandan.h"
@@ -111,12 +112,14 @@ namespace dandan::serialization
             auto json = nlohmann::json{{"type", "SpellAbility"},
                                        {"data", nlohmann::json::object()}};
             auto effect_list = nlohmann::json::array();
-            for (const auto &effect : spellAbility->effects())
-            {
-                effect_list.push_back(
-                    JsonFactory<effects::IOneShotEffect>::create_json(
-                        effect.get()));
-            }
+            std::transform(
+                spellAbility->effects().begin(), spellAbility->effects().end(),
+                std::back_inserter(effect_list),
+                [](const auto &effect)
+                {
+                    return JsonFactory<effects::IOneShotEffect>::create_json(
+                        effect.get());
+                });
             json["data"]["effect_list"] = effect_list;
             return json;
         }
@@ -205,12 +208,14 @@ namespace dandan::serialization
         if (type == "SpellAbility")
         {
             std::vector<std::unique_ptr<effects::IOneShotEffect>> effect_list;
-            for (const auto &effect_json : data.at("effect_list"))
-            {
-                effect_list.push_back(
-                    JsonFactory<effects::IOneShotEffect>::create_product(
-                        effect_json));
-            }
+            std::transform(
+                data.at("effect_list").begin(), data.at("effect_list").end(),
+                std::back_inserter(effect_list),
+                [](const auto &effect_json)
+                {
+                    return JsonFactory<effects::IOneShotEffect>::create_product(
+                        effect_json);
+                });
             return std::make_unique<SpellAbility>(std::move(effect_list));
         }
 

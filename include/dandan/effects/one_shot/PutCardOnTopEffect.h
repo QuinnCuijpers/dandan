@@ -7,10 +7,17 @@
 
 namespace dandan::effects
 {
-
+    /** @brief A one-shot effect that puts a card on top of the deck from the
+     * hand.
+     * @class PutCardOnTopEffect
+     * @implements IOneShotEffect
+     */
     class PutCardOnTopEffect : public IOneShotEffect
     {
     public:
+        /** @brief Create a PutCardOnTopEffect.
+         * @param amount The number of cards to put on top.
+         */
         explicit PutCardOnTopEffect(int amount) : m_amount(amount)
         {
         }
@@ -22,6 +29,9 @@ namespace dandan::effects
 
         [[nodiscard]] std::string display() const override;
 
+        /** @brief Get the amount of cards to put on top.
+         * @return The number of cards to put on top.
+         */
         [[nodiscard]] int getAmount() const
         {
             return m_amount;

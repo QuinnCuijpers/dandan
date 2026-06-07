@@ -269,7 +269,7 @@ namespace dandan::core
         std::cout << "Graveyard: ";
         printCards(graveyard().getCards());
         std::cout << "Stack: ";
-        auto stack_objects = stack().getStackObjects();
+        const auto &stack_objects = stack().getStackObjects();
         for (const auto &object : stack_objects)
         {
             std::visit(overloaded{[this](const CardID &card_id)

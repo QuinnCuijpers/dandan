@@ -24,27 +24,47 @@
 // empty.
 namespace dandan::core
 {
+    /** @brief A record for tracking triggered abilities.
+     * @struct TriggeredRecord
+     */
     struct TriggeredRecord
     {
-        // pointer to static ability on CardData
+        /// pointer to the State Triggered ability. As this is a pointer to the
+        /// static definition on CardData, we can be assured that it will remain
+        /// valid as long as the card exists.
         abilities::StateTriggeredAbility *ability;
+        /// boolean representing whether or not a trigger condition has been
+        /// satisfied since the last time SBA were checked.
         bool satisfied;
     };
 
+    /** @brief A manager for handling game conditions and triggered abilities.
+     * @class ConditionManager
+     */
     class ConditionManager
     {
     public:
+        /** @brief Add a state-triggered ability to the manager.
+         * @param source The card ID of the source.
+         * @param ability The state-triggered ability.
+         */
         void addStateTriggeredAbility(CardID source,
                                       abilities::StateTriggeredAbility *ability)
         {
             m_trigger_records[source] = {ability, false};
         }
 
+        /** @brief Remove all conditions associated with a card.
+         * @param card_id The ID of the card.
+         */
         void removeCardConditions(CardID card_id)
         {
             m_trigger_records.erase(card_id);
         }
 
+        /** @brief Update the conditions for all tracked abilities.
+         * @param game The game instance.
+         */
         void checkConditions(const Game &game)
         {
             for (auto &[card_id, triggered_record] : m_trigger_records)
@@ -58,16 +78,12 @@ namespace dandan::core
                               << " is now satisfied, triggering ability.\n";
                     triggered_record.satisfied = true;
                 }
-                else if (!currently_satisfied && triggered_record.satisfied)
-                {
-                    std::cout << "Condition for ability on card "
-                              << card_id.getID()
-                              << " is no longer satisfied.\n";
-                    triggered_record.satisfied = false;
-                }
             }
         }
 
+        /** @brief Get the trigger records.
+         * @return A const reference to the map of trigger records.
+         */
         const std::unordered_map<CardID, TriggeredRecord> &getTriggerRecords()
             const
         {
