@@ -16,7 +16,7 @@ jobs:
             submodules: 'recursive'
 
       - name: Install dependencies
-        run: sudo apt-get install -y cppcheck cmake clang-tidy
+        run: sudo apt-get update && sudo apt-get install -y cppcheck cmake clang-tidy
       
       - name: Configure with CMake
         run: cmake -B build --preset=DandanWithSerialize -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
