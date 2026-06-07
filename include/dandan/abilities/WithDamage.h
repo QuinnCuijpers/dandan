@@ -57,11 +57,6 @@ namespace dandan::abilities
             return false;
         }
 
-        [[nodiscard]] size_t optionsAmount() const override
-        {
-            return m_ability->optionsAmount();
-        }
-
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 

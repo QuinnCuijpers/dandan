@@ -6,8 +6,8 @@
 
 namespace dandan::abilities
 {
-    /** @brief An interface for ability decorators to use the decorator pattern with
-     * abilities
+    /** @brief An interface for ability decorators to use the decorator pattern
+     * with abilities
      * @class IAbilityDecorator
      *
      * @implements IAbility
@@ -37,6 +37,11 @@ namespace dandan::abilities
                                        AbilityContext context) const override
         {
             return m_ability->canActivate(game, context);
+        }
+
+        [[nodiscard]] size_t optionsAmount() const override
+        {
+            return m_ability->optionsAmount();
         }
     };
 } // namespace dandan::abilities
