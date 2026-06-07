@@ -1,4 +1,5 @@
 #include "dandan/abilities/SpellAbility.h"
+#include "dandan/effects/one_shot/EffectList.h"
 #include <iostream>
 
 namespace dandan::abilities
@@ -11,23 +12,12 @@ namespace dandan::abilities
                   << "\n";
         if (effects().empty())
         {
+            // TODO: consider returning a no-op effect instead of nullptr to
+            // avoid null checks
+            std::cout << "WARNING: No effects to create for spell ability\n";
             return nullptr;
         }
-
-        auto root_effect{effects()[0]->clone()};
-
-        effects::IOneShotEffect *current_effect = root_effect.get();
-
-        for (size_t i{1}; i < effects().size(); ++i)
-        {
-            std::cout << "Adding chain effect with index: " << i << "\n";
-            auto next_effect = effects()[i]->clone();
-            auto *next_effect_raw = next_effect.get();
-            current_effect->setNext(std::move(next_effect));
-            current_effect = next_effect_raw;
-        }
-
-        return root_effect;
+        return std::make_unique<effects::EffectList>(effects());
     }
 
 } // namespace dandan::abilities

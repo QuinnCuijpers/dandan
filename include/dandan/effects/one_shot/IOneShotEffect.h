@@ -3,7 +3,6 @@
 
 #include "dandan/events/IEvent.h"
 #include <memory>
-#include <optional>
 #include <stdexcept>
 
 namespace dandan::core
@@ -52,29 +51,6 @@ namespace dandan::effects
 
         virtual std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const = 0;
-
-        /**
-         * Get the next effect in the chain.
-         * @return An optional unique pointer to the next effect.
-         */
-        [[nodiscard]] std::optional<std::unique_ptr<IOneShotEffect>> getNext()
-            const
-        {
-            if (m_next.has_value())
-            {
-                return std::make_optional(
-                    std::unique_ptr<IOneShotEffect>(m_next.value()->clone()));
-            }
-            return std::nullopt;
-        }
-
-        void setNext(std::optional<std::unique_ptr<IOneShotEffect>> next)
-        {
-            m_next = std::move(next);
-        }
-
-    private:
-        std::optional<std::unique_ptr<IOneShotEffect>> m_next;
     };
 
 } // namespace dandan::effects

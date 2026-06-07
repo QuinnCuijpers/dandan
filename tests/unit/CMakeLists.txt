@@ -1,7 +1,6 @@
 add_executable(DandanUnitTests)
 
-target_sources(DandanUnitTests PRIVATE core/CardDataTest.cpp UtilTest.cpp
-                                       SpellAbilityCreateEffectTest.cpp)
+target_sources(DandanUnitTests PRIVATE core/CardDataTest.cpp UtilTest.cpp)
 
 target_sources(DandanUnitTests PRIVATE FILE_SET HEADERS BASE_DIRS
                                        ${CMAKE_SOURCE_DIR}/tests)

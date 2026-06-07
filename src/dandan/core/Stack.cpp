@@ -47,7 +47,6 @@ namespace dandan::core
                                 game.graveyard().addCard(*card);
                                 auto effect{
                                     spell_ability->createEffect(game, context)};
-                                assert(effect->getNext() != std::nullopt);
                                 return effect;
                             }
                         }

@@ -13,6 +13,7 @@ namespace dandan::effects
 
         if (m_amount == 1)
         {
+            game.printCards(game.activePlayer().hand().getCards());
             auto hand_size = game.activePlayer().hand().getCards().size();
             if (hand_size == 0)
             {
@@ -35,8 +36,8 @@ namespace dandan::effects
         // any relevant state triggers
         for (int i = 0; i < m_amount; ++i)
         {
-            auto draw_effect{std::make_unique<PutCardOnTopEffect>(1)};
-            draw_effect->apply(game);
+            auto put_effect{std::make_unique<PutCardOnTopEffect>(1)};
+            put_effect->apply(game);
         }
 
         return nullptr;
