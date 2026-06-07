@@ -31,6 +31,7 @@ jobs:
         run: |
           cppcheck \
             --project=build/compile_commands.json \
+            --cppcheck-build-dir=build/.cache/cppcheck \
             --std=c++17 \
             --enable=all \
             --check-level=exhaustive \
@@ -39,4 +40,5 @@ jobs:
             --suppress=*:external/* \
             --suppress=missingIncludeSystem \
             --suppress=missingInclude \
+            -j$(nproc)
 
