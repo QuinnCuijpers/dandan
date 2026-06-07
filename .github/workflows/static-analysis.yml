@@ -31,7 +31,7 @@ jobs:
         run: |
           cppcheck \
             --project=build/compile_commands.json \
-            --cppcheck-build-dir=build/.cache/cppcheck \
+            --cppcheck-build-dir=build \
             --std=c++17 \
             --enable=all \
             --check-level=exhaustive \
