@@ -50,7 +50,7 @@ namespace dandan::core
          * @param cards The cards vector to initialize the game with.
          * @return The constructed game instance.
          */
-        static Game withCards(std::vector<Card> cards);
+        static Game withCards(std::vector<Card> cards, bool shuffle = true);
 
         /** Gets a player from the game accosiated with the given ID immutably.
          * @param player_id The ID of the player to get.
@@ -435,10 +435,10 @@ namespace dandan::core
         bool m_first_turn{true};
         Graveyard m_graveyard;
 
-        explicit Game(std::istream &input);
-        explicit Game(std::vector<Card> cards);
+        explicit Game(std::istream &input, bool shuffle = true);
+        explicit Game(std::vector<Card> cards, bool shuffle = true);
 
-        void GameSetup();
+        void GameSetup(bool shuffle = true);
 
         void loadCards(const std::filesystem::path &path);
 

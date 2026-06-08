@@ -46,7 +46,7 @@ namespace dandan::core
     }
 #endif
 
-    void Game::GameSetup()
+    void Game::GameSetup(bool shuffle)
     {
 #ifdef DANDAN_SERIALIZE
         if (m_cards.empty())
@@ -61,7 +61,10 @@ namespace dandan::core
             m_library.addCard(card);
         }
 
-        m_library.shuffle();
+        if (shuffle)
+        {
+            m_library.shuffle();
+        }
 
         auto one_land_a_turn{
             std::make_unique<effects::PlayCardPreventionEffect>(
@@ -106,16 +109,16 @@ namespace dandan::core
     }
 #endif
 
-    Game::Game(std::vector<Card> cards)
+    Game::Game(std::vector<Card> cards, bool shuffle)
         : m_cards{std::deque<Card>{cards.begin(), cards.end()}}
     {
         DLOGI << "Game constructed with explicit cards\n";
-        GameSetup();
+        GameSetup(shuffle);
     }
 
-    Game::Game(std::istream &input) : m_input{&input}
+    Game::Game(std::istream &input, bool shuffle) : m_input{&input}
     {
-        GameSetup();
+        GameSetup(shuffle);
     }
 
     Game Game::withIstream(std::istream &input)
@@ -123,9 +126,9 @@ namespace dandan::core
         return Game{input};
     }
 
-    Game Game::withCards(std::vector<Card> cards)
+    Game Game::withCards(std::vector<Card> cards, bool shuffle)
     {
-        return Game(std::move(cards));
+        return Game(std::move(cards), shuffle);
     }
 
     void Game::run()

@@ -1,5 +1,7 @@
+#include "SpellDefinitions.h"
 #include "common.h"
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/CardData.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
@@ -528,4 +530,76 @@ TEST(DandanLibTest, DieFromNoLife)
     game.run();
 
     EXPECT_TRUE(game.activePlayer().lost());
+}
+
+TEST(DandanLibTest, BrainstormTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_ISLANDS{6};
+    static constexpr int NUM_BRAINSTORMS{14};
+
+    auto island_abilities{Island_Abilities()};
+    auto brainstorm_abilities{Brainstorm_Abilities()};
+
+    auto island_data{dandan::core::CardData{
+        "Island", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land,
+        dandan::core::CardData::SubType::Island, std::move(island_abilities)}};
+
+    auto brainstorm_data{dandan::core::CardData{
+        "Brainstorm", std::make_unique<dandan::mana::BlueMana>(1),
+        dandan::core::CardData::Type::Instant,
+        dandan::core::CardData::SubType::None,
+        std::move(brainstorm_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
+    auto brainstorms{createTestCards(NUM_BRAINSTORMS, &brainstorm_data)};
+    cards.insert(cards.end(), brainstorms.begin(), brainstorms.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+
+    std::stringstream stream{};
+
+    // index 1
+    auto card_1_id{game.activePlayer().hand().getCards()[1]};
+    // index 2
+    auto card_2_id{game.activePlayer().hand().getCards()[2]};
+
+    auto island_id{game.activePlayer().hand().getCards()[0]};
+
+    stream << "play " << island_id.getID() << '\n'; // play island
+    stream << "activate " << island_id.getID()
+           << '\n'; // activate island for mana to be
+                    // able to cast brainstorm
+    stream
+        << "play "
+        << game.activePlayer().hand().getCards()[(NUM_ISLANDS / 2) + 1].getID()
+        << '\n';     // play brainstorm, also checks if cards are drawn in
+                     // the correct order
+    stream << "0\n"; // choose to put card_1 on top of the library
+    stream << "0\n"; // choose to put card_2 on top of the library
+    stream << "pass\n";
+
+    // player 2 now draws card_2
+    stream << "play " << card_2_id.getID() << '\n';
+    stream << "pass\n";
+
+    // player 1 draws card_1
+    stream << "play " << card_1_id.getID() << '\n';
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *card_1{game.getCardByID(card_1_id)};
+    auto *card_2{game.getCardByID(card_2_id)};
+
+    EXPECT_EQ(card_1->getZone(), dandan::core::Zone::BATTLEFIELD);
+    EXPECT_EQ(card_1->getControllerID(), game.activePlayer().getID());
+
+    EXPECT_EQ(card_2->getZone(), dandan::core::Zone::BATTLEFIELD);
+    EXPECT_EQ(card_2->getControllerID(), game.nonActivePlayer().getID());
 }
