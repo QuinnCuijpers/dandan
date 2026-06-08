@@ -37,7 +37,17 @@ namespace dandan::serialization
         {
             auto json = nlohmann::json{{"type", "DrawEffect"},
                                        {"data", nlohmann::json::object()}};
-            json["data"]["amount"] = drawEffect->m_amount;
+            auto *number{drawEffect->getNumber().get()};
+            if (const auto *exactNumber =
+                    dynamic_cast<const numbers::ExactNumber *>(number))
+            {
+                json["data"]["amount"] = exactNumber->getValue();
+            }
+            else
+            {
+                json["data"]["amount"] =
+                    JsonFactory<numbers::INumber>::create_json(number);
+            }
             return json;
         }
         if ([[maybe_unused]] const auto *bounceLandEffect =
@@ -86,8 +96,18 @@ namespace dandan::serialization
         }
         if (type == "DrawEffect")
         {
-            return std::make_unique<effects::DrawEffect>(
-                data.at("amount").get<int>());
+            try
+            {
+                auto number{data.at("amount").get<int>()};
+                return std::make_unique<effects::DrawEffect>(number);
+            }
+            catch (const nlohmann::json::exception &e)
+            {
+                const auto &amount_json = data.at("amount");
+                auto amount =
+                    JsonFactory<numbers::INumber>::create_product(amount_json);
+                return std::make_unique<effects::DrawEffect>(std::move(amount));
+            }
         }
         if (type == "BounceLandEffect")
         {

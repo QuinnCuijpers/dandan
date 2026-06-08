@@ -20,6 +20,7 @@ namespace dandan::mana
         {
             m_options.push_back(std::move(mana));
         }
+
         /** Constructs a ManaList instance with the specified mana options.
          * @param options The mana options to add.
          */

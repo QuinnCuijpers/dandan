@@ -2,13 +2,20 @@
 #include "SpellDefinitions.h"
 #include "common.h"
 #include "dandan/dandan.h"
+#include "dandan/mana/AndMana.h"
 #include <gtest/gtest.h>
 #include <memory>
 
 static const std::vector<const dandan::Card *> &getCards()
 {
-    static const std::vector<const dandan::Card *> cards = {new SPELL(
-        Brainstorm, std::make_unique<dandan::mana::BlueMana>(1), Instant)};
+    static const std::vector<const dandan::Card *> cards = {
+        new SPELL(Brainstorm, std::make_unique<dandan::mana::BlueMana>(1),
+                  Instant),
+        new SPELL(Accumulated_Knowledge,
+                  std::make_unique<dandan::mana::AndMana>(
+                      std::make_unique<dandan::mana::GenericMana>(1),
+                      std::make_unique<dandan::mana::BlueMana>(1)),
+                  Instant)};
     return cards;
 };
 

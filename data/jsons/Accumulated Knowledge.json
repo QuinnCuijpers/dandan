@@ -1,0 +1,31 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "DrawEffect",
+                        "data": {
+                            "amount": 1
+                        }
+                    },
+                    {
+                        "type": "DrawEffect",
+                        "data": {
+                            "amount": {
+                                "type": "GraveyardCount",
+                                "data": {
+                                    "card_name": "Accumulated Knowledge"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Accumulated Knowledge",
+    "type": "Instant",
+    "cost": "(1)U"
+}

@@ -5,7 +5,6 @@
 #include <cassert>
 #include <map>
 #include <string>
-#include <string_view>
 
 namespace dandan::mana
 {
@@ -20,10 +19,11 @@ namespace dandan::mana
             return "(0)";
         }
 
-        std::string symbols;
+        std::string symbols{};
+        std::string generic_part{};
         for (const auto &[mana_type, amount] : mana_map)
         {
-            std::string_view symbol{};
+            std::string symbol{};
             switch (mana_type)
             {
             case ManaType::COLORLESS:
@@ -45,11 +45,7 @@ namespace dandan::mana
                 symbol = "G";
                 break;
             case ManaType::GENERIC:
-                if (amount == 0 && !symbols.empty())
-                {
-                    break;
-                }
-                symbols += "(" + std::to_string(amount) + ")";
+                generic_part = "(" + std::to_string(amount) + ")";
                 continue;
             default:
                 symbol = "?";
@@ -57,10 +53,19 @@ namespace dandan::mana
             }
             for (int i = 0; i < amount; ++i)
             {
-                symbols += std::string(symbol);
+                symbols += symbol;
             }
         }
-        return symbols;
+
+        if (symbols.empty())
+        {
+            return generic_part;
+        }
+        if (generic_part == "(0)" && !symbols.empty())
+        {
+            return symbols;
+        }
+        return generic_part + symbols;
     }
 
     inline std::ostream &operator<<(std::ostream &ostream,

@@ -20,15 +20,18 @@ namespace dandan::core
 
         std::cout << "Resolving object on stack\n";
 
+        bool resolvingSpell{false};
+
         auto effect{std::visit(
             overloaded{
-                [&game](
+                [&game, &resolvingSpell](
                     CardID card_id) -> std::unique_ptr<effects::IOneShotEffect>
                 {
                     auto *card{game.getCardByID(card_id)};
                     if (card->getData().getType() == CardData::Type::Instant ||
                         card->getData().getType() == CardData::Type::Sorcery)
                     {
+                        resolvingSpell = true;
 
                         auto spell_ability_it{std::find_if(
                             card->getData().getAbilities().begin(),
@@ -74,6 +77,18 @@ namespace dandan::core
                 std::cout << "Notifying event\n";
                 game.eventManager().notify(*event, game);
             }
+        }
+
+        // move card to graveyard if it was a spell
+        if (resolvingSpell)
+        {
+            std::visit(overloaded{[&game](CardID card_id)
+                                  {
+                                      auto *card{game.getCardByID(card_id)};
+                                      game.graveyard().addCard(*card);
+                                  },
+                                  [](const abilities::BoundAbility &) {}},
+                       object);
         }
     }
 } // namespace dandan::core
