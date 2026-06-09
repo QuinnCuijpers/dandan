@@ -13,7 +13,7 @@ namespace dandan::numbers
         {
         }
 
-        [[nodiscard]] std::string getName() const
+        [[nodiscard]] const std::string &getName() const
         {
             return m_name;
         }

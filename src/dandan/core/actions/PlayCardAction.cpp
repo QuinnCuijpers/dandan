@@ -87,6 +87,7 @@ namespace dandan::core
             return std::make_unique<effects::ETBEffect>(*card);
 
         case CardData::Type::Creature:
+        case CardData::Type::Sorcery:
         case CardData::Type::Instant:
             std::cout << "Playing card: " << data.getName() << '\n';
             return std::make_unique<effects::PlayCardEffect>(*card);

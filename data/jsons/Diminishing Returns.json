@@ -1,0 +1,31 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "TimeTwisterEffect",
+                        "data": {}
+                    },
+                    {
+                        "type": "ExileTopEffect",
+                        "data": {
+                            "amount": 10
+                        }
+                    },
+                    {
+                        "type": "OptionalDrawEffect",
+                        "data": {
+                            "amount": 7,
+                            "each_player": true
+                        }
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Diminishing Returns",
+    "type": "Sorcery",
+    "cost": "(2)UU"
+}

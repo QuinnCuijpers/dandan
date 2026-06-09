@@ -1,4 +1,5 @@
 #include "dandan/abilities/SpellAbility.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/EffectList.h"
 #include <iostream>
 
@@ -17,7 +18,18 @@ namespace dandan::abilities
             std::cout << "WARNING: No effects to create for spell ability\n";
             return nullptr;
         }
-        return std::make_unique<effects::EffectList>(effects());
+        // TODO: fine grain this, currently we assume any effect targets the
+        // player that created it
+
+        auto bound_effects{
+            std::vector<std::unique_ptr<effects::IOneShotEffect>>{}};
+        for (const auto &effect_def : effects())
+        {
+            effects::EffectContext effect_context{context.controller_id};
+            auto effect{effect_def->bind(effect_context)};
+            bound_effects.push_back(std::move(effect));
+        }
+        return std::make_unique<effects::EffectList>(std::move(bound_effects));
     }
 
 } // namespace dandan::abilities

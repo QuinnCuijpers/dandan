@@ -32,6 +32,15 @@ namespace dandan::core
             m_cards.emplace_back(card.getID());
         }
 
+        void removeCard(const Card &card)
+        {
+            auto iter = std::find(m_cards.begin(), m_cards.end(), card.getID());
+            if (iter != m_cards.end())
+            {
+                m_cards.erase(iter);
+            }
+        }
+
         /** Gets the cards in the graveyard.
          * @return A const reference to the vector of card IDs.
          */

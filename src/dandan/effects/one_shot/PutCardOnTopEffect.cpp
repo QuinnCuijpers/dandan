@@ -11,10 +11,12 @@ namespace dandan::effects
     {
         std::cout << "Applying put card on top effect\n";
 
+        auto &player = game.getPlayer(m_playerID);
+
         if (m_amount == 1)
         {
-            game.printCards(game.activePlayer().hand().getCards());
-            auto hand_size = game.activePlayer().hand().getCards().size();
+            game.printCards(player.hand().getCards());
+            auto hand_size = player.hand().getCards().size();
             if (hand_size == 0)
             {
                 std::cout << "No cards in hand to put on top\n";
@@ -27,7 +29,7 @@ namespace dandan::effects
             auto index = std::stoi(input);
 
             // moves card out of hand
-            auto card{game.activePlayer().hand().getCard(index)};
+            auto card{player.hand().getCard(index)};
             game.library().getCards().push_front(card);
 
             return nullptr;
@@ -36,16 +38,17 @@ namespace dandan::effects
         // any relevant state triggers
         for (int i = 0; i < m_amount; ++i)
         {
-            auto put_effect{std::make_unique<PutCardOnTopEffect>(1)};
+            auto put_effect{
+                std::make_unique<PutCardOnTopEffect>(1, m_playerID)};
             put_effect->apply(game);
         }
 
         return nullptr;
     }
 
-    std::unique_ptr<IOneShotEffect> PutCardOnTopEffect::clone() const
+    std::unique_ptr<IOneShotEffect> PutCardOnTopEffect::copy() const
     {
-        return std::make_unique<PutCardOnTopEffect>(m_amount);
+        return std::make_unique<PutCardOnTopEffect>(m_amount, m_playerID);
     }
 
     std::string PutCardOnTopEffect::display() const

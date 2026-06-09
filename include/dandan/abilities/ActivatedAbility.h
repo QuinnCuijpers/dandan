@@ -24,8 +24,9 @@ namespace dandan::abilities
          * @param cost The cost to activate the ability
          * @param effect The effect of the ability
          */
-        ActivatedAbility(std::unique_ptr<costs::ICost> cost,
-                         std::unique_ptr<effects::IOneShotEffect> effect)
+        ActivatedAbility(
+            std::unique_ptr<costs::ICost> cost,
+            std::unique_ptr<effects::IOneShotEffectDefinition> effect)
             : m_cost(std::move(cost)), m_effect(std::move(effect))
         {
         }
@@ -49,7 +50,7 @@ namespace dandan::abilities
         /** Get the effect of the ability
          * @return The effect of the ability
          */
-        [[nodiscard]] const effects::IOneShotEffect *getEffect() const
+        [[nodiscard]] const effects::IOneShotEffectDefinition *getEffect() const
         {
             return m_effect.get();
         }
@@ -59,7 +60,7 @@ namespace dandan::abilities
 
     private:
         std::unique_ptr<costs::ICost> m_cost;
-        std::unique_ptr<effects::IOneShotEffect> m_effect;
+        std::unique_ptr<effects::IOneShotEffectDefinition> m_effect;
     };
 } // namespace dandan::abilities
 

@@ -14,7 +14,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
 
     abilities.emplace_back(std::make_unique<dandan::StateTriggeredAbility>(
         std::make_unique<dandan::conditions::ControlsNoIslandCondition>(),
-        std::make_unique<dandan::effects::SelfSacrificeEffect>()));
+        std::make_unique<dandan::effects::SelfSacrificeEffectDefinition>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Prevention,

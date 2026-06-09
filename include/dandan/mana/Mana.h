@@ -61,7 +61,7 @@ namespace dandan::mana
         {
             return generic_part;
         }
-        if (generic_part == "(0)" && !symbols.empty())
+        if (generic_part == "(0)")
         {
             return symbols;
         }

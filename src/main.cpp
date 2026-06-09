@@ -95,7 +95,7 @@ void check_card_serialize()
 
     abilities.emplace_back(std::make_unique<dandan::StateTriggeredAbility>(
         std::make_unique<dandan::conditions::ControlsNoIslandCondition>(),
-        std::make_unique<dandan::effects::SelfSacrificeEffect>()));
+        std::make_unique<dandan::effects::SelfSacrificeEffectDefinition>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Prevention,

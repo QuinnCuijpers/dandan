@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonAbilityFactory.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <algorithm>
 
 #ifdef DANDAN_SERIALIZE
@@ -33,7 +34,7 @@ namespace dandan::serialization
             json["data"]["cost"] =
                 JsonFactory<costs::ICost>::create_json(activated->getCost());
             json["data"]["effect"] =
-                JsonFactory<effects::IOneShotEffect>::create_json(
+                JsonFactory<effects::IOneShotEffectDefinition>::create_json(
                     activated->getEffect());
 
             return json;
@@ -86,7 +87,7 @@ namespace dandan::serialization
                 JsonFactory<triggers::ITrigger>::create_json(
                     triggered->trigger());
             json["data"]["effect"] =
-                JsonFactory<effects::IOneShotEffect>::create_json(
+                JsonFactory<effects::IOneShotEffectDefinition>::create_json(
                     triggered->getEffect());
             json["data"]["kind"] = "event";
             return json;
@@ -101,7 +102,7 @@ namespace dandan::serialization
                 JsonFactory<conditions::ICondition>::create_json(
                     stateTriggered->condition());
             json["data"]["effect"] =
-                JsonFactory<effects::IOneShotEffect>::create_json(
+                JsonFactory<effects::IOneShotEffectDefinition>::create_json(
                     stateTriggered->getEffect());
             json["data"]["kind"] = "state";
             return json;
@@ -117,8 +118,8 @@ namespace dandan::serialization
                 std::back_inserter(effect_list),
                 [](const auto &effect)
                 {
-                    return JsonFactory<effects::IOneShotEffect>::create_json(
-                        effect.get());
+                    return JsonFactory<effects::IOneShotEffectDefinition>::
+                        create_json(effect.get());
                 });
             json["data"]["effect_list"] = effect_list;
             return json;
@@ -138,8 +139,9 @@ namespace dandan::serialization
             auto cost{
                 JsonFactory<dandan::ICost>::create_product(data.at("cost"))};
 
-            auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
-                data.at("effect"))};
+            auto effect{
+                JsonFactory<effects::IOneShotEffectDefinition>::create_product(
+                    data.at("effect"))};
 
             return std::make_unique<ActivatedAbility>(std::move(cost),
                                                       std::move(effect));
@@ -185,8 +187,8 @@ namespace dandan::serialization
                     JsonFactory<dandan::triggers::ITrigger>::create_product(
                         data.at("trigger"))};
 
-                auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
-                    data.at("effect"))};
+                auto effect{JsonFactory<effects::IOneShotEffectDefinition>::
+                                create_product(data.at("effect"))};
 
                 return std::make_unique<EventTriggeredAbility>(
                     std::move(trigger), std::move(effect));
@@ -198,8 +200,8 @@ namespace dandan::serialization
                     JsonFactory<dandan::conditions::ICondition>::create_product(
                         data.at("condition"))};
 
-                auto effect{JsonFactory<dandan::IOneShotEffect>::create_product(
-                    data.at("effect"))};
+                auto effect{JsonFactory<effects::IOneShotEffectDefinition>::
+                                create_product(data.at("effect"))};
 
                 return std::make_unique<StateTriggeredAbility>(
                     std::move(condition), std::move(effect));
@@ -207,14 +209,15 @@ namespace dandan::serialization
         }
         if (type == "SpellAbility")
         {
-            std::vector<std::unique_ptr<effects::IOneShotEffect>> effect_list;
+            std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
+                effect_list;
             std::transform(
                 data.at("effect_list").begin(), data.at("effect_list").end(),
                 std::back_inserter(effect_list),
                 [](const auto &effect_json)
                 {
-                    return JsonFactory<effects::IOneShotEffect>::create_product(
-                        effect_json);
+                    return JsonFactory<effects::IOneShotEffectDefinition>::
+                        create_product(effect_json);
                 });
             return std::make_unique<SpellAbility>(std::move(effect_list));
         }

@@ -1,7 +1,10 @@
 #include "dandan/core/Stack.h"
+#include "dandan/abilities/AbilityContext.h"
+#include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/SpellAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
+#include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/overloadVisitor.h"
@@ -50,9 +53,6 @@ namespace dandan::core
                         abilities::AbilityContext context{
                             card->getID(), card->getControllerID()};
 
-                        game.moveCardFromZone(
-                            game.getPlayer(card->getControllerID()), *card);
-                        game.graveyard().addCard(*card);
                         auto effect{spell_ability->createEffect(game, context)};
                         return effect;
                     }
@@ -85,6 +85,8 @@ namespace dandan::core
             std::visit(overloaded{[&game](CardID card_id)
                                   {
                                       auto *card{game.getCardByID(card_id)};
+                                      game.moveCardFromZone(game.activePlayer(),
+                                                            *card);
                                       game.graveyard().addCard(*card);
                                   },
                                   [](const abilities::BoundAbility &) {}},

@@ -23,7 +23,7 @@ namespace dandan::effects
         {
             std::transform(effects.begin(), effects.end(),
                            std::back_inserter(m_effects),
-                           [](const auto &effect) { return effect->clone(); });
+                           [](const auto &effect) { return effect->copy(); });
         }
 
         [[nodiscard]] std::string display() const override
@@ -36,13 +36,13 @@ namespace dandan::effects
             return result;
         }
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
             std::vector<std::unique_ptr<IOneShotEffect>> cloned_effects;
             cloned_effects.reserve(m_effects.size());
             std::transform(m_effects.begin(), m_effects.end(),
                            std::back_inserter(cloned_effects),
-                           [](const auto &effect) { return effect->clone(); });
+                           [](const auto &effect) { return effect->copy(); });
             return std::make_unique<EffectList>(cloned_effects);
         }
 

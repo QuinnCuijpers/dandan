@@ -191,16 +191,22 @@ namespace dandan::core
 
     void Game::moveCardFromZone(Player &player, const Card &card)
     {
+        std::cout << "Removing " << card.getID().getID()
+                  << " from zone: " << card.getZone() << '\n';
         switch (card.getZone())
         {
         case Zone::HAND:
             player.hand().removeCard(card);
             break;
         case Zone::LIBRARY:
+            library().removeCard(card);
+            break;
         case Zone::BATTLEFIELD:
             player.battlefield().removeCard(card);
             break;
         case Zone::GRAVEYARD:
+            graveyard().removeCard(card);
+            break;
         case Zone::EXILE:
         case Zone::STACK:
             auto object{stack().pop()};

@@ -23,7 +23,7 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const override;
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
             return std::make_unique<AttackEffect>(m_creature);
         }

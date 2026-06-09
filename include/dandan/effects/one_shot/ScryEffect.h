@@ -2,6 +2,7 @@
 #define DANDAN_SCRY_EFFECT_H
 
 #include "IOneShotEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 
 namespace dandan::effects
 {
@@ -10,27 +11,63 @@ namespace dandan::effects
      *
      * @implements IOneShotEffect
      */
-    struct ScryEffect final : public IOneShotEffect
+    class ScryEffect final : public IOneShotEffect
     {
-        /// The amount of cards to scry
-        int m_scry_amount{1};
-
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
-        {
-            return std::make_unique<ScryEffect>(m_scry_amount);
-        }
-
-        ScryEffect() = default;
-
+    public:
         /** Constructor
          * @param scry_amount the amount of cards to scry
+         * @param player the player who will scry
          */
-        explicit ScryEffect(int scry_amount) : m_scry_amount(scry_amount)
+        explicit ScryEffect(int scry_amount, core::PlayerID player)
+            : m_scry_amount(scry_amount), m_player(player)
         {
         }
 
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
+        {
+            return std::make_unique<ScryEffect>(m_scry_amount, m_player);
+        }
         std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const override;
+
+        [[nodiscard]] int getScryAmount() const
+        {
+            return m_scry_amount;
+        }
+
+    private:
+        int m_scry_amount{1};
+        core::PlayerID m_player;
+    };
+
+    class ScryEffectDefinition : public IOneShotEffectDefinition
+    {
+    public:
+        ScryEffectDefinition() = default;
+        explicit ScryEffectDefinition(int scry_amount)
+            : m_scry_amount(scry_amount)
+        {
+        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
+            EffectContext context) const override
+        {
+            return std::make_unique<ScryEffect>(m_scry_amount,
+                                                context.player().value());
+        }
+
+        [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
+            const override
+        {
+            return std::make_unique<ScryEffectDefinition>(m_scry_amount);
+        }
+
+        [[nodiscard]] int getScryAmount() const
+        {
+            return m_scry_amount;
+        }
+
+    private:
+        int m_scry_amount{1};
     };
 } // namespace dandan::effects
 

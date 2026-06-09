@@ -34,6 +34,6 @@ namespace dandan::core
         }
         // TODO: clone doesnt clone the next chain, so we need to make sure to
         // clone the entire chain
-        return current_effect->clone();
+        return current_effect->copy();
     }
 } // namespace dandan::core

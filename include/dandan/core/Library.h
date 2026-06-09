@@ -42,6 +42,15 @@ namespace dandan::core
             m_cards.emplace_back(card.getID());
         }
 
+        void removeCard(const Card &card)
+        {
+            auto iter = std::find(m_cards.begin(), m_cards.end(), card.getID());
+            if (iter != m_cards.end())
+            {
+                m_cards.erase(iter);
+            }
+        }
+
         /** Gets the cards in the library mutably.
          * @return A reference to the deque of card IDs in the library.
          */

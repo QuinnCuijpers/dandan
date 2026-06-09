@@ -31,7 +31,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ManaCost>(
                 std::make_unique<dandan::mana::GenericMana>(2))),
-        std::make_unique<dandan::DrawEffect>()));
+        std::make_unique<dandan::DrawEffectDefinition>()));
 
     return abilities;
 }
@@ -51,7 +51,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ManaCost>(
                 std::make_unique<dandan::mana::BlueMana>())),
-        std::make_unique<dandan::DrawEffect>()));
+        std::make_unique<dandan::DrawEffectDefinition>()));
 
     return abilities;
 }
@@ -69,7 +69,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
 
     abilities.emplace_back(std::make_unique<dandan::EventTriggeredAbility>(
         std::make_unique<dandan::SelfETBTrigger>(),
-        std::make_unique<dandan::PeekEffect>()));
+        std::make_unique<dandan::effects::PeekEffectDefinition>()));
 
     return abilities;
 }
@@ -110,7 +110,7 @@ Temple_of_Epiphany_Abilities()
 
     abilities.emplace_back(std::make_unique<dandan::EventTriggeredAbility>(
         std::make_unique<dandan::SelfETBTrigger>(),
-        std::make_unique<dandan::ScryEffect>()));
+        std::make_unique<dandan::effects::ScryEffectDefinition>()));
 
     return abilities;
 }
@@ -131,7 +131,7 @@ Izzet_Boilerworks_Abilities()
 
     abilities.emplace_back(std::make_unique<dandan::EventTriggeredAbility>(
         std::make_unique<dandan::SelfETBTrigger>(),
-        std::make_unique<dandan::BounceLandEffect>()));
+        std::make_unique<dandan::effects::BounceLandEffectDefinition>()));
 
     return abilities;
 }

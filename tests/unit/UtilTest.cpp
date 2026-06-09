@@ -27,7 +27,7 @@ TEST(UtilTest, ConvertToWords)
     {
         int num{nums[i]};
         std::string expected{"Draw " + strings[i] + " cards"};
-        auto draw_effect{std::make_unique<dandan::DrawEffect>(num)};
+        auto draw_effect{std::make_unique<dandan::DrawEffectDefinition>(num)};
         EXPECT_EQ(draw_effect->display(), expected);
     }
 }

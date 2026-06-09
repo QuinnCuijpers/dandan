@@ -3,7 +3,10 @@
 
 #include "dandan/abilities/IAbility.h"
 #include "dandan/dandan.h"
+#include "dandan/effects/one_shot/ExileTopEffect.h"
+#include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
+#include "dandan/effects/one_shot/TimeTwisterEffect.h"
 #include "dandan/numbers/GraveyardCount.h"
 #include <memory>
 #include <vector>
@@ -13,12 +16,12 @@ Brainstorm_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    auto ability_effects{
-        std::vector<std::unique_ptr<dandan::effects::IOneShotEffect>>{}};
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
     ability_effects.emplace_back(
-        std::make_unique<dandan::effects::DrawEffect>(3));
+        std::make_unique<dandan::effects::DrawEffectDefinition>(3));
     ability_effects.emplace_back(
-        std::make_unique<dandan::effects::PutCardOnTopEffect>(2));
+        std::make_unique<dandan::effects::PutCardOnTopEffectDefinition>(2));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
@@ -31,14 +34,41 @@ Accumulated_Knowledge_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    auto ability_effects{
-        std::vector<std::unique_ptr<dandan::effects::IOneShotEffect>>{}};
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
 
     ability_effects.emplace_back(
-        std::make_unique<dandan::effects::DrawEffect>(1));
-    ability_effects.emplace_back(std::make_unique<dandan::effects::DrawEffect>(
-        std::make_unique<dandan::numbers::GraveyardCount>(
-            std::string("Accumulated Knowledge"))));
+        std::make_unique<dandan::effects::DrawEffectDefinition>(1));
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::DrawEffectDefinition>(
+            std::make_unique<dandan::numbers::GraveyardCount>(
+                std::string("Accumulated Knowledge"))));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Diminishing_Returns_Abilities()
+{
+    static const int EXILE_AMOUNT = 10;
+    static const int DRAW_AMOUNT = 7;
+
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::TimeTwisterEffect>());
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::ExileTopEffectDefinition>(
+            EXILE_AMOUNT));
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::OptionalDrawEffectDefinition>(
+            DRAW_AMOUNT, true));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));

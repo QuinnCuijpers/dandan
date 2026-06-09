@@ -12,7 +12,10 @@ target_sources(
           AttackEffect.cpp
           DestroyEffect.cpp
           IOneShotEffect.cpp
-          PutCardOnTopEffect.cpp)
+          PutCardOnTopEffect.cpp
+          TimeTwisterEffect.cpp
+          ExileTopEffect.cpp
+          OptionalDrawEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

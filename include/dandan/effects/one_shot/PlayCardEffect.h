@@ -26,7 +26,7 @@ namespace dandan::effects
         {
         }
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
             return std::make_unique<PlayCardEffect>(m_card);
         }

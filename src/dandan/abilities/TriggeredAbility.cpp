@@ -12,7 +12,7 @@ namespace dandan::abilities
                      [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving triggered ability\n";
-        return m_effect ? m_effect->clone() : nullptr;
+        return m_effect->bind(effects::EffectContext(context.controller_id));
     }
 
 } // namespace dandan::abilities

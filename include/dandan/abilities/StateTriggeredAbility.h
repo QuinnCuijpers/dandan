@@ -4,6 +4,7 @@
 
 #include "dandan/abilities/IAbility.h"
 #include "dandan/conditions/ICondition.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 namespace dandan::abilities
 {
     /** @brief A triggered ability that activates when a specific condition
@@ -19,8 +20,9 @@ namespace dandan::abilities
          * @param condition The condition for the ability
          * @param effect The effect of the ability
          */
-        StateTriggeredAbility(std::unique_ptr<conditions::ICondition> condition,
-                              std::unique_ptr<effects::IOneShotEffect> effect)
+        StateTriggeredAbility(
+            std::unique_ptr<conditions::ICondition> condition,
+            std::unique_ptr<effects::IOneShotEffectDefinition> effect)
             : m_condition(std::move(condition)), m_effect(std::move(effect))
         {
         }
@@ -34,7 +36,8 @@ namespace dandan::abilities
             [[maybe_unused]] core::Game &game,
             [[maybe_unused]] AbilityContext context) const override
         {
-            return m_effect->clone();
+            return m_effect->bind(
+                effects::EffectContext(context.controller_id));
         }
 
         /** Get the condition for the ability as a const pointer
@@ -56,14 +59,14 @@ namespace dandan::abilities
         /** Get the effect of the ability
          * @return The effect of the ability
          */
-        [[nodiscard]] const effects::IOneShotEffect *getEffect() const
+        [[nodiscard]] const effects::IOneShotEffectDefinition *getEffect() const
         {
             return m_effect.get();
         }
 
     private:
         std::unique_ptr<conditions::ICondition> m_condition;
-        std::unique_ptr<effects::IOneShotEffect> m_effect;
+        std::unique_ptr<effects::IOneShotEffectDefinition> m_effect;
     };
 } // namespace dandan::abilities
 

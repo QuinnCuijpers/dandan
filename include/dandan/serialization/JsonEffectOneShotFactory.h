@@ -2,21 +2,21 @@
 #define DANDAN_JSONEFFECTFACTORY_H
 
 #ifdef DANDAN_SERIALIZE
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 
 #include "JsonFactory.h"
-#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <nlohmann/json_fwd.hpp>
 
 namespace dandan::serialization
 {
-    template <> class JsonFactory<effects::IOneShotEffect>
+    template <> class JsonFactory<effects::IOneShotEffectDefinition>
     {
     public:
         static nlohmann::json create_json(
-            const effects::IOneShotEffect *effect);
+            const effects::IOneShotEffectDefinition *effect);
 
-        static std::unique_ptr<effects::IOneShotEffect> create_product(
-            const nlohmann::json &json);
+        static std::unique_ptr<effects::IOneShotEffectDefinition>
+        create_product(const nlohmann::json &json);
     };
 } // namespace dandan::serialization
 

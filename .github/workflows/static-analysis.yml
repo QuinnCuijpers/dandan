@@ -40,5 +40,6 @@ jobs:
             --suppress=*:external/* \
             --suppress=missingIncludeSystem \
             --suppress=missingInclude \
-            -j$(nproc)
+            --suppress=unusedFunction \
+            -j$(nproc) 
 

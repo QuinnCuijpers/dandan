@@ -9,6 +9,7 @@
 #include "dandan/core/CardID.h"
 #include "dandan/core/ConditionManager.h"
 #include "dandan/core/Constants.h"
+#include "dandan/core/Exile.h"
 #include "dandan/core/Graveyard.h"
 #include "dandan/core/Library.h"
 #include "dandan/core/PreventionManager.h"
@@ -166,6 +167,22 @@ namespace dandan::core
         [[nodiscard]] const Graveyard &graveyard() const
         {
             return m_graveyard;
+        }
+
+        /** Gets the exile mutably.
+         * @return A reference to the exile.
+         */
+        [[nodiscard]] Exile &exile()
+        {
+            return m_exile;
+        }
+
+        /** Gets the exile immutably.
+         * @return A const reference to the exile.
+         */
+        [[nodiscard]] const Exile &exile() const
+        {
+            return m_exile;
         }
 
         /** Gets the event manager mutably.
@@ -416,6 +433,7 @@ namespace dandan::core
         int m_active_player_index{};
         Library m_library;
         Stack m_stack;
+        Exile m_exile;
 
         EventManager m_event_manager;
         PreventionManager m_prevention_manager;

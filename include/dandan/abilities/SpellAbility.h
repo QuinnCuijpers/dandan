@@ -3,6 +3,7 @@
 
 #include "dandan/abilities/IAbility.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <memory>
 
 namespace dandan::abilities
@@ -15,11 +16,13 @@ namespace dandan::abilities
     class SpellAbility : public IAbility
     {
     public:
-        /** @brief Construct a spell ability with the given effects.
-         * @param effects The vector of effects for the spell ability.
+        /** @brief Construct a spell ability with the given effect definitions.
+         * @param effects The vector of effect definitions for the spell
+         * ability.
          */
         explicit SpellAbility(
-            std::vector<std::unique_ptr<effects::IOneShotEffect>> &&effects)
+            std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
+                &&effects)
             : m_effects(std::move(effects))
         {
         }
@@ -27,18 +30,19 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
-        /** @brief Get the effects of the spell ability.
-         * @return The vector of effects for the spell ability.
+        /** @brief Get the effect definitions of the spell ability.
+         * @return The vector of effect definitions for the spell ability.
          */
         [[nodiscard]] const std::vector<
-            std::unique_ptr<effects::IOneShotEffect>> &
+            std::unique_ptr<effects::IOneShotEffectDefinition>> &
         effects() const
         {
             return m_effects;
         }
 
     private:
-        std::vector<std::unique_ptr<effects::IOneShotEffect>> m_effects;
+        std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
+            m_effects;
     };
 } // namespace dandan::abilities
 

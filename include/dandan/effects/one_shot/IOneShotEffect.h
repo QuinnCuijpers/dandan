@@ -39,7 +39,7 @@ namespace dandan::effects
          *
          * @returns A unique ptr to the cloned effect.
          */
-        [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> clone() const = 0;
+        [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> copy() const = 0;
 
         /**
          * apply the Effect to the game state by mutating it.

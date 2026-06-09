@@ -2,6 +2,7 @@
 #define DANDAN_SELFSACRIFICEEFFECT_H
 
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <iostream>
 
 // should take a card as member variable, but cant rn due to serialization
@@ -16,9 +17,13 @@ namespace dandan::effects
     class SelfSacrificeEffect : public IOneShotEffect
     {
     public:
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> clone() const override
+        explicit SelfSacrificeEffect(core::CardID card_id) : m_card_id(card_id)
         {
-            return std::make_unique<SelfSacrificeEffect>();
+        }
+
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
+        {
+            return std::make_unique<SelfSacrificeEffect>(m_card_id);
         }
 
         std::unique_ptr<events::IEvent> apply_impl(
@@ -27,6 +32,26 @@ namespace dandan::effects
             std::cout << "Resolving SelfSacrificeEffect: Sacrificing the "
                          "source card.\n";
             return nullptr;
+        }
+
+    private:
+        core::CardID m_card_id;
+    };
+
+    class SelfSacrificeEffectDefinition : public IOneShotEffectDefinition
+    {
+    public:
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
+            [[maybe_unused]] EffectContext context) const override
+        {
+            return std::make_unique<SelfSacrificeEffect>(
+                context.card().value());
+        }
+
+        [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
+            const override
+        {
+            return std::make_unique<SelfSacrificeEffectDefinition>();
         }
     };
 } // namespace dandan::effects

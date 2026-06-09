@@ -3,6 +3,7 @@
 
 #include "IAbility.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/triggers/ITrigger.h"
 #include <memory>
 
@@ -23,7 +24,7 @@ namespace dandan::abilities
          */
         EventTriggeredAbility(
             std::unique_ptr<dandan::triggers::ITrigger> trigger,
-            std::unique_ptr<dandan::effects::IOneShotEffect> effect)
+            std::unique_ptr<dandan::effects::IOneShotEffectDefinition> effect)
             : m_trigger(std::move(trigger)), m_effect(std::move(effect))
         {
         }
@@ -59,7 +60,8 @@ namespace dandan::abilities
         /** Get the effect of the ability
          * @return The effect of the ability
          */
-        [[nodiscard]] const dandan::effects::IOneShotEffect *getEffect() const
+        [[nodiscard]] const dandan::effects::IOneShotEffectDefinition *
+        getEffect() const
         {
             return m_effect.get();
         }
@@ -69,7 +71,7 @@ namespace dandan::abilities
 
     private:
         std::unique_ptr<dandan::triggers::ITrigger> m_trigger;
-        std::unique_ptr<dandan::effects::IOneShotEffect> m_effect;
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition> m_effect;
     };
 } // namespace dandan::abilities
 

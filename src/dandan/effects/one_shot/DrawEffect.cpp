@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/DrawEffect.h"
+#include "dandan/numbers/ExactNumber.h"
 
 #include "dandan/core/Game.h"
 #include "dandan/util.h"
@@ -7,7 +8,7 @@
 namespace dandan::effects
 {
 
-    std::string DrawEffect::display() const
+    std::string DrawEffectDefinition::display() const
     {
         if (const auto *fixed =
                 dynamic_cast<const numbers::ExactNumber *>(m_amount.get()))
@@ -37,7 +38,8 @@ namespace dandan::effects
         if (value == 1)
         {
             std::cout << "Applying draw effect\n";
-            game.activePlayer().drawCard(game);
+            auto &player{game.getPlayer(m_context.player().value())};
+            player.drawCard(game);
             return nullptr;
         }
         // Break down the draw effect into multiple single card draws to
@@ -46,7 +48,13 @@ namespace dandan::effects
         std::cout << "Applying draw effect for " << value << " cards\n";
         for (int i = 0; i < value; ++i)
         {
-            auto draw_effect{std::make_unique<DrawEffect>(1)};
+            auto draw_definition{std::make_unique<DrawEffectDefinition>(1)};
+            auto &player{game.getPlayer(m_context.player().value())};
+            auto draw_effect{
+                draw_definition->bind(EffectContext{player.getID()})};
+
+            // breaking effect up doesnt require checking replacement effects as
+            // all underlying effects are checked
             draw_effect->apply(game);
         }
 

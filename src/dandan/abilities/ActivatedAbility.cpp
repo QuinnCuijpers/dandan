@@ -39,7 +39,7 @@ namespace dandan::abilities
     {
         std::cout << "Resolving Activated ability\n";
         m_cost->pay(game, context);
-        return m_effect ? m_effect->clone() : nullptr;
+        return m_effect->bind(effects::EffectContext(context.controller_id));
     }
 
     [[nodiscard]] bool ActivatedAbility::canActivate(

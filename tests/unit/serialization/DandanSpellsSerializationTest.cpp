@@ -15,7 +15,12 @@ static const std::vector<const dandan::Card *> &getCards()
                   std::make_unique<dandan::mana::AndMana>(
                       std::make_unique<dandan::mana::GenericMana>(1),
                       std::make_unique<dandan::mana::BlueMana>(1)),
-                  Instant)};
+                  Instant),
+        new SPELL(Diminishing_Returns,
+                  std::make_unique<dandan::mana::AndMana>(
+                      std::make_unique<dandan::mana::GenericMana>(2),
+                      std::make_unique<dandan::mana::BlueMana>(2)),
+                  Sorcery)};
     return cards;
 };
 

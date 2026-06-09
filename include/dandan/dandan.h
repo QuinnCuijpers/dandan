@@ -53,6 +53,7 @@ namespace dandan
 
     using effects::BounceLandEffect;
     using effects::DrawEffect;
+    using effects::DrawEffectDefinition;
     using effects::ETBEffect;
     using effects::IOneShotEffect;
     using effects::PeekEffect;
