@@ -25,14 +25,13 @@ namespace dandan::costs
             return source.getControllerID().id() == player.getID().id();
         }
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
+        void pay([[maybe_unused]] core::Game &game,
+                 [[maybe_unused]] abilities::AbilityContext context) override
         {
-            [[maybe_unused]] const auto &player =
+            [[maybe_unused]] auto &player =
                 game.getPlayer(context.controller_id);
-            // TODO: implement sacrifice
-            //  player.sacrificeCard(context.source_card_id);
+            auto *card = game.getCardByID(context.source_card_id);
+            player.sacrificeCard(*card, game);
         }
     };
 } // namespace dandan::costs

@@ -10,6 +10,8 @@
 namespace dandan::core
 {
 
+    class Game;
+
     using Permanent = CardID;
     using PermanentMap =
         std::unordered_map<CardData::Type, std::vector<Permanent>>;
@@ -92,6 +94,8 @@ namespace dandan::core
                 vec.erase(iter);
             }
         }
+
+        void sacrificeCard(Card &card, core::Game &game);
 
     private:
         PermanentMap m_permanents{

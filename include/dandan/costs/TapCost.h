@@ -30,9 +30,8 @@ namespace dandan::costs
                    source.getZone() == core::Zone::BATTLEFIELD;
         }
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
+        void pay([[maybe_unused]] core::Game &game,
+                 [[maybe_unused]] abilities::AbilityContext context) override
         {
             auto *card = game.getCardByID(context.source_card_id);
             card->setTapped(true);

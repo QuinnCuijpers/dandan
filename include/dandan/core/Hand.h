@@ -72,8 +72,11 @@ namespace dandan::core
                           << '\n';
                 m_cards.erase(iter);
             }
-            std::cout << "Couldn't find card " << card.getData().getName()
-                      << " in hand to remove\n";
+            else
+            {
+                std::cout << "Couldn't find card " << card.getData().getName()
+                          << " in hand to remove\n";
+            }
         }
 
         /** Adds a card to the hand.

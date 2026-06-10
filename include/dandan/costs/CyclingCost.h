@@ -42,9 +42,8 @@ namespace dandan::costs
             return m_inner_cost->canPay(source, player);
         }
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
+        void pay([[maybe_unused]] core::Game &game,
+                 [[maybe_unused]] abilities::AbilityContext context) override
         {
             m_inner_cost->pay(game, context);
         }

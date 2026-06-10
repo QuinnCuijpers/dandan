@@ -39,9 +39,8 @@ namespace dandan::costs
             return player.manaPool().canPay(*m_mana);
         }
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
+        void pay([[maybe_unused]] core::Game &game,
+                 [[maybe_unused]] abilities::AbilityContext context) override
         {
             auto &player = game.getPlayer(context.controller_id);
             player.manaPool().pay(*m_mana);

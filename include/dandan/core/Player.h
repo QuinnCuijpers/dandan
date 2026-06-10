@@ -198,6 +198,13 @@ namespace dandan::core
             m_hand.discardCard(card.getID(), game);
         }
 
+        void sacrificeCard(Card &card, Game &game)
+        {
+            std::cout << "Player is sacrificing card with ID "
+                      << card.getID().getID() << '\n';
+            m_battlefield.sacrificeCard(card, game);
+        }
+
         /** Takes damage
          * @param damage The amount of damage to take.
          * @param game The game instance.

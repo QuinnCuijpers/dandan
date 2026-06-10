@@ -7,6 +7,7 @@
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Zone.h"
 #include "dandan/dandan.h"
+#include "dandan/mana/AndMana.h"
 #include "dandan/mana/BlueMana.h"
 #include "dandan/mana/GenericMana.h"
 #include <algorithm>
@@ -608,8 +609,8 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
 {
     dandan::core::PlayerID::reset();
 
-    static constexpr int NUM_ISLANDS{6};
-    static constexpr int NUM_BRAINSTORMS{14};
+    static constexpr int NUM_SVYELUNITE{6};
+    static constexpr int NUM_ACCUMULATED{30};
 
     auto svyenulite_abilities{Svyelunite_Temple_Abilities()};
     auto accumulated_knowledge_abilities{Accumulated_Knowledge_Abilities()};
@@ -621,14 +622,17 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
         std::move(svyenulite_abilities)}};
 
     auto accumulated_knowledge_data{dandan::core::CardData{
-        "Accumulated Knowledge", std::make_unique<dandan::mana::BlueMana>(1),
+        "Accumulated Knowledge",
+        std::make_unique<dandan::mana::AndMana>(
+            std::make_unique<dandan::mana::BlueMana>(1),
+            std::make_unique<dandan::mana::GenericMana>(1)),
         dandan::core::CardData::Type::Instant,
         dandan::core::CardData::SubType::None,
         std::move(accumulated_knowledge_abilities)}};
 
-    auto cards{createTestCards(NUM_ISLANDS, &svyenulite_temple_data)};
+    auto cards{createTestCards(NUM_SVYELUNITE, &svyenulite_temple_data)};
     auto accumulated_knowledge_cards{
-        createTestCards(NUM_BRAINSTORMS, &accumulated_knowledge_data)};
+        createTestCards(NUM_ACCUMULATED, &accumulated_knowledge_data)};
     cards.insert(cards.end(), accumulated_knowledge_cards.begin(),
                  accumulated_knowledge_cards.end());
 
@@ -642,23 +646,23 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     auto svyenulite_id_2{game.nonActivePlayer().hand().getCards()[0]};
 
     auto accumulated_knowledge_id_1{
-        std::find_if(game.activePlayer().hand().getCards().begin(),
-                     game.activePlayer().hand().getCards().end(),
-                     [&game](const auto &card_id)
-                     {
-                         const auto *card = game.getCardByID(card_id);
-                         return card != nullptr && card->getData().getName() ==
-                                                       "Accumulated Knowledge";
-                     })};
+        *std::find_if(game.activePlayer().hand().getCards().begin(),
+                      game.activePlayer().hand().getCards().end(),
+                      [&game](const auto &card_id)
+                      {
+                          const auto *card = game.getCardByID(card_id);
+                          return card != nullptr && card->getData().getName() ==
+                                                        "Accumulated Knowledge";
+                      })};
     auto accumulated_knowledge_id_2{
-        std::find_if(game.nonActivePlayer().hand().getCards().begin(),
-                     game.nonActivePlayer().hand().getCards().end(),
-                     [&game](const auto &card_id)
-                     {
-                         const auto *card = game.getCardByID(card_id);
-                         return card != nullptr && card->getData().getName() ==
-                                                       "Accumulated Knowledge";
-                     })};
+        *std::find_if(game.nonActivePlayer().hand().getCards().begin(),
+                      game.nonActivePlayer().hand().getCards().end(),
+                      [&game](const auto &card_id)
+                      {
+                          const auto *card = game.getCardByID(card_id);
+                          return card != nullptr && card->getData().getName() ==
+                                                        "Accumulated Knowledge";
+                      })};
 
     // turn 1 player 1
     stream << "play " << svyenulite_id_1.getID() << '\n'; // play island
@@ -672,14 +676,14 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     stream << "activate " << svyenulite_id_1.getID()
            << '\n';  // activate land for mana
     stream << "1\n"; // option 1
-    stream << "play " << accumulated_knowledge_id_1->getID() << '\n';
+    stream << "play " << accumulated_knowledge_id_1.getID() << '\n';
     stream << "pass\n";
 
     // turn 2 player 2
     stream << "activate " << svyenulite_id_2.getID()
            << '\n';  // activate land for mana
     stream << "1\n"; // option 1
-    stream << "play " << accumulated_knowledge_id_2->getID() << '\n';
+    stream << "play " << accumulated_knowledge_id_2.getID() << '\n';
     stream << "pass\n";
     // discard down to hand size
     stream << game.nonActivePlayer().hand().getCards()[1].getID() << '\n';
@@ -691,7 +695,8 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     game.setIstream(stream);
     game.run();
 
-    EXPECT_EQ(game.activePlayer().hand().getCards().size(), STARTING_HAND_SIZE);
+    EXPECT_EQ(game.activePlayer().hand().getCards().size(),
+              STARTING_HAND_SIZE + 1);
     EXPECT_EQ(game.nonActivePlayer().hand().getCards().size(),
               STARTING_HAND_SIZE);
 
@@ -701,13 +706,123 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     EXPECT_EQ(svyenulite_1->getZone(), dandan::core::Zone::GRAVEYARD);
     EXPECT_EQ(svyenulite_2->getZone(), dandan::core::Zone::GRAVEYARD);
 
+    std::cout << accumulated_knowledge_id_1.getID() << '\n';
+    std::cout << accumulated_knowledge_id_2.getID() << '\n';
     auto *accumulated_knowledge_1{
-        game.getCardByID(accumulated_knowledge_id_1->getID())};
+        game.getCardByID(accumulated_knowledge_id_1.getID())};
     auto *accumulated_knowledge_2{
-        game.getCardByID(accumulated_knowledge_id_2->getID())};
+        game.getCardByID(accumulated_knowledge_id_2.getID())};
 
     EXPECT_EQ(accumulated_knowledge_1->getZone(),
               dandan::core::Zone::GRAVEYARD);
     EXPECT_EQ(accumulated_knowledge_2->getZone(),
               dandan::core::Zone::GRAVEYARD);
+}
+
+TEST(DandanLibTest, DiminishingReturnsTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_SVYELUNITE{6};
+    static constexpr int NUM_DIMINISHING{35};
+
+    static constexpr int DESIRED_HAND_1{4};
+    static constexpr int DESIRED_HAND_2{6};
+
+    auto svyenulite_abilities{Svyelunite_Temple_Abilities()};
+    auto diminishing_returns_abilities{Diminishing_Returns_Abilities()};
+
+    auto svyenulite_temple_data{dandan::core::CardData{
+        "Svyelunite Temple", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land,
+        dandan::core::CardData::SubType::None,
+        std::move(svyenulite_abilities)}};
+
+    auto diminishing_returns_data{dandan::core::CardData{
+        "Diminishing Returns",
+        std::make_unique<dandan::mana::AndMana>(
+            std::make_unique<dandan::mana::BlueMana>(2),
+            std::make_unique<dandan::mana::GenericMana>(2)),
+        dandan::core::CardData::Type::Instant,
+        dandan::core::CardData::SubType::None,
+        std::move(diminishing_returns_abilities)}};
+
+    auto cards{createTestCards(NUM_SVYELUNITE, &svyenulite_temple_data)};
+    auto diminishing_returns_cards{
+        createTestCards(NUM_DIMINISHING, &diminishing_returns_data)};
+    cards.insert(cards.end(), diminishing_returns_cards.begin(),
+                 diminishing_returns_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+
+    std::stringstream stream{};
+
+    auto svyenulite_id_1{game.activePlayer().hand().getCards()[0]};
+    auto svyenulite_id_2{game.activePlayer().hand().getCards()[1]};
+
+    auto discard_1{game.nonActivePlayer().hand().getCards()[0]};
+    auto discard_2{game.nonActivePlayer().hand().getCards()[1]};
+
+    auto diminishing_returns_id{
+        *std::find_if(game.activePlayer().hand().getCards().begin(),
+                      game.activePlayer().hand().getCards().end(),
+                      [&game](const auto &card_id)
+                      {
+                          const auto *card = game.getCardByID(card_id);
+                          return card != nullptr && card->getData().getName() ==
+                                                        "Diminishing Returns";
+                      })};
+
+    // turn 1 player 1
+    stream << "play " << svyenulite_id_1.getID() << '\n'; // play land
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "pass\n";
+    stream << discard_1.getID() << '\n'; // pass and discard
+
+    // turn 1 player 2
+    stream << "play " << svyenulite_id_2.getID() << '\n'; // play land
+    stream << "pass\n";
+
+    // turn 2 player 2
+    stream << "pass\n";
+    stream << discard_2.getID() << '\n'; // pass and discard
+
+    // Turn 3 player 1
+    stream << "activate " << svyenulite_id_1.getID() << '\n';
+    stream << "1\n"; // option 1
+    stream << "activate " << svyenulite_id_2.getID() << '\n';
+    stream << "1\n"; // option 1
+    stream << "play " << diminishing_returns_id.getID() << '\n';
+    stream << DESIRED_HAND_1 << '\n'; // choose to draw for player 1
+    stream << DESIRED_HAND_2 << '\n'; // choose to draw for player 2
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *svyenulite_1{game.getCardByID(svyenulite_id_1.getID())};
+    auto *svyenulite_2{game.getCardByID(svyenulite_id_2.getID())};
+    auto *discard_card_1{game.getCardByID(discard_1.getID())};
+    auto *discard_card_2{game.getCardByID(discard_2.getID())};
+    auto *diminishing_returns_card{
+        game.getCardByID(diminishing_returns_id.getID())};
+
+    EXPECT_FALSE(svyenulite_1->getZone() == dandan::core::Zone::BATTLEFIELD ||
+                 svyenulite_1->getZone() == dandan::core::Zone::GRAVEYARD);
+    EXPECT_FALSE(svyenulite_2->getZone() == dandan::core::Zone::BATTLEFIELD ||
+                 svyenulite_2->getZone() == dandan::core::Zone::GRAVEYARD);
+    EXPECT_FALSE(discard_card_1->getZone() == dandan::core::Zone::GRAVEYARD);
+    EXPECT_FALSE(discard_card_2->getZone() == dandan::core::Zone::GRAVEYARD);
+
+    EXPECT_TRUE(diminishing_returns_card->getZone() ==
+                dandan::core::Zone::GRAVEYARD);
+
+    EXPECT_EQ(game.exile().getCards().size(), 10);
+
+    EXPECT_EQ(game.activePlayer().hand().getCards().size(), DESIRED_HAND_1);
+    EXPECT_EQ(game.nonActivePlayer().hand().getCards().size(), DESIRED_HAND_2);
 }

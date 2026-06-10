@@ -37,9 +37,8 @@ namespace dandan::costs
             return {m_first.get(), m_second.get()};
         }
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
+        void pay([[maybe_unused]] core::Game &game,
+                 [[maybe_unused]] abilities::AbilityContext context) override
         {
             m_first->pay(game, context);
             m_second->pay(game, context);
