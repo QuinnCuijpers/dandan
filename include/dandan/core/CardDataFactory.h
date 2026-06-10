@@ -1,7 +1,9 @@
 #ifndef DANDAN_CARDDATAFACTORY_H
 #define DANDAN_CARDDATAFACTORY_H
 
+#include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/core/CardData.h"
+#include <memory>
 #include <unordered_map>
 
 #ifdef DANDAN_SERIALIZE
@@ -26,6 +28,12 @@ namespace dandan::core
                 return iter->second;
             }
             CardData new_card_data{name};
+            if (new_card_data.getSuperType() ==
+                core::CardData::SuperType::Basic)
+            {
+                new_card_data.addAbility(
+                    std::make_unique<abilities::BasicLandAbility>());
+            }
             m_card_data_cache[key] = std::move(new_card_data);
             return m_card_data_cache[key];
         }

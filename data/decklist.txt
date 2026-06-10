@@ -4,14 +4,14 @@
 4 Accumulated Knowledge [x]
 2 Brainstorm [x]
 2 Crystal Spray
-2 Dance of the Skywise
+2 Dance of the Skywise 
 2 Diminishing Returns [x]
 2 Metamorphose
 2 Mind Bend
-2 Mystical Tutor []
+2 Mystical Tutor [x]
 2 Mystic Retrieval 
 2 Predict
-2 Ray of Command
+2 Ray of Command 
 2 Supplant Form 
 2 Unsubstantiate
 2 Vision Charm 

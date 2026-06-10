@@ -13,9 +13,12 @@ inline std::vector<dandan::Card> createTestCards(
             std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
 
         static dandan::core::CardData default_card_data{
-            "Test Card", std::make_unique<dandan::mana::GenericMana>(0),
+            "Test Card",
+            std::make_unique<dandan::mana::GenericMana>(0),
             dandan::core::CardData::Type::Land,
-            dandan::core::CardData::SubType::Island, std::move(abilities)};
+            dandan::core::CardData::SubType::Island,
+            dandan::core::CardData::SuperType::None,
+            std::move(abilities)};
 
         cardData = &default_card_data;
     }

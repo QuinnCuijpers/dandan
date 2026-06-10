@@ -1,6 +1,7 @@
 #ifndef DANDAN_TEST_LANDDEFINITIONS_H
 #define DANDAN_TEST_LANDDEFINITIONS_H
 
+#include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/costs/AndCost.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
@@ -10,8 +11,16 @@
 inline std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
-    abilities.push_back(std::make_unique<dandan::ManaAbility>(
-        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::IAbility>> Island_TESTS_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    abilities.push_back(
+        std::make_unique<dandan::abilities::BasicLandAbility>());
+
     return abilities;
 }
 

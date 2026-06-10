@@ -30,6 +30,10 @@ namespace dandan::serialization
         {
             json["subtype"] = card->getSubType();
         }
+        if (card->getSuperType() != core::CardData::SuperType::None)
+        {
+            json["supertype"] = card->getSuperType();
+        }
         auto stats{card->getStats()};
         if (stats.has_value())
         {
@@ -37,7 +41,10 @@ namespace dandan::serialization
             json["stats"] = {{"power", stats_safe.power},
                              {"toughness", stats_safe.toughness}};
         }
-        json["abilities"] = abilities_json;
+        if (!abilities_json.empty())
+        {
+            json["abilities"] = abilities_json;
+        }
 
         return json;
     }
@@ -56,6 +63,12 @@ namespace dandan::serialization
             subtype = json.at("subtype").get<core::CardData::SubType>();
         }
 
+        auto supertype = core::CardData::SuperType::None;
+        if (json.contains("supertype"))
+        {
+            supertype = json.at("supertype").get<core::CardData::SuperType>();
+        }
+
         auto stats = std::optional<core::Stats>{};
         if (json.contains("stats"))
         {
@@ -65,15 +78,19 @@ namespace dandan::serialization
         }
 
         auto abilities{std::vector<std::unique_ptr<abilities::IAbility>>{}};
-        for (const auto &ability_json : json.at("abilities"))
+        if (json.contains("abilities"))
         {
-            auto ability =
-                JsonFactory<abilities::IAbility>::create_product(ability_json);
-            abilities.push_back(std::move(ability));
+            for (const auto &ability_json : json.at("abilities"))
+            {
+                auto ability = JsonFactory<abilities::IAbility>::create_product(
+                    ability_json);
+                abilities.push_back(std::move(ability));
+            }
         }
 
         return std::make_unique<core::CardData>(name, std::move(cost), type,
-                                                subtype, std::move(abilities));
+                                                subtype, supertype,
+                                                std::move(abilities));
     }
 } // namespace dandan::serialization
 

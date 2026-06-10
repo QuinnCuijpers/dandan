@@ -90,10 +90,13 @@ TEST(DandanLibTest, Bounceland)
 
     auto abilities{Izzet_Boilerworks_Abilities()};
 
-    auto data = dandan::core::CardData{
-        "Test Card ", std::make_unique<dandan::mana::GenericMana>(0),
-        dandan::core::CardData::Type::Land,
-        dandan::core::CardData::SubType::Island, std::move(abilities)};
+    auto data =
+        dandan::core::CardData{"Test Card ",
+                               std::make_unique<dandan::mana::GenericMana>(0),
+                               dandan::core::CardData::Type::Land,
+                               dandan::core::CardData::SubType::Island,
+                               dandan::core::CardData::SuperType::None,
+                               std::move(abilities)};
 
     auto test_cards = createTestCards(TEST_DECK_SIZE, &data);
     std::stringstream stream{};
@@ -181,10 +184,13 @@ TEST(DandanLibTest, PlayCreatureTest)
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>()};
 
-    auto data = dandan::core::CardData{
-        "Test Card ", std::make_unique<dandan::mana::BlueMana>(2),
-        dandan::core::CardData::Type::Creature,
-        dandan::core::CardData::SubType::None, std::move(abilities)};
+    auto data =
+        dandan::core::CardData{"Test Card ",
+                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::core::CardData::Type::Creature,
+                               dandan::core::CardData::SubType::None,
+                               dandan::core::CardData::SuperType::None,
+                               std::move(abilities)};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -220,10 +226,13 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
 
     auto abilities{Remote_Isle_Abilities()};
 
-    auto data = dandan::core::CardData{
-        "Test Card ", std::make_unique<dandan::mana::BlueMana>(0),
-        dandan::core::CardData::Type::Land,
-        dandan::core::CardData::SubType::None, std::move(abilities)};
+    auto data =
+        dandan::core::CardData{"Test Card ",
+                               std::make_unique<dandan::mana::BlueMana>(0),
+                               dandan::core::CardData::Type::Land,
+                               dandan::core::CardData::SubType::None,
+                               dandan::core::CardData::SuperType::None,
+                               std::move(abilities)};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -260,16 +269,18 @@ TEST(DandanLibTest, CombatTest)
 
     // dandan can't attack unless the defending player controls an island
     auto abilities{Dandan_Abilities()};
-    auto island1{LAND(Island, dandan::core::CardData::SubType::Island)};
-    auto island2{LAND(Island, dandan::core::CardData::SubType::Island)};
+    auto island1{LAND(Island, Island, Basic)};
+    auto island2{LAND(Island, Island, Basic)};
 
     auto data =
         dandan::core::CardData{"Dandan",
                                std::make_unique<dandan::mana::BlueMana>(0),
                                dandan::core::CardData::Type::Creature,
                                dandan::core::CardData::SubType::None,
+                               dandan::core::CardData::SuperType::None,
                                std::move(abilities),
                                dandan::core::Stats{4, 1}};
+
     auto dandan_cards{createTestCards(TEST_DECK_SIZE, &data)};
     auto island_cards{std::vector<dandan::Card>{island1, island2}};
     dandan_cards.insert(dandan_cards.end(), island_cards.begin(),
@@ -347,14 +358,13 @@ TEST(DandanLibTest, ManaAbilities)
 {
     dandan::core::PlayerID::reset();
 
-    std::vector<dandan::Card> lands{
-        LAND(Island, dandan::CardData::SubType::Island),
-        LAND(Remote_Isle, dandan::CardData::SubType::None),
-        LAND(Lonely_Sandbar, dandan::CardData::SubType::None),
-        LAND(Shivan_Reef, dandan::CardData::SubType::None),
-        LAND(Temple_of_Epiphany, dandan::CardData::SubType::None),
-        LAND(Izzet_Boilerworks, dandan::CardData::SubType::None),
-        LAND(Svyelunite_Temple, dandan::CardData::SubType::None)};
+    std::vector<dandan::Card> lands{LAND(Island, Island, Basic),
+                                    LAND(Remote_Isle, None, None),
+                                    LAND(Lonely_Sandbar, None, None),
+                                    LAND(Shivan_Reef, None, None),
+                                    LAND(Temple_of_Epiphany, None, None),
+                                    LAND(Izzet_Boilerworks, None, None),
+                                    LAND(Svyelunite_Temple, None, None)};
 
     std::unordered_map<std::string, bool> requires_option{
         {"Island", false},
@@ -425,10 +435,13 @@ TEST(DandanLibTest, TempleOfEpiphanyTest)
 
     auto abilities{Temple_of_Epiphany_Abilities()};
 
-    auto data = dandan::core::CardData{
-        "Test Card ", std::make_unique<dandan::mana::GenericMana>(0),
-        dandan::core::CardData::Type::Land,
-        dandan::core::CardData::SubType::None, std::move(abilities)};
+    auto data =
+        dandan::core::CardData{"Test Card ",
+                               std::make_unique<dandan::mana::GenericMana>(0),
+                               dandan::core::CardData::Type::Land,
+                               dandan::core::CardData::SubType::None,
+                               dandan::core::CardData::SuperType::None,
+                               std::move(abilities)};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -466,10 +479,13 @@ TEST(DandanLibTest, HalimarDepthsAbilities)
 
     auto abilities{Halimar_Depths_Abilities()};
 
-    auto data = dandan::core::CardData{
-        "Test Card ", std::make_unique<dandan::mana::GenericMana>(0),
-        dandan::core::CardData::Type::Land,
-        dandan::core::CardData::SubType::None, std::move(abilities)};
+    auto data =
+        dandan::core::CardData{"Test Card ",
+                               std::make_unique<dandan::mana::GenericMana>(0),
+                               dandan::core::CardData::Type::Land,
+                               dandan::core::CardData::SubType::None,
+                               dandan::core::CardData::SuperType::None,
+                               std::move(abilities)};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -553,18 +569,20 @@ TEST(DandanLibTest, BrainstormTest)
     static constexpr int NUM_ISLANDS{6};
     static constexpr int NUM_BRAINSTORMS{14};
 
-    auto island_abilities{Island_Abilities()};
+    auto island_abilities{Island_TESTS_Abilities()};
     auto brainstorm_abilities{Brainstorm_Abilities()};
 
     auto island_data{dandan::core::CardData{
         "Island", std::make_unique<dandan::mana::GenericMana>(0),
         dandan::core::CardData::Type::Land,
-        dandan::core::CardData::SubType::Island, std::move(island_abilities)}};
+        dandan::core::CardData::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
 
     auto brainstorm_data{dandan::core::CardData{
         "Brainstorm", std::make_unique<dandan::mana::BlueMana>(1),
         dandan::core::CardData::Type::Instant,
         dandan::core::CardData::SubType::None,
+        dandan::core::CardData::SuperType::None,
         std::move(brainstorm_abilities)}};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
@@ -632,6 +650,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
         "Svyelunite Temple", std::make_unique<dandan::mana::GenericMana>(0),
         dandan::core::CardData::Type::Land,
         dandan::core::CardData::SubType::None,
+        dandan::core::CardData::SuperType::None,
         std::move(svyenulite_abilities)}};
 
     auto accumulated_knowledge_data{dandan::core::CardData{
@@ -641,6 +660,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
             std::make_unique<dandan::mana::GenericMana>(1)),
         dandan::core::CardData::Type::Instant,
         dandan::core::CardData::SubType::None,
+        dandan::core::CardData::SuperType::None,
         std::move(accumulated_knowledge_abilities)}};
 
     auto cards{createTestCards(NUM_SVYELUNITE, &svyenulite_temple_data)};
@@ -749,6 +769,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
         "Svyelunite Temple", std::make_unique<dandan::mana::GenericMana>(0),
         dandan::core::CardData::Type::Land,
         dandan::core::CardData::SubType::None,
+        dandan::core::CardData::SuperType::None,
         std::move(svyenulite_abilities)}};
 
     auto diminishing_returns_data{dandan::core::CardData{
@@ -758,6 +779,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
             std::make_unique<dandan::mana::GenericMana>(2)),
         dandan::core::CardData::Type::Instant,
         dandan::core::CardData::SubType::None,
+        dandan::core::CardData::SuperType::None,
         std::move(diminishing_returns_abilities)}};
 
     auto cards{createTestCards(NUM_SVYELUNITE, &svyenulite_temple_data)};
@@ -847,22 +869,23 @@ TEST(DandanLibTest, MysticalTutorTest)
     static constexpr int NUM_ISLANDS{6};
     static constexpr int NUM_TUTORS{35};
 
-    auto svyenulite_abilities{::Island_Abilities()};
+    auto island_abilities{::Island_TESTS_Abilities()};
     auto mystical_tutor_abilities{::Mystical_Tutor_Abilities()};
 
-    auto svyenulite_temple_data{dandan::core::CardData{
+    auto island_data{dandan::core::CardData{
         "Svyelunite Temple", std::make_unique<dandan::mana::GenericMana>(0),
         dandan::core::CardData::Type::Land,
-        dandan::core::CardData::SubType::None,
-        std::move(svyenulite_abilities)}};
+        dandan::core::CardData::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
 
     auto mystical_tutor_data{dandan::core::CardData{
         "Mystical Tutor", std::make_unique<dandan::mana::BlueMana>(1),
         dandan::core::CardData::Type::Instant,
         dandan::core::CardData::SubType::None,
+        dandan::core::CardData::SuperType::None,
         std::move(mystical_tutor_abilities)}};
 
-    auto cards{createTestCards(NUM_ISLANDS, &svyenulite_temple_data)};
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto mystical_tutor_cards{
         createTestCards(NUM_TUTORS, &mystical_tutor_data)};
     cards.insert(cards.end(), mystical_tutor_cards.begin(),
@@ -895,7 +918,7 @@ TEST(DandanLibTest, MysticalTutorTest)
            << '\n'; // activate land for mana
     stream << "play " << mystical_tutor_id.getID()
            << '\n';                           // play mystical tutor
-    stream << CHOSEN_CARD_ID.getID() << '\n'; // choose the card
+    stream << CHOSEN_CARD_ID.getID() << '\n'; // choose the card to tutor for
     stream << "pass\n";
 
     // turn 1 player 2

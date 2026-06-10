@@ -80,6 +80,13 @@ namespace dandan::core
             Fish,
         };
 
+        // TODO: expand supertypes
+        enum class SuperType : std::uint8_t
+        {
+            None,
+            Basic,
+        };
+
         CardData() = default;
 
 #ifdef DANDAN_SERIALIZE
@@ -97,12 +104,13 @@ namespace dandan::core
          */
         CardData(
             std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
-            SubType subtype,
+            SubType subtype = SubType::None,
+            SuperType supertype = SuperType::None,
             std::vector<std::unique_ptr<abilities::IAbility>> abilities = {},
             std::optional<Stats> stats = std::nullopt)
             : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-              m_subtype{subtype}, m_abilities{std::move(abilities)},
-              m_stats{stats}
+              m_subtype{subtype}, m_supertype{supertype},
+              m_abilities{std::move(abilities)}, m_stats{stats}
         {
         }
 
@@ -134,6 +142,12 @@ namespace dandan::core
         {
             return m_subtype;
         }
+
+        [[nodiscard]] SuperType getSuperType() const
+        {
+            return m_supertype;
+        }
+
         /** Gets the stats of the card.
          * @return The stats of the card, if any.
          */
@@ -184,13 +198,21 @@ namespace dandan::core
         friend void to_json(nlohmann::json &json, const CardData &card);
 #endif
 
+        friend class CardDataFactory;
+
     private:
         std::string m_name{"unknown"};
         std::unique_ptr<mana::Mana> m_mana_cost;
         Type m_type{Type::Land};
         SubType m_subtype{SubType::None};
+        SuperType m_supertype{SuperType::None};
         std::vector<std::unique_ptr<abilities::IAbility>> m_abilities;
         std::optional<Stats> m_stats;
+
+        void addAbility(std::unique_ptr<abilities::IAbility> ability)
+        {
+            m_abilities.push_back(std::move(ability));
+        }
     };
 } // namespace dandan::core
 

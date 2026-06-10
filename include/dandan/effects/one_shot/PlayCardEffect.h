@@ -46,6 +46,10 @@ namespace dandan::effects
                     "Not enough mana to play card " +
                     std::string{m_card.getData().getName()});
             }
+
+            // TODO: choose targets here if the card is an instant or sorcery
+            // with targets
+
             game.moveCardFromZone(game.getPlayer(m_card.getControllerID()),
                                   m_card);
             m_card.setZone(core::Zone::STACK);

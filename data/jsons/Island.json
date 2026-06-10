@@ -1,20 +1,7 @@
 {
-    "abilities": [
-        {
-            "data": {
-                "mana_list": [
-                    "U"
-                ],
-                "cost": {
-                    "type": "TapCost",
-                    "data": {}
-                }
-            },
-            "type": "ManaAbility"
-        }
-    ],
     "cost": "(0)",
     "name": "Island",
     "type": "Land",
-    "subtype": "Island"
+    "subtype": "Island",
+    "supertype": "Basic"
 }

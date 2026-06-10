@@ -1,6 +1,7 @@
 
 #include "dandan/core/actions/ActivateAbilityAction.h"
 #include "dandan/abilities/ActivatedAbility.h"
+#include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -15,6 +16,15 @@ namespace dandan::core
                 dynamic_cast<const abilities::ManaAbility *>(m_ability))
         {
             auto effect = mana_ability->createEffect(game, m_context);
+            if (effect)
+            {
+                return effect;
+            }
+        }
+        if (const auto *BasicLandAbility =
+                dynamic_cast<const abilities::BasicLandAbility *>(m_ability))
+        {
+            auto effect = BasicLandAbility->createEffect(game, m_context);
             if (effect)
             {
                 return effect;

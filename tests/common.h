@@ -13,19 +13,22 @@
             formatCardName(#name),                                             \
                 std::make_unique<dandan::mana::BlueMana>(2),                   \
                 dandan::core::CardData::Type::Creature,                        \
-                dandan::core::CardData::SubType::Fish, name##_Abilities(),     \
+                dandan::core::CardData::SubType::Fish,                         \
+                dandan::core::CardData::SuperType::None, name##_Abilities(),   \
                 dandan::core::Stats{4, 1}                                      \
         }                                                                      \
     }
 
-#define LAND(name, subtype)                                                    \
+#define LAND(name, subtype, supertype)                                         \
     dandan::Card                                                               \
     {                                                                          \
         new dandan::CardData                                                   \
         {                                                                      \
             formatCardName(#name),                                             \
                 std::make_unique<dandan::mana::GenericMana>(0),                \
-                dandan::CardData::Type::Land, subtype, name##_Abilities()      \
+                dandan::CardData::Type::Land,                                  \
+                dandan::CardData::SubType::subtype,                            \
+                dandan::CardData::SuperType::supertype, name##_Abilities()     \
         }                                                                      \
     }
 
@@ -35,7 +38,8 @@
         new dandan::CardData                                                   \
         {                                                                      \
             formatCardName(#name), cost, dandan::CardData::Type::type,         \
-                dandan::core::CardData::SubType::None, name##_Abilities()      \
+                dandan::core::CardData::SubType::None,                         \
+                dandan::core::CardData::SuperType::None, name##_Abilities(),   \
         }                                                                      \
     }
 

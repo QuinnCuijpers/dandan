@@ -107,6 +107,7 @@ void check_card_serialize()
                                std::make_unique<dandan::BlueMana>(2),
                                dandan::core::CardData::Type::Creature,
                                dandan::core::CardData::SubType::Fish,
+                               dandan::core::CardData::SuperType::None,
                                std::move(abilities),
                                dandan::Stats{4, 1}};
     dandan::Card test{&test_data, dandan::core::PlayerID::generate()};

@@ -10,14 +10,14 @@
 static const std::vector<const dandan::Card *> &getCards()
 {
     static const std::vector<const dandan::Card *> cards = {
-        new LAND(Island, dandan::CardData::SubType::Island),
-        new LAND(Remote_Isle, dandan::CardData::SubType::None),
-        new LAND(Lonely_Sandbar, dandan::CardData::SubType::None),
-        new LAND(Halimar_Depths, dandan::CardData::SubType::None),
-        new LAND(Shivan_Reef, dandan::CardData::SubType::None),
-        new LAND(Temple_of_Epiphany, dandan::CardData::SubType::None),
-        new LAND(Izzet_Boilerworks, dandan::CardData::SubType::None),
-        new LAND(Svyelunite_Temple, dandan::CardData::SubType::None)};
+        new LAND(Island, Island, Basic),
+        new LAND(Remote_Isle, None, None),
+        new LAND(Lonely_Sandbar, None, None),
+        new LAND(Halimar_Depths, None, None),
+        new LAND(Shivan_Reef, None, None),
+        new LAND(Temple_of_Epiphany, None, None),
+        new LAND(Izzet_Boilerworks, None, None),
+        new LAND(Svyelunite_Temple, None, None)};
     return cards;
 };
 

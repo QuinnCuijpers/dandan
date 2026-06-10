@@ -26,6 +26,10 @@ namespace dandan::core
                                   {CardData::SubType::Plains, "Plains"},
                                   {CardData::SubType::Fish, "Fish"}});
 
+    NLOHMANN_JSON_SERIALIZE_ENUM(CardData::SuperType, // NOLINT
+                                 {{CardData::SuperType::None, "None"},
+                                  {CardData::SuperType::Basic, "Basic"}});
+
 } // namespace dandan::core
 
 #endif
