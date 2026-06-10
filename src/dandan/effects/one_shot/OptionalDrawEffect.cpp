@@ -10,12 +10,16 @@ namespace dandan::effects
     {
         if (m_each_player)
         {
-            // TODO: need to have draweffect take a player
-            for (const auto &player : game.getPlayers())
+            auto starting_player_id{game.activePlayer().getID()};
+            auto current_player_id{starting_player_id};
+
+            while (true)
             {
+                auto &player{game.getPlayer(current_player_id)};
                 std::cout << player.getName()
                           << ", how many cards do you want to draw (0-"
                           << m_amount << ")?\n";
+
                 std::string input;
                 std::getline(game.istream(), input);
                 int draw_amount{std::stoi(input)};
@@ -24,6 +28,12 @@ namespace dandan::effects
                 auto context{EffectContext{player.getID()}};
                 auto effect{def.bind(context)};
                 effect->apply(game);
+
+                current_player_id = game.getNextPlayerID(current_player_id);
+                if (current_player_id == starting_player_id)
+                {
+                    break;
+                }
             }
         }
         else
