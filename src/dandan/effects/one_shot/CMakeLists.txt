@@ -15,7 +15,8 @@ target_sources(
           PutCardOnTopEffect.cpp
           TimeTwisterEffect.cpp
           ExileTopEffect.cpp
-          OptionalDrawEffect.cpp)
+          OptionalDrawEffect.cpp
+          TutorTopEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

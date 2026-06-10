@@ -9,6 +9,8 @@
 #include "dandan/effects/one_shot/ScryEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "dandan/effects/one_shot/TimeTwisterEffect.h"
+#include "dandan/effects/one_shot/TutorTopEffect.h"
+#include "dandan/serialization/JsonEnums.h" //IWYU pragma: keep
 #include "nlohmann/json_fwd.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
@@ -106,6 +108,19 @@ namespace dandan::serialization
             return json;
         }
 
+        if (const auto *tutorTopEffect =
+                dynamic_cast<const effects::TutorTopEffectDefinition *>(effect))
+        {
+            auto json = nlohmann::json{{"type", "TutorTopEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["filter_types"] = nlohmann::json::array();
+            for (auto type : tutorTopEffect->getFilterTypes())
+            {
+                json["data"]["filter_types"].push_back(type);
+            }
+            return json;
+        }
+
         throw std::runtime_error(
             "Unknown effect type for JSON serialization: " +
             std::string(typeid(*effect).name()));
@@ -171,6 +186,16 @@ namespace dandan::serialization
             return std::make_unique<effects::OptionalDrawEffectDefinition>(
                 data.at("amount").get<int>(),
                 data.at("each_player").get<bool>());
+        }
+        if (type == "TutorTopEffect")
+        {
+            std::vector<core::CardData::Type> filter_types;
+            for (const auto &type_json : data.at("filter_types"))
+            {
+                filter_types.push_back(type_json.get<core::CardData::Type>());
+            }
+            return std::make_unique<effects::TutorTopEffectDefinition>(
+                std::move(filter_types));
         }
         throw std::runtime_error("Unknown effect type: " + type);
     }

@@ -1,6 +1,7 @@
 #include "dandan/effects/one_shot/TimeTwisterEffect.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/Zone.h"
+#include <algorithm>
 #include <cassert>
 #include <vector>
 
@@ -12,10 +13,9 @@ namespace dandan::effects
         for (auto &player : game.getPlayers())
         {
             auto hand_card_ids{std::vector<core::CardID>{}};
-            for (const auto &card_id : player.hand().getCards())
-            {
-                hand_card_ids.emplace_back(card_id);
-            }
+            std::copy(player.hand().getCards().begin(),
+                      player.hand().getCards().end(),
+                      std::back_inserter(hand_card_ids));
 
             for (auto card_id : hand_card_ids)
             {
@@ -31,10 +31,9 @@ namespace dandan::effects
         }
 
         auto graveyard_ids{std::vector<core::CardID>{}};
-        for (const auto &card_id : game.graveyard().getCards())
-        {
-            graveyard_ids.emplace_back(card_id);
-        }
+        std::copy(game.graveyard().getCards().begin(),
+                  game.graveyard().getCards().end(),
+                  std::back_inserter(graveyard_ids));
 
         for (auto card_id : graveyard_ids)
         {

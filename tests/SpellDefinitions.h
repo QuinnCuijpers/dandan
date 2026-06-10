@@ -7,6 +7,7 @@
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
 #include "dandan/effects/one_shot/TimeTwisterEffect.h"
+#include "dandan/effects/one_shot/TutorTopEffect.h"
 #include "dandan/numbers/GraveyardCount.h"
 #include <memory>
 #include <vector>
@@ -29,7 +30,7 @@ Brainstorm_Abilities()
     return abilities;
 }
 
-std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Accumulated_Knowledge_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
@@ -50,7 +51,7 @@ Accumulated_Knowledge_Abilities()
     return abilities;
 }
 
-std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Diminishing_Returns_Abilities()
 {
     static const int EXILE_AMOUNT = 10;
@@ -69,6 +70,25 @@ Diminishing_Returns_Abilities()
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::OptionalDrawEffectDefinition>(
             DRAW_AMOUNT, true));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Mystical_Tutor_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::TutorTopEffectDefinition>(
+            std::vector<dandan::CardData::Type>{
+                dandan::CardData::Type::Instant,
+                dandan::CardData::Type::Sorcery}));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));

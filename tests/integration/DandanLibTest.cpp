@@ -2,6 +2,7 @@
 #include "common.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
+#include "dandan/core/CardID.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
@@ -837,4 +838,72 @@ TEST(DandanLibTest, DiminishingReturnsTest)
 
     EXPECT_EQ(game.activePlayer().hand().getCards().size(), DESIRED_HAND_1);
     EXPECT_EQ(game.nonActivePlayer().hand().getCards().size(), DESIRED_HAND_2);
+}
+
+TEST(DandanLibTest, MysticalTutorTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_ISLANDS{6};
+    static constexpr int NUM_TUTORS{35};
+
+    auto svyenulite_abilities{::Island_Abilities()};
+    auto mystical_tutor_abilities{::Mystical_Tutor_Abilities()};
+
+    auto svyenulite_temple_data{dandan::core::CardData{
+        "Svyelunite Temple", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land,
+        dandan::core::CardData::SubType::None,
+        std::move(svyenulite_abilities)}};
+
+    auto mystical_tutor_data{dandan::core::CardData{
+        "Mystical Tutor", std::make_unique<dandan::mana::BlueMana>(1),
+        dandan::core::CardData::Type::Instant,
+        dandan::core::CardData::SubType::None,
+        std::move(mystical_tutor_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &svyenulite_temple_data)};
+    auto mystical_tutor_cards{
+        createTestCards(NUM_TUTORS, &mystical_tutor_data)};
+    cards.insert(cards.end(), mystical_tutor_cards.begin(),
+                 mystical_tutor_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+
+    static const dandan::core::CardID CHOSEN_CARD_ID{
+        game.library().getCards().back()};
+
+    std::stringstream stream{};
+
+    auto island_id_1{game.activePlayer().hand().getCards()[0]};
+
+    auto mystical_tutor_id{
+        *std::find_if(game.activePlayer().hand().getCards().begin(),
+                      game.activePlayer().hand().getCards().end(),
+                      [&game](const auto &card_id)
+                      {
+                          const auto *card = game.getCardByID(card_id);
+                          return card != nullptr &&
+                                 card->getData().getName() == "Mystical Tutor";
+                      })};
+
+    // turn 1 player 1
+    stream << "play " << island_id_1.getID() << '\n'; // play land
+    stream << "activate " << island_id_1.getID()
+           << '\n'; // activate land for mana
+    stream << "play " << mystical_tutor_id.getID()
+           << '\n';                           // play mystical tutor
+    stream << CHOSEN_CARD_ID.getID() << '\n'; // choose the card
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    EXPECT_EQ(game.activePlayer().hand().getCards().back().getID(),
+              CHOSEN_CARD_ID.getID());
 }

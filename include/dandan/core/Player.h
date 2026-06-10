@@ -191,7 +191,7 @@ namespace dandan::core
          * @param card The card to discard.
          * @param game The game instance.
          */
-        void discardCard(Card &card, Game &game)
+        void discardCard(const Card &card, Game &game)
         {
             std::cout << "Player is discarding card "
                       << card.getData().getName() << '\n';

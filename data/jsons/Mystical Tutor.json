@@ -1,0 +1,23 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "TutorTopEffect",
+                        "data": {
+                            "filter_types": [
+                                "Instant",
+                                "Sorcery"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Mystical Tutor",
+    "type": "Instant",
+    "cost": "U"
+}

@@ -346,7 +346,7 @@ namespace dandan::core
                 {
                     std::cout << card->getData().getName() << "("
                               << "CardID: " << card->getID().getID() << ", ";
-                    std::cout << "Zone: " << card->getZone() << ")";
+                    std::cout << "Zone: " << card->getZone() << ") ";
                 }
             }
             std::cout << "]\n";
