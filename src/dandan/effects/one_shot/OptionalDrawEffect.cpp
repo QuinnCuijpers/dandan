@@ -11,7 +11,7 @@ namespace dandan::effects
         if (m_each_player)
         {
             // TODO: need to have draweffect take a player
-            for (auto &player : game.getPlayers())
+            for (const auto &player : game.getPlayers())
             {
                 std::cout << player.getName()
                           << ", how many cards do you want to draw (0-"

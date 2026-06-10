@@ -11,12 +11,12 @@ namespace dandan::effects
     {
     public:
         EffectContext() = default;
-        EffectContext(core::CardID card_id)
+        explicit EffectContext(core::CardID card_id)
             : EffectContext(card_id, std::nullopt)
         {
         }
 
-        EffectContext(core::PlayerID player_id)
+        explicit EffectContext(core::PlayerID player_id)
             : EffectContext(std::nullopt, player_id)
         {
         }
@@ -35,8 +35,9 @@ namespace dandan::effects
         std::optional<core::CardID> m_card_id;
         std::optional<core::PlayerID> m_player_id;
 
-        EffectContext(std::optional<core::CardID> card_id = std::nullopt,
-                      std::optional<core::PlayerID> player = std::nullopt)
+        explicit EffectContext(
+            std::optional<core::CardID> card_id = std::nullopt,
+            std::optional<core::PlayerID> player = std::nullopt)
             : m_card_id(card_id), m_player_id(player)
         {
         }

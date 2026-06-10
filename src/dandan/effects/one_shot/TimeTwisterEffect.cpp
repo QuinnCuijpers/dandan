@@ -10,7 +10,7 @@ namespace dandan::effects
     {
         for (auto &player : game.getPlayers())
         {
-            auto hand_cards{player.hand().getCards()};
+            const auto &hand_cards{player.hand().getCards()};
 
             for (auto card_id : hand_cards)
             {
@@ -21,7 +21,7 @@ namespace dandan::effects
             }
         }
 
-        auto graveyard{game.graveyard().getCards()};
+        const auto &graveyard{game.graveyard().getCards()};
         for (auto card_id : graveyard)
         {
             auto *card{game.getCardByID(card_id)};

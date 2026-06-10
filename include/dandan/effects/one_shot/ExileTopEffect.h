@@ -43,7 +43,7 @@ namespace dandan::effects
             return std::make_unique<ExileTopEffectDefinition>(m_amount);
         }
 
-        ExileTopEffectDefinition(int amount) : m_amount(amount)
+        explicit ExileTopEffectDefinition(int amount) : m_amount(amount)
         {
         }
 

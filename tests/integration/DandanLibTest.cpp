@@ -603,3 +603,111 @@ TEST(DandanLibTest, BrainstormTest)
     EXPECT_EQ(card_2->getZone(), dandan::core::Zone::BATTLEFIELD);
     EXPECT_EQ(card_2->getControllerID(), game.nonActivePlayer().getID());
 }
+
+TEST(DandanLibTest, AccumulatedKnowledgeTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_ISLANDS{6};
+    static constexpr int NUM_BRAINSTORMS{14};
+
+    auto svyenulite_abilities{Svyelunite_Temple_Abilities()};
+    auto accumulated_knowledge_abilities{Accumulated_Knowledge_Abilities()};
+
+    auto svyenulite_temple_data{dandan::core::CardData{
+        "Svyelunite Temple", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land,
+        dandan::core::CardData::SubType::None,
+        std::move(svyenulite_abilities)}};
+
+    auto accumulated_knowledge_data{dandan::core::CardData{
+        "Accumulated Knowledge", std::make_unique<dandan::mana::BlueMana>(1),
+        dandan::core::CardData::Type::Instant,
+        dandan::core::CardData::SubType::None,
+        std::move(accumulated_knowledge_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &svyenulite_temple_data)};
+    auto accumulated_knowledge_cards{
+        createTestCards(NUM_BRAINSTORMS, &accumulated_knowledge_data)};
+    cards.insert(cards.end(), accumulated_knowledge_cards.begin(),
+                 accumulated_knowledge_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+
+    std::stringstream stream{};
+
+    auto svyenulite_id_1{game.activePlayer().hand().getCards()[0]};
+    auto svyenulite_id_2{game.nonActivePlayer().hand().getCards()[0]};
+
+    auto accumulated_knowledge_id_1{
+        std::find_if(game.activePlayer().hand().getCards().begin(),
+                     game.activePlayer().hand().getCards().end(),
+                     [&game](const auto &card_id)
+                     {
+                         const auto *card = game.getCardByID(card_id);
+                         return card != nullptr && card->getData().getName() ==
+                                                       "Accumulated Knowledge";
+                     })};
+    auto accumulated_knowledge_id_2{
+        std::find_if(game.nonActivePlayer().hand().getCards().begin(),
+                     game.nonActivePlayer().hand().getCards().end(),
+                     [&game](const auto &card_id)
+                     {
+                         const auto *card = game.getCardByID(card_id);
+                         return card != nullptr && card->getData().getName() ==
+                                                       "Accumulated Knowledge";
+                     })};
+
+    // turn 1 player 1
+    stream << "play " << svyenulite_id_1.getID() << '\n'; // play island
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "play " << svyenulite_id_2.getID() << '\n';
+    stream << "pass\n";
+
+    // turn 2 player 1
+    stream << "activate " << svyenulite_id_1.getID()
+           << '\n';  // activate land for mana
+    stream << "1\n"; // option 1
+    stream << "play " << accumulated_knowledge_id_1->getID() << '\n';
+    stream << "pass\n";
+
+    // turn 2 player 2
+    stream << "activate " << svyenulite_id_2.getID()
+           << '\n';  // activate land for mana
+    stream << "1\n"; // option 1
+    stream << "play " << accumulated_knowledge_id_2->getID() << '\n';
+    stream << "pass\n";
+    // discard down to hand size
+    stream << game.nonActivePlayer().hand().getCards()[1].getID() << '\n';
+    stream << game.nonActivePlayer().hand().getCards()[2].getID() << '\n';
+
+    // Turn 3 player 1
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    EXPECT_EQ(game.activePlayer().hand().getCards().size(), STARTING_HAND_SIZE);
+    EXPECT_EQ(game.nonActivePlayer().hand().getCards().size(),
+              STARTING_HAND_SIZE);
+
+    auto *svyenulite_1{game.getCardByID(svyenulite_id_1.getID())};
+    auto *svyenulite_2{game.getCardByID(svyenulite_id_2.getID())};
+
+    EXPECT_EQ(svyenulite_1->getZone(), dandan::core::Zone::GRAVEYARD);
+    EXPECT_EQ(svyenulite_2->getZone(), dandan::core::Zone::GRAVEYARD);
+
+    auto *accumulated_knowledge_1{
+        game.getCardByID(accumulated_knowledge_id_1->getID())};
+    auto *accumulated_knowledge_2{
+        game.getCardByID(accumulated_knowledge_id_2->getID())};
+
+    EXPECT_EQ(accumulated_knowledge_1->getZone(),
+              dandan::core::Zone::GRAVEYARD);
+    EXPECT_EQ(accumulated_knowledge_2->getZone(),
+              dandan::core::Zone::GRAVEYARD);
+}

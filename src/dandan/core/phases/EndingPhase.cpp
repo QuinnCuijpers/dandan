@@ -43,7 +43,8 @@ namespace dandan::core
                         std::string input;
                         std::getline(game().istream(), input);
                         int card_id = std::stoi(input);
-                        auto *card{game().getCardByID(card_id)};
+                        auto *card =
+                            game().getCardByID(CardID::fromInt(card_id));
                         game().activePlayer().discardCard(*card, game());
                     }
                     catch (const std::exception &e)

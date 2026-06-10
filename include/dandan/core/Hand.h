@@ -68,8 +68,12 @@ namespace dandan::core
                                      { return card_id == other; });
             if (iter != m_cards.end())
             {
+                std::cout << "Removing card:" << card.getData().getName()
+                          << '\n';
                 m_cards.erase(iter);
             }
+            std::cout << "Couldn't find card " << card.getData().getName()
+                      << " in hand to remove\n";
         }
 
         /** Adds a card to the hand.
@@ -96,10 +100,10 @@ namespace dandan::core
         }
 
         /** Discards a card from the hand.
-         * @param card The card to discard.
+         * @param card_id The ID of the card to discard.
          * @param game The game instance.
          */
-        void discardCard(Card &card, Game &game);
+        void discardCard(CardID card_id, Game &game);
 
     private:
         std::vector<CardID> m_cards;

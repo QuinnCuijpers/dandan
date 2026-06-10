@@ -3,10 +3,11 @@
 
 namespace dandan::core
 {
-    void Hand::discardCard(Card &card, Game &game)
+    void Hand::discardCard(CardID card_id, Game &game)
     {
-        std::cout << "Discarding card " << card.getData().getName() << '\n';
-        game.graveyard().addCard(card);
-        removeCard(card);
+        auto *card = game.getCardByID(card_id);
+        std::cout << "Discarding card " << card->getData().getName() << '\n';
+        removeCard(*card);
+        game.graveyard().addCard(*card);
     }
 } // namespace dandan::core

@@ -195,7 +195,7 @@ namespace dandan::core
         {
             std::cout << "Player is discarding card "
                       << card.getData().getName() << '\n';
-            m_hand.discardCard(card, game);
+            m_hand.discardCard(card.getID(), game);
         }
 
         /** Takes damage
