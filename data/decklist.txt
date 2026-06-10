@@ -5,7 +5,7 @@
 2 Brainstorm [x]
 2 Crystal Spray
 2 Dance of the Skywise
-2 Diminishing Returns []
+2 Diminishing Returns [x]
 2 Metamorphose
 2 Mind Bend
 2 Mystical Tutor
@@ -20,6 +20,6 @@
 2 Izzet Boilerworks [x]
 2 Lonely Sandbar [x]
 2 Remote Isle [x]
-2 Svyelunite Temple []
+2 Svyelunite Temple [x]
 2 Temple of Epiphany [x]
 20 Island  [x]

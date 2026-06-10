@@ -369,12 +369,11 @@ TEST(DandanLibTest, ManaAbilities)
         {"Temple of Epiphany", 1},
         {"Svyelunite Temple", 1}};
 
-    auto game{dandan::Game::withCards(std::move(lands))};
+    auto padded{createTestCards(2 * TEST_DECK_SIZE)};
+    lands.insert(lands.end(), padded.begin(), padded.end());
 
-    // add n copies of a land to each players battlefield where n is the
-    // amount
-    // of options for the player to choose from when activating mana
-    // abilities
+    auto game{dandan::Game::withCards(std::move(lands), false)};
+
     for (auto &player : game.getPlayers())
     {
         for (const auto &land : player.hand().getCards())
@@ -387,17 +386,30 @@ TEST(DandanLibTest, ManaAbilities)
 
     std::stringstream stream{};
 
-    for (auto &player : game.getPlayers())
+    // starting player
+    for (const auto &permanent : game.activePlayer().battlefield().getLands())
     {
-        for (const auto &permanent : player.battlefield().getLands())
+        auto *card{game.getCardByID(permanent)};
+        stream << "activate " << card->getID().getID() << '\n';
+        if (requires_option[std::string(card->getData().getName())])
         {
-            auto *card{game.getCardByID(permanent)};
-            stream << "activate " << card->getID().getID() << '\n';
-            if (requires_option[std::string(card->getData().getName())])
-            {
-                stream << desired_option[std::string(card->getData().getName())]
-                       << '\n';
-            }
+            stream << desired_option[std::string(card->getData().getName())]
+                   << '\n';
+        }
+    }
+
+    stream << "pass\n";
+
+    // non active player
+    for (const auto &permanent :
+         game.nonActivePlayer().battlefield().getLands())
+    {
+        auto *card{game.getCardByID(permanent)};
+        stream << "activate " << card->getID().getID() << '\n';
+        if (requires_option[std::string(card->getData().getName())])
+        {
+            stream << desired_option[std::string(card->getData().getName())]
+                   << '\n';
         }
     }
     stream << "quit\n";
