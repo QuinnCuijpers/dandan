@@ -16,7 +16,10 @@ target_sources(
           TimeTwisterEffect.cpp
           ExileTopEffect.cpp
           OptionalDrawEffect.cpp
-          TutorTopEffect.cpp)
+          TutorTopEffect.cpp
+          ChangeLandTypeEffect.cpp
+          MillEffect.cpp
+          ModalEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

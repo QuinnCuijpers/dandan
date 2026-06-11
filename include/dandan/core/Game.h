@@ -19,6 +19,7 @@
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <filesystem>
 #include <istream>
 #include <memory>
@@ -52,6 +53,17 @@ namespace dandan::core
          * @return The constructed game instance.
          */
         static Game withCards(std::vector<Card> cards, bool shuffle = true);
+
+        [[nodiscard]] std::vector<CardID> cards() const
+        {
+            std::vector<CardID> card_ids;
+            card_ids.reserve(m_cards.size());
+            for (const auto &card : m_cards)
+            {
+                card_ids.push_back(card.getID());
+            }
+            return card_ids;
+        }
 
         /** Gets a player from the game accosiated with the given ID immutably.
          * @param player_id The ID of the player to get.
@@ -281,6 +293,20 @@ namespace dandan::core
             return m_condition_manager;
         }
 
+        void addEndOfTurnEffect(std::unique_ptr<effects::IOneShotEffect> effect)
+        {
+            m_end_of_turn_effects.push_back(std::move(effect));
+        }
+
+        void applyEndOfTurnEffects()
+        {
+            for (auto &effect : m_end_of_turn_effects)
+            {
+                effect->apply(*this);
+            }
+            m_end_of_turn_effects.clear();
+        }
+
         /** Gets the input stream mutably.
          * @return A reference to the input stream.
          */
@@ -346,7 +372,10 @@ namespace dandan::core
                 {
                     std::cout << card->getData().getName() << "("
                               << "CardID: " << card->getID().getID() << ", ";
-                    std::cout << "Zone: " << card->getZone() << ") ";
+                    std::cout
+                        << "SubType: "
+                        << CardData::SubTypeToString(card->getCurrentSubType())
+                        << ") ";
                 }
             }
             std::cout << "]\n";
@@ -441,6 +470,9 @@ namespace dandan::core
         PriorityManager m_priority_manager{m_players.at(0).getID()};
         ConditionManager m_condition_manager;
         SBAManager m_sba_manager;
+
+        std::vector<std::unique_ptr<effects::IOneShotEffect>>
+            m_end_of_turn_effects;
 
         std::unique_ptr<IPhase> m_phase;
         std::istream *m_input{&std::cin};

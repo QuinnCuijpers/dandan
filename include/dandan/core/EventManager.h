@@ -22,6 +22,8 @@ namespace dandan::core
          */
         void subscribe(const Card &card);
 
+        void subscribe(abilities::EventTriggeredAbility &ability);
+
         /** Unsubscribes a card from the event manager.
          * @param card The card to unsubscribe.
          */

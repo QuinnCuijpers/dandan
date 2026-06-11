@@ -5,6 +5,8 @@
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Zone.h"
+#include "dandan/effects/one_shot/ModalEffect.h"
+#include <unordered_map>
 
 #ifdef DANDAN_SERIALIZE
 #include <string_view>
@@ -190,6 +192,16 @@ namespace dandan::core
             return m_marked_damage;
         }
 
+        [[nodiscard]] CardData::SubType getCurrentSubType() const
+        {
+            return m_current_subtype;
+        }
+
+        void setCurrentSubType(CardData::SubType subtype)
+        {
+            m_current_subtype = subtype;
+        }
+
         // TODO: should generate a damage event
         /** Take damage.
          * @param damage The damage to take.
@@ -222,6 +234,24 @@ namespace dandan::core
             m_marked_damage = 0;
         }
 
+        void addModalChoice(const effects::ModalEffectDefinition &modal_effect,
+                            int choice)
+        {
+            m_modal_choices[&modal_effect] = choice;
+        }
+
+        int getModalChoice(
+            const effects::ModalEffectDefinition &modal_effect) const
+        {
+            auto iter = m_modal_choices.find(&modal_effect);
+            if (iter == m_modal_choices.end())
+            {
+                throw std::runtime_error(
+                    "No modal choice found for the given modal effect");
+            }
+            return iter->second;
+        }
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.
@@ -248,6 +278,10 @@ namespace dandan::core
     private:
         CardID m_card_id;
         PlayerID m_controller_id;
+
+        std::unordered_map<const effects::ModalEffectDefinition *, int>
+            m_modal_choices;
+
         bool m_tapped{false};
         Zone m_zone{Zone::LIBRARY};
 
@@ -259,6 +293,7 @@ namespace dandan::core
         int m_current_power{};
         int m_current_toughness{};
         int m_marked_damage{};
+        CardData::SubType m_current_subtype{};
 
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each

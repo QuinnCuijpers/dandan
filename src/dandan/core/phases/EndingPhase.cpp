@@ -53,6 +53,17 @@ namespace dandan::core
                     }
                 }
             }
+
+            // 514.2. Second, the following actions happen
+            // simultaneously: all damage marked on permanents
+            // (including phased-out permanents) is removed and all “until end
+            // of turn” and “this turn” effects end. This turn-based action
+            // doesn’t use the stack.
+
+            // FIXME: currently we are planning to store the undo effects to
+            // apply here, but technically these are effects that should stop
+            // applying
+            game().applyEndOfTurnEffects();
             m_step = Step::Done;
             break;
         case Step::Done:

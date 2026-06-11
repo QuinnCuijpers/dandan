@@ -12,7 +12,8 @@ namespace dandan::abilities
                      [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving triggered ability\n";
-        return m_effect->bind(effects::EffectContext(context.controller_id));
+        return m_effect->bind(game,
+                              effects::EffectContext(context.controller_id));
     }
 
 } // namespace dandan::abilities

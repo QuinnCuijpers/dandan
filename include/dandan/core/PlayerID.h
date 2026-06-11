@@ -52,6 +52,16 @@ namespace dandan::core
             return m_id;
         }
 
+        PlayerID static fromInt(int player_id)
+        {
+            if (player_id < -1 || player_id >= AMOUNT_PLAYERS)
+            {
+                throw std::runtime_error("Invalid integer for PlayerID: " +
+                                         std::to_string(player_id));
+            }
+            return PlayerID{player_id};
+        }
+
         /** Checks if two PlayerIDs are equal.
          * @param other The other PlayerID to compare with.
          * @return True if the PlayerIDs are equal, false otherwise.

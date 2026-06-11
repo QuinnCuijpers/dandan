@@ -19,6 +19,11 @@ namespace dandan::core
         }
     }
 
+    void EventManager::subscribe(abilities::EventTriggeredAbility &ability)
+    {
+        m_subscribers[CardID::getInvalidID()].push_back(&ability);
+    }
+
     void EventManager::unsubscribe(const Card &card)
     {
         m_subscribers.erase(card.getID());

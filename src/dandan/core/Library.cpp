@@ -1,5 +1,6 @@
 #include "dandan/core/Library.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/Game.h"
 #include <iostream>
 #include <vector>
 
@@ -38,5 +39,15 @@ namespace dandan::core
             peeked_cards.push_back(card_id);
         }
         return peeked_cards;
+    }
+
+    void Library::mill(core::Game &game, int count)
+    {
+        for (int i = 0; i < count && !m_cards.empty(); ++i)
+        {
+            CardID milled_card = m_cards.front();
+            m_cards.pop_front();
+            game.graveyard().addCard(*game.getCardByID(milled_card));
+        }
     }
 } // namespace dandan::core

@@ -8,7 +8,6 @@
 
 namespace dandan::core
 {
-
     std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect(
         core::Game &game)
     {
@@ -80,6 +79,7 @@ namespace dandan::core
                     card->getID(), state_triggered_ability);
             }
         }
+
         // lands dont use the stack and thus immediately enter
         switch (data.getType())
         {

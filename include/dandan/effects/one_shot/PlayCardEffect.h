@@ -1,10 +1,13 @@
 #ifndef DANDAN_PLAYCARDEFFECT_H
 #define DANDAN_PLAYCARDEFFECT_H
 
+#include "dandan/abilities/SpellAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/events/IEvent.h"
+#include <algorithm>
 #include <iostream>
 #include <memory>
 
@@ -47,8 +50,58 @@ namespace dandan::effects
                     std::string{m_card.getData().getName()});
             }
 
-            // TODO: choose targets here if the card is an instant or sorcery
-            // with targets
+            auto *cardp = game.getCardByID(m_card.getID());
+            if (cardp->getData().getType() == core::CardData::Type::Instant ||
+                cardp->getData().getType() == core::CardData::Type::Sorcery)
+            {
+                auto spell_ability_it{std::find_if(
+                    cardp->getData().getAbilities().begin(),
+                    cardp->getData().getAbilities().end(),
+                    [](const auto &ability)
+                    {
+                        return dynamic_cast<const abilities::SpellAbility *>(
+                                   ability.get()) != nullptr;
+                    })};
+
+                if (spell_ability_it == cardp->getData().getAbilities().end())
+                {
+                    throw std::runtime_error(
+                        "Instant or sorcery card does not have a spell "
+                        "ability");
+                }
+                const auto &spell_ability =
+                    dynamic_cast<const abilities::SpellAbility *>(
+                        spell_ability_it->get());
+                for (const auto &effect : spell_ability->effects())
+                {
+                    if (const auto *modal_effect =
+                            dynamic_cast<const ModalEffectDefinition *>(
+                                effect.get()))
+                    // choose mode
+                    {
+                        std::cout << modal_effect->display();
+                        std::cout << "Choose an option (0-"
+                                  << modal_effect->getOptions().size() - 1
+                                  << "): ";
+                        std::string input;
+                        std::getline(game.istream(), input);
+                        int choice = std::stoi(input);
+                        if (choice < 0 ||
+                            choice >= static_cast<int>(
+                                          modal_effect->getOptions().size()))
+                        {
+                            throw std::runtime_error(
+                                "Invalid choice for modal effect");
+                        }
+                        cardp->addModalChoice(*modal_effect, choice);
+
+                        // choose targets
+                        // if (effect.requiresTargets())
+                        // {
+                        // }
+                    }
+                }
+            }
 
             game.moveCardFromZone(game.getPlayer(m_card.getControllerID()),
                                   m_card);

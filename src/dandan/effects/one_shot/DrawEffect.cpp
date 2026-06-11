@@ -2,7 +2,7 @@
 #include "dandan/numbers/ExactNumber.h"
 
 #include "dandan/core/Game.h"
-#include "dandan/util.h"
+#include "dandan/utils/convertToWords.h"
 #include <iostream>
 
 namespace dandan::effects
@@ -51,7 +51,7 @@ namespace dandan::effects
             auto draw_definition{std::make_unique<DrawEffectDefinition>(1)};
             auto &player{game.getPlayer(m_context.player().value())};
             auto draw_effect{
-                draw_definition->bind(EffectContext{player.getID()})};
+                draw_definition->bind(game, EffectContext{player.getID()})};
 
             // breaking effect up doesnt require checking replacement effects as
             // all underlying effects are checked

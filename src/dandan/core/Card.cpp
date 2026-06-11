@@ -23,6 +23,7 @@ namespace dandan::core
                 setCurrentPower(stats->power);
                 setCurrentToughness(stats->toughness);
             }
+            setCurrentSubType(m_card_data->getSubType());
         }
     }
 #endif
@@ -41,6 +42,7 @@ namespace dandan::core
                 setCurrentPower(stats->power);
                 setCurrentToughness(stats->toughness);
             }
+            setCurrentSubType(m_card_data->getSubType());
         }
     }
 

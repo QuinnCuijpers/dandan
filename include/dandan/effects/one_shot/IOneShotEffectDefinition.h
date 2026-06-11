@@ -21,7 +21,7 @@ namespace dandan::effects
         virtual ~IOneShotEffectDefinition() = default;
 
         [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> bind(
-            EffectContext context) const = 0;
+            core::Game &game, EffectContext context) const = 0;
 
         [[nodiscard]] virtual std::string display() const
         {

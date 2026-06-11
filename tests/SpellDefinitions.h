@@ -3,7 +3,11 @@
 
 #include "dandan/abilities/IAbility.h"
 #include "dandan/dandan.h"
+#include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/effects/one_shot/ExileTopEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
+#include "dandan/effects/one_shot/MillEffect.h"
+#include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
 #include "dandan/effects/one_shot/TimeTwisterEffect.h"
@@ -92,6 +96,31 @@ Mystical_Tutor_Abilities()
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Vision_Charm_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto options{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+    options.emplace_back(
+        std::make_unique<dandan::effects::MillEffectDefinition>(4));
+    options.emplace_back(
+        std::make_unique<dandan::effects::ChangeLandTypeEffectDefinition>());
+
+    auto modal_effect{std::make_unique<dandan::effects::ModalEffectDefinition>(
+        std::move(options))};
+
+    auto spell_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+    spell_effects.emplace_back(std::move(modal_effect));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(spell_effects)));
 
     return abilities;
 }

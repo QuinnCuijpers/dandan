@@ -7,7 +7,7 @@
 #include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
-#include "dandan/overloadVisitor.h"
+#include "dandan/utils/overloadVisitor.h"
 #include <memory>
 
 namespace dandan::core
@@ -26,7 +26,7 @@ namespace dandan::core
         bool resolvingSpell{false};
 
         auto effect{std::visit(
-            overloaded{
+            utils::overloaded{
                 [&game, &resolvingSpell](
                     CardID card_id) -> std::unique_ptr<effects::IOneShotEffect>
                 {
@@ -82,7 +82,8 @@ namespace dandan::core
         // move card to graveyard if it was a spell
         if (resolvingSpell)
         {
-            std::visit(overloaded{[&game](CardID card_id)
+            std::visit(
+                utils::overloaded{[&game](CardID card_id)
                                   {
                                       auto *card{game.getCardByID(card_id)};
                                       game.moveCardFromZone(game.activePlayer(),
@@ -90,7 +91,7 @@ namespace dandan::core
                                       game.graveyard().addCard(*card);
                                   },
                                   [](const abilities::BoundAbility &) {}},
-                       object);
+                object);
         }
     }
 } // namespace dandan::core

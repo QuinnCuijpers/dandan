@@ -43,7 +43,8 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] EffectContext context) const override
+            [[maybe_unused]] core::Game &game,
+            EffectContext context) const override
         {
             return std::make_unique<BounceLandEffect>(context.player().value());
         }

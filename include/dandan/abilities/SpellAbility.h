@@ -43,6 +43,7 @@ namespace dandan::abilities
     private:
         std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
             m_effects;
+        std::optional<size_t> m_chosen_effect_index;
     };
 } // namespace dandan::abilities
 

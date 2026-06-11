@@ -1,0 +1,31 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "ModalEffect",
+                        "data": {
+                            "options": [
+                                {
+                                    "type": "MillEffect",
+                                    "data": {
+                                        "amount": 4
+                                    }
+                                },
+                                {
+                                    "type": "ChangeLandTypeEffect",
+                                    "data": {}
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Vision Charm",
+    "type": "Instant",
+    "cost": "U"
+}

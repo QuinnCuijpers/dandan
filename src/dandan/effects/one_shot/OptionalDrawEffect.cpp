@@ -26,7 +26,7 @@ namespace dandan::effects
 
                 auto def{dandan::effects::DrawEffectDefinition(draw_amount)};
                 auto context{EffectContext{player.getID()}};
-                auto effect{def.bind(context)};
+                auto effect{def.bind(game, context)};
                 effect->apply(game);
 
                 current_player_id = game.getNextPlayerID(current_player_id);

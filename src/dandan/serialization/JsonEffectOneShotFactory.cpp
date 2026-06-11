@@ -1,8 +1,11 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
 #ifdef DANDAN_SERIALIZE
 #include "dandan/effects/one_shot/BounceLandEffect.h"
+#include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
 #include "dandan/effects/one_shot/ExileTopEffect.h"
+#include "dandan/effects/one_shot/MillEffect.h"
+#include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PeekEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
@@ -21,6 +24,18 @@ namespace dandan::serialization
         const effects::IOneShotEffectDefinition *effect)
     {
 
+        if (const auto *ModalEffect =
+                dynamic_cast<const effects::ModalEffectDefinition *>(effect))
+        {
+            auto json = nlohmann::json{{"type", "ModalEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["options"] = nlohmann::json::array();
+            for (const auto &option : ModalEffect->getOptions())
+            {
+                json["data"]["options"].push_back(create_json(option.get()));
+            }
+            return json;
+        }
         if (const auto *scryEffect =
                 dynamic_cast<const effects::ScryEffectDefinition *>(effect))
         {
@@ -121,6 +136,23 @@ namespace dandan::serialization
             return json;
         }
 
+        if (const auto *millEffect =
+                dynamic_cast<const effects::MillEffectDefinition *>(effect))
+        {
+            auto json = nlohmann::json{{"type", "MillEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["amount"] = millEffect->getAmount();
+            return json;
+        }
+
+        if (dynamic_cast<const effects::ChangeLandTypeEffectDefinition *>(
+                effect) != nullptr)
+        {
+            auto json = nlohmann::json{{"type", "ChangeLandTypeEffect"},
+                                       {"data", nlohmann::json::object()}};
+            return json;
+        }
+
         throw std::runtime_error(
             "Unknown effect type for JSON serialization: " +
             std::string(typeid(*effect).name()));
@@ -133,6 +165,26 @@ namespace dandan::serialization
         const auto &type = json.at("type").get<std::string>();
         const auto &data = json.at("data");
 
+        if (type == "ModalEffect")
+        {
+            std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
+                options;
+            for (const auto &option_json : data.at("options"))
+            {
+                options.push_back(create_product(option_json));
+            }
+            return std::make_unique<effects::ModalEffectDefinition>(
+                std::move(options));
+        }
+        if (type == "ChangeLandTypeEffect")
+        {
+            return std::make_unique<effects::ChangeLandTypeEffectDefinition>();
+        }
+        if (type == "MillEffect")
+        {
+            return std::make_unique<effects::MillEffectDefinition>(
+                data.at("amount").get<int>());
+        }
         if (type == "ScryEffect")
         {
             return std::make_unique<effects::ScryEffectDefinition>(

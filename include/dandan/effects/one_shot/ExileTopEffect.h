@@ -1,6 +1,7 @@
 #ifndef DANDAN_EXILETOPEFFECT_H
 #define DANDAN_EXILETOPEFFECT_H
 
+#include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 
@@ -31,6 +32,7 @@ namespace dandan::effects
     {
     public:
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
+            [[maybe_unused]] core::Game &game,
             EffectContext context) const override
         {
             return std::make_unique<ExileTopEffect>(m_amount,
