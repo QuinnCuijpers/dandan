@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "ReplacementManager.h"
 #include "Stack.h"
+#include "Target.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/ConditionManager.h"
@@ -12,6 +13,7 @@
 #include "dandan/core/Exile.h"
 #include "dandan/core/Graveyard.h"
 #include "dandan/core/Library.h"
+#include "dandan/core/PlayerID.h"
 #include "dandan/core/PreventionManager.h"
 #include "dandan/core/PriorityManager.h"
 #include "dandan/core/SBAManager.h"
@@ -455,6 +457,32 @@ namespace dandan::core
          * @param player The player who is quitting the game.
          */
         void quit(const Player &player);
+
+        std::vector<core::Target> getValidTargets(core::TargetType type) const
+        {
+            switch (type)
+            {
+            case TargetType::Player:
+            {
+                const auto &players = getPlayers();
+                std::vector<Target> targets;
+                std::transform(players.begin(), players.end(),
+                               std::back_inserter(targets),
+                               [](const Player &player) -> Target
+                               { return player.getID(); });
+                return targets;
+            }
+            case TargetType::Creature:
+            case TargetType::Land:
+            case TargetType::Planeswalker:
+            case TargetType::Card:
+            case TargetType::Any:
+            default:
+                throw std::runtime_error("getValidTargets for type " +
+                                         targetTypeToString(type) +
+                                         " is not implemented yet");
+            }
+        }
 
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{

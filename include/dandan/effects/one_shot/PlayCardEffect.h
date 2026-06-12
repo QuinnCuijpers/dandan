@@ -95,10 +95,37 @@ namespace dandan::effects
                         }
                         cardp->addModalChoice(*modal_effect, choice);
 
-                        // choose targets
-                        // if (effect.requiresTargets())
-                        // {
-                        // }
+                        auto *chosen_effect{
+                            modal_effect->getOptions()[choice].get()};
+
+                        std::cout
+                            << "Chosen effect: " << chosen_effect->display()
+                            << '\n';
+                        if (const auto *targets =
+                                chosen_effect->getTargetRequirement())
+                        {
+                            auto choices = std::vector<core::Target>{};
+                            for (const auto &target_type :
+                                 targets->getTargetTypes())
+                            {
+                                auto valid_targets =
+                                    game.getValidTargets(target_type);
+                                for (size_t i = 0; i < valid_targets.size();
+                                     ++i)
+                                {
+                                    std::cout << i << ": " << valid_targets[i]
+                                              << '\n';
+                                }
+                                std::cout << "Choose a target " << target_type
+                                          << ": ";
+                                std::string target_input;
+                                std::getline(game.istream(), target_input);
+                                int target_choice = std::stoi(target_input);
+                                auto target{valid_targets.at(target_choice)};
+                                choices.push_back(target);
+                            }
+                            cardp->addTargetChoices(*chosen_effect, choices);
+                        }
                     }
                 }
             }

@@ -1,10 +1,12 @@
 #ifndef DANDAN_MILL_EFFECT_H
 #define DANDAN_MILL_EFFECT_H
 
-#include "dandan/core/Constants.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/PlayerID.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
@@ -32,7 +34,10 @@ namespace dandan::effects
     class MillEffectDefinition : public IOneShotEffectDefinition
     {
     public:
-        MillEffectDefinition(int amount) : m_amount(amount)
+        MillEffectDefinition(int amount,
+                             core::TargetRequirement target_requirement)
+            : m_amount(amount),
+              m_target_requirement(std::move(target_requirement))
         {
         }
 
@@ -40,25 +45,18 @@ namespace dandan::effects
             core::Game &game,
             [[maybe_unused]] EffectContext context) const override
         {
-            std::cout << "Which player do you want to mill? (0-"
-                      << core::AMOUNT_PLAYERS - 1 << "): ";
-            std::string input;
-            std::getline(game.istream(), input);
-            int player_choice = std::stoi(input);
-            if (player_choice < 0 ||
-                player_choice >= static_cast<int>(core::AMOUNT_PLAYERS))
-            {
-                throw std::runtime_error(
-                    "Invalid player choice for mill effect");
-            }
-            return std::make_unique<MillEffect>(
-                m_amount, core::PlayerID::fromInt(player_choice));
+            auto *card{game.getCardByID(context.card()->getID())};
+            auto choices{card->getTargetChoices(*this)};
+            auto choice{choices.at(0)};
+            auto player_choice{std::get<core::PlayerID>(choice)};
+            return std::make_unique<MillEffect>(m_amount, player_choice);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override
         {
-            return std::make_unique<MillEffectDefinition>(m_amount);
+            return std::make_unique<MillEffectDefinition>(m_amount,
+                                                          m_target_requirement);
         }
 
         [[nodiscard]] std::string display() const override;
@@ -68,8 +66,15 @@ namespace dandan::effects
             return m_amount;
         }
 
+        [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
+            const override
+        {
+            return &m_target_requirement;
+        }
+
     private:
         int m_amount;
+        core::TargetRequirement m_target_requirement;
     };
 } // namespace dandan::effects
 

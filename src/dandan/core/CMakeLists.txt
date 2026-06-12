@@ -25,7 +25,8 @@ target_sources(
           CardID.cpp
           SBAManager.cpp
           PriorityManager.cpp
-          Hand.cpp)
+          Hand.cpp
+          Target.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
                                  ${CMAKE_SOURCE_DIR}/include)

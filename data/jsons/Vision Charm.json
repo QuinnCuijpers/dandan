@@ -10,7 +10,12 @@
                                 {
                                     "type": "MillEffect",
                                     "data": {
-                                        "amount": 4
+                                        "amount": 4,
+                                        "targets": [
+                                            {
+                                                "type": "Player"
+                                            }
+                                        ]
                                     }
                                 },
                                 {

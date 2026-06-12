@@ -1,6 +1,7 @@
 #ifndef DANDAN_IONESHOTEFFECTDEFINITION_H
 #define DANDAN_IONESHOTEFFECTDEFINITION_H
 
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
@@ -30,6 +31,12 @@ namespace dandan::effects
 
         [[nodiscard]] virtual std::unique_ptr<IOneShotEffectDefinition> clone()
             const = 0;
+
+        [[nodiscard]] virtual const core::TargetRequirement *
+        getTargetRequirement() const
+        {
+            return nullptr;
+        }
     };
 } // namespace dandan::effects
 

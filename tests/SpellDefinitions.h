@@ -108,7 +108,9 @@ Vision_Charm_Abilities()
     auto options{std::vector<
         std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
     options.emplace_back(
-        std::make_unique<dandan::effects::MillEffectDefinition>(4));
+        std::make_unique<dandan::effects::MillEffectDefinition>(
+            4, dandan::core::TargetRequirement(
+                   {dandan::core::TargetType::Player})));
     options.emplace_back(
         std::make_unique<dandan::effects::ChangeLandTypeEffectDefinition>());
 

@@ -4,9 +4,13 @@
 #include "CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/core/Target.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/core/Zone.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
 #include <unordered_map>
+#include <vector>
 
 #ifdef DANDAN_SERIALIZE
 #include <string_view>
@@ -252,6 +256,24 @@ namespace dandan::core
             return iter->second;
         }
 
+        void addTargetChoices(const effects::IOneShotEffectDefinition &effect,
+                              std::vector<core::Target> targets)
+        {
+            m_target_choices[&effect] = std::move(targets);
+        }
+
+        const std::vector<core::Target> &getTargetChoices(
+            const effects::IOneShotEffectDefinition &effect) const
+        {
+            auto iter = m_target_choices.find(&effect);
+            if (iter == m_target_choices.end())
+            {
+                throw std::runtime_error(
+                    "No target choices found for the given target requirement");
+            }
+            return iter->second;
+        }
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.
@@ -281,6 +303,9 @@ namespace dandan::core
 
         std::unordered_map<const effects::ModalEffectDefinition *, int>
             m_modal_choices;
+        std::unordered_map<const effects::IOneShotEffectDefinition *,
+                           std::vector<core::Target>>
+            m_target_choices;
 
         bool m_tapped{false};
         Zone m_zone{Zone::LIBRARY};

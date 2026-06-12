@@ -23,12 +23,22 @@ namespace dandan::serialization
     nlohmann::json JsonFactory<effects::IOneShotEffectDefinition>::create_json(
         const effects::IOneShotEffectDefinition *effect)
     {
+        auto json = nlohmann::json::object();
+        json["data"] = nlohmann::json::object();
+
+        if (const auto *targets = effect->getTargetRequirement())
+        {
+            json["data"]["targets"] = nlohmann::json::array();
+            for (const auto &target_type : targets->getTargetTypes())
+            {
+                json["data"]["targets"].push_back({{"type", target_type}});
+            }
+        }
 
         if (const auto *ModalEffect =
                 dynamic_cast<const effects::ModalEffectDefinition *>(effect))
         {
-            auto json = nlohmann::json{{"type", "ModalEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "ModalEffect";
             json["data"]["options"] = nlohmann::json::array();
             for (const auto &option : ModalEffect->getOptions())
             {
@@ -39,24 +49,21 @@ namespace dandan::serialization
         if (const auto *scryEffect =
                 dynamic_cast<const effects::ScryEffectDefinition *>(effect))
         {
-            auto json = nlohmann::json{{"type", "ScryEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "ScryEffect";
             json["data"]["scry_amount"] = scryEffect->getScryAmount();
             return json;
         }
         if (const auto *peekEffect =
                 dynamic_cast<const effects::PeekEffectDefinition *>(effect))
         {
-            auto json = nlohmann::json{{"type", "PeekEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "PeekEffect";
             json["data"]["peek_amount"] = peekEffect->getPeekAmount();
             return json;
         }
         if (const auto *drawEffect =
                 dynamic_cast<const effects::DrawEffectDefinition *>(effect))
         {
-            auto json = nlohmann::json{{"type", "DrawEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "DrawEffect";
             auto *number{drawEffect->getNumber().get()};
             if (const auto *exactNumber =
                     dynamic_cast<const numbers::ExactNumber *>(number))
@@ -74,39 +81,34 @@ namespace dandan::serialization
                 dynamic_cast<const effects::BounceLandEffectDefinition *>(
                     effect))
         {
-            auto json = nlohmann::json{{"type", "BounceLandEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "BounceLandEffect";
             return json;
         }
         if (dynamic_cast<const effects::SelfSacrificeEffectDefinition *>(
                 effect) != nullptr)
         {
-            auto json = nlohmann::json{{"type", "SelfSacrificeEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "SelfSacrificeEffect";
             return json;
         }
         if (const auto *putCardOnTopEffect =
                 dynamic_cast<const effects::PutCardOnTopEffectDefinition *>(
                     effect))
         {
-            auto json = nlohmann::json{{"type", "PutCardOnTopEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "PutCardOnTopEffect";
             json["data"]["amount"] = putCardOnTopEffect->getAmount();
             return json;
         }
 
         if (dynamic_cast<const effects::TimeTwisterEffect *>(effect) != nullptr)
         {
-            auto json = nlohmann::json{{"type", "TimeTwisterEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "TimeTwisterEffect";
             return json;
         }
 
         if (const auto *exileTopEffect =
                 dynamic_cast<const effects::ExileTopEffectDefinition *>(effect))
         {
-            auto json = nlohmann::json{{"type", "ExileTopEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "ExileTopEffect";
             json["data"]["amount"] = exileTopEffect->getAmount();
             return json;
         }
@@ -115,9 +117,7 @@ namespace dandan::serialization
                 dynamic_cast<const effects::OptionalDrawEffectDefinition *>(
                     effect))
         {
-            auto json = nlohmann::json{{"type", "OptionalDrawEffect"},
-                                       {"data", nlohmann::json::object()}};
-
+            json["type"] = "OptionalDrawEffect";
             json["data"]["amount"] = optionalDrawEffect->getAmount();
             json["data"]["each_player"] = optionalDrawEffect->isEachPlayer();
             return json;
@@ -126,8 +126,7 @@ namespace dandan::serialization
         if (const auto *tutorTopEffect =
                 dynamic_cast<const effects::TutorTopEffectDefinition *>(effect))
         {
-            auto json = nlohmann::json{{"type", "TutorTopEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "TutorTopEffect";
             json["data"]["filter_types"] = nlohmann::json::array();
             for (auto type : tutorTopEffect->getFilterTypes())
             {
@@ -139,8 +138,7 @@ namespace dandan::serialization
         if (const auto *millEffect =
                 dynamic_cast<const effects::MillEffectDefinition *>(effect))
         {
-            auto json = nlohmann::json{{"type", "MillEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "MillEffect";
             json["data"]["amount"] = millEffect->getAmount();
             return json;
         }
@@ -148,8 +146,7 @@ namespace dandan::serialization
         if (dynamic_cast<const effects::ChangeLandTypeEffectDefinition *>(
                 effect) != nullptr)
         {
-            auto json = nlohmann::json{{"type", "ChangeLandTypeEffect"},
-                                       {"data", nlohmann::json::object()}};
+            json["type"] = "ChangeLandTypeEffect";
             return json;
         }
 
@@ -164,6 +161,15 @@ namespace dandan::serialization
     {
         const auto &type = json.at("type").get<std::string>();
         const auto &data = json.at("data");
+        const auto &targets = json["data"].find("targets");
+        if (targets != json["data"].end())
+        {
+            std::vector<core::TargetType> target_types;
+            for (const auto &target_json : *targets)
+            {
+                target_types.push_back(target_json.at("type"));
+            }
+        }
 
         if (type == "ModalEffect")
         {
@@ -183,7 +189,8 @@ namespace dandan::serialization
         if (type == "MillEffect")
         {
             return std::make_unique<effects::MillEffectDefinition>(
-                data.at("amount").get<int>());
+                data.at("amount").get<int>(),
+                dandan::core::TargetRequirement{*targets});
         }
         if (type == "ScryEffect")
         {
