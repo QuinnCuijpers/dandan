@@ -9,8 +9,6 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <utility>
-#include <vector>
 
 #ifdef DANDAN_SERIALIZE
 #include <nlohmann/json.hpp>
@@ -59,27 +57,6 @@ namespace dandan::core
             Planeswalker,
         };
 
-        /** The subtype of the card. For now every card has exactly one subtype.
-         * @enum SubType
-         */
-        enum class SubType : std::uint8_t
-        {
-            /// No subtype
-            None,
-            /// The forest land subtype
-            Forest,
-            /// The island land subtype
-            Island,
-            /// The mountain land subtype
-            Mountain,
-            /// The plains land subtype
-            Plains,
-            /// The swamp land subtype
-            Swamp,
-            /// The fish creature subtype for dandan
-            Fish,
-        };
-
         // TODO: expand supertypes
         enum class SuperType : std::uint8_t
         {
@@ -107,12 +84,7 @@ namespace dandan::core
             SubType subtype = SubType::None,
             SuperType supertype = SuperType::None,
             std::vector<std::unique_ptr<abilities::IAbility>> abilities = {},
-            std::optional<Stats> stats = std::nullopt)
-            : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-              m_subtype{subtype}, m_supertype{supertype},
-              m_abilities{std::move(abilities)}, m_stats{stats}
-        {
-        }
+            std::optional<Stats> stats = std::nullopt);
 
         /** Gets the name of the card.
          * @return The name of the card.
@@ -209,10 +181,7 @@ namespace dandan::core
         std::vector<std::unique_ptr<abilities::IAbility>> m_abilities;
         std::optional<Stats> m_stats;
 
-        void addAbility(std::unique_ptr<abilities::IAbility> ability)
-        {
-            m_abilities.push_back(std::move(ability));
-        }
+        void addAbility(std::unique_ptr<abilities::IAbility> ability);
     };
 } // namespace dandan::core
 

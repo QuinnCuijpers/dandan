@@ -1,0 +1,26 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "MindBendEffect",
+                        "data": {
+                            "targets": [
+                                {
+                                    "types": [
+                                        "Permanent"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Mind Bend",
+    "type": "Instant",
+    "cost": "U"
+}

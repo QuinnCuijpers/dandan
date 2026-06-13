@@ -1,7 +1,10 @@
 #ifndef DANDAN_ICONDITION_H
 #define DANDAN_ICONDITION_H
 
+#include "dandan/core/TextReplacement.h"
 #include <memory>
+#include <optional>
+#include <vector>
 
 namespace dandan::core
 {
@@ -30,7 +33,9 @@ namespace dandan::conditions
          * @returns true if the condition is satisfied, false otherwise.
          */
         [[nodiscard]] virtual bool isSatisfied(
-            const core::Game &game) const = 0;
+            const core::Game &game,
+            std::optional<std::vector<core::TextReplacement>>
+                text_replacements = std::nullopt) const = 0;
 
         /**
          * Creates a copy of the condition.

@@ -1,13 +1,12 @@
 #ifndef DANDAN_CORE_EVENTMANAGER_H
 #define DANDAN_CORE_EVENTMANAGER_H
 
-#include "dandan/abilities/EventTriggeredAbility.h"
+#include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include "dandan/events/IEvent.h"
 #include <unordered_map>
-#include <vector>
 
 namespace dandan::core
 {
@@ -17,12 +16,7 @@ namespace dandan::core
     class EventManager
     {
     public:
-        /** Subscribes a card to the event manager.
-         * @param card The card to subscribe.
-         */
-        void subscribe(const Card &card);
-
-        void subscribe(abilities::EventTriggeredAbility &ability);
+        void subscribe(abilities::BoundAbility &ability);
 
         /** Unsubscribes a card from the event manager.
          * @param card The card to unsubscribe.
@@ -44,8 +38,7 @@ namespace dandan::core
         }
 
     private:
-        std::unordered_map<
-            CardID, std::vector<const abilities::EventTriggeredAbility *>>
+        std::unordered_map<CardID, std::vector<abilities::BoundAbility *>>
             m_subscribers;
     };
 } // namespace dandan::core

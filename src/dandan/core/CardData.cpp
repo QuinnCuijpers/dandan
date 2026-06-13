@@ -1,5 +1,7 @@
 #include "dandan/core/CardData.h"
+#include "dandan/abilities/IAbility.h"
 #include <cassert>
+#include <memory>
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
@@ -37,6 +39,21 @@ namespace dandan::core
             dandan::core::CardData>::create_json(&card);
     }
 #endif
+    CardData::CardData(
+        std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
+        SubType subtype, SuperType supertype,
+        std::vector<std::unique_ptr<abilities::IAbility>> abilities,
+        std::optional<Stats> stats)
+        : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
+          m_subtype{subtype}, m_supertype{supertype},
+          m_abilities{std::move(abilities)}, m_stats{stats}
+    {
+    }
+
+    void CardData::addAbility(std::unique_ptr<abilities::IAbility> ability)
+    {
+        m_abilities.push_back(std::move(ability));
+    }
 
     std::string_view CardData::TypeToString(Type type)
     {

@@ -2,7 +2,10 @@
 #define DANDAN_PLAYEDLANDCONDITION_H
 
 #include "dandan/conditions/ICondition.h"
+#include "dandan/core/TextReplacement.h"
 #include <memory>
+#include <optional>
+#include <vector>
 
 namespace dandan::conditions
 {
@@ -15,7 +18,10 @@ namespace dandan::conditions
     class PlayedLandCondition : public ICondition
     {
     public:
-        [[nodiscard]] bool isSatisfied(const core::Game &game) const override;
+        [[nodiscard]] bool isSatisfied(
+            const core::Game &game,
+            std::optional<std::vector<core::TextReplacement>> text_replacement)
+            const override;
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override
         {

@@ -1,11 +1,16 @@
 #include "dandan/conditions/SummoningSicknessCondition.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/TextReplacement.h"
+#include <optional>
+#include <vector>
 
 namespace dandan::conditions
 {
 
     bool SummoningSicknessCondition::isSatisfied(
-        [[maybe_unused]] const core::Game &game) const
+        const core::Game &game,
+        [[maybe_unused]] std::optional<std::vector<core::TextReplacement>>
+            text_replacements) const
     {
         const auto *card = game.getCardByID(m_card_id);
         std::cout << "Checking summoning sickness condition for card "

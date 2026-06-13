@@ -2,8 +2,14 @@ add_library(DandanAbilities OBJECT)
 
 target_sources(
   DandanAbilities
-  PRIVATE ActivatedAbility.cpp ManaAbility.cpp WithDamage.cpp StaticAbility.cpp
-          TriggeredAbility.cpp SpellAbility.cpp)
+  PRIVATE ActivatedAbility.cpp
+          ManaAbility.cpp
+          WithDamage.cpp
+          StaticAbility.cpp
+          EventTriggeredAbility.cpp
+          SpellAbility.cpp
+          StateTriggeredAbility.cpp
+          AbilityType.cpp)
 
 target_sources(DandanAbilities PUBLIC FILE_SET HEADERS BASE_DIRS
                                       ${CMAKE_SOURCE_DIR}/include)

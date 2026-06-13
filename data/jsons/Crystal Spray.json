@@ -1,0 +1,33 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "MindBendEffect",
+                        "data": {
+                            "targets": [
+                                {
+                                    "types": [
+                                        "Spell",
+                                        "Permanent"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "DrawEffect",
+                        "data": {
+                            "amount": 1
+                        }
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Crystal Spray",
+    "type": "Instant",
+    "cost": "(2)U"
+}

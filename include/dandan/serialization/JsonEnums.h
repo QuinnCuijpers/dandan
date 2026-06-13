@@ -18,14 +18,14 @@ namespace dandan::core
                                   {CardData::Type::Planeswalker,
                                    "Planeswalker"}});
 
-    NLOHMANN_JSON_SERIALIZE_ENUM(CardData::SubType, // NOLINT
-                                 {{CardData::SubType::None, "None"},
-                                  {CardData::SubType::Island, "Island"},
-                                  {CardData::SubType::Swamp, "Swamp"},
-                                  {CardData::SubType::Mountain, "Mountain"},
-                                  {CardData::SubType::Forest, "Forest"},
-                                  {CardData::SubType::Plains, "Plains"},
-                                  {CardData::SubType::Fish, "Fish"}});
+    NLOHMANN_JSON_SERIALIZE_ENUM(SubType, // NOLINT
+                                 {{SubType::None, "None"},
+                                  {SubType::Island, "Island"},
+                                  {SubType::Swamp, "Swamp"},
+                                  {SubType::Mountain, "Mountain"},
+                                  {SubType::Forest, "Forest"},
+                                  {SubType::Plains, "Plains"},
+                                  {SubType::Fish, "Fish"}});
 
     NLOHMANN_JSON_SERIALIZE_ENUM(CardData::SuperType, // NOLINT
                                  {{CardData::SuperType::None, "None"},
@@ -34,9 +34,11 @@ namespace dandan::core
     NLOHMANN_JSON_SERIALIZE_ENUM(core::TargetType, // NOLINT
                                  {{core::TargetType::Player, "Player"},
                                   {core::TargetType::Creature, "Creature"},
+                                  {core::TargetType::Permanent, "Permanent"},
                                   {core::TargetType::Land, "Land"},
                                   {core::TargetType::Planeswalker,
                                    "Planeswalker"},
+                                  {core::TargetType::Spell, "Spell"},
                                   {core::TargetType::Card, "Card"},
                                   {core::TargetType::Any, "Any"}});
 

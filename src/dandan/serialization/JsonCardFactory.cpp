@@ -1,8 +1,9 @@
 #include "dandan/serialization/JsonCardFactory.h"
 
 #ifdef DANDAN_SERIALIZE
+#include "dandan/abilities/IAbility.h"
 #include "dandan/mana/Mana.h"
-#include "dandan/serialization/JsonEnums.h" //IWYU pragma: keep
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include "dandan/serialization/JsonFactory.h"
 #include <nlohmann/json.hpp>
 
@@ -26,7 +27,7 @@ namespace dandan::serialization
         json["name"] = card->getName();
         json["cost"] = JsonFactory<mana::Mana>::create_json(card->getCost());
         json["type"] = card->getType();
-        if (card->getSubType() != core::CardData::SubType::None)
+        if (card->getSubType() != core::SubType::None)
         {
             json["subtype"] = card->getSubType();
         }
@@ -57,10 +58,10 @@ namespace dandan::serialization
         auto cost = JsonFactory<mana::Mana>::create_product(json.at("cost"));
         auto type = json.at("type").get<core::CardData::Type>();
 
-        auto subtype = core::CardData::SubType::None;
+        auto subtype = core::SubType::None;
         if (json.contains("subtype"))
         {
-            subtype = json.at("subtype").get<core::CardData::SubType>();
+            subtype = json.at("subtype").get<core::SubType>();
         }
 
         auto supertype = core::CardData::SuperType::None;

@@ -1,27 +1,18 @@
-#include "dandan/core/EventManager.h"
-#include "dandan/abilities/AbilityContext.h"
+#include "dandan/core/engine/EventManager.h"
+#include "dandan/abilities/AbilityType.h"
+#include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/EventTriggeredAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 
 namespace dandan::core
 {
-    void EventManager::subscribe(const Card &card)
+    void EventManager::subscribe(abilities::BoundAbility &ability)
     {
-        for (const auto &ability : card.getData().getAbilities())
+        if (ability.type() == abilities::AbilityType::EventTriggered)
         {
-            if (const auto *triggered =
-                    dynamic_cast<const abilities::EventTriggeredAbility *>(
-                        ability.get()))
-            {
-                m_subscribers[card.getID()].push_back(triggered);
-            }
+            m_subscribers[ability.sourceCard()].push_back(&ability);
         }
-    }
-
-    void EventManager::subscribe(abilities::EventTriggeredAbility &ability)
-    {
-        m_subscribers[CardID::getInvalidID()].push_back(&ability);
     }
 
     void EventManager::unsubscribe(const Card &card)
@@ -50,13 +41,20 @@ namespace dandan::core
 
             for (const auto *ability : iter->second)
             {
-                auto *card{game.getCardByID(card_id)};
+                // TODO: replace with BoundAbility.getContext();
                 auto ability_context{abilities::AbilityContext{
-                    card->getID(), card->getControllerID()}};
-                if (ability->appliesTo(event, ability_context))
+                    ability->sourceCard(), ability->sourcePlayer()}};
+                const auto &underlying_ability{ability->definition()};
+                if (const auto *event_triggered_ability =
+                        dynamic_cast<const abilities::EventTriggeredAbility *>(
+                            &underlying_ability))
                 {
-                    game.stack().push(
-                        abilities::BoundAbility{*ability, ability_context});
+                    if (event_triggered_ability->appliesTo(event,
+                                                           ability_context))
+                    {
+                        game.stack().push(abilities::BoundAbility{
+                            *event_triggered_ability, ability_context});
+                    }
                 }
             }
         }

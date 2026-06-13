@@ -7,6 +7,7 @@
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
 #include "dandan/log.h"
 #include "dandan/utils/overloadVisitor.h"
+#include <deque>
 #include <memory>
 #include <random>
 #include <sstream>
@@ -110,8 +111,9 @@ namespace dandan::core
 #endif
 
     Game::Game(std::vector<Card> cards, bool shuffle)
-        : m_cards{std::deque<Card>{cards.begin(), cards.end()}}
     {
+        auto moved_cards{std::move(cards)};
+        m_cards = std::deque<Card>{moved_cards.begin(), moved_cards.end()};
         DLOGI << "Game constructed with explicit cards\n";
         GameSetup(shuffle);
     }

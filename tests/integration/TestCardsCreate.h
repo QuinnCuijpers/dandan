@@ -16,7 +16,7 @@ inline std::vector<dandan::Card> createTestCards(
             "Test Card",
             std::make_unique<dandan::mana::GenericMana>(0),
             dandan::core::CardData::Type::Land,
-            dandan::core::CardData::SubType::Island,
+            dandan::core::SubType::Island,
             dandan::core::CardData::SuperType::None,
             std::move(abilities)};
 

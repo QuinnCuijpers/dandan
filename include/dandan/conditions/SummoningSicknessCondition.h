@@ -3,6 +3,9 @@
 
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/TextReplacement.h"
+#include <optional>
+#include <vector>
 
 namespace dandan::conditions
 {
@@ -22,7 +25,10 @@ namespace dandan::conditions
             : m_card_id(card_id)
         {
         }
-        [[nodiscard]] bool isSatisfied(const core::Game &game) const override;
+        [[nodiscard]] bool isSatisfied(
+            const core::Game &game,
+            std::optional<std::vector<core::TextReplacement>> text_replacement)
+            const override;
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override
         {

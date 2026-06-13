@@ -4,12 +4,14 @@
 #include "dandan/abilities/SpellAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/Target.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/events/IEvent.h"
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <vector>
 
 // TODO: add doc explaining how this is different from ETBEffect
 namespace dandan::effects
@@ -105,19 +107,38 @@ namespace dandan::effects
                                 chosen_effect->getTargetRequirement())
                         {
                             auto choices = std::vector<core::Target>{};
-                            for (const auto &target_type :
+                            for (const auto &target_types :
                                  targets->getTargetTypes())
                             {
                                 auto valid_targets =
-                                    game.getValidTargets(target_type);
+                                    std::vector<core::Target>{};
+                                for (const auto &target_type : target_types)
+                                {
+
+                                    auto new_valid_targets =
+                                        game.getValidTargets(target_type);
+
+                                    valid_targets.insert(
+                                        valid_targets.end(),
+                                        new_valid_targets.begin(),
+                                        new_valid_targets.end());
+                                }
+
+                                if (valid_targets.empty())
+                                {
+                                    std::cout
+                                        << "No valid targets for this effect\n";
+                                    return nullptr;
+                                }
+
                                 for (size_t i = 0; i < valid_targets.size();
                                      ++i)
                                 {
                                     std::cout << i << ": " << valid_targets[i]
                                               << '\n';
                                 }
-                                std::cout << "Choose a target " << target_type
-                                          << ": ";
+                                std::cout << "Choose a target (0-"
+                                          << valid_targets.size() - 1 << "): ";
                                 std::string target_input;
                                 std::getline(game.istream(), target_input);
                                 int target_choice = std::stoi(target_input);
@@ -126,6 +147,47 @@ namespace dandan::effects
                             }
                             cardp->addTargetChoices(*chosen_effect, choices);
                         }
+                    }
+
+                    if (const auto *targets = effect->getTargetRequirement())
+                    {
+                        auto choices = std::vector<core::Target>{};
+                        for (const auto &target_type :
+                             targets->getTargetTypes())
+                        {
+                            auto valid_targets = std::vector<core::Target>{};
+                            for (const auto &type : target_type)
+                            {
+                                auto new_valid_targets =
+                                    game.getValidTargets(type);
+
+                                valid_targets.insert(valid_targets.end(),
+                                                     new_valid_targets.begin(),
+                                                     new_valid_targets.end());
+                            }
+
+                            if (valid_targets.empty())
+                            {
+                                std::cout
+                                    << "No valid targets for this effect\n";
+                                return nullptr;
+                            }
+
+                            for (size_t i = 0; i < valid_targets.size(); ++i)
+                            {
+                                std::cout << i << ": " << valid_targets[i]
+                                          << '\n';
+                            }
+
+                            std::cout << "Choose a target (0-"
+                                      << valid_targets.size() - 1 << "): ";
+                            std::string target_input;
+                            std::getline(game.istream(), target_input);
+                            int target_choice = std::stoi(target_input);
+                            auto target{valid_targets.at(target_choice)};
+                            choices.push_back(target);
+                        }
+                        cardp->addTargetChoices(*effect, choices);
                     }
                 }
             }
@@ -140,6 +202,7 @@ namespace dandan::effects
     private:
         core::Card &m_card;
     };
+
 } // namespace dandan::effects
 
 #endif

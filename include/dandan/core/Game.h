@@ -1,27 +1,26 @@
 #ifndef DANDAN_GAME_H
 #define DANDAN_GAME_H
 
-#include "EventManager.h"
 #include "Player.h"
-#include "ReplacementManager.h"
 #include "Stack.h"
 #include "Target.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/ConditionManager.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Exile.h"
 #include "dandan/core/Graveyard.h"
 #include "dandan/core/Library.h"
 #include "dandan/core/PlayerID.h"
-#include "dandan/core/PreventionManager.h"
 #include "dandan/core/PriorityManager.h"
 #include "dandan/core/SBAManager.h"
 #include "dandan/core/actions/IAction.h"
+#include "dandan/core/engine/ConditionManager.h"
+#include "dandan/core/engine/PreventionManager.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
-#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
+#include "engine/EventManager.h"
+#include "engine/ReplacementManager.h"
 #include <filesystem>
 #include <istream>
 #include <memory>
@@ -473,6 +472,22 @@ namespace dandan::core
                 return targets;
             }
             case TargetType::Creature:
+            case TargetType::Permanent:
+            {
+                std::vector<Target> targets;
+                for (const auto &player : getPlayers())
+                {
+                    auto player_permanents = player.battlefield().permanents();
+                    for (const auto &[type, permanents] : player_permanents)
+                    {
+                        std::transform(permanents.begin(), permanents.end(),
+                                       std::back_inserter(targets),
+                                       [](const Permanent &perm) -> Target
+                                       { return perm; });
+                    }
+                }
+                return targets;
+            }
             case TargetType::Land:
             case TargetType::Planeswalker:
             case TargetType::Card:

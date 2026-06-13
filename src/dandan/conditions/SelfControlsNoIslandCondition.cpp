@@ -1,16 +1,15 @@
-#include "dandan/conditions/PlayedLandCondition.h"
+#include "dandan/conditions/SelfControlsNoBasicCondition.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/TextReplacement.h"
-#include <optional>
 #include <vector>
 
 namespace dandan::conditions
 {
-    bool PlayedLandCondition::isSatisfied(
-        const core::Game &game,
+    bool SelfControlsNoBasicCondition::isSatisfied(
+        [[maybe_unused]] const core::Game &game,
         [[maybe_unused]] std::optional<std::vector<core::TextReplacement>>
             text_replacements) const
     {
-        return game.activePlayer().playedLandThisTurn();
+        return true;
     }
 } // namespace dandan::conditions

@@ -24,6 +24,13 @@ static const std::vector<const dandan::Card *> &getCards()
         new SPELL(Mystical_Tutor, std::make_unique<dandan::mana::BlueMana>(1),
                   Instant),
         new SPELL(Vision_Charm, std::make_unique<dandan::mana::BlueMana>(1),
+                  Instant),
+        new SPELL(Crystal_Spray,
+                  std::make_unique<dandan::mana::AndMana>(
+                      std::make_unique<dandan::mana::GenericMana>(2),
+                      std::make_unique<dandan::mana::BlueMana>(1)),
+                  Instant),
+        new SPELL(Mind_Bend, std::make_unique<dandan::mana::BlueMana>(1),
                   Instant)};
     return cards;
 };

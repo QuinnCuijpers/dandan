@@ -3,14 +3,16 @@
 
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/TextReplacement.h"
 #include <memory>
+#include <vector>
 
 namespace dandan::conditions
 {
     /**
-     * @brief A condition that checks if the player is the starting player and it is
-     * the first turn. This is used to determine whether the player should draw
-     * a card at the beginning of their turn.
+     * @brief A condition that checks if the player is the starting player and
+     * it is the first turn. This is used to determine whether the player should
+     * draw a card at the beginning of their turn.
      * @class StartingPlayerCondition
      *
      * @implements ICondition
@@ -18,7 +20,10 @@ namespace dandan::conditions
     class StartingPlayerCondition : public ICondition
     {
     public:
-        [[nodiscard]] bool isSatisfied(const core::Game &game) const override
+        [[nodiscard]] bool isSatisfied(
+            const core::Game &game,
+            [[maybe_unused]] std::optional<std::vector<core::TextReplacement>>
+                text_replacement) const override
         {
             return game.isFirstTurn();
         }

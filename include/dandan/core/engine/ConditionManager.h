@@ -1,11 +1,14 @@
 #ifndef DANDAN_CONDITION_MANAGER_H
 #define DANDAN_CONDITION_MANAGER_H
 
+#include "dandan/abilities/AbilityType.h"
+#include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/CardID.h"
 #include <iostream>
 #include <unordered_map>
+#include <vector>
 // 603.8. Some triggered abilities trigger when a game state (such as a player
 // controlling no permanents of a particular card type) is true, rather than
 // triggering when an event occurs. These abilities trigger as soon as the game
@@ -32,7 +35,7 @@ namespace dandan::core
         /// pointer to the State Triggered ability. As this is a pointer to the
         /// static definition on CardData, we can be assured that it will remain
         /// valid as long as the card exists.
-        abilities::StateTriggeredAbility *ability;
+        abilities::BoundAbility *bound_ability;
         /// boolean representing whether or not a trigger condition has been
         /// satisfied since the last time SBA were checked.
         bool satisfied;
@@ -48,10 +51,15 @@ namespace dandan::core
          * @param source The card ID of the source.
          * @param ability The state-triggered ability.
          */
-        void addStateTriggeredAbility(CardID source,
-                                      abilities::StateTriggeredAbility *ability)
+        void addStateTriggeredAbility(abilities::BoundAbility *ability)
         {
-            m_trigger_records[source] = {ability, false};
+
+            if (ability->type() == abilities::AbilityType::StateTriggered)
+            {
+                auto source{ability->sourceCard()};
+                auto triggered_record{TriggeredRecord{ability, false}};
+                m_trigger_records[source].push_back(triggered_record);
+            }
         }
 
         /** @brief Remove all conditions associated with a card.
@@ -67,16 +75,29 @@ namespace dandan::core
          */
         void checkConditions(const Game &game)
         {
-            for (auto &[card_id, triggered_record] : m_trigger_records)
+            for (auto &[card_id, triggered_records] : m_trigger_records)
             {
-                bool currently_satisfied =
-                    triggered_record.ability->condition()->isSatisfied(game);
-                if (currently_satisfied && !triggered_record.satisfied)
+                for (auto &triggered_record : triggered_records)
                 {
-                    std::cout << "Condition for ability on card "
-                              << card_id.getID()
-                              << " is now satisfied, triggering ability.\n";
-                    triggered_record.satisfied = true;
+                    const auto &underlying_ability{
+                        triggered_record.bound_ability->definition()};
+
+                    if (const auto *triggered_ability = dynamic_cast<
+                            const abilities::StateTriggeredAbility *>(
+                            &underlying_ability))
+                    {
+                        bool currently_satisfied =
+                            triggered_ability->condition()->isSatisfied(
+                                game, triggered_record.bound_ability
+                                          ->getTextReplacements());
+                        if (currently_satisfied && !triggered_record.satisfied)
+                        {
+                            std::cout << "Condition for ability on card "
+                                      << card_id.getID()
+                                      << " is now satisfied\n";
+                            triggered_record.satisfied = true;
+                        }
+                    }
                 }
             }
         }
@@ -84,14 +105,15 @@ namespace dandan::core
         /** @brief Get the trigger records.
          * @return A const reference to the map of trigger records.
          */
-        const std::unordered_map<CardID, TriggeredRecord> &getTriggerRecords()
-            const
+        const std::unordered_map<CardID, std::vector<TriggeredRecord>> &
+        getTriggerRecords() const
         {
             return m_trigger_records;
         }
 
     private:
-        std::unordered_map<CardID, TriggeredRecord> m_trigger_records;
+        std::unordered_map<CardID, std::vector<TriggeredRecord>>
+            m_trigger_records;
     };
 } // namespace dandan::core
 

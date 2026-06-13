@@ -62,6 +62,12 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
+        // void replaceBasicWord(core::SubType from,
+        //                       core::SubType new_basic) override;
+
+        // void replaceColorWord(core::ColorWord from,
+        //                       core::ColorWord new_color) override;
+
     private:
         Type m_type{};
         std::unique_ptr<effects::IContinuousEffect> m_effect;

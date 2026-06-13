@@ -13,7 +13,7 @@
             formatCardName(#name),                                             \
                 std::make_unique<dandan::mana::BlueMana>(2),                   \
                 dandan::core::CardData::Type::Creature,                        \
-                dandan::core::CardData::SubType::Fish,                         \
+                dandan::core::SubType::Fish,                                   \
                 dandan::core::CardData::SuperType::None, name##_Abilities(),   \
                 dandan::core::Stats{4, 1}                                      \
         }                                                                      \
@@ -26,8 +26,7 @@
         {                                                                      \
             formatCardName(#name),                                             \
                 std::make_unique<dandan::mana::GenericMana>(0),                \
-                dandan::CardData::Type::Land,                                  \
-                dandan::CardData::SubType::subtype,                            \
+                dandan::CardData::Type::Land, dandan::core::SubType::subtype,  \
                 dandan::CardData::SuperType::supertype, name##_Abilities()     \
         }                                                                      \
     }
@@ -38,7 +37,7 @@
         new dandan::CardData                                                   \
         {                                                                      \
             formatCardName(#name), cost, dandan::CardData::Type::type,         \
-                dandan::core::CardData::SubType::None,                         \
+                dandan::core::SubType::None,                                   \
                 dandan::core::CardData::SuperType::None, name##_Abilities(),   \
         }                                                                      \
     }

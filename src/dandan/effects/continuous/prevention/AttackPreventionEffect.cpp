@@ -10,6 +10,7 @@ namespace dandan::effects
         if ([[maybe_unused]] const auto *attack_action =
                 dynamic_cast<const core::AttackAction *>(&action))
         {
+
             std::cout << "Checking attack prevention effect condition\n";
             if (getCondition()->isSatisfied(game))
             {

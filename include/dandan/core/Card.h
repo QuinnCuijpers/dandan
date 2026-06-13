@@ -2,13 +2,17 @@
 #define DANDAN_CARD_H
 
 #include "CardData.h"
+#include "dandan/abilities/BoundAbility.h"
+#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/core/Zone.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -196,14 +200,19 @@ namespace dandan::core
             return m_marked_damage;
         }
 
-        [[nodiscard]] CardData::SubType getCurrentSubType() const
+        [[nodiscard]] SubType getCurrentSubType() const
         {
             return m_current_subtype;
         }
 
-        void setCurrentSubType(CardData::SubType subtype)
+        void setCurrentSubType(SubType subtype)
         {
             m_current_subtype = subtype;
+        }
+
+        std::vector<abilities::BoundAbility> &getCurrentAbilities()
+        {
+            return m_current_abilities;
         }
 
         // TODO: should generate a damage event
@@ -274,6 +283,9 @@ namespace dandan::core
             return iter->second;
         }
 
+        void replaceText(ColorWord from, ColorWord new_color);
+        void replaceText(SubType from, SubType new_basic);
+
         /** Output the card to an ostream.
          * @param ostream The ostream to output the card to.
          * @param card The card to output.
@@ -317,8 +329,10 @@ namespace dandan::core
 
         int m_current_power{};
         int m_current_toughness{};
+        SubType m_current_subtype{};
+        std::vector<abilities::BoundAbility> m_current_abilities;
+
         int m_marked_damage{};
-        CardData::SubType m_current_subtype{};
 
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each

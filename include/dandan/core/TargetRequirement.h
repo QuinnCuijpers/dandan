@@ -12,6 +12,8 @@ namespace dandan::core
         Player,
         Creature,
         Land,
+        Permanent,
+        Spell,
         Planeswalker,
         Card,
         Any
@@ -25,10 +27,14 @@ namespace dandan::core
             return "Player";
         case TargetType::Creature:
             return "Creature";
+        case TargetType::Permanent:
+            return "Permanent";
         case TargetType::Land:
             return "Land";
         case TargetType::Planeswalker:
             return "Planeswalker";
+        case TargetType::Spell:
+            return "Spell";
         case TargetType::Card:
             return "Card";
         case TargetType::Any:
@@ -47,18 +53,20 @@ namespace dandan::core
     class TargetRequirement
     {
     public:
-        explicit TargetRequirement(std::vector<TargetType> target_types)
+        explicit TargetRequirement(
+            std::vector<std::vector<TargetType>> target_types)
             : m_target_types(std::move(target_types))
         {
         }
 
-        [[nodiscard]] const std::vector<TargetType> &getTargetTypes() const
+        [[nodiscard]] const std::vector<std::vector<TargetType>> &
+        getTargetTypes() const
         {
             return m_target_types;
         }
 
     private:
-        std::vector<TargetType> m_target_types;
+        std::vector<std::vector<TargetType>> m_target_types;
     };
 } // namespace dandan::core
 

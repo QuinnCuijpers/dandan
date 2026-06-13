@@ -1,6 +1,7 @@
 
 
-#include "dandan/effects/continuous/replacement/IReplacementEffect.h"
+#include "dandan/abilities/BoundAbility.h"
+#include "dandan/core/Card.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <vector>
 
@@ -18,12 +19,12 @@ namespace dandan::core
         /** Subscribes to replacement effects.
          * @param effect The replacement effect to subscribe to.
          */
-        void subscribe(const effects::IReplacementEffect *effect);
+        void subscribe(abilities::BoundAbility &ability);
 
         /** Unsubscribes from replacement effects.
          * @param effect The replacement effect to unsubscribe from.
          */
-        void unsubscribe(const effects::IReplacementEffect *effect);
+        void unsubscribe(Card &card);
 
         /** Applies all active replacement effects to the given effect.
          * @param effect The effect to apply replacement effects to.
@@ -34,6 +35,6 @@ namespace dandan::core
             effects::IOneShotEffect &effect, Game &game) const;
 
     private:
-        std::vector<const effects::IReplacementEffect *> m_replacement_effects;
+        std::vector<abilities::BoundAbility *> m_replacement_effects;
     };
 } // namespace dandan::core

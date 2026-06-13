@@ -7,6 +7,7 @@
 #include "dandan/effects/one_shot/ExileTopEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/MillEffect.h"
+#include "dandan/effects/one_shot/MindBendEffect.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
@@ -105,12 +106,15 @@ Vision_Charm_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
+    auto target_requirement{dandan::core::TargetRequirement{
+        std::vector<std::vector<dandan::core::TargetType>>{
+            {dandan::core::TargetType::Player}}}};
+
     auto options{std::vector<
         std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
     options.emplace_back(
         std::make_unique<dandan::effects::MillEffectDefinition>(
-            4, dandan::core::TargetRequirement(
-                   {dandan::core::TargetType::Player})));
+            4, target_requirement));
     options.emplace_back(
         std::make_unique<dandan::effects::ChangeLandTypeEffectDefinition>());
 
@@ -123,6 +127,54 @@ Vision_Charm_Abilities()
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(spell_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Crystal_Spray_Abilities()
+{
+    auto target_req{dandan::core::TargetRequirement{
+        std::vector<std::vector<dandan::core::TargetType>>{
+            {dandan::core::TargetType::Spell,
+             dandan::core::TargetType::Permanent}}}};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::MindBendEffectDefinition>(
+            target_req));
+
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::DrawEffectDefinition>(1));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Mind_Bend_Abilities()
+{
+    auto target_req{dandan::core::TargetRequirement{
+        std::vector<std::vector<dandan::core::TargetType>>{
+            {dandan::core::TargetType::Permanent}}}};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::MindBendEffectDefinition>(
+            target_req));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
 
     return abilities;
 }

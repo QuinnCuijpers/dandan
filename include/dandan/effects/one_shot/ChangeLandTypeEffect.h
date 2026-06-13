@@ -12,8 +12,8 @@ namespace dandan::effects
     public:
         ChangeLandTypeEffect() = default;
 
-        ChangeLandTypeEffect(core::CardData::SubType basic_land_1,
-                             core::CardData::SubType basic_land_2)
+        ChangeLandTypeEffect(core::SubType basic_land_1,
+                             core::SubType basic_land_2)
             : m_basic_land_1(basic_land_1), m_basic_land_2(basic_land_2) {};
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
@@ -25,8 +25,8 @@ namespace dandan::effects
             core::Game &game) const override;
 
     private:
-        std::optional<core::CardData::SubType> m_basic_land_1;
-        std::optional<core::CardData::SubType> m_basic_land_2;
+        std::optional<core::SubType> m_basic_land_1;
+        std::optional<core::SubType> m_basic_land_2;
     };
 
     class ChangeLandTypeEffectDefinition : public IOneShotEffectDefinition

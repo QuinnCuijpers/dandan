@@ -13,7 +13,9 @@
                                         "amount": 4,
                                         "targets": [
                                             {
-                                                "type": "Player"
+                                                "types": [
+                                                    "Player"
+                                                ]
                                             }
                                         ]
                                     }

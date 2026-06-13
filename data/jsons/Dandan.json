@@ -8,8 +8,10 @@
                     "type": "SelfSacrificeEffect"
                 },
                 "condition": {
-                    "data": {},
-                    "type": "ControlsNoIslandCondition"
+                    "data": {
+                        "type": "Island"
+                    },
+                    "type": "SelfControlsNoBasicCondition"
                 }
             },
             "type": "TriggeredAbility"
@@ -19,8 +21,10 @@
                 "continuous_effect": {
                     "data": {
                         "condition": {
-                            "data": {},
-                            "type": "ControlsNoIslandCondition"
+                            "data": {
+                                "type": "Island"
+                            },
+                            "type": "DefenderControlsNoBasicCondition"
                         }
                     },
                     "type": "AttackPreventionEffect"

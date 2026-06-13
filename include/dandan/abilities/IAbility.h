@@ -2,6 +2,8 @@
 #define IABILITY_H
 
 #include "dandan/abilities/AbilityContext.h"
+#include "dandan/core/ColorWord.h"
+#include "dandan/core/SubType.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 #include <stdexcept>
@@ -9,7 +11,7 @@
 namespace dandan::core
 {
     class Game;
-}
+} // namespace dandan::core
 
 namespace dandan::events
 {
@@ -89,9 +91,19 @@ namespace dandan::abilities
                 std::string(typeid(*this).name()));
         }
 
-        // private:
-        //     core::CardID m_source;
-        //     core::PlayerID m_controller;
+        // // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+        // virtual void replaceColorWord(
+        //     [[maybe_unused]] core::ColorWord from,
+        //     [[maybe_unused]] core::ColorWord new_color)
+        // {
+        // }
+
+        // virtual void replaceBasicWord([[maybe_unused]] core::SubType from,
+        //                               [[maybe_unused]] core::SubType
+        //                               new_basic)
+        // {
+        // }
+        // // NOLINTEND(bugprone-easily-swappable-parameters)
     };
 }; // namespace dandan::abilities
 

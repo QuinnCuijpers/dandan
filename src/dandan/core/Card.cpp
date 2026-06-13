@@ -1,4 +1,6 @@
 #include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/Game.h"
 #include "dandan/log.h"
 
@@ -58,4 +60,30 @@ namespace dandan::core
         game.preventionManager().unsubscribe(card->getID());
         game.graveyard().addCard(*card);
     }
+
+    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+    void Card::replaceText(ColorWord from, ColorWord new_color)
+    {
+        // change controls island conditions
+        for (auto &ability : getCurrentAbilities())
+        {
+            ability.addTextReplacement({from, new_color});
+        }
+    }
+    // NOLINTEND(bugprone-easily-swappable-parameters)
+
+    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+    void Card::replaceText(SubType from, SubType new_basic)
+    {
+        if (getCurrentSubType() == from)
+        {
+            setCurrentSubType(new_basic);
+        }
+
+        for (auto &ability : getCurrentAbilities())
+        {
+            ability.addTextReplacement({from, new_basic});
+        }
+    }
+    // NOLINTEND(bugprone-easily-swappable-parameters)
 } // namespace dandan::core

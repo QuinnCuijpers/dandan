@@ -8,7 +8,7 @@
 
 namespace dandan::utils
 {
-    inline core::CardData::SubType stringToBasicLandType(const std::string &str)
+    inline core::SubType stringToBasicLandType(const std::string &str)
     {
         std::string lowered{str};
         std::transform(lowered.begin(), lowered.end(), lowered.begin(),
@@ -17,21 +17,27 @@ namespace dandan::utils
 
         if (lowered == "plains")
         {
-            return core::CardData::SubType::Plains;
+            return core::SubType::Plains;
         }
         if (lowered == "island")
         {
-            return core::CardData::SubType::Island;
+            return core::SubType::Island;
         }
         if (lowered == "swamp")
         {
-            return core::CardData::SubType::Swamp;
+            return core::SubType::Swamp;
         }
         if (lowered == "mountain")
         {
-            return core::CardData::SubType::Mountain;
+            return core::SubType::Mountain;
         }
-        return core::CardData::SubType::Forest;
+
+        if (lowered == "forest")
+        {
+            return core::SubType::Forest;
+        }
+
+        return core::SubType::None;
     }
 } // namespace dandan::utils
 #endif

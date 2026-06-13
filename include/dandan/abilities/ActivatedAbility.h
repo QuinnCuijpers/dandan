@@ -2,10 +2,14 @@
 #define DANDAN_ACTIVATED_ABILITY_H
 
 #include "IAbility.h"
-#include "dandan/core/Game.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
+
+namespace dandan::core
+{
+    class Game;
+}
 
 namespace dandan::abilities
 {

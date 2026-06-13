@@ -2,8 +2,8 @@ add_library(DandanConditions OBJECT)
 
 target_sources(
   DandanConditions
-  PRIVATE ControlsNoIslandCondition.cpp PlayedLandCondition.cpp
-          SummoningSicknessCondition.cpp)
+  PRIVATE DefenderControlsNoIslandCondition.cpp PlayedLandCondition.cpp
+          SummoningSicknessCondition.cpp SelfControlsNoIslandCondition.cpp)
 
 target_sources(DandanConditions PUBLIC FILE_SET HEADERS BASE_DIRS
                                        ${CMAKE_SOURCE_DIR}/include)

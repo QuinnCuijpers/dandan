@@ -1,4 +1,6 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
+#include "dandan/effects/one_shot/MindBendEffect.h"
+#include <vector>
 #ifdef DANDAN_SERIALIZE
 #include "dandan/effects/one_shot/BounceLandEffect.h"
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
@@ -29,9 +31,9 @@ namespace dandan::serialization
         if (const auto *targets = effect->getTargetRequirement())
         {
             json["data"]["targets"] = nlohmann::json::array();
-            for (const auto &target_type : targets->getTargetTypes())
+            for (const auto &target_types : targets->getTargetTypes())
             {
-                json["data"]["targets"].push_back({{"type", target_type}});
+                json["data"]["targets"].push_back({{"types", target_types}});
             }
         }
 
@@ -149,6 +151,12 @@ namespace dandan::serialization
             json["type"] = "ChangeLandTypeEffect";
             return json;
         }
+        if (dynamic_cast<const effects::MindBendEffectDefinition *>(effect) !=
+            nullptr)
+        {
+            json["type"] = "MindBendEffect";
+            return json;
+        }
 
         throw std::runtime_error(
             "Unknown effect type for JSON serialization: " +
@@ -162,12 +170,21 @@ namespace dandan::serialization
         const auto &type = json.at("type").get<std::string>();
         const auto &data = json.at("data");
         const auto &targets = json["data"].find("targets");
+        std::vector<std::vector<dandan::core::TargetType>> target_types;
+
         if (targets != json["data"].end())
         {
-            std::vector<core::TargetType> target_types;
             for (const auto &target_json : *targets)
             {
-                target_types.push_back(target_json.at("type"));
+                if (!target_json.at("types").is_array())
+                {
+                    throw std::runtime_error(
+                        "Expected 'types' to be an array, got: " +
+                        target_json.at("types").dump());
+                }
+                auto types{target_json.at("types")
+                               .get<std::vector<dandan::core::TargetType>>()};
+                target_types.push_back(types);
             }
         }
 
@@ -190,7 +207,7 @@ namespace dandan::serialization
         {
             return std::make_unique<effects::MillEffectDefinition>(
                 data.at("amount").get<int>(),
-                dandan::core::TargetRequirement{*targets});
+                dandan::core::TargetRequirement{target_types});
         }
         if (type == "ScryEffect")
         {
@@ -256,6 +273,12 @@ namespace dandan::serialization
             return std::make_unique<effects::TutorTopEffectDefinition>(
                 std::move(filter_types));
         }
+        if (type == "MindBendEffect")
+        {
+            return std::make_unique<effects::MindBendEffectDefinition>(
+                dandan::core::TargetRequirement{target_types});
+        }
+
         throw std::runtime_error("Unknown effect type: " + type);
     }
 } // namespace dandan::serialization

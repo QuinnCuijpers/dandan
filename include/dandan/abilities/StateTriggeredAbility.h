@@ -5,6 +5,7 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
+#include <memory>
 namespace dandan::abilities
 {
     /** @brief A triggered ability that activates when a specific condition
@@ -63,6 +64,12 @@ namespace dandan::abilities
         {
             return m_effect.get();
         }
+
+        // void replaceBasicWord(core::SubType from,
+        //                       core::SubType new_basic) override;
+
+        // void replaceColorWord(core::ColorWord from,
+        //                       core::ColorWord new_color) override;
 
     private:
         std::unique_ptr<conditions::ICondition> m_condition;

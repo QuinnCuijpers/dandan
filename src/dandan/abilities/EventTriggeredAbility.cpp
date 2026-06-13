@@ -1,4 +1,6 @@
 #include "dandan/abilities/EventTriggeredAbility.h"
+#include "dandan/core/CardData.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <iostream>

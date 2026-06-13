@@ -1,4 +1,6 @@
-#include "dandan/conditions/ControlsNoIslandCondition.h"
+#include "dandan/conditions/DefenderControlsNoBasicCondition.h"
+#include "dandan/conditions/SelfControlsNoBasicCondition.h"
+#include "dandan/core/CardData.h"
 #include "dandan/dandan.h"
 #include "dandan/log.h"
 
@@ -94,19 +96,21 @@ void check_card_serialize()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
     abilities.emplace_back(std::make_unique<dandan::StateTriggeredAbility>(
-        std::make_unique<dandan::conditions::ControlsNoIslandCondition>(),
+        std::make_unique<dandan::conditions::SelfControlsNoBasicCondition>(
+            dandan::core::SubType::Island),
         std::make_unique<dandan::effects::SelfSacrificeEffectDefinition>()));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Prevention,
         std::make_unique<dandan::effects::AttackPreventionEffect>(
             std::make_unique<
-                dandan::conditions::ControlsNoIslandCondition>())));
+                dandan::conditions::DefenderControlsNoBasicCondition>(
+                dandan::core::SubType::Island))));
 
     dandan::CardData test_data{"Dandan",
                                std::make_unique<dandan::BlueMana>(2),
                                dandan::core::CardData::Type::Creature,
-                               dandan::core::CardData::SubType::Fish,
+                               dandan::core::SubType::Fish,
                                dandan::core::CardData::SuperType::None,
                                std::move(abilities),
                                dandan::Stats{4, 1}};

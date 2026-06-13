@@ -1,7 +1,14 @@
-#include "dandan/core/PreventionManager.h"
+#include "dandan/core/engine/PreventionManager.h"
+#include "dandan/abilities/AbilityType.h"
+#include "dandan/abilities/BoundAbility.h"
+#include "dandan/abilities/StaticAbility.h"
+#include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/PlayerID.h"
+#include "dandan/effects/continuous/prevention/IPreventionEffect.h"
 #include <algorithm>
 #include <memory>
+#include <stdexcept>
 #include <variant>
 
 namespace dandan::core
@@ -9,19 +16,97 @@ namespace dandan::core
     void PreventionManager::subscribe(
         std::unique_ptr<effects::IPreventionEffect> effect)
     {
-        m_global_preventions.push_back(std::move(effect));
+        m_global_preventions.emplace_back(std::move(effect));
     }
 
     void PreventionManager::subscribe(
         PlayerID player, std::unique_ptr<effects::IPreventionEffect> effect)
     {
-        m_player_preventions[player.id()].push_back(std::move(effect));
+        m_player_preventions[player].emplace_back(std::move(effect));
     }
 
     void PreventionManager::subscribe(
         CardID card, std::unique_ptr<effects::IPreventionEffect> effect)
     {
-        m_card_preventions[card.getID()].push_back(std::move(effect));
+        m_card_preventions[card].emplace_back(std::move(effect));
+    }
+
+    void PreventionManager::subscribe(abilities::BoundAbility &ability)
+    {
+
+        if (ability.type() == abilities::AbilityType::StaticPrevention)
+        {
+            if (const auto *staticAbility =
+                    dynamic_cast<const abilities::StaticAbility *>(
+                        &ability.definition()))
+            {
+                if (staticAbility->getType() !=
+                    abilities::StaticAbility::Type::Prevention)
+                {
+                    throw std::runtime_error(
+                        "Staticprevention ability has a static ability whose "
+                        "type was not prevention");
+                }
+
+                if (dynamic_cast<const effects::IPreventionEffect *>(
+                        staticAbility->getEffect()) != nullptr)
+                {
+                    m_global_preventions.emplace_back(&ability);
+                }
+            }
+        }
+    }
+
+    void PreventionManager::subscribe(CardID card_id,
+                                      abilities::BoundAbility &ability)
+    {
+        if (ability.type() == abilities::AbilityType::StaticPrevention)
+        {
+            if (const auto *staticAbility =
+                    dynamic_cast<const abilities::StaticAbility *>(
+                        &ability.definition()))
+            {
+                if (staticAbility->getType() !=
+                    abilities::StaticAbility::Type::Prevention)
+                {
+                    throw std::runtime_error(
+                        "Staticprevention ability has a static ability whose "
+                        "type was not prevention");
+                }
+
+                if (dynamic_cast<const effects::IPreventionEffect *>(
+                        staticAbility->getEffect()) != nullptr)
+                {
+                    m_card_preventions[card_id].emplace_back(&ability);
+                }
+            }
+        }
+    }
+
+    void PreventionManager::subscribe(PlayerID player_id,
+                                      abilities::BoundAbility &ability)
+    {
+        if (ability.type() == abilities::AbilityType::StaticPrevention)
+        {
+            if (const auto *staticAbility =
+                    dynamic_cast<const abilities::StaticAbility *>(
+                        &ability.definition()))
+            {
+                if (staticAbility->getType() !=
+                    abilities::StaticAbility::Type::Prevention)
+                {
+                    throw std::runtime_error(
+                        "Staticprevention ability has a static ability whose "
+                        "type was not prevention");
+                }
+
+                if (dynamic_cast<const effects::IPreventionEffect *>(
+                        staticAbility->getEffect()) != nullptr)
+                {
+                    m_player_preventions[player_id].emplace_back(&ability);
+                }
+            }
+        }
     }
 
     void PreventionManager::removeFromPreventionList(
@@ -72,7 +157,7 @@ namespace dandan::core
 
     void PreventionManager::unsubscribe(CardID card_id)
     {
-        m_card_preventions.erase(card_id.getID());
+        m_card_preventions.erase(card_id);
     }
 
     bool PreventionManager::isPreventedByPreventionList(
@@ -99,7 +184,7 @@ namespace dandan::core
         {
             std::cout << "Checking player-scoped prevention effects for player "
                       << std::get<PlayerID>(actor).id() << '\n';
-            const auto player_id = std::get<PlayerID>(actor).id();
+            const auto player_id = std::get<PlayerID>(actor);
             if (const auto player_it = m_player_preventions.find(player_id);
                 player_it != m_player_preventions.end() &&
                 isPreventedByPreventionList(player_it->second, action, game))
@@ -111,7 +196,7 @@ namespace dandan::core
         {
             std::cout << "Checking card-scoped prevention effects for card "
                       << std::get<CardID>(actor).getID() << '\n';
-            const auto card_id = std::get<CardID>(actor).getID();
+            const auto card_id = std::get<CardID>(actor);
             if (const auto card_it = m_card_preventions.find(card_id);
                 card_it != m_card_preventions.end() &&
                 isPreventedByPreventionList(card_it->second, action, game))

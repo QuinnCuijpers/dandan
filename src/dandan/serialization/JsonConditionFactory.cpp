@@ -1,6 +1,9 @@
 #include "dandan/serialization/JsonConditionFactory.h"
+#include "dandan/core/CardData.h"
 #ifdef DANDAN_SERIALIZE
-#include "dandan/conditions/ControlsNoIslandCondition.h"
+#include "dandan/conditions/DefenderControlsNoBasicCondition.h"
+#include "dandan/conditions/SelfControlsNoBasicCondition.h"
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -8,12 +11,23 @@ namespace dandan::serialization
     nlohmann::json JsonFactory<conditions::ICondition>::create_json(
         [[maybe_unused]] const conditions::ICondition *condition)
     {
-        if ([[maybe_unused]] const auto *controlsNoIslandCondition =
-                dynamic_cast<const conditions::ControlsNoIslandCondition *>(
+        if (const auto *selfControlsNoIslandCondition =
+                dynamic_cast<const conditions::SelfControlsNoBasicCondition *>(
                     condition))
         {
-            auto json = nlohmann::json{{"type", "ControlsNoIslandCondition"},
+            auto json = nlohmann::json{{"type", "SelfControlsNoBasicCondition"},
                                        {"data", nlohmann::json::object()}};
+            json["data"]["type"] = selfControlsNoIslandCondition->type();
+            return json;
+        }
+        if (const auto *defenderControlsNoBasicCondition = dynamic_cast<
+                const conditions::DefenderControlsNoBasicCondition *>(
+                condition))
+        {
+            auto json =
+                nlohmann::json{{"type", "DefenderControlsNoBasicCondition"},
+                               {"data", nlohmann::json::object()}};
+            json["data"]["type"] = defenderControlsNoBasicCondition->type();
             return json;
         }
         throw std::runtime_error(
@@ -26,11 +40,12 @@ namespace dandan::serialization
         create_product([[maybe_unused]] const nlohmann::json &json)
     {
         const std::string type{json.at("type").get<std::string>()};
-        // const nlohmann::json &data{json.at("data")};
+        const nlohmann::json &data{json.at("data")};
 
-        if (type == "ControlsNoIslandCondition")
+        if (type == "SelfControlsNoIslandCondition")
         {
-            return std::make_unique<conditions::ControlsNoIslandCondition>();
+            return std::make_unique<conditions::SelfControlsNoBasicCondition>(
+                data.at("type").get<core::SubType>());
         }
 
         throw std::runtime_error(

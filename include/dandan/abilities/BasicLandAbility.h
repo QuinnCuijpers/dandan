@@ -12,24 +12,18 @@
 
 namespace dandan::abilities
 {
-    static const std::unordered_map<core::CardData::SubType,
-                                    const ManaAbility *>
+    static const std::unordered_map<core::SubType, const ManaAbility *>
         s_land_ability_map{
-            {core::CardData::SubType::Plains,
-             new ManaAbility(
-                 mana::ManaList{std::make_unique<mana::WhiteMana>(1)})},
-            {core::CardData::SubType::Island,
-             new ManaAbility(
-                 mana::ManaList{std::make_unique<mana::BlueMana>(1)})},
-            {core::CardData::SubType::Swamp,
-             new ManaAbility(
-                 mana::ManaList{std::make_unique<mana::BlackMana>(1)})},
-            {core::CardData::SubType::Mountain,
-             new ManaAbility(
-                 mana::ManaList{std::make_unique<mana::RedMana>(1)})},
-            {core::CardData::SubType::Forest,
-             new ManaAbility(
-                 mana::ManaList{std::make_unique<mana::GreenMana>(1)})},
+            {core::SubType::Plains, new ManaAbility(mana::ManaList{
+                                        std::make_unique<mana::WhiteMana>(1)})},
+            {core::SubType::Island, new ManaAbility(mana::ManaList{
+                                        std::make_unique<mana::BlueMana>(1)})},
+            {core::SubType::Swamp, new ManaAbility(mana::ManaList{
+                                       std::make_unique<mana::BlackMana>(1)})},
+            {core::SubType::Mountain, new ManaAbility(mana::ManaList{
+                                          std::make_unique<mana::RedMana>(1)})},
+            {core::SubType::Forest, new ManaAbility(mana::ManaList{
+                                        std::make_unique<mana::GreenMana>(1)})},
         };
 
     /** @brief An ability that represents a basic land's ability to produce
@@ -46,7 +40,7 @@ namespace dandan::abilities
         [[nodiscard]] std::string display() const override
         {
             // for now display islands
-            return m_basic_land_ability_map->at(core::CardData::SubType::Island)
+            return m_basic_land_ability_map->at(core::SubType::Island)
                 ->display();
         }
 
@@ -85,7 +79,7 @@ namespace dandan::abilities
         }
 
     private:
-        const std::unordered_map<core::CardData::SubType, const ManaAbility *>
+        const std::unordered_map<core::SubType, const ManaAbility *>
             *m_basic_land_ability_map = &s_land_ability_map;
     };
 } // namespace dandan::abilities

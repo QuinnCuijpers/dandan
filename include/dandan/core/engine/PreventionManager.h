@@ -1,6 +1,7 @@
 #ifndef DANDAN_PREVENTION_MANAGER_H
 #define DANDAN_PREVENTION_MANAGER_H
 
+#include "dandan/abilities/BoundAbility.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/actions/IAction.h"
@@ -17,7 +18,7 @@ namespace dandan::core
     class PreventionManager
     {
     public:
-        /** Subscribe a prevention effect.
+        /** Subscribe a global-scoped prevention effect.
          * @param effect The prevention effect to subscribe.
          */
         void subscribe(std::unique_ptr<effects::IPreventionEffect> effect);
@@ -35,6 +36,12 @@ namespace dandan::core
          */
         void subscribe(CardID card,
                        std::unique_ptr<effects::IPreventionEffect> effect);
+
+        void subscribe(abilities::BoundAbility &ability);
+
+        void subscribe(CardID card_id, abilities::BoundAbility &ability);
+
+        void subscribe(PlayerID player_id, abilities::BoundAbility &ability);
 
         /** Unsubscribe the prevention effect.
          * @param effect The prevention effect to unsubscribe.
@@ -56,15 +63,18 @@ namespace dandan::core
                                        const Game &game) const;
 
     private:
-        using PreventionList =
-            std::vector<std::unique_ptr<effects::IPreventionEffect>>;
+        using PreventionEffect =
+            std::variant<std::unique_ptr<effects::IPreventionEffect>,
+                         abilities::BoundAbility *>;
+        using PreventionList = std::vector<PreventionEffect>;
 
+        // split into three do differentiate which scope they have
         PreventionList m_global_preventions;
-        std::unordered_map<int, PreventionList> m_player_preventions;
-        std::unordered_map<int, PreventionList> m_card_preventions;
+        std::unordered_map<PlayerID, PreventionList> m_player_preventions;
+        std::unordered_map<CardID, PreventionList> m_card_preventions;
 
         static void removeFromPreventionList(
-            PreventionList &list, const effects::IPreventionEffect *effect);
+            PreventionList &list, const effects::IPreventionEffect *);
 
         static bool isPreventedByPreventionList(const PreventionList &list,
                                                 const IAction &action,

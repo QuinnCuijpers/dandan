@@ -14,7 +14,7 @@
 2 Ray of Command 
 2 Supplant Form 
 2 Unsubstantiate
-2 Vision Charm 
+2 Vision Charm [x] 
 
 2 Halimar Depths [x]
 2 Izzet Boilerworks [x]

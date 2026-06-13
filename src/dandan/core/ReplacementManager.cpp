@@ -1,23 +1,38 @@
-#include "dandan/core/ReplacementManager.h"
+#include "dandan/core/engine/ReplacementManager.h"
+#include "dandan/abilities/AbilityType.h"
+#include "dandan/abilities/BoundAbility.h"
+#include "dandan/effects/continuous/replacement/IReplacementEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <algorithm>
 #include <memory>
+#include <unordered_set>
 
 namespace dandan::core
 {
-    void ReplacementManager::subscribe(
-        const effects::IReplacementEffect *effect)
+    void ReplacementManager::subscribe(abilities::BoundAbility &ability)
     {
-        m_replacement_effects.emplace_back(effect);
+        m_replacement_effects.emplace_back(&ability);
     }
 
-    void ReplacementManager::unsubscribe(
-        const effects::IReplacementEffect *effect)
+    void ReplacementManager::unsubscribe(Card &card)
     {
-        m_replacement_effects.erase(std::remove(m_replacement_effects.begin(),
-                                                m_replacement_effects.end(),
-                                                effect),
-                                    m_replacement_effects.end());
+        // Phase 1: collect pointers to remove
+        std::unordered_set<const abilities::BoundAbility *> to_remove{};
+
+        for (const auto &ability : card.getCurrentAbilities())
+        {
+            if (ability.type() == abilities::AbilityType::StaticReplacement)
+            {
+                to_remove.insert(&ability);
+            }
+        }
+
+        // Phase 2: erase from target container
+        m_replacement_effects.erase(
+            std::remove_if(m_replacement_effects.begin(),
+                           m_replacement_effects.end(), [&](const auto *effect)
+                           { return to_remove.count(effect) > 0; }),
+            m_replacement_effects.end());
     }
 
     std::unique_ptr<effects::IOneShotEffect> ReplacementManager::
@@ -25,15 +40,19 @@ namespace dandan::core
                                 [[maybe_unused]] Game &game) const
     {
         effects::IOneShotEffect *current_effect{&effect};
-        for (const auto *replacement_effect : m_replacement_effects)
+        for (const auto *ability : m_replacement_effects)
         {
-            if (replacement_effect->appliesTo(*current_effect))
+            if (const auto *replacement_effect =
+                    dynamic_cast<const effects::IReplacementEffect *>(
+                        &ability->definition()))
             {
-                current_effect = &replacement_effect->replace(*current_effect);
+                if (replacement_effect->appliesTo(*current_effect))
+                {
+                    current_effect =
+                        &replacement_effect->replace(*current_effect);
+                }
             }
         }
-        // TODO: clone doesnt clone the next chain, so we need to make sure to
-        // clone the entire chain
         return current_effect->copy();
     }
 } // namespace dandan::core

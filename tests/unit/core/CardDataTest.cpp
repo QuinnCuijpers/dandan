@@ -2,6 +2,7 @@
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/core/CardData.h"
+
 TEST(CardDataTest, NonExistantFile)
 {
     const auto *card_name = "NonExistantCard";
