@@ -54,6 +54,7 @@ namespace dandan::core
         void addStateTriggeredAbility(abilities::BoundAbility *ability)
         {
 
+            std::cout << "Adding StateTriggered ability\n";
             if (ability->type() == abilities::AbilityType::StateTriggered)
             {
                 auto source{ability->sourceCard()};

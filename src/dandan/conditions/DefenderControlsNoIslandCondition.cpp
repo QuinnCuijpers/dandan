@@ -37,18 +37,18 @@ namespace dandan::conditions
                 }
             }
         }
-        auto basic_filter = [&game, this](const core::CardID &card_id)
+        auto no_basic_filter = [&game, this](const core::CardID &card_id)
         {
             const auto *card = game.getCardByID(card_id);
             return card != nullptr &&
                    card->getData().getType() == core::CardData::Type::Land &&
-                   card->getData().getSubType() == m_type;
+                   card->getData().getSubType() != m_type;
         };
         std::cout << "Checking ControlsNoIslandCondition for player "
                   << game.nonActivePlayer().getID().id() << '\n';
         const core::Player &defending_player = game.nonActivePlayer();
         const auto &battlefield{defending_player.battlefield()};
-        return !std::any_of(battlefield.getLands().begin(),
-                            battlefield.getLands().end(), basic_filter);
+        return std::all_of(battlefield.getLands().begin(),
+                           battlefield.getLands().end(), no_basic_filter);
     }
 } // namespace dandan::conditions

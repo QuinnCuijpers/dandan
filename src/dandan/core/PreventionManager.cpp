@@ -181,13 +181,20 @@ namespace dandan::core
                     { return prevention_effect->prevents(action, game); },
                     [&](const abilities::BoundAbility *ability)
                     {
-                        auto effect{ability->createEffect(game)};
-                        if (const auto *prevention_effect = dynamic_cast<
-                                const effects::IPreventionEffect *>(
-                                effect.get()))
+                        if (const auto *static_ability =
+                                dynamic_cast<const abilities::StaticAbility *>(
+                                    &ability->definition()))
                         {
-                            return prevention_effect->prevents(
-                                action, game, ability->getTextReplacements());
+                            assert(static_ability->getType() ==
+                                   abilities::StaticAbility::Type::Prevention);
+                            if (const auto *prevention_effect = dynamic_cast<
+                                    const effects::IPreventionEffect *>(
+                                    static_ability->getEffect()))
+                            {
+                                return prevention_effect->prevents(
+                                    action, game,
+                                    ability->getTextReplacements());
+                            }
                         }
                         // should be unreachable as only prevention effects are
                         // registered in this class
