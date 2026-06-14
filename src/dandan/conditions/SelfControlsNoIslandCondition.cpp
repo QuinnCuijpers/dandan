@@ -10,6 +10,6 @@ namespace dandan::conditions
         [[maybe_unused]] std::optional<std::vector<core::TextReplacement>>
             text_replacements) const
     {
-        return true;
+        return false;
     }
 } // namespace dandan::conditions

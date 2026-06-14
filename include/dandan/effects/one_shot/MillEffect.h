@@ -42,10 +42,10 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            core::Game &game,
+            const core::Game &game,
             [[maybe_unused]] EffectContext context) const override
         {
-            auto *card{game.getCardByID(context.card()->getID())};
+            const auto *card{game.getCardByID(context.card()->getID())};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             auto player_choice{std::get<core::PlayerID>(choice)};

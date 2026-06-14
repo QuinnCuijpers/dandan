@@ -32,7 +32,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            core::Game &game, EffectContext context) const override;
+            const core::Game &game, EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override

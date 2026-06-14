@@ -59,7 +59,7 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect(
+        [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
         // void replaceBasicWord(core::SubType from,

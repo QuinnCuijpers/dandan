@@ -40,7 +40,7 @@ namespace dandan::abilities
 
         [[nodiscard]] size_t optionsAmount() const override;
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect(
+        [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
         /** Get the cost of the ability

@@ -65,8 +65,8 @@ namespace dandan::abilities
          * @param context The context for the ability's execution
          * @return The effect created by the ability
          */
-        virtual std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const = 0;
+        [[nodiscard]] virtual std::unique_ptr<effects::IOneShotEffect>
+        createEffect(core::Game &game, AbilityContext context) const = 0;
 
         /** Determine if the ability can be activated
          * @param game The game object to check for activation conditions

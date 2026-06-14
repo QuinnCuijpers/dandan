@@ -33,7 +33,7 @@ namespace dandan::abilities
          * @param context The ability context.
          * @return The created effect instance.
          */
-        std::unique_ptr<effects::IOneShotEffect> createEffect(
+        [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             [[maybe_unused]] core::Game &game,
             [[maybe_unused]] AbilityContext context) const override
         {

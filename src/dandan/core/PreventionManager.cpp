@@ -6,6 +6,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/effects/continuous/prevention/IPreventionEffect.h"
+#include "dandan/utils/overloadVisitor.h"
 #include <algorithm>
 #include <memory>
 #include <stdexcept>
@@ -112,12 +113,20 @@ namespace dandan::core
     void PreventionManager::removeFromPreventionList(
         PreventionList &list, const effects::IPreventionEffect *effect)
     {
-        list.erase(
-            std::remove_if(
-                list.begin(), list.end(),
-                [effect](const std::unique_ptr<effects::IPreventionEffect>
-                             &candidate) { return candidate.get() == effect; }),
-            list.end());
+        list.erase(std::remove_if(
+                       list.begin(), list.end(),
+                       [effect](const PreventionEffect &candidate)
+                       {
+                           return std::visit(
+                               utils::overloaded{
+                                   [&](const std::unique_ptr<
+                                       effects::IPreventionEffect> &prevention)
+                                   { return prevention.get() == effect; },
+                                   [](const abilities::BoundAbility *)
+                                   { return false; }},
+                               candidate);
+                       }),
+                   list.end());
     }
 
     void PreventionManager::unsubscribe(
@@ -161,15 +170,39 @@ namespace dandan::core
     }
 
     bool PreventionManager::isPreventedByPreventionList(
-        const PreventionList &list, const IAction &action, const Game &game)
+        const PreventionList &list, const IAction &action, Game &game)
     {
-        return std::any_of(list.begin(), list.end(),
-                           [&action, &game](const auto &effect)
-                           { return effect->prevents(action, game); });
+        for (const auto &prevention : list)
+        {
+            auto prevented{std::visit(
+                utils::overloaded{
+                    [&](const std::unique_ptr<effects::IPreventionEffect>
+                            &prevention_effect)
+                    { return prevention_effect->prevents(action, game); },
+                    [&](const abilities::BoundAbility *ability)
+                    {
+                        auto effect{ability->createEffect(game)};
+                        if (const auto *prevention_effect = dynamic_cast<
+                                const effects::IPreventionEffect *>(
+                                effect.get()))
+                        {
+                            return prevention_effect->prevents(
+                                action, game, ability->getTextReplacements());
+                        }
+                        // should be unreachable as only prevention effects are
+                        // registered in this class
+                        return false;
+                    }},
+                prevention)};
+            if (prevented)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
-    bool PreventionManager::isPrevented(const IAction &action,
-                                        const Game &game) const
+    bool PreventionManager::isPrevented(const IAction &action, Game &game) const
     {
 
         std::cout << "Checking global-scoped preventions\n";

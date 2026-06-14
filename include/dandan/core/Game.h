@@ -414,7 +414,7 @@ namespace dandan::core
          * @param action The action to check.
          * @return True if the action is prevented, false otherwise.
          */
-        [[nodiscard]] bool isActionPrevented(const IAction &action) const
+        [[nodiscard]] bool isActionPrevented(const IAction &action)
         {
             return m_prevention_manager.isPrevented(action, *this);
         }

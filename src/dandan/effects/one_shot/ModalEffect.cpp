@@ -4,9 +4,9 @@
 namespace dandan::effects
 {
     std::unique_ptr<IOneShotEffect> ModalEffectDefinition::bind(
-        core::Game &game, EffectContext context) const
+        const core::Game &game, EffectContext context) const
     {
-        auto *card{game.getCardByID(context.card().value())};
+        const auto *card{game.getCardByID(context.card().value())};
         std::cout << "Binding modal effect for card "
                   << card->getData().getName() << '\n';
         auto modal_choice{card->getModalChoice(*this)};

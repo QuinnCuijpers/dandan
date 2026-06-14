@@ -56,7 +56,7 @@ namespace dandan::abilities
             return m_cost.get();
         }
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect(
+        [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
         [[nodiscard]] bool canActivate(core::Game &game,

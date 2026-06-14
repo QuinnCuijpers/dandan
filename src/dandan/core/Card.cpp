@@ -1,8 +1,10 @@
 #include "dandan/core/Card.h"
+#include "dandan/abilities/BoundAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Game.h"
 #include "dandan/log.h"
+#include <vector>
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/core/CardDataFactory.h"
@@ -26,6 +28,16 @@ namespace dandan::core
                 setCurrentToughness(stats->toughness);
             }
             setCurrentSubType(m_card_data->getSubType());
+
+            auto bound_abilities{std::vector<abilities::BoundAbility>{}};
+            for (const auto &ability : m_card_data->getAbilities())
+            {
+                auto *definition{ability.get()};
+                auto bound{abilities::BoundAbility{*definition, m_card_id,
+                                                   m_controller_id}};
+                bound_abilities.push_back(bound);
+            }
+            m_current_abilities = std::move(bound_abilities);
         }
     }
 #endif
@@ -45,6 +57,16 @@ namespace dandan::core
                 setCurrentToughness(stats->toughness);
             }
             setCurrentSubType(m_card_data->getSubType());
+
+            auto bound_abilities{std::vector<abilities::BoundAbility>{}};
+            for (const auto &ability : m_card_data->getAbilities())
+            {
+                auto *definition{ability.get()};
+                auto bound{abilities::BoundAbility{*definition, m_card_id,
+                                                   m_controller_id}};
+                bound_abilities.push_back(bound);
+            }
+            m_current_abilities = std::move(bound_abilities);
         }
     }
 

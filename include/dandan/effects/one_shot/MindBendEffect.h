@@ -43,11 +43,11 @@ namespace dandan::effects
         {
         }
 
-        std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] core::Game &game,
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
+            [[maybe_unused]] const core::Game &game,
             [[maybe_unused]] EffectContext context) const override
         {
-            auto *card{game.getCardByID(context.card()->getID())};
+            const auto *card{game.getCardByID(context.card()->getID())};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             return std::make_unique<MindBendEffect>(choice);

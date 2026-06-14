@@ -27,7 +27,7 @@ namespace dandan::abilities
         {
         }
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect(
+        [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
         /** @brief Get the effect definitions of the spell ability.

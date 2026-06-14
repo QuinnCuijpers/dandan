@@ -3,7 +3,10 @@
 
 #include "IPreventionEffect.h"
 #include "dandan/conditions/ICondition.h"
+#include "dandan/core/TextReplacement.h"
 #include <memory>
+#include <optional>
+#include <vector>
 
 namespace dandan::effects
 {
@@ -25,8 +28,10 @@ namespace dandan::effects
         {
         }
 
-        [[nodiscard]] bool prevents(const core::IAction &action,
-                                    const core::Game &game) const override;
+        [[nodiscard]] bool prevents(
+            const core::IAction &action, const core::Game &game,
+            std::optional<std::vector<core::TextReplacement>>
+                text_replacements = std::nullopt) const override;
 
         [[nodiscard]] std::unique_ptr<IPreventionEffect> clone() const override
         {

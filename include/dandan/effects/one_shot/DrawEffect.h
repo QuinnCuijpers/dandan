@@ -55,7 +55,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] const core::Game &game,
             EffectContext context) const override
         {
             return std::make_unique<DrawEffect>(m_amount->clone(), context);

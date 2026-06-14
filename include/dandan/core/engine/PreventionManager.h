@@ -55,12 +55,13 @@ namespace dandan::core
 
         /** Check if an action is prevented.
          * @param action The action to check.
-         * @param game The game instance.
+         * @param game The game instance. Game is treated as const but as bound
+         * abilities need to create a copy of their effect and those could pay
+         * costs, we cant mark it as const for now
          * @return True if the action is prevented by a prevention effect, false
          * otherwise.
          */
-        [[nodiscard]] bool isPrevented(const IAction &action,
-                                       const Game &game) const;
+        [[nodiscard]] bool isPrevented(const IAction &action, Game &game) const;
 
     private:
         using PreventionEffect =
@@ -76,9 +77,12 @@ namespace dandan::core
         static void removeFromPreventionList(
             PreventionList &list, const effects::IPreventionEffect *);
 
+        // TODO: Game is used as const as there is no bound ability that has a
+        // prevention effect that requires a cost to  create, but this should be
+        // fixed at some point
         static bool isPreventedByPreventionList(const PreventionList &list,
                                                 const IAction &action,
-                                                const Game &game);
+                                                Game &game);
     };
 } // namespace dandan::core
 
