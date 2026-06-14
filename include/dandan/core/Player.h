@@ -2,7 +2,6 @@
 #define DANDAN_PLAYER_H
 
 #include "dandan/core/Battlefield.h"
-#include "dandan/core/Card.h"
 #include "dandan/core/Hand.h"
 #include "dandan/mana/Mana.h"
 #include <cstddef>
@@ -14,6 +13,7 @@ namespace dandan::core
 {
 
     class Game;
+    class Card;
 
     /** @brief The class that represents a player in the game.
      * @class Player
@@ -177,33 +177,11 @@ namespace dandan::core
          */
         void drawCard(Game &game);
 
-        /** Plays a card from the player's hand.
-         * @param card The card to play.
-         */
-        void playCard(Card &card)
-        {
-            std::cout << "Player is playing card " << card.getData().getName()
-                      << " with ID " << card.getID().getID() << '\n';
-            m_battlefield.addCard(card);
-        }
+        void playCard(Card &card);
 
-        /** Discards a card from the player's hand.
-         * @param card The card to discard.
-         * @param game The game instance.
-         */
-        void discardCard(const Card &card, Game &game)
-        {
-            std::cout << "Player is discarding card "
-                      << card.getData().getName() << '\n';
-            m_hand.discardCard(card.getID(), game);
-        }
+        void discardCard(const Card &card, Game &game);
 
-        void sacrificeCard(Card &card, Game &game)
-        {
-            std::cout << "Player is sacrificing card with ID "
-                      << card.getID().getID() << '\n';
-            m_battlefield.sacrificeCard(card, game);
-        }
+        void sacrificeCard(Card &card, Game &game);
 
         /** Takes damage
          * @param damage The amount of damage to take.

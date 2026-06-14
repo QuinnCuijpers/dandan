@@ -2,6 +2,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/DestroyEffect.h"
 #include "dandan/effects/one_shot/LoseGameEffect.h"
+#include <vector>
 
 namespace dandan::core
 {
@@ -72,8 +73,8 @@ namespace dandan::core
         }
 
         // check state triggers
-        for (const auto &[card_id, triggered_records] :
-             game.conditionManager().getTriggerRecords())
+        auto current_records{game.conditionManager().getTriggerRecords()};
+        for (const auto &[card_id, triggered_records] : current_records)
         {
             for (const auto &triggered_record : triggered_records)
             {

@@ -12,6 +12,7 @@
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #ifdef DANDAN_SERIALIZE
@@ -305,6 +306,12 @@ namespace dandan::core
                     << ", summoning sick: " << card.m_summoning_sick
                     << ", data: " << *card.m_card_data << '}';
             return ostream;
+        }
+
+        // TODO: should only be public to Game::GameSetup
+        void setBoundAbilities(std::vector<abilities::BoundAbility> abilities)
+        {
+            m_current_abilities = std::move(abilities);
         }
 
     private:

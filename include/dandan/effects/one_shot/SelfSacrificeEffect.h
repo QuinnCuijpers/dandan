@@ -1,6 +1,7 @@
 #ifndef DANDAN_SELFSACRIFICEEFFECT_H
 #define DANDAN_SELFSACRIFICEEFFECT_H
 
+#include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <iostream>
@@ -29,8 +30,8 @@ namespace dandan::effects
         std::unique_ptr<events::IEvent> apply_impl(
             [[maybe_unused]] core::Game &game) const override
         {
-            std::cout << "Resolving SelfSacrificeEffect: Sacrificing the "
-                         "source card.\n";
+            auto *card{game.getCardByID(m_card_id)};
+            card->destroy(game);
             return nullptr;
         }
 

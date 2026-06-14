@@ -991,7 +991,7 @@ TEST(DandanLibTest, DandanMindBendTest)
     // turn 2 player 2
     stream << "activate " << island_2_1 << '\n';
     stream << "play " << mind_bend_2_1 << '\n';
-    stream << 1 << '\n'; // index of dandan in choice list
+    stream << 3 << '\n'; // index of dandan in choice list
     stream << "island\n";
     stream << "plains\n";
     stream << "quit\n";

@@ -11,6 +11,8 @@ namespace dandan::core
     {
         if (ability.type() == abilities::AbilityType::EventTriggered)
         {
+            std::cout << "subscribing to event manager\n";
+            std::cout << "New size: " << size() << '\n';
             m_subscribers[ability.sourceCard()].push_back(&ability);
         }
     }
@@ -41,7 +43,6 @@ namespace dandan::core
 
             for (const auto *ability : iter->second)
             {
-                // TODO: replace with BoundAbility.getContext();
                 auto ability_context{ability->getContext()};
                 const auto &underlying_ability{ability->definition()};
                 if (const auto *event_triggered_ability =

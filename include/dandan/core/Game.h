@@ -476,16 +476,26 @@ namespace dandan::core
             case TargetType::Permanent:
             {
                 std::vector<Target> targets;
-                for (const auto &player : getPlayers())
+                auto starting_player_id{activePlayer().getID()};
+                auto current_player_id{starting_player_id};
+
+                while (true)
                 {
+                    const auto &player{getPlayer(current_player_id)};
                     const auto &player_permanents =
                         player.battlefield().permanents();
-                    for (const auto &[type, permanents] : player_permanents)
+                    for (const auto &[permanent_type, permanents] :
+                         player_permanents)
                     {
                         std::transform(permanents.begin(), permanents.end(),
                                        std::back_inserter(targets),
                                        [](const Permanent &perm) -> Target
                                        { return perm; });
+                    }
+                    current_player_id = getNextPlayerID(current_player_id);
+                    if (current_player_id == starting_player_id)
+                    {
+                        break;
                     }
                 }
                 return targets;

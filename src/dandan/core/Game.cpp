@@ -58,6 +58,18 @@ namespace dandan::core
 
         for (auto &card : m_cards)
         {
+            auto bound_abilities{std::vector<abilities::BoundAbility>{}};
+            for (const auto &ability : card.getData().getAbilities())
+            {
+                auto *definition{ability.get()};
+                auto bound{abilities::BoundAbility{*definition, &card}};
+                bound_abilities.push_back(bound);
+            }
+            card.setBoundAbilities(std::move(bound_abilities));
+        }
+
+        for (auto &card : m_cards)
+        {
             m_card_map.emplace(card.getID(), &card);
             m_library.addCard(card);
         }

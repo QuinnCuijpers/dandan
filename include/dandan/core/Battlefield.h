@@ -4,7 +4,7 @@
 #include "Card.h"
 #include "dandan/core/CardData.h"
 #include <algorithm>
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 namespace dandan::core
@@ -13,8 +13,7 @@ namespace dandan::core
     class Game;
 
     using Permanent = CardID;
-    using PermanentMap =
-        std::unordered_map<CardData::Type, std::vector<Permanent>>;
+    using PermanentMap = std::map<CardData::Type, std::vector<Permanent>>;
 
     // TODO: expand docs
     /** @brief A class representing the battlefield.

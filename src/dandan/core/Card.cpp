@@ -56,16 +56,6 @@ namespace dandan::core
                 setCurrentToughness(stats->toughness);
             }
             setCurrentSubType(m_card_data->getSubType());
-
-            auto bound_abilities{std::vector<abilities::BoundAbility>{}};
-            for (const auto &ability : m_card_data->getAbilities())
-            {
-                auto *definition{ability.get()};
-                auto bound{abilities::BoundAbility{*definition, this}};
-
-                bound_abilities.push_back(bound);
-            }
-            m_current_abilities = std::move(bound_abilities);
         }
     }
 
@@ -79,6 +69,7 @@ namespace dandan::core
         game.eventManager().unsubscribe(*card);
         game.conditionManager().removeCardConditions(card->getID());
         game.preventionManager().unsubscribe(card->getID());
+        game.replacementManager().unsubscribe(*card);
         game.graveyard().addCard(*card);
     }
 
