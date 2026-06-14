@@ -3,7 +3,9 @@
 
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/core/TextReplacement.h"
 #include <optional>
+#include <vector>
 // #include "dandan/core/PlayerID.h"
 
 namespace dandan::abilities
@@ -22,9 +24,12 @@ namespace dandan::abilities
          */
         AbilityContext(core::CardID source_card_id,
                        core::PlayerID controller_id,
-                       std::optional<size_t> chosen_mode_index = std::nullopt)
+                       std::optional<size_t> chosen_mode_index = std::nullopt,
+                       std::optional<std::vector<core::TextReplacement>>
+                           text_replacements = std::nullopt)
             : source_card_id(source_card_id), controller_id(controller_id),
-              chosen_mode_index(chosen_mode_index)
+              chosen_mode_index(chosen_mode_index),
+              text_replacements(std::move(text_replacements))
         {
         }
 
@@ -35,6 +40,8 @@ namespace dandan::abilities
         core::PlayerID controller_id;
         /// for modal abilities this represents the index of the chosen mode
         std::optional<size_t> chosen_mode_index;
+        /// Optional text replacements
+        std::optional<std::vector<core::TextReplacement>> text_replacements;
     };
 } // namespace dandan::abilities
 

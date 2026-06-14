@@ -1,13 +1,12 @@
 #ifndef DANDAN_DEFENDERCONTROLSNOBASICCONDITION_H
 #define DANDAN_DEFENDERCONTROLSNOBASICCONDITION_H
 
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/IMindBendable.h"
-#include "dandan/core/TextReplacement.h"
 #include <memory>
 #include <optional>
-#include <vector>
 namespace dandan::conditions
 {
     class DefenderControlsNoBasicCondition : public ICondition,
@@ -15,7 +14,8 @@ namespace dandan::conditions
     {
 
     public:
-        DefenderControlsNoBasicCondition(core::SubType type) : m_type(type)
+        explicit DefenderControlsNoBasicCondition(core::SubType type)
+            : m_type(type)
         {
         }
 
@@ -26,7 +26,7 @@ namespace dandan::conditions
 
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
-            std::optional<std::vector<core::TextReplacement>> text_replace =
+            std::optional<abilities::AbilityContext> context =
                 std::nullopt) const override;
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override

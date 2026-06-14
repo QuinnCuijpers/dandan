@@ -21,8 +21,10 @@
 #include "dandan/core/phases/IPhase.h"
 #include "engine/EventManager.h"
 #include "engine/ReplacementManager.h"
+#include <algorithm>
 #include <filesystem>
 #include <istream>
+#include <iterator>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -59,10 +61,9 @@ namespace dandan::core
         {
             std::vector<CardID> card_ids;
             card_ids.reserve(m_cards.size());
-            for (const auto &card : m_cards)
-            {
-                card_ids.push_back(card.getID());
-            }
+            std::transform(m_cards.begin(), m_cards.end(),
+                           std::back_inserter(card_ids),
+                           [](const auto &card) { return card.getID(); });
             return card_ids;
         }
 
@@ -301,7 +302,7 @@ namespace dandan::core
 
         void applyEndOfTurnEffects()
         {
-            for (auto &effect : m_end_of_turn_effects)
+            for (const auto &effect : m_end_of_turn_effects)
             {
                 effect->apply(*this);
             }
@@ -477,7 +478,8 @@ namespace dandan::core
                 std::vector<Target> targets;
                 for (const auto &player : getPlayers())
                 {
-                    auto player_permanents = player.battlefield().permanents();
+                    const auto &player_permanents =
+                        player.battlefield().permanents();
                     for (const auto &[type, permanents] : player_permanents)
                     {
                         std::transform(permanents.begin(), permanents.end(),

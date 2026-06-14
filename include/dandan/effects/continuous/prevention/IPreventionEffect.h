@@ -2,6 +2,7 @@
 #define DANDAN_IPREVENTION_EFFECT_H
 
 #include "../IContinuousEffect.h"
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/TextReplacement.h"
 #include "dandan/core/actions/IAction.h"
@@ -44,8 +45,8 @@ namespace dandan::effects
          */
         [[nodiscard]] virtual bool prevents(
             const core::IAction &action, const core::Game &game,
-            std::optional<std::vector<core::TextReplacement>>
-                text_replacements = std::nullopt) const = 0;
+            std::optional<abilities::AbilityContext> context =
+                std::nullopt) const = 0;
 
         /** Creates a copy of the prevention effect.
          * @return A unique pointer to the cloned prevention effect.

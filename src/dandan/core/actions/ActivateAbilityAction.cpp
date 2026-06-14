@@ -33,14 +33,16 @@ namespace dandan::core
         if (const auto *activated_ability =
                 dynamic_cast<const abilities::ActivatedAbility *>(m_ability))
         {
+            auto *card{game.getCardByID(m_context.source_card_id)};
             game.stack().push(
-                abilities::BoundAbility{*activated_ability, m_context});
+                abilities::BoundAbility{*activated_ability, card});
             return nullptr;
         }
         if (const auto *with_damage =
                 dynamic_cast<const abilities::WithDamage *>(m_ability))
         {
-            game.stack().push(abilities::BoundAbility{*with_damage, m_context});
+            auto *card{game.getCardByID(m_context.source_card_id)};
+            game.stack().push(abilities::BoundAbility{*with_damage, card});
             return nullptr;
         }
         throw std::runtime_error(

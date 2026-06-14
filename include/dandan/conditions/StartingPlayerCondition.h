@@ -1,10 +1,12 @@
 #ifndef DANDAN_STARTINGPLAYERCONDITION_H
 #define DANDAN_STARTINGPLAYERCONDITION_H
 
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/TextReplacement.h"
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace dandan::conditions
@@ -22,8 +24,8 @@ namespace dandan::conditions
     public:
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
-            [[maybe_unused]] std::optional<std::vector<core::TextReplacement>>
-                text_replacement) const override
+            [[maybe_unused]] std::optional<abilities::AbilityContext> context =
+                std::nullopt) const override
         {
             return game.isFirstTurn();
         }

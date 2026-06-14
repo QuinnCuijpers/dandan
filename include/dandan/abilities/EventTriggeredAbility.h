@@ -6,6 +6,7 @@
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/triggers/ITrigger.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::abilities
 {
@@ -38,7 +39,7 @@ namespace dandan::abilities
         [[nodiscard]] bool appliesTo(const events::IEvent &event,
                                      abilities::AbilityContext context) const
         {
-            return m_trigger->triggersOn(event, context);
+            return m_trigger->triggersOn(event, std::move(context));
         }
 
         /** Get the trigger for the ability as a const pointer

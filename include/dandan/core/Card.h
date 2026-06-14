@@ -8,11 +8,9 @@
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Target.h"
-#include "dandan/core/TargetRequirement.h"
 #include "dandan/core/Zone.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
-#include <memory>
 #include <unordered_map>
 #include <vector>
 

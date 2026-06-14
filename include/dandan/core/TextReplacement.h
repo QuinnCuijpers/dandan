@@ -1,8 +1,8 @@
 #ifndef DANDAN_TEXTREPLACEMENT_H
 #define DANDAN_TEXTREPLACEMENT_H
 
-#include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
+#include "dandan/core/SubType.h"
 #include <variant>
 
 namespace dandan::core

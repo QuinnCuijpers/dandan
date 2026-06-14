@@ -1,12 +1,11 @@
 #ifndef DANDAN_SELFCONTROLSNObasicCONDITION_H
 #define DANDAN_SELFCONTROLSNObasicCONDITION_H
 
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/IMindBendable.h"
-#include "dandan/core/TextReplacement.h"
 #include <memory>
-#include <vector>
 
 namespace dandan::conditions
 {
@@ -19,7 +18,7 @@ namespace dandan::conditions
     class SelfControlsNoBasicCondition : public ICondition, core::IMindBendable
     {
     public:
-        SelfControlsNoBasicCondition(core::SubType basic_land_type)
+        explicit SelfControlsNoBasicCondition(core::SubType basic_land_type)
             : m_basic_type(basic_land_type)
         {
         }
@@ -31,8 +30,7 @@ namespace dandan::conditions
 
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
-            std::optional<std::vector<core::TextReplacement>> text_replacements)
-            const override;
+            std::optional<abilities::AbilityContext> context) const override;
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override
         {

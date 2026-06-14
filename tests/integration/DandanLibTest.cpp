@@ -6,6 +6,7 @@
 #include "dandan/core/Constants.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/core/SubType.h"
 #include "dandan/core/Zone.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
@@ -921,4 +922,83 @@ TEST(DandanLibTest, MysticalTutorTest)
 
     EXPECT_EQ(game.activePlayer().hand().getCards().back().getID(),
               CHOSEN_CARD_ID.getID());
+}
+
+TEST(DandanLibTest, DandanMindBendTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_DANDANS{4};
+    static constexpr int NUM_ISLANDS{4};
+    static constexpr int NUM_MINDBEND{30};
+
+    auto dandan_abilities{::Dandan_Abilities()};
+    auto island_abilities{::Island_TESTS_Abilities()};
+    auto mind_bend_abilities{::Mind_Bend_Abilities()};
+
+    auto island_data{dandan::core::CardData{
+        "Svyelunite Temple", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land, dandan::core::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
+
+    auto dandan_data{dandan::core::CardData{
+        "Dandan", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Creature, dandan::core::SubType::Fish,
+        dandan::core::CardData::SuperType::None, std::move(dandan_abilities)}};
+
+    auto mind_bend_data{dandan::core::CardData{
+        "Mind Bend", std::make_unique<dandan::mana::BlueMana>(1),
+        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::SuperType::None,
+        std::move(mind_bend_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
+    auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
+    auto mind_bend_cards{createTestCards(NUM_MINDBEND, &mind_bend_data)};
+
+    cards.insert(cards.end(), dandan_cards.begin(), dandan_cards.end());
+    cards.insert(cards.end(), mind_bend_cards.begin(), mind_bend_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    std::stringstream stream{};
+
+    auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
+
+    auto island_1_2{game.activePlayer().hand().getCards()[1].getID()};
+
+    auto island_2_1{game.nonActivePlayer().hand().getCards()[0].getID()};
+
+    auto dandan_1_1{game.activePlayer().hand().getCards()[2].getID()};
+    auto mind_bend_2_1{game.nonActivePlayer().hand().getCards()[4].getID()};
+
+    // turn 1 player 1
+    stream << "play " << island_1_1 << '\n';
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "play " << island_2_1 << '\n';
+    stream << "pass\n";
+
+    // turn 2 player 1
+    stream << "play " << island_1_2 << '\n';
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "play " << dandan_1_1 << '\n';
+    stream << "pass\n";
+
+    // turn 2 player 2
+    stream << "activate " << island_2_1 << '\n';
+    stream << "play " << mind_bend_2_1 << '\n';
+    stream << 1 << '\n'; // index of dandan in choice list
+    stream << "island\n";
+    stream << "plains\n";
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *dandan{game.getCardByID(dandan_1_1)};
+    EXPECT_EQ(dandan->getZone(), dandan::core::Zone::GRAVEYARD);
 }

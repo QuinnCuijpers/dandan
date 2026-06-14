@@ -38,7 +38,8 @@ namespace dandan::abilities
             [[maybe_unused]] AbilityContext context) const override
         {
             return m_effect->bind(
-                game, effects::EffectContext(context.controller_id));
+                game, effects::EffectContext(context.source_card_id,
+                                             context.controller_id));
         }
 
         /** Get the condition for the ability as a const pointer

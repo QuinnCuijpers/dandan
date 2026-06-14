@@ -192,8 +192,7 @@ namespace dandan::core
                                     static_ability->getEffect()))
                             {
                                 return prevention_effect->prevents(
-                                    action, game,
-                                    ability->getTextReplacements());
+                                    action, game, ability->getContext());
                             }
                         }
                         // should be unreachable as only prevention effects are

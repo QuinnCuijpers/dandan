@@ -54,9 +54,9 @@ namespace dandan::core
         void addStateTriggeredAbility(abilities::BoundAbility *ability)
         {
 
-            std::cout << "Adding StateTriggered ability\n";
             if (ability->type() == abilities::AbilityType::StateTriggered)
             {
+                std::cout << "Adding StateTriggered ability\n";
                 auto source{ability->sourceCard()};
                 auto triggered_record{TriggeredRecord{ability, false}};
                 m_trigger_records[source].push_back(triggered_record);
@@ -89,8 +89,8 @@ namespace dandan::core
                     {
                         bool currently_satisfied =
                             triggered_ability->condition()->isSatisfied(
-                                game, triggered_record.bound_ability
-                                          ->getTextReplacements());
+                                game,
+                                triggered_record.bound_ability->getContext());
                         if (currently_satisfied && !triggered_record.satisfied)
                         {
                             std::cout << "Condition for ability on card "

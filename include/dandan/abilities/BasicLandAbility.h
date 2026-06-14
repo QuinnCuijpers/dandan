@@ -73,7 +73,7 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override
         {
-            auto *cardp = game.getCardByID(context.source_card_id);
+            const auto *cardp = game.getCardByID(context.source_card_id);
             return m_basic_land_ability_map->at(cardp->getCurrentSubType())
                 ->createEffect(game, context);
         }

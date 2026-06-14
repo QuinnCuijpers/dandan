@@ -12,7 +12,8 @@ namespace dandan::effects
     {
 
     public:
-        MindBendEffect(core::Target target) : m_target(std::move(target))
+        explicit MindBendEffect(core::Target target)
+            : m_target(std::move(target))
         {
         }
 
@@ -38,7 +39,8 @@ namespace dandan::effects
     class MindBendEffectDefinition : public IOneShotEffectDefinition
     {
     public:
-        MindBendEffectDefinition(core::TargetRequirement target_requirements)
+        explicit MindBendEffectDefinition(
+            core::TargetRequirement target_requirements)
             : m_target_requirements(std::move(target_requirements))
         {
         }

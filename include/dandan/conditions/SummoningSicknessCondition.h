@@ -1,6 +1,7 @@
 #ifndef DANDAN_SUMMONING_SICKNESS_CONDITION_H
 #define DANDAN_SUMMONING_SICKNESS_CONDITION_H
 
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/TextReplacement.h"
@@ -27,8 +28,8 @@ namespace dandan::conditions
         }
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
-            std::optional<std::vector<core::TextReplacement>> text_replacement)
-            const override;
+            std::optional<abilities::AbilityContext> context =
+                std::nullopt) const override;
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override
         {

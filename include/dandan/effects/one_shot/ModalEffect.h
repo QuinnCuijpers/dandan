@@ -3,7 +3,6 @@
 
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
-#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -15,7 +14,7 @@ namespace dandan::effects
     {
 
     public:
-        ModalEffectDefinition(
+        explicit ModalEffectDefinition(
             std::vector<std::unique_ptr<IOneShotEffectDefinition>> options)
             : m_options(std::move(options))
         {

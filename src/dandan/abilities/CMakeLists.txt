@@ -9,7 +9,8 @@ target_sources(
           EventTriggeredAbility.cpp
           SpellAbility.cpp
           StateTriggeredAbility.cpp
-          AbilityType.cpp)
+          AbilityType.cpp
+          BoundAbility.cpp)
 
 target_sources(DandanAbilities PUBLIC FILE_SET HEADERS BASE_DIRS
                                       ${CMAKE_SOURCE_DIR}/include)

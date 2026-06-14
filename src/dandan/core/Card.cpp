@@ -33,8 +33,7 @@ namespace dandan::core
             for (const auto &ability : m_card_data->getAbilities())
             {
                 auto *definition{ability.get()};
-                auto bound{abilities::BoundAbility{*definition, m_card_id,
-                                                   m_controller_id}};
+                auto bound{abilities::BoundAbility{*definition, this}};
                 bound_abilities.push_back(bound);
             }
             m_current_abilities = std::move(bound_abilities);
@@ -62,8 +61,8 @@ namespace dandan::core
             for (const auto &ability : m_card_data->getAbilities())
             {
                 auto *definition{ability.get()};
-                auto bound{abilities::BoundAbility{*definition, m_card_id,
-                                                   m_controller_id}};
+                auto bound{abilities::BoundAbility{*definition, this}};
+
                 bound_abilities.push_back(bound);
             }
             m_current_abilities = std::move(bound_abilities);

@@ -1,3 +1,4 @@
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Card.h"
@@ -15,11 +16,10 @@ namespace dandan::conditions
 
     bool DefenderControlsNoBasicCondition::isSatisfied(
         const core::Game &game,
-        [[maybe_unused]] std::optional<std::vector<core::TextReplacement>>
-            text_replacements) const
+        [[maybe_unused]] std::optional<abilities::AbilityContext> context) const
     {
-        std::cout << "Checking ControlsNoIslandCondition\n";
         auto basic{m_type};
+        auto text_replacements{context->text_replacements};
         if (text_replacements.has_value())
         {
             auto text_replacements_v{text_replacements.value()};
@@ -44,7 +44,7 @@ namespace dandan::conditions
                    card->getData().getType() == core::CardData::Type::Land &&
                    card->getData().getSubType() != m_type;
         };
-        std::cout << "Checking ControlsNoIslandCondition for player "
+        std::cout << "Checking DefenderControlsNoIslandCondition for player "
                   << game.nonActivePlayer().getID().id() << '\n';
         const core::Player &defending_player = game.nonActivePlayer();
         const auto &battlefield{defending_player.battlefield()};

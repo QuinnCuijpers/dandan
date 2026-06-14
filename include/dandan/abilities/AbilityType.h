@@ -23,7 +23,7 @@ namespace dandan::abilities
             AbilityDecorator
         };
 
-        AbilityType(Type type) : m_type(type)
+        explicit AbilityType(Type type) : m_type(type)
         {
         }
 

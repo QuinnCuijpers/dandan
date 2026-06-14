@@ -32,7 +32,7 @@ namespace dandan::effects
     class TutorTopEffectDefinition : public IOneShotEffectDefinition
     {
     public:
-        TutorTopEffectDefinition(
+        explicit TutorTopEffectDefinition(
             std::vector<dandan::core::CardData::Type> filter_types)
             : m_filter_types(std::move(filter_types))
         {

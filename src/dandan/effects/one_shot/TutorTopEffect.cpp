@@ -40,7 +40,7 @@ namespace dandan::effects
         int chosen_card_id = std::stoi(input);
 
         // remove card from lib and shuffle
-        auto *card = game.getCardByID(chosen_card_id);
+        const auto *card = game.getCardByID(chosen_card_id);
         game.moveCardFromZone(game.activePlayer(), *card);
         game.library().shuffle();
 

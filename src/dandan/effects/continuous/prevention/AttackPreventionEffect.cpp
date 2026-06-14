@@ -6,15 +6,14 @@ namespace dandan::effects
 {
     bool AttackPreventionEffect::prevents(
         const core::IAction &action, const core::Game &game,
-        std::optional<std::vector<core::TextReplacement>> text_replacements)
-        const
+        std::optional<abilities::AbilityContext> context) const
     {
         if ([[maybe_unused]] const auto *attack_action =
                 dynamic_cast<const core::AttackAction *>(&action))
         {
 
             std::cout << "Checking attack prevention effect condition\n";
-            if (getCondition()->isSatisfied(game, text_replacements))
+            if (getCondition()->isSatisfied(game, context))
             {
                 // TODO: give conditions display
                 //  std::cout << "Attack prevention with condition "
