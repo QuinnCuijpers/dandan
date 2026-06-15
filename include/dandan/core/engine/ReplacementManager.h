@@ -1,4 +1,5 @@
-
+#ifndef DANDAN_REPLACEMENTMANAGER_H
+#define DANDAN_REPLACEMENTMANAGER_H
 
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/core/Card.h"
@@ -7,8 +8,6 @@
 
 namespace dandan::core
 {
-    // TODO: consider implementing this as a map of cardID's like the event
-    // manager
 
     /** @brief The class that manages replacement effects.
      * @class ReplacementManager
@@ -38,3 +37,5 @@ namespace dandan::core
         std::vector<abilities::BoundAbility *> m_replacement_effects;
     };
 } // namespace dandan::core
+
+#endif

@@ -3,6 +3,8 @@
 
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
+#include <algorithm>
+#include <iterator>
 #include <memory>
 #include <string>
 #include <vector>
@@ -38,10 +40,10 @@ namespace dandan::effects
         {
             auto cloned_options{
                 std::vector<std::unique_ptr<IOneShotEffectDefinition>>{}};
-            for (const auto &option : m_options)
-            {
-                cloned_options.emplace_back(option->clone());
-            }
+
+            std::transform(m_options.begin(), m_options.end(),
+                           std::back_inserter(cloned_options),
+                           [](const auto &option) { return option->clone(); });
             return std::make_unique<ModalEffectDefinition>(
                 std::move(cloned_options));
         }

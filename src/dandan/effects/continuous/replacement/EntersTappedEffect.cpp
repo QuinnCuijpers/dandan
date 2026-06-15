@@ -14,9 +14,10 @@ namespace dandan::effects
     effects::IOneShotEffect &EntersTappedEffect::replace(
         effects::IOneShotEffect &effect) const
     {
-
+        std::cout << "Checking entertapped replacement effect\n";
         if (appliesTo(effect))
         {
+            std::cout << "Applying etb tapped replacement effect\n";
             auto *etbEffect = dynamic_cast<effects::ETBEffect *>(&effect);
             etbEffect->setTapped(true);
             return *etbEffect;

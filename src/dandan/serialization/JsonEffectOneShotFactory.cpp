@@ -1,5 +1,8 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
+#include "dandan/core/CardData.h"
 #include "dandan/effects/one_shot/MindBendEffect.h"
+#include <algorithm>
+#include <iterator>
 #include <vector>
 #ifdef DANDAN_SERIALIZE
 #include "dandan/effects/one_shot/BounceLandEffect.h"
@@ -192,10 +195,11 @@ namespace dandan::serialization
         {
             std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
                 options;
-            for (const auto &option_json : data.at("options"))
-            {
-                options.push_back(create_product(option_json));
-            }
+            std::transform(data.at("options").begin(), data.at("options").end(),
+                           std::back_inserter(options),
+                           [](const auto &option_json)
+                           { return create_product(option_json); });
+
             return std::make_unique<effects::ModalEffectDefinition>(
                 std::move(options));
         }
@@ -266,10 +270,14 @@ namespace dandan::serialization
         if (type == "TutorTopEffect")
         {
             std::vector<core::CardData::Type> filter_types;
-            for (const auto &type_json : data.at("filter_types"))
-            {
-                filter_types.push_back(type_json.get<core::CardData::Type>());
-            }
+            std::transform(
+                data.at("filter_types").begin(), data.at("filter_types").end(),
+                std::back_inserter(filter_types), [](const auto &type_json)
+                { return type_json.template get<core::CardData::Type>(); });
+            // for (const auto &type_json : data.at("filter_types"))
+            // {
+            //     filter_types.push_back(type_json.get<core::CardData::Type>());
+            // }
             return std::make_unique<effects::TutorTopEffectDefinition>(
                 std::move(filter_types));
         }

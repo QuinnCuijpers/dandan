@@ -216,7 +216,6 @@ TEST(DandanLibTest, PlayCreatureTest)
     // should play 6 dandan
     game.run();
 
-    // player should have the mana that was added to their mana pool
     EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(),
               STARTING_HAND_SIZE - 1);
 }
@@ -393,6 +392,7 @@ TEST(DandanLibTest, ManaAbilities)
             auto *card{game.getCardByID(land)};
             // Adds a copy of the land in hand to the battlefield
             player.playCard(*card);
+            game.moveCardFromZone(player, *card);
         }
     }
 
@@ -715,6 +715,9 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     stream << "1\n"; // option 1
     stream << "play " << accumulated_knowledge_id_2.getID() << '\n';
     stream << "pass\n";
+
+    // turn 2 player 2
+    stream << "pass\n";
     // discard down to hand size
     stream << game.nonActivePlayer().hand().getCards()[1].getID() << '\n';
     stream << game.nonActivePlayer().hand().getCards()[2].getID() << '\n';
@@ -773,7 +776,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
         std::make_unique<dandan::mana::AndMana>(
             std::make_unique<dandan::mana::BlueMana>(2),
             std::make_unique<dandan::mana::GenericMana>(2)),
-        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::Type::Sorcery, dandan::core::SubType::None,
         dandan::core::CardData::SuperType::None,
         std::move(diminishing_returns_abilities)}};
 

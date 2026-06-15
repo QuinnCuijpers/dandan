@@ -42,7 +42,8 @@ namespace dandan::core
          * priority.
          */
         explicit PriorityManager(PlayerID starting_player)
-            : m_current_player_with_priority{starting_player}
+            : m_current_player_with_priority{starting_player},
+              m_last_acted_player(starting_player)
         {
         }
 
@@ -57,15 +58,18 @@ namespace dandan::core
         /** Sets the priority to the active player.
          * @param game The game object to get the active player from.
          */
-        void setPriorityToActivePlayer(Game &game);
+        void setPriorityToPlayer(PlayerID player_id, Game &game);
 
         /** Passes priority to the next player in turn order.
          * @param game The game object to get the next player from.
          */
-        void passPriority(const Game &game);
+        void passPriority(Game &game);
 
     private:
         PlayerID m_current_player_with_priority;
+        PlayerID m_last_acted_player;
+
+        void handleStack(core::Game &game);
     };
 
 } // namespace dandan::core

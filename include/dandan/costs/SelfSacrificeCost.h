@@ -25,8 +25,9 @@ namespace dandan::costs
             return source.getControllerID().id() == player.getID().id();
         }
 
-        void pay([[maybe_unused]] core::Game &game,
-                 [[maybe_unused]] abilities::AbilityContext context) override
+        void pay(
+            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] abilities::AbilityContext context) const override
         {
             [[maybe_unused]] auto &player =
                 game.getPlayer(context.controller_id);

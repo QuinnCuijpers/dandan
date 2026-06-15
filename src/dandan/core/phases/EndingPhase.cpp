@@ -12,7 +12,8 @@ namespace dandan::core
         {
         case Step::End:
             std::cout << "Handling end step\n";
-            game().priorityManager().setPriorityToActivePlayer(game());
+            game().priorityManager().setPriorityToPlayer(
+                game().activePlayer().getID(), game());
             game().render();
             m_step = Step::Cleanup;
             break;

@@ -1,6 +1,8 @@
 #include "dandan/effects/one_shot/TutorTopEffect.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
+#include <algorithm>
+#include <iterator>
 #include <string>
 #include <vector>
 
@@ -17,20 +19,17 @@ namespace dandan::effects
             return std::any_of(filter_types.begin(), filter_types.end(),
                                [&card_id, &game](const auto &type)
                                {
-                                   auto *card = game.getCardByID(card_id);
+                                   const auto *card = game.getCardByID(card_id);
                                    return card->getData().getType() == type;
                                });
         };
 
         std::vector<core::CardID> options{};
 
-        for (const auto &card : game.library().getCards())
-        {
-            if (included(card, m_filter_types))
-            {
-                options.push_back(card);
-            }
-        }
+        std::copy_if(game.library().getCards().begin(),
+                     game.library().getCards().end(),
+                     std::back_inserter(options), [&](const auto &card)
+                     { return included(card, m_filter_types); });
 
         // ask player which cardid they want
         game.printCards(options);

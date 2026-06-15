@@ -26,7 +26,8 @@ namespace dandan::core
 
     void CombatPhase::handleDeclareAttackersStep()
     {
-        game().priorityManager().setPriorityToActivePlayer(game());
+        game().priorityManager().setPriorityToPlayer(
+            game().activePlayer().getID(), game());
         std::cout << "Declare attackers step\n";
 
         // ask the player to choose attacking creatures
@@ -105,7 +106,8 @@ namespace dandan::core
     void CombatPhase::handleDeclareBlockersStep()
     {
         std::cout << "Declare blockers step\n";
-        game().priorityManager().setPriorityToActivePlayer(game());
+        game().priorityManager().setPriorityToPlayer(
+            game().activePlayer().getID(), game());
         if (m_attackers.empty())
         {
             std::cout
@@ -154,7 +156,8 @@ namespace dandan::core
         {
         case Step::BeginningOfCombat:
             std::cout << "Beginning of combat step\n";
-            game().priorityManager().setPriorityToActivePlayer(game());
+            game().priorityManager().setPriorityToPlayer(
+                game().activePlayer().getID(), game());
             m_step = Step::DeclareAttackers;
             break;
         // TODO:
@@ -198,7 +201,8 @@ namespace dandan::core
             m_step = Step::EndOfCombat;
             break;
         case Step::EndOfCombat:
-            game().priorityManager().setPriorityToActivePlayer(game());
+            game().priorityManager().setPriorityToPlayer(
+                game().activePlayer().getID(), game());
             std::cout << "End of combat step\n";
             m_step = Step::Done;
             break;

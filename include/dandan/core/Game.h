@@ -23,6 +23,7 @@
 #include "engine/ReplacementManager.h"
 #include <algorithm>
 #include <filesystem>
+#include <ios>
 #include <istream>
 #include <iterator>
 #include <memory>
@@ -374,10 +375,8 @@ namespace dandan::core
                 {
                     std::cout << card->getData().getName() << "("
                               << "CardID: " << card->getID().getID() << ", ";
-                    std::cout
-                        << "SubType: "
-                        << CardData::SubTypeToString(card->getCurrentSubType())
-                        << ") ";
+                    std::cout << "Tapped: " << std::boolalpha
+                              << card->getTapped() << ") ";
                 }
             }
             std::cout << "]\n";
@@ -510,6 +509,9 @@ namespace dandan::core
                                          " is not implemented yet");
             }
         }
+
+        void handlePlay(const std::string &input);
+        void handleActivate(const std::string &input);
 
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{

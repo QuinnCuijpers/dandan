@@ -1,6 +1,7 @@
 #include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/abilities/AbilityType.h"
 #include "dandan/abilities/BoundAbility.h"
+#include "dandan/abilities/StaticAbility.h"
 #include "dandan/effects/continuous/replacement/IReplacementEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <algorithm>
@@ -11,7 +12,11 @@ namespace dandan::core
 {
     void ReplacementManager::subscribe(abilities::BoundAbility &ability)
     {
-        m_replacement_effects.emplace_back(&ability);
+        if (ability.type() == abilities::AbilityType::StaticReplacement)
+        {
+            std::cout << "Registering static replacement ability\n";
+            m_replacement_effects.emplace_back(&ability);
+        }
     }
 
     void ReplacementManager::unsubscribe(Card &card)
@@ -42,9 +47,12 @@ namespace dandan::core
         effects::IOneShotEffect *current_effect{&effect};
         for (const auto *ability : m_replacement_effects)
         {
+            const auto *static_ability =
+                dynamic_cast<const abilities::StaticAbility *>(
+                    &ability->definition());
             if (const auto *replacement_effect =
                     dynamic_cast<const effects::IReplacementEffect *>(
-                        &ability->definition()))
+                        static_ability->getEffect()))
             {
                 if (replacement_effect->appliesTo(*current_effect))
                 {

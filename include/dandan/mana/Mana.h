@@ -3,6 +3,7 @@
 
 #include "dandan/mana/ManaType.h"
 #include <cassert>
+#include <iostream>
 #include <map>
 #include <string>
 
@@ -141,6 +142,7 @@ namespace dandan::mana
          */
         void pay(const Mana &cost)
         {
+            std::cout << "Paying cost: " << cost << '\n';
             int generic_cost = cost.getMana().at(ManaType::GENERIC);
 
             // TODO: generic mana is now paid by draining colors in order, which

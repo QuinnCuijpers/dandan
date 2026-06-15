@@ -34,6 +34,7 @@ namespace dandan::core
                 dynamic_cast<const abilities::ActivatedAbility *>(m_ability))
         {
             auto *card{game.getCardByID(m_context.source_card_id)};
+            activated_ability->getCost()->pay(game, m_context);
             game.stack().push(
                 abilities::BoundAbility{*activated_ability, card});
             return nullptr;

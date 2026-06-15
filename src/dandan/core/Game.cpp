@@ -2,6 +2,8 @@
 #include "dandan/conditions/PlayedLandCondition.h"
 #include "dandan/conditions/StartingPlayerCondition.h"
 #include "dandan/core/Player.h"
+#include "dandan/core/actions/ActivateAbilityAction.h"
+#include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/effects/continuous/prevention/DrawPreventionEffect.h"
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
@@ -322,5 +324,149 @@ namespace dandan::core
         std::cout << "Player " << winner.getName() << " wins the game!\n";
         std::cout << "Quitting the game...\n";
         std::exit(0);
+    }
+
+    void Game::handlePlay(const std::string &input)
+    {
+
+        int card_id = std::stoi(input.substr(std::size("play ") - 1));
+
+        auto action =
+            std::make_unique<PlayCardAction>(CardID::fromInt(card_id));
+
+        if (isActionPrevented(*action))
+        {
+            std::cout << "Action prevented\n";
+            return;
+        }
+
+        auto effect{action->createEffect(*this)};
+        const auto &final_effect{
+            replacementManager().applyReplacementEffects(*effect, *this)};
+
+        auto event{final_effect->apply(*this)};
+        if (event)
+        {
+            eventManager().notify(*event, *this);
+        }
+    }
+
+    void Game::handleActivate(const std::string &input)
+    {
+        int card_id = std::stoi(input.substr(std::size("activate ") - 1));
+
+        // does not move the card out of the previous zone
+        auto *cardp{getCardByID(card_id)};
+
+        if (cardp->getZone() != Zone::BATTLEFIELD &&
+            cardp->getZone() != Zone::HAND)
+        {
+            std::cout << "Card is not on the battlefield or in hand\n";
+            return;
+        }
+
+        size_t ability_index{};
+        int display_index{};
+
+        const auto &abilities = cardp->getData().getAbilities();
+
+        auto ability_indices{
+            std::vector<std::pair<size_t, std::optional<size_t>>>{}};
+
+        auto base_ability_context{abilities::AbilityContext{
+            cardp->getID(), cardp->getControllerID()}};
+
+        for (const auto &ability : cardp->getData().getAbilities())
+        {
+            if (!ability->canActivate(*this, base_ability_context))
+            {
+                ++ability_index;
+                continue;
+            }
+            if (ability->optionsAmount() > 1)
+            {
+                size_t modal_index{};
+                for (size_t option_index{};
+                     option_index < ability->optionsAmount(); ++option_index)
+                {
+                    std::cout << "Ability " << display_index++ << ": ";
+                    std::cout << ability->displayOption(option_index);
+                    std::cout << ".\n";
+                    ability_indices.emplace_back(ability_index, modal_index);
+                    ++modal_index;
+                }
+            }
+            else
+            {
+                std::cout << "Ability " << display_index++ << ": "
+                          << ability->display();
+                std::cout << ".\n";
+                ability_indices.emplace_back(ability_index, std::nullopt);
+            }
+            ++ability_index;
+        }
+
+        if (ability_indices.empty())
+        {
+            std::cout << "No activatable abilities\n";
+            return;
+        }
+
+        size_t real_index{};
+        std::optional<size_t> modal_index_opt{};
+
+        if (ability_indices.size() == 1)
+        {
+            std::cout << "Only one activatable ability, activating it\n";
+            real_index = ability_indices[0].first;
+            modal_index_opt = ability_indices[0].second;
+        }
+        else
+        {
+            std::cout << "Which ability do you want to activate? "
+                         "(enter the index of the "
+                         "ability)\n";
+
+            std::string ability_input;
+            std::getline(istream(), ability_input);
+            size_t ability_index_input = std::stoull(ability_input);
+            if (ability_index_input >= ability_indices.size())
+            {
+                std::cout << "Invalid ability index\n";
+                return;
+            }
+            real_index = ability_indices[ability_index_input].first;
+            modal_index_opt = ability_indices[ability_index_input].second;
+        }
+
+        const auto *ability = abilities[real_index].get();
+
+        auto ability_context{abilities::AbilityContext{
+            cardp->getID(), cardp->getControllerID(), modal_index_opt}};
+
+        auto action =
+            std::make_unique<ActivateAbilityAction>(ability, ability_context);
+
+        if (isActionPrevented(*action))
+        {
+            std::cout << "Action prevented\n";
+            return;
+        }
+
+        auto effect{action->createEffect(*this)};
+        if (!effect)
+        {
+            std::cout << "No effect created for ability activation\n";
+            return;
+        }
+        std::cout << "Created effect for ability activation\n";
+        const auto &final_effect{
+            replacementManager().applyReplacementEffects(*effect, *this)};
+
+        auto event{final_effect->apply(*this)};
+        if (event)
+        {
+            eventManager().notify(*event, *this);
+        }
     }
 } // namespace dandan::core

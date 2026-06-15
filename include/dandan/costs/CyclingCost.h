@@ -2,6 +2,7 @@
 #define DANDAN_CYCLING_H
 
 #include "ICost.h"
+#include "dandan/core/Game.h"
 #include <memory>
 
 namespace dandan::costs
@@ -42,10 +43,15 @@ namespace dandan::costs
             return m_inner_cost->canPay(source, player);
         }
 
-        void pay([[maybe_unused]] core::Game &game,
-                 [[maybe_unused]] abilities::AbilityContext context) override
+        void pay(
+            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] abilities::AbilityContext context) const override
         {
             m_inner_cost->pay(game, context);
+            auto player_id{context.controller_id};
+            auto &player{game.getPlayer(player_id)};
+            auto *card{game.getCardByID(context.source_card_id)};
+            player.discardCard(*card, game);
         }
 
     private:

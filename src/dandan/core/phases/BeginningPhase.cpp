@@ -64,7 +64,8 @@ namespace dandan::core
             break;
         case Step::Upkeep:
             DLOGI << "Handling upkeep step\n";
-            game().priorityManager().setPriorityToActivePlayer(game());
+            game().priorityManager().setPriorityToPlayer(
+                game().activePlayer().getID(), game());
             game().render();
             m_step = Step::Draw;
             break;
@@ -87,7 +88,8 @@ namespace dandan::core
                         *draw_effect, game())};
                 final_effect->apply(game());
             }
-            game().priorityManager().setPriorityToActivePlayer(game());
+            game().priorityManager().setPriorityToPlayer(
+                game().activePlayer().getID(), game());
             game().render();
             m_step = Step::Done;
             break;

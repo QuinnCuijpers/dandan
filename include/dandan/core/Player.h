@@ -193,6 +193,8 @@ namespace dandan::core
             m_life_total -= damage;
         }
 
+        bool canActivateSomething(Game &game) const;
+
     private:
         PlayerID m_player_id;
         std::string m_name;

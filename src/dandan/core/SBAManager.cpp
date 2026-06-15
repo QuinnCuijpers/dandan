@@ -1,7 +1,11 @@
 #include "dandan/core/SBAManager.h"
+#include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/engine/ConditionManager.h"
 #include "dandan/effects/one_shot/DestroyEffect.h"
 #include "dandan/effects/one_shot/LoseGameEffect.h"
+#include <algorithm>
+#include <unordered_map>
 #include <vector>
 
 namespace dandan::core
@@ -73,8 +77,16 @@ namespace dandan::core
         }
 
         // check state triggers
-        auto current_records{game.conditionManager().getTriggerRecords()};
-        for (const auto &[card_id, triggered_records] : current_records)
+        // copy the current triggers so we dont segfault if a trigger causes an
+        // effect that removes trigger records
+        std::unordered_map<CardID, std::vector<TriggeredRecord>>
+            copied_records{};
+        const auto &current_records{
+            game.conditionManager().getTriggerRecords()};
+        std::copy(current_records.begin(), current_records.end(),
+                  std::inserter(copied_records, copied_records.begin()));
+
+        for (const auto &[card_id, triggered_records] : copied_records)
         {
             for (const auto &triggered_record : triggered_records)
             {

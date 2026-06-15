@@ -1,5 +1,12 @@
 #include "dandan/core/Player.h"
+#include "dandan/abilities/AbilityType.h"
+#include "dandan/abilities/ActivatedAbility.h"
+#include "dandan/abilities/ManaAbility.h"
+#include "dandan/core/CardData.h"
 #include "dandan/core/Game.h"
+#include "dandan/mana/Mana.h"
+#include <algorithm>
+#include <iterator>
 
 namespace dandan::core
 {
@@ -37,5 +44,76 @@ namespace dandan::core
         std::cout << "Player is sacrificing card with ID "
                   << card.getID().getID() << '\n';
         m_battlefield.sacrificeCard(card, game);
+    }
+
+    bool Player::canActivateSomething(Game &game) const
+    {
+        mana::Mana available_mana{};
+        for (const auto &[type, amount] : m_mana_pool.getMana())
+        {
+            available_mana.addMana(type, amount);
+        }
+
+        for (const auto &land_id : m_battlefield.getLands())
+        {
+            auto *land{game.getCardByID(land_id)};
+            if (land->getTapped())
+            {
+                continue;
+            }
+
+            mana::ManaMap max_mana_for_land{};
+            for (const auto &ability : land->getCurrentAbilities())
+            {
+                if (ability.type() == abilities::AbilityType::Mana)
+                {
+                    const auto *mana_ability =
+                        dynamic_cast<const abilities::ManaAbility *>(
+                            &ability.definition());
+                    for (const auto &option :
+                         mana_ability->getManaList()->getOptions())
+                    {
+                        if (option->getMana() > max_mana_for_land)
+                        {
+                            max_mana_for_land = option->getMana();
+                        }
+                    }
+                }
+            }
+
+            for (const auto &[type, amount] : max_mana_for_land)
+            {
+                available_mana.addMana(type, amount);
+            }
+        }
+        std::cout << "Available mana found in canActivateSomething: "
+                  << available_mana << '\n';
+        for (const auto &card_id : m_hand.getCards())
+        {
+            auto *card{game.getCardByID(card_id)};
+            if (card->getData().getType() == CardData::Type::Instant)
+            {
+                const auto *card_cost{card->getData().getCost()};
+                if (available_mana.canPay(*card_cost))
+                {
+                    return true;
+                }
+            }
+            for (const auto &ability : card->getCurrentAbilities())
+            {
+                if (ability.type() == abilities::AbilityType::Activated)
+                {
+                    const auto *activated_ability =
+                        dynamic_cast<const abilities::ActivatedAbility *>(
+                            &ability.definition());
+                    if (activated_ability->canActivate(game,
+                                                       ability.getContext()))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 } // namespace dandan::core

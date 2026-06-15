@@ -1,5 +1,6 @@
 #include "dandan/serialization/JsonConditionFactory.h"
 #include "dandan/core/CardData.h"
+#include "dandan/core/SubType.h"
 #ifdef DANDAN_SERIALIZE
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
@@ -42,9 +43,16 @@ namespace dandan::serialization
         const std::string type{json.at("type").get<std::string>()};
         const nlohmann::json &data{json.at("data")};
 
-        if (type == "SelfControlsNoIslandCondition")
+        if (type == "SelfControlsNoBasicCondition")
         {
             return std::make_unique<conditions::SelfControlsNoBasicCondition>(
+                data.at("type").get<core::SubType>());
+        }
+        if (type == "DefenderControlsNoBasicCondition")
+        {
+
+            return std::make_unique<
+                conditions::DefenderControlsNoBasicCondition>(
                 data.at("type").get<core::SubType>());
         }
 
