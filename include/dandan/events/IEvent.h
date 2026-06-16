@@ -36,19 +36,7 @@ namespace dandan::events
             return m_source;
         }
 
-        /**
-         * get the controller of the card that generated the event
-         * @returns The PlayerID of the player that controls the card that
-         * generated the event
-         */
-        [[nodiscard]] core::PlayerID controller() const
-        {
-            return m_controller;
-        }
-
     private:
-        // TODO: consider having this be a std::variant between card and player
-        // id
         [[maybe_unused]] core::CardID m_source;
         [[maybe_unused]] core::PlayerID m_controller;
     };

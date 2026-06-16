@@ -18,8 +18,6 @@ namespace dandan::abilities
             std::cout << "WARNING: No effects to create for spell ability\n";
             return nullptr;
         }
-        // TODO: fine grain this, currently we assume any effect targets the
-        // player that created it
 
         auto bound_effects{
             std::vector<std::unique_ptr<effects::IOneShotEffect>>{}};

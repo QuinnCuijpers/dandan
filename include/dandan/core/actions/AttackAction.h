@@ -27,14 +27,6 @@ namespace dandan::core
         {
         }
 
-        /** Get the creature that would attack under this action
-         * @returns the creature that would attack under this action
-         */
-        core::Card &getCreature()
-        {
-            return m_creature;
-        }
-
         [[nodiscard]] ActionActor getActor() const override
         {
             return m_creature.getID();

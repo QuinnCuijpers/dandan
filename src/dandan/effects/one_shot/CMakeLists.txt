@@ -20,7 +20,8 @@ target_sources(
           ChangeLandTypeEffect.cpp
           MillEffect.cpp
           ModalEffect.cpp
-          MindBendEffect.cpp)
+          MindBendEffect.cpp
+          BounceEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

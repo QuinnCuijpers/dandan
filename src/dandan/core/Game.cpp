@@ -86,8 +86,6 @@ namespace dandan::core
                 std::make_unique<conditions::PlayedLandCondition>())};
 
         // Randomize whom is starting player
-        // TODO: Implement proper dice rolling to determine starting player
-        // through gui
         std::random_device rand;
         std::mt19937 gen(rand());
         std::uniform_int_distribution<> dist(0, AMOUNT_PLAYERS - 1);
@@ -135,11 +133,6 @@ namespace dandan::core
     Game::Game(std::istream &input, bool shuffle) : m_input{&input}
     {
         GameSetup(shuffle);
-    }
-
-    Game Game::withIstream(std::istream &input)
-    {
-        return Game{input};
     }
 
     Game Game::withCards(std::vector<Card> cards, bool shuffle)

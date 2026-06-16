@@ -48,15 +48,6 @@ namespace dandan::core
          */
         explicit BeginningPhase(Game &game) : IPhase(game) {};
 
-        /**
-         * Sets the current step
-         * @param step The step to set
-         */
-        void setStep(Step step)
-        {
-            m_step = step;
-        }
-
         std::unique_ptr<IPhase> handle() override;
 
         [[nodiscard]] std::string name() const override

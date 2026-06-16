@@ -1,12 +1,12 @@
 #include "dandan/core/Player.h"
 #include "dandan/abilities/AbilityType.h"
 #include "dandan/abilities/ActivatedAbility.h"
+#include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/Game.h"
+#include "dandan/effects/one_shot/AddManaEffect.h"
 #include "dandan/mana/Mana.h"
-#include <algorithm>
-#include <iterator>
 
 namespace dandan::core
 {
@@ -73,10 +73,26 @@ namespace dandan::core
                     for (const auto &option :
                          mana_ability->getManaList()->getOptions())
                     {
-                        if (option->getMana() > max_mana_for_land)
+                        if (mana::MoreManaThan(option->getMana(),
+                                               max_mana_for_land))
                         {
                             max_mana_for_land = option->getMana();
                         }
+                    }
+                }
+                else if (ability.type() == abilities::AbilityType::BasicLand)
+                {
+                    const auto *basic_ability =
+                        dynamic_cast<const abilities::BasicLandAbility *>(
+                            &ability.definition());
+                    auto effect{basic_ability->createEffect(
+                        game, ability.getContext())};
+                    auto *mana_effect =
+                        dynamic_cast<effects::AddManaEffect *>(effect.get());
+                    if (mana::MoreManaThan(mana_effect->getMana(),
+                                           max_mana_for_land))
+                    {
+                        max_mana_for_land = mana_effect->getMana();
                     }
                 }
             }

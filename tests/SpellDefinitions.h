@@ -2,7 +2,9 @@
 #define DANDAN_SPELL_DEFINITIONS_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/dandan.h"
+#include "dandan/effects/one_shot/BounceEffect.h"
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/effects/one_shot/ExileTopEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
@@ -172,6 +174,29 @@ Mind_Bend_Abilities()
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::MindBendEffectDefinition>(
             target_req));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Unsubstantiate_Abilities()
+{
+
+    auto target_req{dandan::core::TargetRequirement{
+        std::vector<std::vector<dandan::core::TargetType>>{
+            {dandan::core::TargetType::Spell,
+             dandan::core::TargetType::Creature}}}};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::BounceEffectDefinition>(target_req));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));

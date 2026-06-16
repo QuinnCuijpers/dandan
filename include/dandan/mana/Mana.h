@@ -12,6 +12,25 @@ namespace dandan::mana
 
     using ManaMap = std::map<ManaType, int>;
 
+    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+    inline bool MoreManaThan(const ManaMap &first_map,
+                             const ManaMap &second_map)
+    {
+        int a_count{};
+        for (const auto &[type, amount] : first_map)
+        {
+            a_count += amount;
+        }
+        int b_count{};
+        for (const auto &[type, amount] : second_map)
+        {
+            b_count += amount;
+        }
+
+        return a_count > b_count;
+    }
+    // NOLINTEND(bugprone-easily-swappable-parameters)
+
     [[maybe_unused]]
     static std::string ManaToSymbols(const ManaMap &mana_map)
     {

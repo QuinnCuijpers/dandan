@@ -1,6 +1,7 @@
 #include "dandan/core/PriorityManager.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/Player.h"
+#include "dandan/core/PlayerID.h"
 #include <stdexcept>
 
 namespace dandan::core
@@ -18,12 +19,16 @@ namespace dandan::core
     {
         SBAManager::checkSBAs(game);
         m_current_player_with_priority = player_id;
+        if (m_last_acted_player == PlayerID::getInvalidID())
+        {
+            m_last_acted_player = m_current_player_with_priority;
+        }
         auto &player{game.getPlayer(player_id)};
-        bool canActAtInstantSpeed{player.canActivateSomething(game)};
 
-        // If the stack is empty and we cant activate anything then we go into
+        // If the stack is empty we go into
         // sorcery speed mode
-        if (game.stack().isEmpty() && !canActAtInstantSpeed)
+
+        if (game.stack().isEmpty())
         {
             m_current_player_with_priority = game.activePlayer().getID();
             return;
@@ -77,6 +82,10 @@ namespace dandan::core
         {
             // if after passing the last acting player is the current player
             // then the top of the stack should resolve
+            std::cout << "Last acted player: " << m_last_acted_player.id()
+                      << '\n';
+            std::cout << "Current player with priority: "
+                      << m_current_player_with_priority.id() << '\n';
             if (m_last_acted_player == m_current_player_with_priority)
             {
                 game.stack().resolveNext(game);

@@ -42,8 +42,7 @@ namespace dandan::core
          * priority.
          */
         explicit PriorityManager(PlayerID starting_player)
-            : m_current_player_with_priority{starting_player},
-              m_last_acted_player(starting_player)
+            : m_current_player_with_priority{starting_player}
         {
         }
 
@@ -67,7 +66,7 @@ namespace dandan::core
 
     private:
         PlayerID m_current_player_with_priority;
-        PlayerID m_last_acted_player;
+        PlayerID m_last_acted_player{PlayerID::getInvalidID()};
 
         void handleStack(core::Game &game);
     };

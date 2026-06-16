@@ -22,7 +22,6 @@ namespace dandan::core
     {
 
     public:
-        // TODO: change to have players input names through gui
         explicit Player() : m_player_id(PlayerID::generate())
         {
             std::cout << "Constructed player\n";
@@ -77,14 +76,6 @@ namespace dandan::core
         [[nodiscard]] const Hand &hand() const
         {
             return m_hand;
-        }
-
-        /** Sets the hand of the player.
-         * @param hand The new hand for the player.
-         */
-        void setHand(Hand &&hand)
-        {
-            m_hand = std::move(hand);
         }
 
         /** Gets the battlefield of the player mutably.

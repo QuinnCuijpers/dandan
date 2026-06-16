@@ -1,19 +1,19 @@
-10 Dandân []
+10 Dandân [x]
 
-8 Memory Lapse
+8 Memory Lapse 
 4 Accumulated Knowledge [x]
 2 Brainstorm [x]
-2 Crystal Spray
+2 Crystal Spray []
 2 Dance of the Skywise 
 2 Diminishing Returns [x]
 2 Metamorphose
-2 Mind Bend
+2 Mind Bend [x]
 2 Mystical Tutor [x]
 2 Mystic Retrieval 
 2 Predict
 2 Ray of Command 
 2 Supplant Form 
-2 Unsubstantiate
+2 Unsubstantiate 
 2 Vision Charm [x] 
 
 2 Halimar Depths [x]

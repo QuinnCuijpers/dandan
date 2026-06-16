@@ -3,6 +3,8 @@
 #include "common.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
+#include "dandan/mana/BlueMana.h"
+#include "dandan/mana/GenericMana.h"
 #include <gtest/gtest.h>
 #include <memory>
 
@@ -31,6 +33,11 @@ static const std::vector<const dandan::Card *> &getCards()
                       std::make_unique<dandan::mana::BlueMana>(1)),
                   Instant),
         new SPELL(Mind_Bend, std::make_unique<dandan::mana::BlueMana>(1),
+                  Instant),
+        new SPELL(Unsubstantiate,
+                  std::make_unique<dandan::mana::AndMana>(
+                      std::make_unique<dandan::mana::BlueMana>(1),
+                      std::make_unique<dandan::mana::GenericMana>(1)),
                   Instant)};
     return cards;
 };

@@ -4,7 +4,6 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include <algorithm>
-#include <stdexcept>
 #include <vector>
 
 namespace dandan::core
@@ -86,20 +85,6 @@ namespace dandan::core
         {
             card.setZone(Zone::HAND);
             m_cards.emplace_back(card.getID());
-        }
-
-        /** Adds multiple cards to the hand.
-         * @param cards The vector of cards to add.
-         */
-        void addCards(std::vector<Card> &cards)
-        {
-            auto cardToHand = [](Card &card)
-            {
-                card.setZone(Zone::HAND);
-                return card.getID();
-            };
-            std::transform(cards.begin(), cards.end(),
-                           std::back_inserter(m_cards), cardToHand);
         }
 
         /** Discards a card from the hand.

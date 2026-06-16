@@ -5,6 +5,7 @@
 #include "Stack.h"
 #include "Target.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Exile.h"
@@ -13,6 +14,7 @@
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/PriorityManager.h"
 #include "dandan/core/SBAManager.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/engine/ConditionManager.h"
 #include "dandan/core/engine/PreventionManager.h"
@@ -28,6 +30,7 @@
 #include <iterator>
 #include <memory>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 namespace dandan::core
@@ -248,22 +251,6 @@ namespace dandan::core
             return m_prevention_manager;
         }
 
-        /** Gets the SBA manager mutably.
-         * @return A reference to the SBA manager.
-         */
-        [[nodiscard]] SBAManager &sbaManager()
-        {
-            return m_sba_manager;
-        }
-
-        /** Gets the SBA manager immutably.
-         * @return A const reference to the SBA manager.
-         */
-        [[nodiscard]] const SBAManager &sbaManager() const
-        {
-            return m_sba_manager;
-        }
-
         /** Gets the priority manager mutably.
          * @return A reference to the priority manager.
          */
@@ -334,14 +321,6 @@ namespace dandan::core
             m_phase = std::move(phase);
         }
 
-        /** Sets the library.
-         * @param library The library to set.
-         */
-        void setLibrary(Library &&library)
-        {
-            m_library = std::move(library);
-        }
-
         /** Checks if it is the first turn of the first player.
          * @return True if it is the first turn, false otherwise.
          */
@@ -386,8 +365,6 @@ namespace dandan::core
          */
         void render() const;
 
-        // TODO: this is a temporary solution, should be replaced with proper
-        // turn structure and phase handling
         /** Passes the turn to the next player.
          */
         void passTurn()
@@ -472,6 +449,31 @@ namespace dandan::core
                 return targets;
             }
             case TargetType::Creature:
+            {
+                std::vector<Target> targets;
+                auto starting_player_id{activePlayer().getID()};
+                auto current_player_id{starting_player_id};
+
+                while (true)
+                {
+                    const auto &player{getPlayer(current_player_id)};
+                    const auto &creatures =
+                        player.battlefield().permanents().at(
+                            CardData::Type::Creature);
+
+                    std::transform(creatures.begin(), creatures.end(),
+                                   std::back_inserter(targets),
+                                   [](const Permanent &perm) -> Target
+                                   { return perm; });
+                }
+                current_player_id = getNextPlayerID(current_player_id);
+                if (current_player_id == starting_player_id)
+                {
+                    break;
+                }
+                return targets;
+            }
+
             case TargetType::Permanent:
             {
                 std::vector<Target> targets;
@@ -503,6 +505,18 @@ namespace dandan::core
             case TargetType::Planeswalker:
             case TargetType::Card:
             case TargetType::Any:
+            case TargetType::Spell:
+            {
+                std::vector<Target> targets{};
+                for (const auto &object : m_stack.getStackObjects())
+                {
+                    if (std::holds_alternative<CardID>(object))
+                    {
+                        targets.emplace_back(std::get<CardID>(object));
+                    }
+                }
+                return targets;
+            }
             default:
                 throw std::runtime_error("getValidTargets for type " +
                                          targetTypeToString(type) +
