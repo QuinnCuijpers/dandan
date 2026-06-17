@@ -361,7 +361,7 @@ namespace dandan::core
         size_t ability_index{};
         int display_index{};
 
-        const auto &abilities = cardp->getData().getAbilities();
+        const auto &abilities = cardp->getCurrentAbilities();
 
         auto ability_indices{
             std::vector<std::pair<size_t, std::optional<size_t>>>{}};
@@ -369,21 +369,23 @@ namespace dandan::core
         auto base_ability_context{abilities::AbilityContext{
             cardp->getID(), cardp->getControllerID()}};
 
-        for (const auto &ability : cardp->getData().getAbilities())
+        for (const auto &ability : cardp->getCurrentAbilities())
         {
-            if (!ability->canActivate(*this, base_ability_context))
+            const auto &underlying_ability{ability.definition()};
+            if (!underlying_ability.canActivate(*this, base_ability_context))
             {
                 ++ability_index;
                 continue;
             }
-            if (ability->optionsAmount() > 1)
+            if (underlying_ability.optionsAmount() > 1)
             {
                 size_t modal_index{};
                 for (size_t option_index{};
-                     option_index < ability->optionsAmount(); ++option_index)
+                     option_index < underlying_ability.optionsAmount();
+                     ++option_index)
                 {
                     std::cout << "Ability " << display_index++ << ": ";
-                    std::cout << ability->displayOption(option_index);
+                    std::cout << underlying_ability.displayOption(option_index);
                     std::cout << ".\n";
                     ability_indices.emplace_back(ability_index, modal_index);
                     ++modal_index;
@@ -392,7 +394,7 @@ namespace dandan::core
             else
             {
                 std::cout << "Ability " << display_index++ << ": "
-                          << ability->display();
+                          << underlying_ability.display();
                 std::cout << ".\n";
                 ability_indices.emplace_back(ability_index, std::nullopt);
             }
@@ -432,13 +434,13 @@ namespace dandan::core
             modal_index_opt = ability_indices[ability_index_input].second;
         }
 
-        const auto *ability = abilities[real_index].get();
+        const auto ability = abilities[real_index];
 
         auto ability_context{abilities::AbilityContext{
             cardp->getID(), cardp->getControllerID(), modal_index_opt}};
 
-        auto action =
-            std::make_unique<ActivateAbilityAction>(ability, ability_context);
+        auto action = std::make_unique<ActivateAbilityAction>(
+            &ability.definition(), ability_context);
 
         if (isActionPrevented(*action))
         {

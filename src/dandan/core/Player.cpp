@@ -85,14 +85,17 @@ namespace dandan::core
                     const auto *basic_ability =
                         dynamic_cast<const abilities::BasicLandAbility *>(
                             &ability.definition());
-                    auto effect{basic_ability->createEffect(
+                    const auto *mana_ability{basic_ability->getManaAbility(
                         game, ability.getContext())};
-                    auto *mana_effect =
-                        dynamic_cast<effects::AddManaEffect *>(effect.get());
-                    if (mana::MoreManaThan(mana_effect->getMana(),
-                                           max_mana_for_land))
+                    const auto *mana_list{mana_ability->getManaList()};
+
+                    for (const auto &option : mana_list->getOptions())
                     {
-                        max_mana_for_land = mana_effect->getMana();
+                        if (mana::MoreManaThan(option->getMana(),
+                                               max_mana_for_land))
+                        {
+                            max_mana_for_land = option->getMana();
+                        }
                     }
                 }
             }

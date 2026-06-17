@@ -616,7 +616,9 @@ TEST(DandanLibTest, BrainstormTest)
 
     // player 2 now draws card_2
     stream << "play " << card_2_id.getID() << '\n';
-    stream << "pass\n";
+    stream << "pass\n"; // pass priotity
+    stream << "pass\n"; // pass the turn
+    stream << "pass\n"; // ack the passing the turn
 
     // player 1 draws card_1
     stream << "play " << card_1_id.getID() << '\n';
@@ -978,18 +980,23 @@ TEST(DandanLibTest, DandanMindBendTest)
 
     // turn 1 player 1
     stream << "play " << island_1_1 << '\n';
+    stream << "activate " << island_1_1 << '\n'; // avoids priotity requests
+    stream << "pass\n";                          // pass on self for some reason
     stream << "pass\n";
 
     // turn 1 player 2
     stream << "play " << island_2_1 << '\n';
-    stream << "pass\n";
+    stream << "activate " << island_2_1 << '\n';
+    stream << "pass\n"; // pass on self?
+    stream << "pass\n"; // pass turn
 
     // turn 2 player 1
     stream << "play " << island_1_2 << '\n';
     stream << "activate " << island_1_1 << '\n';
     stream << "activate " << island_1_2 << '\n';
     stream << "play " << dandan_1_1 << '\n';
-    stream << "pass\n";
+    stream << "pass\n"; // pass priority on dandan entering
+    stream << "pass\n"; // pass turn to player 2
 
     // turn 2 player 2
     stream << "activate " << island_2_1 << '\n';

@@ -26,7 +26,7 @@ namespace dandan::core
                 "Only player with priority can play cards, card is controlled "
                 "by "
                 "player " +
-                std::to_string(card->getControllerID().id()));
+                game.getPlayer(card->getControllerID()).getName());
         }
 
         const auto &data = card->getData();

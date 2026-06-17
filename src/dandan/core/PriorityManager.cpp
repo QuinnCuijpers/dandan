@@ -3,6 +3,7 @@
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
 #include <stdexcept>
+#include <string>
 
 namespace dandan::core
 {
@@ -24,11 +25,12 @@ namespace dandan::core
             m_last_acted_player = m_current_player_with_priority;
         }
         auto &player{game.getPlayer(player_id)};
+        bool canActivateSomething{player.canActivateSomething(game)};
 
-        // If the stack is empty we go into
+        // If the stack is empty and we cant activate anything into
         // sorcery speed mode
 
-        if (game.stack().isEmpty())
+        if (game.stack().isEmpty() && !canActivateSomething)
         {
             m_current_player_with_priority = game.activePlayer().getID();
             return;
@@ -49,6 +51,7 @@ namespace dandan::core
             {
                 std::cout << "Passing priority\n";
                 passPriority(game);
+                return;
             }
             if (input == "quit")
             {
@@ -67,9 +70,9 @@ namespace dandan::core
                 game.handleActivate(input);
                 continue;
             }
-            throw std::runtime_error(
-                "Unhandled input when getting priority and "
-                "being able to act");
+            throw std::runtime_error(std::string("Unhandled input ") + input +
+                                     std::string(" when getting priority and "
+                                                 "being able to act"));
         }
         std::cout << "Passsing priority as player " << player.getName()
                   << " has no more priority actions available\n";

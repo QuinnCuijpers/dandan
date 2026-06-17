@@ -1,8 +1,10 @@
 #ifndef DANDAN_BASICLANDABILITY_H
 #define DANDAN_BASICLANDABILITY_H
 
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/core/Game.h"
 #include "dandan/mana/BlackMana.h"
 #include "dandan/mana/BlueMana.h"
 #include "dandan/mana/GreenMana.h"
@@ -76,6 +78,13 @@ namespace dandan::abilities
             const auto *cardp = game.getCardByID(context.source_card_id);
             return m_basic_land_ability_map->at(cardp->getCurrentSubType())
                 ->createEffect(game, context);
+        }
+
+        const ManaAbility *getManaAbility(core::Game &game,
+                                          const AbilityContext &context) const
+        {
+            auto *card{game.getCardByID(context.source_card_id)};
+            return m_basic_land_ability_map->at(card->getCurrentSubType());
         }
 
     private:

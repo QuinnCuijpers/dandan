@@ -1,16 +1,9 @@
 #include "dandan/core/phases/MainPhase.h"
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/core/Game.h"
-#include "dandan/core/actions/ActivateAbilityAction.h"
-#include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/core/phases/CombatPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
-#include <cstddef>
-#include <iterator>
-#include <memory>
 #include <string>
 #include <utility>
-#include <vector>
 
 namespace dandan::core
 {
@@ -48,6 +41,7 @@ namespace dandan::core
             if (input == "pass")
             {
                 std::cout << "Passing turn\n";
+                game().priorityManager().passPriority(game());
                 m_next_phase = std::make_unique<EndingPhase>(game());
                 break;
             }
@@ -66,6 +60,7 @@ namespace dandan::core
                 {
                     std::cout << "you can't go back to combat phase\n";
                 }
+                game().priorityManager().passPriority(game());
                 break;
             }
             if (input.rfind("play ", 0) == 0)
