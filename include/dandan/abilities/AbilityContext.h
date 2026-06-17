@@ -19,8 +19,10 @@ namespace dandan::abilities
          * @param source_card_id The CardID of the card that generated the
          * @param controller_id The PlayerID of the player who controls the
          * ability
-         * @param chosen_mode_index The index of the chosen mode for modal
-         * ability
+         * @param chosen_mode_index An optional index of the chosen mode for
+         * modal ability
+         * @param text_replacements An optional vector of text replacements that
+         * are being applied to the ability
          */
         AbilityContext(core::CardID source_card_id,
                        core::PlayerID controller_id,

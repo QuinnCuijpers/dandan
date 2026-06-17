@@ -2,8 +2,6 @@
 #define IABILITY_H
 
 #include "dandan/abilities/AbilityContext.h"
-#include "dandan/core/ColorWord.h"
-#include "dandan/core/SubType.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 #include <stdexcept>

@@ -1,6 +1,8 @@
 #ifndef WITHDAMAGE_H
 #define WITHDAMAGE_H
 
+#include <utility>
+
 #include "IAbilityDecorator.h"
 #include "dandan/abilities/EventTriggeredAbility.h"
 
@@ -52,7 +54,8 @@ namespace dandan::abilities
                     dynamic_cast<const EventTriggeredAbility *>(
                         m_ability.get()))
             {
-                return eventTriggeredAbility->appliesTo(event, context);
+                return eventTriggeredAbility->appliesTo(event,
+                                                        std::move(context));
             }
             return false;
         }

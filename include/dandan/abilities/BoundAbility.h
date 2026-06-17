@@ -86,6 +86,14 @@ namespace dandan::abilities
 
         [[nodiscard]] AbilityContext getContext() const;
 
+        bool operator==(const BoundAbility &ability) const
+        {
+            return ability.m_ability_type.getType() ==
+                       m_ability_type.getType() &&
+                   m_definition == ability.m_definition &&
+                   m_source_card == ability.m_source_card;
+        }
+
     private:
         const IAbility *m_definition{};
         const core::Card *m_source_card{};

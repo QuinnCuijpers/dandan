@@ -9,7 +9,7 @@ namespace dandan::core
 {
     void EventManager::subscribe(abilities::BoundAbility &ability)
     {
-        if (ability.type() == abilities::AbilityType::EventTriggered)
+        if (ability.type() == abilities::AbilityType::Type::EventTriggered)
         {
             std::cout << "subscribing to event manager\n";
             std::cout << "New size: " << size() << '\n';

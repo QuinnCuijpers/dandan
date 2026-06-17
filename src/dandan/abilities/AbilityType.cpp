@@ -15,30 +15,30 @@ namespace dandan::abilities
     {
         if (dynamic_cast<const ActivatedAbility *>(ability) != nullptr)
         {
-            return AbilityType{Activated};
+            return AbilityType{Type::Activated};
         }
         if (dynamic_cast<const BasicLandAbility *>(ability) != nullptr)
         {
-            return AbilityType{BasicLand};
+            return AbilityType{Type::BasicLand};
         }
 
         if (dynamic_cast<const EventTriggeredAbility *>(ability) != nullptr)
         {
-            return AbilityType{EventTriggered};
+            return AbilityType{Type::EventTriggered};
         }
         if (dynamic_cast<const ManaAbility *>(ability) != nullptr)
         {
-            return AbilityType{Mana};
+            return AbilityType{Type::Mana};
         }
 
         if (dynamic_cast<const SpellAbility *>(ability) != nullptr)
         {
-            return AbilityType{Spell};
+            return AbilityType{Type::Spell};
         }
 
         if (dynamic_cast<const StateTriggeredAbility *>(ability) != nullptr)
         {
-            return AbilityType{StateTriggered};
+            return AbilityType{Type::StateTriggered};
         }
 
         if (const auto *static_ability =
@@ -48,11 +48,11 @@ namespace dandan::abilities
             {
 
             case StaticAbility::Type::CharacteristicDefining:
-                return AbilityType{StaticCharacteristicDefining};
+                return AbilityType{Type::StaticCharacteristicDefining};
             case StaticAbility::Type::Prevention:
-                return AbilityType{StaticPrevention};
+                return AbilityType{Type::StaticPrevention};
             case StaticAbility::Type::Replacement:
-                return AbilityType{StaticReplacement};
+                return AbilityType{Type::StaticReplacement};
             }
         }
 

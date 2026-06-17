@@ -12,7 +12,7 @@ namespace dandan::core
 {
     void ReplacementManager::subscribe(abilities::BoundAbility &ability)
     {
-        if (ability.type() == abilities::AbilityType::StaticReplacement)
+        if (ability.type() == abilities::AbilityType::Type::StaticReplacement)
         {
             std::cout << "Registering static replacement ability\n";
             m_replacement_effects.emplace_back(&ability);
@@ -26,7 +26,8 @@ namespace dandan::core
 
         for (const auto &ability : card.getCurrentAbilities())
         {
-            if (ability.type() == abilities::AbilityType::StaticReplacement)
+            if (ability.type() ==
+                abilities::AbilityType::Type::StaticReplacement)
             {
                 to_remove.insert(&ability);
             }

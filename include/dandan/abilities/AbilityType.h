@@ -9,7 +9,7 @@ namespace dandan::abilities
     class AbilityType
     {
     public:
-        enum Type : uint8_t
+        enum class Type : uint8_t
         {
             Activated,
             BasicLand,

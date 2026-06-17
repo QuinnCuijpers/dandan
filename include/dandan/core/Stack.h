@@ -4,6 +4,7 @@
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include <algorithm>
 #include <iostream>
 #include <variant>
 #include <vector>
@@ -65,6 +66,14 @@ namespace dandan::core
         [[nodiscard]] const std::vector<StackObject> &getStackObjects() const
         {
             return m_stack;
+        }
+
+        void removeObject(const StackObject &object)
+        {
+            m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(),
+                                         [&](const StackObject &stack_object)
+                                         { return stack_object == object; }),
+                          m_stack.end());
         }
 
     private:

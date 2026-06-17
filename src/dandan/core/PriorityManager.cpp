@@ -9,10 +9,13 @@ namespace dandan::core
 {
     void PriorityManager::passPriority(core::Game &game)
     {
-        m_current_player_with_priority =
-            game.getNextPlayerID(m_current_player_with_priority);
-        handleStack(game);
-        setPriorityToPlayer(m_current_player_with_priority, game);
+        auto next{game.getNextPlayerID(m_current_player_with_priority)};
+        if (!game.stack().isEmpty() && next == m_last_acted_player)
+        {
+            game.stack().resolveNext(game);
+        }
+        m_current_player_with_priority = next;
+        setPriorityToPlayer(next, game);
     }
 
     void PriorityManager::setPriorityToPlayer(PlayerID player_id,
@@ -33,12 +36,14 @@ namespace dandan::core
         if (game.stack().isEmpty() &&
             m_current_player_with_priority == game.activePlayer().getID())
         {
+            m_last_acted_player = PlayerID::getInvalidID();
             return;
         }
 
         if (game.stack().isEmpty() && !canActivateSomething)
         {
             m_current_player_with_priority = game.activePlayer().getID();
+            m_last_acted_player = PlayerID::getInvalidID();
             return;
         }
 
@@ -87,22 +92,5 @@ namespace dandan::core
         std::cout << "Passsing priority as player " << player.getName()
                   << " has no more priority actions available\n";
         passPriority(game);
-    }
-
-    void PriorityManager::handleStack(Game &game)
-    {
-        if (!game.stack().isEmpty())
-        {
-            // if after passing the last acting player is the current player
-            // then the top of the stack should resolve
-            std::cout << "Last acted player: " << m_last_acted_player.id()
-                      << '\n';
-            std::cout << "Current player with priority: "
-                      << m_current_player_with_priority.id() << '\n';
-            if (m_last_acted_player == m_current_player_with_priority)
-            {
-                game.stack().resolveNext(game);
-            }
-        }
     }
 } // namespace dandan::core

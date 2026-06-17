@@ -35,7 +35,7 @@ namespace dandan::core
     void PreventionManager::subscribe(abilities::BoundAbility &ability)
     {
 
-        if (ability.type() == abilities::AbilityType::StaticPrevention)
+        if (ability.type() == abilities::AbilityType::Type::StaticPrevention)
         {
             if (const auto *staticAbility =
                     dynamic_cast<const abilities::StaticAbility *>(
@@ -61,7 +61,7 @@ namespace dandan::core
     void PreventionManager::subscribe(CardID card_id,
                                       abilities::BoundAbility &ability)
     {
-        if (ability.type() == abilities::AbilityType::StaticPrevention)
+        if (ability.type() == abilities::AbilityType::Type::StaticPrevention)
         {
             if (const auto *staticAbility =
                     dynamic_cast<const abilities::StaticAbility *>(
@@ -87,7 +87,7 @@ namespace dandan::core
     void PreventionManager::subscribe(PlayerID player_id,
                                       abilities::BoundAbility &ability)
     {
-        if (ability.type() == abilities::AbilityType::StaticPrevention)
+        if (ability.type() == abilities::AbilityType::Type::StaticPrevention)
         {
             if (const auto *staticAbility =
                     dynamic_cast<const abilities::StaticAbility *>(

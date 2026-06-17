@@ -218,11 +218,9 @@ namespace dandan::core
             break;
         case Zone::EXILE:
         case Zone::STACK:
-            auto object{stack().pop()};
-            assert(
-                std::get<CardID>(object) == card.getID() &&
-                "Card popped from stack should be the same as the card being "
-                "moved");
+            // while it is called a stack and it does have FILO properties cards
+            // can be removed at any level
+            stack().removeObject(card.getID());
             break;
         }
     }

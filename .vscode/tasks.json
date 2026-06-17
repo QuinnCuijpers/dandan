@@ -63,7 +63,7 @@
                 "--suppress='*:*external*'",
                 "--suppress=missingInclude",
                 "--inconclusive",
-                "-j4"
+                "-j8"
             ],
             "problemMatcher": {
                 "owner": "cppcheck",

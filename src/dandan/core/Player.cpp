@@ -65,7 +65,7 @@ namespace dandan::core
             mana::ManaMap max_mana_for_land{};
             for (const auto &ability : land->getCurrentAbilities())
             {
-                if (ability.type() == abilities::AbilityType::Mana)
+                if (ability.type() == abilities::AbilityType::Type::Mana)
                 {
                     const auto *mana_ability =
                         dynamic_cast<const abilities::ManaAbility *>(
@@ -80,7 +80,8 @@ namespace dandan::core
                         }
                     }
                 }
-                else if (ability.type() == abilities::AbilityType::BasicLand)
+                else if (ability.type() ==
+                         abilities::AbilityType::Type::BasicLand)
                 {
                     const auto *basic_ability =
                         dynamic_cast<const abilities::BasicLandAbility *>(
@@ -121,7 +122,7 @@ namespace dandan::core
             }
             for (const auto &ability : card->getCurrentAbilities())
             {
-                if (ability.type() == abilities::AbilityType::Activated)
+                if (ability.type() == abilities::AbilityType::Type::Activated)
                 {
                     const auto *activated_ability =
                         dynamic_cast<const abilities::ActivatedAbility *>(

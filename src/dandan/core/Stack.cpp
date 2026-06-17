@@ -82,6 +82,10 @@ namespace dandan::core
         // move card to graveyard if it was a spell
         if (resolvingSpell)
         {
+            // the stack may have moved in memory so we need to regrab the
+            // object
+            auto &new_object{m_stack.back()};
+            std::cout << "Played spell, so now it gets removed\n";
             std::visit(
                 utils::overloaded{[&game](CardID card_id)
                                   {
@@ -91,7 +95,7 @@ namespace dandan::core
                                       game.graveyard().addCard(*card);
                                   },
                                   [](const abilities::BoundAbility &) {}},
-                object);
+                new_object);
         }
     }
 } // namespace dandan::core
