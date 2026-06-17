@@ -9,7 +9,9 @@ namespace dandan::effects
     {
         for (const auto &[type, amount] : m_mana)
         {
-            game.activePlayer().manaPool().addMana(type, amount);
+            auto &player{
+                game.getPlayer(game.priorityManager().getPlayerWithPriority())};
+            player.manaPool().addMana(type, amount);
         }
         return nullptr;
     }

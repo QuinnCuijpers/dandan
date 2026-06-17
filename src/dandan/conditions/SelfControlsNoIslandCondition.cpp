@@ -1,6 +1,7 @@
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
 #include "dandan/core/Game.h"
+#include <algorithm>
 
 namespace dandan::conditions
 {
@@ -33,9 +34,9 @@ namespace dandan::conditions
             const auto *card = game.getCardByID(card_id);
             return card != nullptr &&
                    card->getData().getType() == core::CardData::Type::Land &&
-                   card->getData().getSubType() != basic;
+                   card->getCurrentSubType() != basic;
         };
-        std::cout << "Checking SelfControlsNoIslandCondition for player "
+        std::cout << "Checking SelfControlsNoBasicCondition for player "
                   << context->controller_id << '\n';
         const core::Player &self_player =
             game.getPlayer(context->controller_id);

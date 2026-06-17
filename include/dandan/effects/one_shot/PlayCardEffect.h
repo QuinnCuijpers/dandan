@@ -40,10 +40,12 @@ namespace dandan::effects
             [[maybe_unused]] core::Game &game) const override
         {
             std::cout << "Applying PlayCardEffect\n";
+            auto &prio_player{
+                game.getPlayer(game.priorityManager().getPlayerWithPriority())};
             const auto *mana_cost = m_card.getData().getCost();
-            if (game.activePlayer().manaPool().canPay(*mana_cost))
+            if (prio_player.manaPool().canPay(*mana_cost))
             {
-                game.activePlayer().manaPool().pay(*mana_cost);
+                prio_player.manaPool().pay(*mana_cost);
             }
             else
             {

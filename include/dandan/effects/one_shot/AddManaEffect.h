@@ -31,7 +31,7 @@ namespace dandan::effects
         std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const override;
 
-        [[nodiscard]] mana::ManaMap getMana() const
+        [[nodiscard]] const mana::ManaMap &getMana() const
         {
             return m_mana;
         }

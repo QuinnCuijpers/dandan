@@ -105,8 +105,9 @@ namespace dandan::core
                 available_mana.addMana(type, amount);
             }
         }
-        std::cout << "Available mana found in canActivateSomething: "
-                  << available_mana << '\n';
+        std::cout << "Available mana found in canActivateSomething for player "
+                     "with id "
+                  << m_player_id.id() << " : " << available_mana << '\n';
         for (const auto &card_id : m_hand.getCards())
         {
             auto *card{game.getCardByID(card_id)};

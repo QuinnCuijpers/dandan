@@ -465,11 +465,11 @@ namespace dandan::core
                                    std::back_inserter(targets),
                                    [](const Permanent &perm) -> Target
                                    { return perm; });
-                }
-                current_player_id = getNextPlayerID(current_player_id);
-                if (current_player_id == starting_player_id)
-                {
-                    break;
+                    current_player_id = getNextPlayerID(current_player_id);
+                    if (current_player_id == starting_player_id)
+                    {
+                        break;
+                    }
                 }
                 return targets;
             }

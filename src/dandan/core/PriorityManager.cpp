@@ -30,6 +30,12 @@ namespace dandan::core
         // If the stack is empty and we cant activate anything into
         // sorcery speed mode
 
+        if (game.stack().isEmpty() &&
+            m_current_player_with_priority == game.activePlayer().getID())
+        {
+            return;
+        }
+
         if (game.stack().isEmpty() && !canActivateSomething)
         {
             m_current_player_with_priority = game.activePlayer().getID();
@@ -67,6 +73,10 @@ namespace dandan::core
             if (input.rfind("activate ", 0) == 0)
             {
                 m_last_acted_player = m_current_player_with_priority;
+                std::cout
+                    << "handling activate for player: "
+                    << game.getPlayer(m_current_player_with_priority).getName()
+                    << '\n';
                 game.handleActivate(input);
                 continue;
             }
