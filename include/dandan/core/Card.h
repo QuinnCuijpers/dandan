@@ -224,6 +224,11 @@ namespace dandan::core
             m_marked_damage += damage;
         }
 
+        bool canBeCountered() const
+        {
+            return m_can_be_countered;
+        }
+
         /** Destroy the card.
          * @param game The game instance.
          */
@@ -331,6 +336,8 @@ namespace dandan::core
         bool m_is_attacking{false};
         bool m_is_blocked{false};
         bool m_blocking{false};
+
+        bool m_can_be_countered{true};
 
         int m_current_power{};
         int m_current_toughness{};

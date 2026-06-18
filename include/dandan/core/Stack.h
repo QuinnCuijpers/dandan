@@ -32,21 +32,6 @@ namespace dandan::core
             m_stack.push_back(object);
         }
 
-        /** Pops a StackObject from the stack.
-         * Throws a runtime error if the stack is empty.
-         * @return The popped object.
-         */
-        StackObject pop()
-        {
-            if (m_stack.empty())
-            {
-                throw std::runtime_error("Cannot pop from an empty stack");
-            }
-            auto object = m_stack.back();
-            m_stack.pop_back();
-            return object;
-        }
-
         /** Checks if the stack is empty.
          * @return True if the stack is empty, false otherwise.
          */

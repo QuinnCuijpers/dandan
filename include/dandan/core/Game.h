@@ -429,6 +429,8 @@ namespace dandan::core
          */
         void moveCardFromZone(Player &player, const Card &card);
 
+        void moveCardToZone(Card &card, Player &player, Zone zone);
+
         /** Quits the game for the specified player.
          * @param player The player who is quitting the game.
          */

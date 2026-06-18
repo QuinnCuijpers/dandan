@@ -26,7 +26,7 @@ namespace dandan::effects
                           << " from hand to library\n";
                 assert(card->getZone() == core::Zone::HAND);
                 game.moveCardFromZone(player, *card);
-                game.library().addCard(*card);
+                game.library().addCardBottom(*card);
             }
         }
 
@@ -40,7 +40,7 @@ namespace dandan::effects
             auto *card{game.getCardByID(card_id)};
             assert(card->getZone() == core::Zone::GRAVEYARD);
             game.moveCardFromZone(game.activePlayer(), *card);
-            game.library().addCard(*card);
+            game.library().addCardBottom(*card);
         }
 
         game.library().shuffle();

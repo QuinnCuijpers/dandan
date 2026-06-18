@@ -75,7 +75,7 @@ namespace dandan::core
         std::unordered_map<CardID, PreventionList> m_card_preventions;
 
         static void removeFromPreventionList(
-            PreventionList &list, const effects::IPreventionEffect *);
+            PreventionList &list, const effects::IPreventionEffect *effect);
 
         // TODO: Game is used as const as there is no bound ability that has a
         // prevention effect that requires a cost to  create, but this should be

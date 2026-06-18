@@ -8,6 +8,7 @@
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/effects/one_shot/ExileTopEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
+#include "dandan/effects/one_shot/MemoryLapseEffect.h"
 #include "dandan/effects/one_shot/MillEffect.h"
 #include "dandan/effects/one_shot/MindBendEffect.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
@@ -197,6 +198,29 @@ Unsubstantiate_Abilities()
 
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::BounceEffectDefinition>(target_req));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Memory_Lapse_Abilities()
+{
+
+    auto target_req{dandan::core::TargetRequirement{
+        std::vector<std::vector<dandan::core::TargetType>>{
+            {dandan::core::TargetType::Spell}}}};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::MemoryLapseEffectDefinition>(
+            target_req));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));

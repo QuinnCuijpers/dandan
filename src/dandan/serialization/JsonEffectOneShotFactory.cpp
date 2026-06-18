@@ -2,6 +2,7 @@
 #include "dandan/core/CardData.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
+#include "dandan/effects/one_shot/MemoryLapseEffect.h"
 #include "dandan/effects/one_shot/MindBendEffect.h"
 #include <algorithm>
 #include <iterator>
@@ -168,6 +169,12 @@ namespace dandan::serialization
             json["type"] = "BounceEffect";
             return json;
         }
+        if (dynamic_cast<const effects::MemoryLapseEffectDefinition *>(
+                effect) != nullptr)
+        {
+            json["type"] = "MemoryLapseEffect";
+            return json;
+        }
 
         throw std::runtime_error(
             "Unknown effect type for JSON serialization: " +
@@ -297,6 +304,12 @@ namespace dandan::serialization
         if (type == "BounceEffect")
         {
             return std::make_unique<effects::BounceEffectDefinition>(
+                core::TargetRequirement{target_types});
+        }
+        if (type == "MemoryLapseEffect")
+        {
+
+            return std::make_unique<effects::MemoryLapseEffectDefinition>(
                 core::TargetRequirement{target_types});
         }
 

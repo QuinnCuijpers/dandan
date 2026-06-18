@@ -77,6 +77,32 @@
                     "message": 5
                 }
             }
+        },
+        {
+            "label": "clang-tidy",
+            "type": "shell",
+            "group": "build",
+            "command": "run-clang-tidy",
+            "args": [
+                "-p",
+                "build",
+                "'.*/(include/dandan|src/dandan|src/main\\.cpp).*'",
+                "-j",
+                "8",
+                "-quiet"
+            ],
+            "problemMatcher": {
+                "owner": "clang-tidy",
+                "fileLocation": "autoDetect",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
         }
     ]
 }

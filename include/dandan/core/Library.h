@@ -33,13 +33,19 @@ namespace dandan::core
                          std::mt19937{std::random_device{}()});
         }
 
-        /** Adds a card to the library.
+        /** Adds a card to the bottom of the library.
          * @param card The card to add.
          */
-        void addCard(Card &card)
+        void addCardBottom(Card &card)
         {
             card.setZone(Zone::LIBRARY);
             m_cards.emplace_back(card.getID());
+        }
+
+        void addCardTop(Card &card)
+        {
+            card.setZone(Zone::LIBRARY);
+            m_cards.emplace_front(card.getID());
         }
 
         void removeCard(const Card &card)

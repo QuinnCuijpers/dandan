@@ -38,6 +38,11 @@ static const std::vector<const dandan::Card *> &getCards()
                   std::make_unique<dandan::mana::AndMana>(
                       std::make_unique<dandan::mana::BlueMana>(1),
                       std::make_unique<dandan::mana::GenericMana>(1)),
+                  Instant),
+        new SPELL(Memory_Lapse,
+                  std::make_unique<dandan::mana::AndMana>(
+                      std::make_unique<dandan::mana::BlueMana>(1),
+                      std::make_unique<dandan::mana::GenericMana>(1)),
                   Instant)};
     return cards;
 };

@@ -1095,3 +1095,94 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
 
     EXPECT_EQ(unsub->getZone(), dandan::core::Zone::GRAVEYARD);
 }
+
+TEST(DandanLibTest, MemoryLapseTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_DANDANS{4};
+    static constexpr int NUM_ISLANDS{4};
+    static constexpr int NUM_MEMORY_LAPSE{30};
+
+    auto dandan_abilities{::Dandan_Abilities()};
+    auto island_abilities{::Island_TESTS_Abilities()};
+    auto memory_abilities{::Memory_Lapse_Abilities()};
+
+    auto island_data{dandan::core::CardData{
+        "Island", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land, dandan::core::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
+
+    auto dandan_data{dandan::core::CardData{
+        "Dandan", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Creature, dandan::core::SubType::Fish,
+        dandan::core::CardData::SuperType::None, std::move(dandan_abilities)}};
+
+    auto memory_data{dandan::core::CardData{
+        "Memory Lapse",
+        std::make_unique<dandan::mana::AndMana>(
+            std::make_unique<dandan::mana::BlueMana>(1),
+            std::make_unique<dandan::mana::GenericMana>(1)),
+        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::SuperType::None, std::move(memory_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
+    auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
+    auto memory_cards{createTestCards(NUM_MEMORY_LAPSE, &memory_data)};
+
+    cards.insert(cards.end(), dandan_cards.begin(), dandan_cards.end());
+    cards.insert(cards.end(), memory_cards.begin(), memory_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    std::stringstream stream{};
+
+    auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
+    auto island_1_2{game.activePlayer().hand().getCards()[1].getID()};
+
+    auto island_2_1{game.nonActivePlayer().hand().getCards()[0].getID()};
+    auto island_2_2{game.nonActivePlayer().hand().getCards()[1].getID()};
+
+    auto dandan_2{game.nonActivePlayer().hand().getCards()[2].getID()};
+    auto memory_1{game.activePlayer().hand().getCards()[4].getID()};
+
+    // turn 1 player 1
+    stream << "play " << island_1_1 << '\n';
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "play " << island_2_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 1
+    stream << "play " << island_1_2 << '\n';
+    stream << "pass\n";
+
+    // turn 2 player 2
+    stream << "play " << island_2_2 << '\n';
+    stream << "activate " << island_2_2 << '\n';
+    stream << "activate " << island_2_1 << '\n';
+    stream << "play " << dandan_2 << '\n';
+
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "play " << memory_1 << '\n';
+    stream << 0 << '\n'; // only one target for memory lapse
+    stream << "pass\n";  // pass turn to player 1
+
+    // turn 3 player 1
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *dandan{game.getCardByID(dandan_2)};
+    auto *memory{game.getCardByID(memory_1)};
+    auto back_card_id{game.activePlayer().hand().getCards().back()};
+
+    EXPECT_EQ(dandan->getZone(), dandan::core::Zone::HAND);
+    EXPECT_EQ(back_card_id, dandan->getID());
+
+    EXPECT_EQ(memory->getZone(), dandan::core::Zone::GRAVEYARD);
+}

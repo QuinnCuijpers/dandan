@@ -73,7 +73,7 @@ namespace dandan::core
         for (auto &card : m_cards)
         {
             m_card_map.emplace(card.getID(), &card);
-            m_library.addCard(card);
+            m_library.addCardBottom(card);
         }
 
         if (shuffle)
@@ -221,6 +221,31 @@ namespace dandan::core
             // while it is called a stack and it does have FILO properties cards
             // can be removed at any level
             stack().removeObject(card.getID());
+            break;
+        }
+    }
+
+    void Game::moveCardToZone(Card &card, Player &player, Zone zone)
+    {
+        switch (zone)
+        {
+        case Zone::LIBRARY:
+            m_library.addCardTop(card);
+            break;
+        case Zone::HAND:
+            player.hand().addCard(card);
+            break;
+        case Zone::BATTLEFIELD:
+            player.battlefield().addCard(card);
+            break;
+        case Zone::GRAVEYARD:
+            m_graveyard.addCard(card);
+            break;
+        case Zone::EXILE:
+            m_exile.addCard(card);
+            break;
+        case Zone::STACK:
+            m_stack.push(card.getID());
             break;
         }
     }
