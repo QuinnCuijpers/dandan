@@ -2,6 +2,7 @@
 #include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/engine/ConditionManager.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/DestroyEffect.h"
 #include "dandan/effects/one_shot/LoseGameEffect.h"
 #include <algorithm>
@@ -21,8 +22,9 @@ namespace dandan::core
             {
                 std::cout << player.getName()
                           << " has 0 or less life and loses the game.\n";
-                auto lose_effect{
-                    std::make_unique<effects::LoseGameEffect>(player.getID())};
+                effects::EffectContext context{};
+                auto lose_effect{std::make_unique<effects::LoseGameEffect>(
+                    player.getID(), context)};
                 auto final_effect{
                     game.replacementManager().applyReplacementEffects(
                         *lose_effect, game)};
@@ -40,8 +42,9 @@ namespace dandan::core
                 std::cout << player.getName()
                           << " attempted to draw from an empty library and "
                              "loses the game.\n";
-                auto lose_effect{
-                    std::make_unique<effects::LoseGameEffect>(player.getID())};
+                effects::EffectContext context{};
+                auto lose_effect{std::make_unique<effects::LoseGameEffect>(
+                    player.getID(), context)};
                 auto final_effect{
                     game.replacementManager().applyReplacementEffects(
                         *lose_effect, game)};
@@ -66,8 +69,10 @@ namespace dandan::core
                               << " with ID " << card->getID().getID()
                               << " has been dealt lethal damage and is "
                                  "destroyed.\n";
+                    effects::EffectContext context{};
                     auto destroy_effect{
-                        std::make_unique<effects::DestroyEffect>(*card)};
+                        std::make_unique<effects::DestroyEffect>(*card,
+                                                                 context)};
                     auto final_effect{
                         game.replacementManager().applyReplacementEffects(
                             *destroy_effect, game)};

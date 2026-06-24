@@ -1,6 +1,8 @@
 #ifndef DANDAN_EXACTNUMBER_H
 #define DANDAN_EXACTNUMBER_H
 
+#include "dandan/core/Context.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/numbers/INumber.h"
 
 namespace dandan::numbers
@@ -18,7 +20,8 @@ namespace dandan::numbers
         }
 
         [[nodiscard]] int getValue(
-            [[maybe_unused]] core::Game &game) const override
+            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] effects::EffectContext context) const override
         {
             return m_value;
         }

@@ -1,16 +1,21 @@
 #ifndef DANDAN_EFFECTCONTEXT_H
 #define DANDAN_EFFECTCONTEXT_H
 
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
 #include <optional>
 
 namespace dandan::effects
 {
-    class EffectContext
+    struct EffectContext
     {
-    public:
-        EffectContext() = default;
+        explicit EffectContext(
+            std::optional<core::CardID> card_id = std::nullopt,
+            std::optional<core::PlayerID> player = std::nullopt)
+            : card_id(card_id), player_id(player)
+        {
+        }
 
         explicit EffectContext(core::CardID card_id)
             : EffectContext(card_id, std::nullopt)
@@ -23,30 +28,21 @@ namespace dandan::effects
         }
 
         explicit EffectContext(core::CardID card_id, core::PlayerID player_id)
-            : m_card_id(card_id), m_player_id(player_id)
+            : card_id(card_id), player_id(player_id)
         {
         }
 
-        [[nodiscard]] std::optional<core::PlayerID> player() const
-        {
-            return m_player_id;
-        }
-
-        [[nodiscard]] std::optional<core::CardID> card() const
-        {
-            return m_card_id;
-        }
-
-    private:
-        std::optional<core::CardID> m_card_id;
-        std::optional<core::PlayerID> m_player_id;
-
-        explicit EffectContext(
-            std::optional<core::CardID> card_id = std::nullopt,
-            std::optional<core::PlayerID> player = std::nullopt)
-            : m_card_id(card_id), m_player_id(player)
+        explicit EffectContext(abilities::AbilityContext context)
+            : card_id(context.source_card_id), player_id(context.controller_id),
+              chosen_mode_index(context.chosen_mode_index),
+              text_replacements(context.text_replacements)
         {
         }
+
+        std::optional<core::CardID> card_id;
+        std::optional<core::PlayerID> player_id;
+        std::optional<size_t> chosen_mode_index;
+        std::optional<std::vector<core::TextReplacement>> text_replacements;
     };
 } // namespace dandan::effects
 

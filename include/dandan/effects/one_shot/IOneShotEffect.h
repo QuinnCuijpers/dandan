@@ -1,6 +1,7 @@
 #ifndef DANDAN_I_EFFECT_H
 #define DANDAN_I_EFFECT_H
 
+#include "dandan/effects/EffectContext.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
 #include <stdexcept>
@@ -19,7 +20,11 @@ namespace dandan::effects
     class IOneShotEffect
     {
     public:
-        IOneShotEffect() = default;
+        IOneShotEffect(EffectContext effect_context)
+            : m_effect_context(effect_context)
+        {
+        }
+
         IOneShotEffect(const IOneShotEffect &) = delete;
         IOneShotEffect(IOneShotEffect &&) = delete;
         IOneShotEffect &operator=(const IOneShotEffect &) = delete;
@@ -55,6 +60,14 @@ namespace dandan::effects
          */
         virtual std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const = 0;
+
+        [[nodiscard]] virtual EffectContext getEffectContext() const
+        {
+            return m_effect_context;
+        }
+
+    private:
+        EffectContext m_effect_context;
     };
 
 } // namespace dandan::effects

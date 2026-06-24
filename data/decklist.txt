@@ -1,6 +1,6 @@
 10 Dandân [x]
 
-8 Memory Lapse 
+8 Memory Lapse [x]
 4 Accumulated Knowledge [x]
 2 Brainstorm [x]
 2 Crystal Spray []
@@ -13,7 +13,7 @@
 2 Predict
 2 Ray of Command 
 2 Supplant Form 
-2 Unsubstantiate 
+2 Unsubstantiate [x]
 2 Vision Charm [x] 
 
 2 Halimar Depths [x]

@@ -5,6 +5,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/Target.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/events/IEvent.h"
@@ -27,13 +28,14 @@ namespace dandan::effects
         /** Constructor
          *@param card The card that would be played
          */
-        explicit PlayCardEffect(core::Card &card) : m_card{card}
+        explicit PlayCardEffect(core::Card &card, EffectContext context)
+            : IOneShotEffect(context), m_card{card}
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<PlayCardEffect>(m_card);
+            return std::make_unique<PlayCardEffect>(m_card, getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(

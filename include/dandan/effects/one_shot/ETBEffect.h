@@ -3,6 +3,7 @@
 
 #include "dandan/core/Card.h"
 #include "dandan/effects//one_shot/IOneShotEffect.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
 namespace dandan::effects
@@ -18,13 +19,15 @@ namespace dandan::effects
         /** Constructor
          * @param card the card that would be entering the battlefield
          */
-        explicit ETBEffect(core::Card &card) : m_card{card}
+        explicit ETBEffect(core::Card &card, EffectContext context)
+            : IOneShotEffect(context), m_card{card}
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            auto cloned_effect = std::make_unique<ETBEffect>(m_card);
+            auto cloned_effect =
+                std::make_unique<ETBEffect>(m_card, getEffectContext());
             cloned_effect->setTapped(m_tapped);
             return cloned_effect;
         }

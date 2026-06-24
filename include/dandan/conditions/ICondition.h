@@ -1,11 +1,9 @@
 #ifndef DANDAN_ICONDITION_H
 #define DANDAN_ICONDITION_H
 
-#include "dandan/abilities/AbilityContext.h"
-#include "dandan/core/TextReplacement.h"
+#include "dandan/effects/EffectContext.h"
 #include <memory>
 #include <optional>
-#include <vector>
 
 namespace dandan::core
 {
@@ -35,7 +33,7 @@ namespace dandan::conditions
          */
         [[nodiscard]] virtual bool isSatisfied(
             const core::Game &game,
-            std::optional<abilities::AbilityContext> context =
+            std::optional<effects::EffectContext> context =
                 std::nullopt) const = 0;
 
         /**

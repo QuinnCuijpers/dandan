@@ -22,7 +22,9 @@ target_sources(
           ModalEffect.cpp
           MindBendEffect.cpp
           BounceEffect.cpp
-          MemoryLapseEffect.cpp)
+          MemoryLapseEffect.cpp
+          ShowAndTellEffect.cpp
+          ChooseCardNameAndMillEffect.cpp)
 
 target_sources(DandanOneShotEffects PUBLIC FILE_SET HEADERS BASE_DIRS
                                            ${CMAKE_SOURCE_DIR}/include)

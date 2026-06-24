@@ -10,7 +10,7 @@ namespace dandan::conditions
 
     bool SummoningSicknessCondition::isSatisfied(
         const core::Game &game,
-        [[maybe_unused]] std::optional<abilities::AbilityContext> context) const
+        [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
         const auto *card = game.getCardByID(m_card_id);
         std::cout << "Checking summoning sickness condition for card "

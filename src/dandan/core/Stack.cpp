@@ -6,6 +6,7 @@
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/utils/overloadVisitor.h"
 #include <memory>
@@ -56,8 +57,9 @@ namespace dandan::core
                         auto effect{spell_ability->createEffect(game, context)};
                         return effect;
                     }
+                    effects::EffectContext context{card->getControllerID()};
                     return std::make_unique<effects::ETBEffect>(
-                        *game.getCardByID(card->getID()));
+                        *game.getCardByID(card->getID()), context);
                 },
                 [&game, this](const abilities::BoundAbility &ability)
                     -> std::unique_ptr<effects::IOneShotEffect>

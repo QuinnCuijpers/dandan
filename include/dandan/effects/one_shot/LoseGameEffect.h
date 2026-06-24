@@ -3,6 +3,7 @@
 
 #include "dandan/core/Game.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 
 namespace dandan::effects
@@ -18,7 +19,9 @@ namespace dandan::effects
         /** @brief Constructs a new lose game effect.
          * @param player The player to cause to lose the game.
          */
-        explicit LoseGameEffect(const core::PlayerID &player) : m_player(player)
+        explicit LoseGameEffect(const core::PlayerID &player,
+                                EffectContext context)
+            : IOneShotEffect(context), m_player(player)
         {
         }
 
@@ -33,7 +36,8 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<LoseGameEffect>(m_player);
+            return std::make_unique<LoseGameEffect>(m_player,
+                                                    getEffectContext());
         }
 
     private:

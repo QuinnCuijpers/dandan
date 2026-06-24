@@ -38,8 +38,8 @@ namespace dandan::effects
         // any relevant state triggers
         for (int i = 0; i < m_amount; ++i)
         {
-            auto put_effect{
-                std::make_unique<PutCardOnTopEffect>(1, m_playerID)};
+            auto put_effect{std::make_unique<PutCardOnTopEffect>(
+                1, m_playerID, getEffectContext())};
             put_effect->apply(game);
         }
 
@@ -48,7 +48,8 @@ namespace dandan::effects
 
     std::unique_ptr<IOneShotEffect> PutCardOnTopEffect::copy() const
     {
-        return std::make_unique<PutCardOnTopEffect>(m_amount, m_playerID);
+        return std::make_unique<PutCardOnTopEffect>(m_amount, m_playerID,
+                                                    getEffectContext());
     }
 
     std::string PutCardOnTopEffect::display() const

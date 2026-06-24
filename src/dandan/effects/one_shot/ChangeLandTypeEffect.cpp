@@ -1,5 +1,6 @@
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/core/Game.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/utils/stringToBasicLandType.h"
 #include <iostream>
 #include <memory>
@@ -47,7 +48,7 @@ namespace dandan::effects
         }
 
         game.addEndOfTurnEffect(std::make_unique<ChangeLandTypeEffect>(
-            basic_land_2.value(), basic_land_1.value()));
+            basic_land_2.value(), basic_land_1.value(), getEffectContext()));
 
         return nullptr;
     }

@@ -1,4 +1,3 @@
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
 #include "dandan/core/Game.h"
 #include <algorithm>
@@ -7,7 +6,7 @@ namespace dandan::conditions
 {
     bool SelfControlsNoBasicCondition::isSatisfied(
         [[maybe_unused]] const core::Game &game,
-        [[maybe_unused]] std::optional<abilities::AbilityContext> context) const
+        [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
         assert(context.has_value());
         auto basic{m_basic_type};
@@ -37,9 +36,9 @@ namespace dandan::conditions
                    card->getCurrentSubType() != basic;
         };
         std::cout << "Checking SelfControlsNoBasicCondition for player "
-                  << context->controller_id << '\n';
+                  << context->player_id.value() << '\n';
         const core::Player &self_player =
-            game.getPlayer(context->controller_id);
+            game.getPlayer(context->player_id.value());
         const auto &battlefield{self_player.battlefield()};
         return std::all_of(battlefield.getLands().begin(),
                            battlefield.getLands().end(), no_basic_filter);

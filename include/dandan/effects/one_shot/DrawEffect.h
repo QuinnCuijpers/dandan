@@ -1,6 +1,8 @@
 #ifndef DANDAN_DRAWEFFECT_H
 #define DANDAN_DRAWEFFECT_H
 
+#include <utility>
+
 #include "dandan/core/Game.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -15,7 +17,7 @@ namespace dandan::effects
     public:
         DrawEffect(std::unique_ptr<numbers::INumber> amount,
                    EffectContext context)
-            : m_amount(std::move(amount)), m_context(context)
+            : IOneShotEffect(std::move(context)), m_amount(std::move(amount))
         {
         }
 
@@ -24,12 +26,12 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<DrawEffect>(m_amount->clone(), m_context);
+            return std::make_unique<DrawEffect>(m_amount->clone(),
+                                                getEffectContext());
         }
 
     private:
         std::unique_ptr<numbers::INumber> m_amount;
-        EffectContext m_context;
     };
 
     class DrawEffectDefinition final : public IOneShotEffectDefinition

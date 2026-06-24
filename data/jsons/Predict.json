@@ -1,0 +1,54 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "data": {
+                            "targets": [
+                                {
+                                    "types": [
+                                        "Player"
+                                    ]
+                                }
+                            ],
+                            "amount": 1,
+                            "writes": [
+                                "chosenCardName",
+                                "milledCardName"
+                            ]
+                        },
+                        "type": "ChooseCardNameAndMillEffect"
+                    },
+                    {
+                        "data": {
+                            "reads": [
+                                "chosenCardName",
+                                "milledCardName"
+                            ],
+                            "amount": {
+                                "type": "conditionalNumber",
+                                "data": {
+                                    "ifNumber": 2,
+                                    "elseNumber": 1,
+                                    "condition": {
+                                        "type": "MatchesReadLinksCondition",
+                                        "data": {
+                                            "first": "chosenCardName",
+                                            "second": "milledCardName"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "type": "DrawEffect"
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Predict",
+    "type": "Instant",
+    "cost": "U"
+}

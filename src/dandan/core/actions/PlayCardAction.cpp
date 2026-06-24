@@ -1,6 +1,7 @@
 #include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/Zone.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/effects/one_shot/PlayCardEffect.h"
 
@@ -44,16 +45,18 @@ namespace dandan::core
             game.conditionManager().addStateTriggeredAbility(&ability);
         }
 
+        effects::EffectContext context{card->getControllerID()};
+
         // lands dont use the stack and thus immediately enter
         switch (data.getType())
         {
         case CardData::Type::Land:
-            return std::make_unique<effects::ETBEffect>(*card);
+            return std::make_unique<effects::ETBEffect>(*card, context);
 
         case CardData::Type::Creature:
         case CardData::Type::Sorcery:
         case CardData::Type::Instant:
-            return std::make_unique<effects::PlayCardEffect>(*card);
+            return std::make_unique<effects::PlayCardEffect>(*card, context);
 
         default:
             throw std::runtime_error(

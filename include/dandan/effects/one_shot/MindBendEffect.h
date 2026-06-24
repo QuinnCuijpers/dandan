@@ -5,6 +5,8 @@
 
 #include "dandan/core/Game.h"
 #include "dandan/core/TargetRequirement.h"
+#include "dandan/effects/EffectContext.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 namespace dandan::effects
 {
@@ -12,14 +14,15 @@ namespace dandan::effects
     {
 
     public:
-        explicit MindBendEffect(core::Target target)
-            : m_target(std::move(target))
+        explicit MindBendEffect(core::Target target, EffectContext context)
+            : IOneShotEffect(std::move(context)), m_target(std::move(target))
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<MindBendEffect>(m_target);
+            return std::make_unique<MindBendEffect>(m_target,
+                                                    getEffectContext());
         }
 
         [[nodiscard]] std::string display() const override
@@ -49,10 +52,10 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             [[maybe_unused]] EffectContext context) const override
         {
-            const auto *card{game.getCardByID(context.card()->getID())};
+            const auto *card{game.getCardByID(context.card_id.value())};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
-            return std::make_unique<MindBendEffect>(choice);
+            return std::make_unique<MindBendEffect>(choice, context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

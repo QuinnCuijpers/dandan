@@ -5,6 +5,7 @@
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/TextReplacement.h"
+#include "dandan/effects/EffectContext.h"
 #include <memory>
 #include <optional>
 #include <vector>
@@ -31,7 +32,7 @@ namespace dandan::effects
 
         [[nodiscard]] bool prevents(const core::IAction &action,
                                     const core::Game &game,
-                                    std::optional<abilities::AbilityContext>
+                                    std::optional<effects::EffectContext>
                                         context = std::nullopt) const override;
 
         [[nodiscard]] std::unique_ptr<IPreventionEffect> clone() const override

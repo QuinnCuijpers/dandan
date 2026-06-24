@@ -25,22 +25,23 @@ namespace dandan::core
             if (auto iter = m_card_data_cache.find(key);
                 iter != m_card_data_cache.end())
             {
-                return iter->second;
+                return *(iter->second);
             }
-            CardData new_card_data{name};
-            if (new_card_data.getSuperType() ==
+            auto new_card_data{std::make_unique<CardData>(name)};
+            if (new_card_data->getSuperType() ==
                 core::CardData::SuperType::Basic)
             {
-                new_card_data.addAbility(
+                new_card_data->addAbility(
                     std::make_unique<abilities::BasicLandAbility>());
             }
             m_card_data_cache[key] = std::move(new_card_data);
-            return m_card_data_cache[key];
+            return *m_card_data_cache[key];
         }
 #endif
 
     private:
-        static std::unordered_map<std::string, CardData> m_card_data_cache;
+        static std::unordered_map<std::string, std::unique_ptr<CardData>>
+            m_card_data_cache;
     };
 } // namespace dandan::core
 

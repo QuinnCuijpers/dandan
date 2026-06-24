@@ -1,6 +1,8 @@
 #ifndef DANDAN_GRAVEYARDCOUNT_H
 #define DANDAN_GRAVEYARDCOUNT_H
 
+#include "dandan/core/Context.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/numbers/INumber.h"
 #include <algorithm>
 
@@ -19,7 +21,8 @@ namespace dandan::numbers
         }
 
         [[nodiscard]] int getValue(
-            [[maybe_unused]] core::Game &game) const override
+            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] effects::EffectContext context) const override
         {
             auto count{std::count_if(game.graveyard().getCards().begin(),
                                      game.graveyard().getCards().end(),

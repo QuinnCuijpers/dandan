@@ -2,6 +2,7 @@
 #define DANDAN_DESTROY_EFFECT_H
 
 #include "dandan/core/Card.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 
@@ -18,7 +19,8 @@ namespace dandan::effects
         /** @brief Constructs a new destroy effect with the specified card.
          * @param card The card to destroy.
          */
-        explicit DestroyEffect(core::Card &card) : m_card{card}
+        explicit DestroyEffect(core::Card &card, EffectContext context)
+            : IOneShotEffect(context), m_card{card}
         {
         }
 
@@ -27,7 +29,7 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<DestroyEffect>(m_card);
+            return std::make_unique<DestroyEffect>(m_card, getEffectContext());
         }
 
     private:

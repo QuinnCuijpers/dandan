@@ -1,10 +1,12 @@
 #ifndef DANDAN_PUTCARDONTOPEFFECT_H
 #define DANDAN_PUTCARDONTOPEFFECT_H
 
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
@@ -20,8 +22,10 @@ namespace dandan::effects
          * @param amount The number of cards to put on top.
          * @param playerID The ID of the player who will use this effect.
          */
-        PutCardOnTopEffect(int amount, core::PlayerID playerID)
-            : m_amount(amount), m_playerID(playerID)
+        PutCardOnTopEffect(int amount, core::PlayerID playerID,
+                           EffectContext context)
+            : IOneShotEffect(std::move(context)), m_amount(amount),
+              m_playerID(playerID)
         {
         }
 
@@ -60,7 +64,7 @@ namespace dandan::effects
             EffectContext context) const override
         {
             return std::make_unique<PutCardOnTopEffect>(
-                m_amount, context.player().value());
+                m_amount, context.player_id.value(), context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

@@ -5,6 +5,7 @@
 #include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/continuous/prevention/IPreventionEffect.h"
 #include "dandan/utils/overloadVisitor.h"
 #include <algorithm>
@@ -191,8 +192,10 @@ namespace dandan::core
                                     const effects::IPreventionEffect *>(
                                     static_ability->getEffect()))
                             {
-                                return prevention_effect->prevents(
-                                    action, game, ability->getContext());
+                                effects::EffectContext context{
+                                    ability->getContext()};
+                                return prevention_effect->prevents(action, game,
+                                                                   context);
                             }
                         }
                         // should be unreachable as only prevention effects are

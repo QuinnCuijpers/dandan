@@ -1,4 +1,5 @@
 #include "dandan/core/Library.h"
+#include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
 #include <iostream>
@@ -30,13 +31,16 @@ namespace dandan::core
         return drawn_cards;
     }
 
-    void Library::mill(core::Game &game, int count)
+    std::vector<CardID> Library::mill(core::Game &game, int count)
     {
+        auto res{std::vector<CardID>{}};
         for (int i = 0; i < count && !m_cards.empty(); ++i)
         {
             CardID milled_card = m_cards.front();
+            res.push_back(milled_card);
             m_cards.pop_front();
             game.graveyard().addCard(*game.getCardByID(milled_card));
         }
+        return res;
     }
 } // namespace dandan::core

@@ -6,6 +6,7 @@
 #include "dandan/core/Player.h"
 #include "dandan/core/SubType.h"
 #include "dandan/core/TextReplacement.h"
+#include "dandan/effects/EffectContext.h"
 #include <algorithm>
 #include <optional>
 #include <variant>
@@ -16,7 +17,7 @@ namespace dandan::conditions
 
     bool DefenderControlsNoBasicCondition::isSatisfied(
         const core::Game &game,
-        [[maybe_unused]] std::optional<abilities::AbilityContext> context) const
+        [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
         auto basic{m_type};
         auto text_replacements{context->text_replacements};

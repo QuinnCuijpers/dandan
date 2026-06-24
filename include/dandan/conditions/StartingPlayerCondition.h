@@ -24,7 +24,7 @@ namespace dandan::conditions
     public:
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
-            [[maybe_unused]] std::optional<abilities::AbilityContext> context =
+            [[maybe_unused]] std::optional<effects::EffectContext> context =
                 std::nullopt) const override
         {
             return game.isFirstTurn();

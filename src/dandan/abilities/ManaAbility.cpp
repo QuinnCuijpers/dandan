@@ -1,4 +1,5 @@
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/AddManaEffect.h"
 #include "dandan/mana/Mana.h"
 #include "dandan/mana/ManaList.h"
@@ -41,16 +42,19 @@ namespace dandan::abilities
         [[maybe_unused]] core::Game &game,
         [[maybe_unused]] AbilityContext context) const
     {
+        effects::EffectContext effect_context{context.source_card_id,
+                                              context.controller_id};
         m_cost->pay(game, context);
         if (context.chosen_mode_index.has_value())
         {
             const auto &option =
                 m_mana_list.getOptions()[context.chosen_mode_index.value()];
-            return std::make_unique<effects::AddManaEffect>(option->getMana());
+            return std::make_unique<effects::AddManaEffect>(option->getMana(),
+                                                            effect_context);
         }
 
         return std::make_unique<effects::AddManaEffect>(
-            m_mana_list.getOptions()[0]->getMana());
+            m_mana_list.getOptions()[0]->getMana(), effect_context);
     }
 
     [[nodiscard]] bool ManaAbility::canActivate(core::Game &game,

@@ -6,6 +6,7 @@
 #include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/CardID.h"
+#include "dandan/effects/EffectContext.h"
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -87,10 +88,13 @@ namespace dandan::core
                             const abilities::StateTriggeredAbility *>(
                             &underlying_ability))
                     {
+                        auto context{
+                            triggered_record.bound_ability->getContext()};
+                        effects::EffectContext effect_context{context};
                         bool currently_satisfied =
                             triggered_ability->condition()->isSatisfied(
-                                game,
-                                triggered_record.bound_ability->getContext());
+                                game, effect_context);
+
                         if (currently_satisfied && !triggered_record.satisfied)
                         {
                             std::cout << "Condition for ability on card "

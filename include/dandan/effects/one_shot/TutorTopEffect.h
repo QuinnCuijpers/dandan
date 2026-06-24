@@ -1,7 +1,11 @@
 #ifndef DANDAN_TUTOR_TOP_EFFECT_H
 #define DANDAN_TUTOR_TOP_EFFECT_H
 
+#include <utility>
+
 #include "dandan/core/CardData.h"
+#include "dandan/effects/EffectContext.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 
 namespace dandan::effects
@@ -10,15 +14,16 @@ namespace dandan::effects
     {
     public:
         TutorTopEffect(std::vector<core::CardData::Type> filter_types,
-                       core::PlayerID player_id)
-            : m_filter_types(std::move(filter_types)), m_player_id(player_id)
+                       core::PlayerID player_id, EffectContext context)
+            : IOneShotEffect(std::move(context)),
+              m_filter_types(std::move(filter_types)), m_player_id(player_id)
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<TutorTopEffect>(m_filter_types,
-                                                    m_player_id);
+            return std::make_unique<TutorTopEffect>(m_filter_types, m_player_id,
+                                                    getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(
@@ -42,8 +47,8 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             EffectContext context) const override
         {
-            return std::make_unique<TutorTopEffect>(m_filter_types,
-                                                    context.player().value());
+            return std::make_unique<TutorTopEffect>(
+                m_filter_types, context.player_id.value(), context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

@@ -1,6 +1,7 @@
 #ifndef DANDAN_OPTIONALDRAWEFFECT_H
 #define DANDAN_OPTIONALDRAWEFFECT_H
 
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 
@@ -9,8 +10,9 @@ namespace dandan::effects
     class OptionalDrawEffect : public IOneShotEffect
     {
     public:
-        OptionalDrawEffect(int amount, bool each_player)
-            : m_amount(amount), m_each_player(each_player)
+        OptionalDrawEffect(int amount, bool each_player, EffectContext context)
+            : IOneShotEffect(context), m_amount(amount),
+              m_each_player(each_player)
         {
         }
 
@@ -19,8 +21,8 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<OptionalDrawEffect>(m_amount,
-                                                        m_each_player);
+            return std::make_unique<OptionalDrawEffect>(m_amount, m_each_player,
+                                                        getEffectContext());
         }
 
     private:
@@ -35,8 +37,8 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             [[maybe_unused]] EffectContext context) const override
         {
-            return std::make_unique<OptionalDrawEffect>(m_amount,
-                                                        m_each_player);
+            return std::make_unique<OptionalDrawEffect>(m_amount, m_each_player,
+                                                        context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

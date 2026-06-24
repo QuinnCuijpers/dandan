@@ -2,10 +2,12 @@
 #include "dandan/core/CardData.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
+#include "dandan/effects/one_shot/ChooseCardNameAndMillEffect.h"
 #include "dandan/effects/one_shot/MemoryLapseEffect.h"
 #include "dandan/effects/one_shot/MindBendEffect.h"
 #include <algorithm>
 #include <iterator>
+#include <optional>
 #include <vector>
 #ifdef DANDAN_SERIALIZE
 #include "dandan/effects/one_shot/BounceLandEffect.h"
@@ -33,6 +35,22 @@ namespace dandan::serialization
     {
         auto json = nlohmann::json::object();
         json["data"] = nlohmann::json::object();
+
+        if (effect->readLinks().has_value())
+        {
+            for (const auto &read_link : effect->readLinks().value())
+            {
+                json["data"]["reads"].push_back(read_link);
+            }
+        }
+
+        if (effect->writeLinks().has_value())
+        {
+            for (const auto &write_link : effect->writeLinks().value())
+            {
+                json["data"]["writes"].push_back(write_link);
+            }
+        }
 
         if (const auto *targets = effect->getTargetRequirement())
         {
@@ -107,7 +125,8 @@ namespace dandan::serialization
             return json;
         }
 
-        if (dynamic_cast<const effects::TimeTwisterEffect *>(effect) != nullptr)
+        if (dynamic_cast<const effects::TimeTwisterEffectDefinition *>(
+                effect) != nullptr)
         {
             json["type"] = "TimeTwisterEffect";
             return json;
@@ -173,6 +192,14 @@ namespace dandan::serialization
                 effect) != nullptr)
         {
             json["type"] = "MemoryLapseEffect";
+            return json;
+        }
+
+        if (const auto *choose_name_and_mill = dynamic_cast<
+                const effects::ChooseCardNameAndMillEffectDefinition *>(effect))
+        {
+            json["type"] = "ChooseCardNameAndMillEffect";
+            json["data"]["amount"] = choose_name_and_mill->getAmount();
             return json;
         }
 
@@ -269,7 +296,7 @@ namespace dandan::serialization
         }
         if (type == "TimeTwisterEffect")
         {
-            return std::make_unique<effects::TimeTwisterEffect>();
+            return std::make_unique<effects::TimeTwisterEffectDefinition>();
         }
         if (type == "ExileTopEffect")
         {
@@ -310,6 +337,13 @@ namespace dandan::serialization
         {
 
             return std::make_unique<effects::MemoryLapseEffectDefinition>(
+                core::TargetRequirement{target_types});
+        }
+        if (type == "ChooseCardNameAndMillEffect")
+        {
+            return std::make_unique<
+                effects::ChooseCardNameAndMillEffectDefinition>(
+                data.at("amount").get<int>(),
                 core::TargetRequirement{target_types});
         }
 

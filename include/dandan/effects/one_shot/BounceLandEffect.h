@@ -2,9 +2,11 @@
 #define DANDAN_BOUNCELANDEFFECT_H
 
 #include "IOneShotEffect.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
@@ -16,14 +18,16 @@ namespace dandan::effects
     class BounceLandEffect : public IOneShotEffect
     {
     public:
-        explicit BounceLandEffect(core::PlayerID player_id)
-            : m_player_id(player_id)
+        explicit BounceLandEffect(core::PlayerID player_id,
+                                  EffectContext effect_context)
+            : IOneShotEffect(std::move(effect_context)), m_player_id(player_id)
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<BounceLandEffect>(m_player_id);
+            return std::make_unique<BounceLandEffect>(m_player_id,
+                                                      getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(
@@ -46,7 +50,8 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             EffectContext context) const override
         {
-            return std::make_unique<BounceLandEffect>(context.player().value());
+            return std::make_unique<BounceLandEffect>(context.player_id.value(),
+                                                      context);
         }
     };
 } // namespace dandan::effects

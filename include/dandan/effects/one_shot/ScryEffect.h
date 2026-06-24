@@ -1,7 +1,10 @@
 #ifndef DANDAN_SCRY_EFFECT_H
 #define DANDAN_SCRY_EFFECT_H
 
+#include <utility>
+
 #include "IOneShotEffect.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 
 namespace dandan::effects
@@ -18,14 +21,17 @@ namespace dandan::effects
          * @param scry_amount the amount of cards to scry
          * @param player the player who will scry
          */
-        explicit ScryEffect(int scry_amount, core::PlayerID player)
-            : m_scry_amount(scry_amount), m_player(player)
+        explicit ScryEffect(int scry_amount, core::PlayerID player,
+                            EffectContext context)
+            : IOneShotEffect(std::move(context)), m_scry_amount(scry_amount),
+              m_player(player)
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<ScryEffect>(m_scry_amount, m_player);
+            return std::make_unique<ScryEffect>(m_scry_amount, m_player,
+                                                getEffectContext());
         }
         std::unique_ptr<events::IEvent> apply_impl(
             core::Game &game) const override;
@@ -52,8 +58,8 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             EffectContext context) const override
         {
-            return std::make_unique<ScryEffect>(m_scry_amount,
-                                                context.player().value());
+            return std::make_unique<ScryEffect>(
+                m_scry_amount, context.player_id.value(), context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

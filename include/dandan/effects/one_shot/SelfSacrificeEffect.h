@@ -2,9 +2,11 @@
 #define DANDAN_SELFSACRIFICEEFFECT_H
 
 #include "dandan/core/Game.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <iostream>
+#include <utility>
 
 // should take a card as member variable, but cant rn due to serialization
 namespace dandan::effects
@@ -18,13 +20,16 @@ namespace dandan::effects
     class SelfSacrificeEffect : public IOneShotEffect
     {
     public:
-        explicit SelfSacrificeEffect(core::CardID card_id) : m_card_id(card_id)
+        explicit SelfSacrificeEffect(core::CardID card_id,
+                                     EffectContext context)
+            : IOneShotEffect(std::move(context)), m_card_id(card_id)
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<SelfSacrificeEffect>(m_card_id);
+            return std::make_unique<SelfSacrificeEffect>(m_card_id,
+                                                         getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(
@@ -47,7 +52,7 @@ namespace dandan::effects
             [[maybe_unused]] EffectContext context) const override
         {
             return std::make_unique<SelfSacrificeEffect>(
-                context.card().value());
+                context.card_id.value(), context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

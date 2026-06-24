@@ -2,10 +2,14 @@
 #define DANDAN_SPELL_DEFINITIONS_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/conditions/ICondition.h"
+#include "dandan/conditions/MatchesReadLinksCondition.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
+#include "dandan/effects/one_shot/ChooseCardNameAndMillEffect.h"
+#include "dandan/effects/one_shot/DrawEffect.h"
 #include "dandan/effects/one_shot/ExileTopEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/MemoryLapseEffect.h"
@@ -16,8 +20,10 @@
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
 #include "dandan/effects/one_shot/TimeTwisterEffect.h"
 #include "dandan/effects/one_shot/TutorTopEffect.h"
+#include "dandan/numbers/ConditionalNumber.h"
 #include "dandan/numbers/GraveyardCount.h"
 #include <memory>
+#include <utility>
 #include <vector>
 
 inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
@@ -71,7 +77,7 @@ Diminishing_Returns_Abilities()
         std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
 
     ability_effects.emplace_back(
-        std::make_unique<dandan::effects::TimeTwisterEffect>());
+        std::make_unique<dandan::effects::TimeTwisterEffectDefinition>());
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::ExileTopEffectDefinition>(
             EXILE_AMOUNT));
@@ -221,6 +227,49 @@ Memory_Lapse_Abilities()
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::MemoryLapseEffectDefinition>(
             target_req));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Predict_Abilities()
+{
+
+    auto target_req{dandan::core::TargetRequirement{
+        std::vector<std::vector<dandan::core::TargetType>>{
+            {dandan::core::TargetType::Player}}}};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    auto first_effect{std::make_unique<
+        dandan::effects::ChooseCardNameAndMillEffectDefinition>(1, target_req)};
+
+    first_effect->addWriteLink("chosenCardName");
+    first_effect->addWriteLink("milledCardName");
+
+    ability_effects.emplace_back(std::move(first_effect));
+
+    std::unique_ptr<dandan::conditions::ICondition> condition{
+        std::make_unique<dandan::conditions::MatchesReadLinksCondition>(
+            "chosenCardName", "milledCardName")};
+
+    auto conditional_number{
+        std::make_unique<dandan::numbers::ConditionalNumber>(
+            2, 1, std::move(condition))};
+
+    auto second_effect{std::make_unique<dandan::effects::DrawEffectDefinition>(
+        std::move(conditional_number))};
+
+    second_effect->addReadLink("chosenCardName");
+    second_effect->addReadLink("milledCardName");
+
+    ability_effects.emplace_back(std::move(second_effect));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));

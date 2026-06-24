@@ -65,7 +65,7 @@ namespace dandan::core
             return m_cards;
         }
 
-        void mill(core::Game &game, int count);
+        std::vector<CardID> mill(core::Game &game, int count = 1);
 
         /** Gets the cards in the library immutably.
          * @return A const reference to the deque of card IDs in the library.

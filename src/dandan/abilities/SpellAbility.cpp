@@ -21,14 +21,15 @@ namespace dandan::abilities
 
         auto bound_effects{
             std::vector<std::unique_ptr<effects::IOneShotEffect>>{}};
+        effects::EffectContext effect_context{context.source_card_id,
+                                              context.controller_id};
         for (const auto &effect_def : effects())
         {
-            effects::EffectContext effect_context{context.source_card_id,
-                                                  context.controller_id};
             auto effect{effect_def->bind(game, effect_context)};
             bound_effects.push_back(std::move(effect));
         }
-        return std::make_unique<effects::EffectList>(std::move(bound_effects));
+        return std::make_unique<effects::EffectList>(std::move(bound_effects),
+                                                     effect_context);
     }
 
 } // namespace dandan::abilities

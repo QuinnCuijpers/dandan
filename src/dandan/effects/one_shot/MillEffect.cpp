@@ -6,7 +6,19 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> MillEffect::apply_impl(
         core::Game &game) const
     {
-        game.library().mill(game, m_amount);
+        auto context{getEffectContext()};
+        auto milled_cards{game.library().mill(game, m_amount)};
+        if (context.card_id.has_value())
+        {
+            auto card_id{context.card_id.value()};
+            auto *card{game.getCardByID(card_id)};
+            if (milled_cards.size() == 1)
+            {
+                auto milled_id{milled_cards[0]};
+                auto name{game.getCardByID(milled_id)->getData().getName()};
+                card->remember("milledCardName", name);
+            }
+        }
         return nullptr;
     }
 

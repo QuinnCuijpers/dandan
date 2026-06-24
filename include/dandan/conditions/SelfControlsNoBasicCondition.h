@@ -30,7 +30,7 @@ namespace dandan::conditions
 
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
-            std::optional<abilities::AbilityContext> context) const override;
+            std::optional<effects::EffectContext> context) const override;
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override
         {

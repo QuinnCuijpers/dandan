@@ -10,6 +10,7 @@ namespace dandan::core
     enum class TargetType : int8_t
     {
         Player,
+        Opponent,
         Creature,
         Land,
         Permanent,
@@ -25,6 +26,8 @@ namespace dandan::core
         {
         case TargetType::Player:
             return "Player";
+        case TargetType::Opponent:
+            return "Opponent";
         case TargetType::Creature:
             return "Creature";
         case TargetType::Permanent:

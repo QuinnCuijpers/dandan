@@ -1,9 +1,10 @@
 #include "dandan/serialization/JsonConditionFactory.h"
-#include "dandan/core/CardData.h"
-#include "dandan/core/SubType.h"
+#include <memory>
 #ifdef DANDAN_SERIALIZE
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
+#include "dandan/conditions/MatchesReadLinksCondition.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
+#include "dandan/core/SubType.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include <nlohmann/json.hpp>
 
@@ -31,6 +32,16 @@ namespace dandan::serialization
             json["data"]["type"] = defenderControlsNoBasicCondition->type();
             return json;
         }
+        if (const auto *matches =
+                dynamic_cast<const conditions::MatchesReadLinksCondition *>(
+                    condition))
+        {
+            auto json = nlohmann::json{{"type", "MatchesReadLinksCondition"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["first"] = matches->getfirst();
+            json["data"]["second"] = matches->getSecond();
+            return json;
+        }
         throw std::runtime_error(
             "create_json for this type of ICondition is not "
             "implemented yet.");
@@ -54,6 +65,13 @@ namespace dandan::serialization
             return std::make_unique<
                 conditions::DefenderControlsNoBasicCondition>(
                 data.at("type").get<core::SubType>());
+        }
+        if (type == "MatchesReadLinksCondition")
+        {
+            std::string first{data.at("first")};
+            std::string second{data.at("second")};
+            return std::make_unique<conditions::MatchesReadLinksCondition>(
+                first, second);
         }
 
         throw std::runtime_error(

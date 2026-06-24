@@ -2,6 +2,8 @@
 #define DANDAN_ATTACKEFFECT_H
 
 #include "dandan/core/Card.h"
+#include "dandan/effects/EffectContext.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 
 namespace dandan::effects
 {
@@ -16,7 +18,8 @@ namespace dandan::effects
         /** Constructor
          * @param creature The creature to apply the effect to.
          */
-        explicit AttackEffect(core::Card &creature) : m_creature{creature}
+        explicit AttackEffect(core::Card &creature, EffectContext context)
+            : IOneShotEffect(context), m_creature{creature}
         {
         }
 
@@ -25,7 +28,8 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<AttackEffect>(m_creature);
+            return std::make_unique<AttackEffect>(m_creature,
+                                                  getEffectContext());
         }
 
     private:

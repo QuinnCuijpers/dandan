@@ -6,11 +6,14 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/ColorWord.h"
+#include "dandan/core/Memorable.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/Zone.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
+#include <any>
+#include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -319,6 +322,21 @@ namespace dandan::core
             m_current_abilities = std::move(abilities);
         }
 
+        void remember(const std::string &key, Memorable value)
+        {
+            m_link_map[key] = std::move(value);
+        }
+
+        std::unordered_map<std::string, Memorable> &linkMap()
+        {
+            return m_link_map;
+        }
+
+        const std::unordered_map<std::string, Memorable> &linkMap() const
+        {
+            return m_link_map;
+        }
+
     private:
         CardID m_card_id;
         PlayerID m_controller_id;
@@ -345,6 +363,10 @@ namespace dandan::core
         std::vector<abilities::BoundAbility> m_current_abilities;
 
         int m_marked_damage{};
+
+        // the memory link map of the card, which allows effects to store memory
+        // used for other effects
+        std::unordered_map<std::string, Memorable> m_link_map;
 
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each

@@ -4,6 +4,8 @@
 #include "dandan/core/Game.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/TargetRequirement.h"
+#include "dandan/effects/EffectContext.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <memory>
 #include <utility>
@@ -13,14 +15,16 @@ namespace dandan::effects
     class MillEffect : public IOneShotEffect
     {
     public:
-        MillEffect(int amount, core::PlayerID player_id)
-            : m_amount(amount), m_player_id(player_id)
+        MillEffect(int amount, core::PlayerID player_id, EffectContext context)
+            : IOneShotEffect(std::move(context)), m_amount(amount),
+              m_player_id(player_id)
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<MillEffect>(m_amount, m_player_id);
+            return std::make_unique<MillEffect>(m_amount, m_player_id,
+                                                getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(
@@ -45,11 +49,12 @@ namespace dandan::effects
             const core::Game &game,
             [[maybe_unused]] EffectContext context) const override
         {
-            const auto *card{game.getCardByID(context.card()->getID())};
+            const auto *card{game.getCardByID(context.card_id.value())};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             auto player_choice{std::get<core::PlayerID>(choice)};
-            return std::make_unique<MillEffect>(m_amount, player_choice);
+            return std::make_unique<MillEffect>(m_amount, player_choice,
+                                                context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

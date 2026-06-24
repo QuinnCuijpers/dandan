@@ -2,6 +2,7 @@
 #define DANDAN_UNTAPEFFECT_H
 
 #include "dandan/core/Card.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
@@ -26,13 +27,14 @@ namespace dandan::effects
          * Constructs an UntapEffect for a specified card.
          * @param card The card to be untapped by this effect.
          */
-        explicit UntapEffect(core::Card &card) : m_card{card}
+        explicit UntapEffect(core::Card &card, EffectContext context)
+            : IOneShotEffect(context), m_card{card}
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<UntapEffect>(m_card);
+            return std::make_unique<UntapEffect>(m_card, getEffectContext());
         }
 
         /**

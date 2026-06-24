@@ -31,6 +31,7 @@ add_subdirectory(events)
 add_subdirectory(costs)
 add_subdirectory(conditions)
 add_subdirectory(triggers)
+add_subdirectory(numbers)
 
 if(DANDAN_BUILD_SERIALIZE)
   add_subdirectory(serialization)

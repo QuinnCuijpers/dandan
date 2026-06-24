@@ -1,7 +1,10 @@
 #ifndef DANDAN_EXILETOPEFFECT_H
 #define DANDAN_EXILETOPEFFECT_H
 
+#include <utility>
+
 #include "dandan/core/Game.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 
@@ -10,8 +13,9 @@ namespace dandan::effects
     class ExileTopEffect : public IOneShotEffect
     {
     public:
-        ExileTopEffect(int amount, core::PlayerID player)
-            : m_amount(amount), m_player(player)
+        ExileTopEffect(int amount, core::PlayerID player, EffectContext context)
+            : IOneShotEffect(std::move(context)), m_amount(amount),
+              m_player(player)
         {
         }
 
@@ -20,7 +24,8 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<ExileTopEffect>(m_amount, m_player);
+            return std::make_unique<ExileTopEffect>(m_amount, m_player,
+                                                    getEffectContext());
         }
 
     private:
@@ -35,8 +40,8 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             EffectContext context) const override
         {
-            return std::make_unique<ExileTopEffect>(m_amount,
-                                                    context.player().value());
+            return std::make_unique<ExileTopEffect>(
+                m_amount, context.player_id.value(), context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

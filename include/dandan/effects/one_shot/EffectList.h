@@ -2,6 +2,7 @@
 #define DANDAN_EFFECT_LIST_H
 
 #include "dandan/core/Game.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <algorithm>
 #include <memory>
@@ -19,7 +20,9 @@ namespace dandan::effects
          * @param effects The vector of one-shot effects.
          */
         explicit EffectList(
-            const std::vector<std::unique_ptr<IOneShotEffect>> &effects)
+            const std::vector<std::unique_ptr<IOneShotEffect>> &effects,
+            EffectContext context)
+            : IOneShotEffect(context)
         {
             std::transform(effects.begin(), effects.end(),
                            std::back_inserter(m_effects),
@@ -43,7 +46,8 @@ namespace dandan::effects
             std::transform(m_effects.begin(), m_effects.end(),
                            std::back_inserter(cloned_effects),
                            [](const auto &effect) { return effect->copy(); });
-            return std::make_unique<EffectList>(cloned_effects);
+            return std::make_unique<EffectList>(cloned_effects,
+                                                getEffectContext());
         }
 
         // TODO: impl an event bus instead of pushing the last event

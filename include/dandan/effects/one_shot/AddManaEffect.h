@@ -2,6 +2,7 @@
 #define DANDAN_ADDMANAEFFECT_H
 
 #include "dandan/core/Game.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/events/IEvent.h"
 #include "dandan/mana/Mana.h"
@@ -19,13 +20,14 @@ namespace dandan::effects
         /** Constructor
          * @param mana the mana that this effect will add.
          */
-        explicit AddManaEffect(mana::ManaMap mana) : m_mana(std::move(mana))
+        explicit AddManaEffect(mana::ManaMap mana, EffectContext context)
+            : IOneShotEffect(context), m_mana(std::move(mana))
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<AddManaEffect>(m_mana);
+            return std::make_unique<AddManaEffect>(m_mana, getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(

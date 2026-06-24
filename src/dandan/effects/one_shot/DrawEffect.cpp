@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/DrawEffect.h"
+#include "dandan/abilities/AbilityContext.h"
 #include "dandan/numbers/ExactNumber.h"
 
 #include "dandan/core/Game.h"
@@ -33,12 +34,12 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> DrawEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
-        int value{m_amount->getValue(game)};
+        int value{m_amount->getValue(game, getEffectContext())};
 
         if (value == 1)
         {
             std::cout << "Applying draw effect\n";
-            auto &player{game.getPlayer(m_context.player().value())};
+            auto &player{game.getPlayer(getEffectContext().player_id.value())};
             player.drawCard(game);
             return nullptr;
         }
@@ -49,7 +50,7 @@ namespace dandan::effects
         for (int i = 0; i < value; ++i)
         {
             auto draw_definition{std::make_unique<DrawEffectDefinition>(1)};
-            auto &player{game.getPlayer(m_context.player().value())};
+            auto &player{game.getPlayer(getEffectContext().player_id.value())};
             auto draw_effect{
                 draw_definition->bind(game, EffectContext{player.getID()})};
 

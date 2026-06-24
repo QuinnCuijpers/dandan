@@ -1,7 +1,10 @@
 #ifndef DANDAN_PEEK_EFFECT_H
 #define DANDAN_PEEK_EFFECT_H
 
+#include <utility>
+
 #include "IOneShotEffect.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 namespace dandan::effects
 {
@@ -18,14 +21,17 @@ namespace dandan::effects
         /** Constructor
          *@param peek_amount the amount of cards to peek.
          */
-        explicit PeekEffect(int peek_amount, core::PlayerID player_id)
-            : m_peek_amount(peek_amount), m_player_id(player_id)
+        explicit PeekEffect(int peek_amount, core::PlayerID player_id,
+                            EffectContext context)
+            : IOneShotEffect(std::move(context)), m_peek_amount(peek_amount),
+              m_player_id(player_id)
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<PeekEffect>(m_peek_amount, m_player_id);
+            return std::make_unique<PeekEffect>(m_peek_amount, m_player_id,
+                                                getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(
@@ -48,8 +54,8 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             EffectContext context) const override
         {
-            return std::make_unique<PeekEffect>(m_peek_amount,
-                                                context.player().value());
+            return std::make_unique<PeekEffect>(
+                m_peek_amount, context.player_id.value(), context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

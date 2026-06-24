@@ -3,6 +3,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/CardDrawAction.h"
 #include "dandan/core/phases/IPhase.h"
+#include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/UntapEffect.h"
 #include "dandan/log.h"
 #include <memory>
@@ -40,7 +41,9 @@ namespace dandan::core
             for (auto &card : cards)
             {
                 auto *cardp{game().getCardByID(card)};
-                auto effect{std::make_unique<effects::UntapEffect>(*cardp)};
+                effects::EffectContext context{};
+                auto effect{
+                    std::make_unique<effects::UntapEffect>(*cardp, context)};
                 // TODO: throw generated events onto a queue
                 effect->apply(game());
 
