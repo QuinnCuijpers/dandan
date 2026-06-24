@@ -13,7 +13,7 @@ namespace dandan::effects
     class TimeTwisterEffect : public IOneShotEffect
     {
     public:
-        TimeTwisterEffect(EffectContext context)
+        explicit TimeTwisterEffect(EffectContext context)
             : IOneShotEffect(std::move(context))
         {
         }

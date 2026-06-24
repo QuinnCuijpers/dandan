@@ -7,6 +7,7 @@
 #include "dandan/events/IEvent.h"
 #include "dandan/mana/Mana.h"
 #include <memory>
+#include <utility>
 namespace dandan::effects
 {
     /** @brief Represents an effect for adding mana
@@ -21,7 +22,7 @@ namespace dandan::effects
          * @param mana the mana that this effect will add.
          */
         explicit AddManaEffect(mana::ManaMap mana, EffectContext context)
-            : IOneShotEffect(context), m_mana(std::move(mana))
+            : IOneShotEffect(std::move(context)), m_mana(std::move(mana))
         {
         }
 

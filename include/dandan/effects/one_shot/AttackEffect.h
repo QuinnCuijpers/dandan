@@ -1,6 +1,8 @@
 #ifndef DANDAN_ATTACKEFFECT_H
 #define DANDAN_ATTACKEFFECT_H
 
+#include <utility>
+
 #include "dandan/core/Card.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -19,7 +21,7 @@ namespace dandan::effects
          * @param creature The creature to apply the effect to.
          */
         explicit AttackEffect(core::Card &creature, EffectContext context)
-            : IOneShotEffect(context), m_creature{creature}
+            : IOneShotEffect(std::move(context)), m_creature{creature}
         {
         }
 

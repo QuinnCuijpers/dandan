@@ -5,11 +5,30 @@
 #include <filesystem>
 #include <plog/Log.h>
 
-#define DLOGI PLOGI
-#define DLOGD PLOGD
-#define DLOGW PLOGW
-#define DLOGE PLOGE
-#define DLOGF PLOGF
+#define DLOGI                                                                  \
+    /* NOLINTBEGIN */                                                          \
+    PLOGI                                                                      \
+    /* NOLINTEND */
+
+#define DLOGD                                                                  \
+    /*NOLINTBEGIN*/                                                            \
+    PLOGD                                                                      \
+    /*NOLINTEND*/
+
+#define DLOGW                                                                  \
+    /*NOLINTBEGIN*/                                                            \
+    PLOGW                                                                      \
+    /*NOLINTEND*/
+
+#define DLOGE                                                                  \
+    /*NOLINTBEGIN*/                                                            \
+    PLOGE                                                                      \
+    /*NOLINTEND*/
+
+#define DLOGF                                                                  \
+    /*NOLINTBEGIN*/                                                            \
+    PLOGF                                                                      \
+    /*NOLINTEND*/
 
 namespace dandan
 {

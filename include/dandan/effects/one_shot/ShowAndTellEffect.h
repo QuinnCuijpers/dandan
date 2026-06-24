@@ -40,7 +40,8 @@ namespace dandan::effects
     {
 
     public:
-        ShowAndTellEffectDefinition(core::TargetRequirement target_requirement)
+        explicit ShowAndTellEffectDefinition(
+            core::TargetRequirement target_requirement)
             : m_target_requirements(std::move(target_requirement))
         {
         }

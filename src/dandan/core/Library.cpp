@@ -1,5 +1,4 @@
 #include "dandan/core/Library.h"
-#include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
 #include <iostream>

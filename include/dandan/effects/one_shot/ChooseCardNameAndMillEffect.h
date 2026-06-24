@@ -45,7 +45,7 @@ namespace dandan::effects
     {
 
     public:
-        ChooseCardNameAndMillEffectDefinition(
+        explicit ChooseCardNameAndMillEffectDefinition(
             core::TargetRequirement target_reqs)
             : m_target_requirements(std::move(target_reqs))
         {

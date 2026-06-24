@@ -15,7 +15,8 @@ namespace dandan::effects
             if (milled_cards.size() == 1)
             {
                 auto milled_id{milled_cards[0]};
-                auto name{game.getCardByID(milled_id)->getData().getName()};
+                const auto &name{
+                    game.getCardByID(milled_id)->getData().getName()};
                 card->remember("milledCardName", name);
             }
         }

@@ -12,7 +12,6 @@
 #include "dandan/core/Zone.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
-#include <any>
 #include <string>
 #include <unordered_map>
 #include <utility>

@@ -6,12 +6,14 @@
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <memory>
+#include <utility>
 namespace dandan::effects
 {
     class ChangeLandTypeEffect : public IOneShotEffect
     {
     public:
-        ChangeLandTypeEffect(EffectContext context) : IOneShotEffect(context)
+        explicit ChangeLandTypeEffect(EffectContext context)
+            : IOneShotEffect(std::move(context))
         {
         }
 
