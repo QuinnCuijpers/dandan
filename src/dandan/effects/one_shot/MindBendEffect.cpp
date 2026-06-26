@@ -1,8 +1,12 @@
 #include "dandan/effects/one_shot/MindBendEffect.h"
 #include "dandan/core/ColorWord.h"
+#include "dandan/core/Expire.h"
+#include "dandan/core/SubType.h"
+#include "dandan/core/TextReplacement.h"
 #include "dandan/utils/overloadVisitor.h"
 #include "dandan/utils/stringToBasicLandType.h"
 #include "dandan/utils/stringToColorWord.h"
+#include <memory>
 #include <variant>
 
 namespace dandan::effects
@@ -20,6 +24,41 @@ namespace dandan::effects
 
         auto permanent{std::get<core::Permanent>(target)};
         auto *card{game.getCardByID(permanent)};
+
+        if (m_replace_with.has_value() && m_to_replace.has_value())
+        {
+            auto const to_replace{m_to_replace.value()};
+            auto const replace_with{m_replace_with.value()};
+            std::visit(
+                utils::overloaded{
+                    [&](core::SubType to_replace_basic)
+                    {
+                        if (std::holds_alternative<core::SubType>(replace_with))
+                        {
+                            auto replace_with_basic{
+                                std::get<core::SubType>(replace_with)};
+                            card->replaceText(to_replace_basic,
+                                              replace_with_basic);
+                            return;
+                        }
+                    },
+                    [&](core::ColorWord to_replace_color)
+                    {
+                        if (std::holds_alternative<core::ColorWord>(
+                                replace_with))
+                        {
+                            auto replace_with_color{
+                                std::get<core::ColorWord>(replace_with)};
+                            card->replaceText(to_replace_color,
+                                              replace_with_color);
+                            return;
+                        }
+                    },
+                },
+                to_replace);
+
+            return nullptr;
+        }
 
         // Change the text of target permanent by replacing all instances of one
         // color word with another or one basic land type with another.
@@ -41,11 +80,13 @@ namespace dandan::effects
             to_replace_var = to_replace_type;
         }
 
+        core::ReplacementType replace_with_var;
+
         std::cout << "color word or basic land type to replace with: ";
 
         std::visit(
             utils::overloaded{
-                [&game, &card](const core::ColorWord to_replace_color)
+                [&](const core::ColorWord to_replace_color)
                 {
                     std::cout << "color word to replace with: ";
                     std::string replace_with_color_str;
@@ -57,9 +98,10 @@ namespace dandan::effects
                         throw std::runtime_error("Invalid color word: " +
                                                  replace_with_color_str);
                     }
+                    replace_with_var = replace_with_color;
                     card->replaceText(to_replace_color, replace_with_color);
                 },
-                [&game, &card](const core::SubType to_replace_basic)
+                [&](const core::SubType to_replace_basic)
                 {
                     std::cout << "basic land type to replace with: ";
                     std::string replace_with_basic_str;
@@ -71,10 +113,23 @@ namespace dandan::effects
                         throw std::runtime_error("Invalid basic land type: " +
                                                  replace_with_basic_str);
                     }
+                    replace_with_var = replace_with_basic;
                     card->replaceText(to_replace_basic, replace_with_basic);
                 },
             },
             to_replace_var);
+
+        if (auto expiry = getEffectContext().expires;
+            expiry != core::ExpireTime::None)
+        {
+            if (expiry == core::ExpireTime::EnfOfTurn)
+            {
+                auto undo_effect{std::make_unique<MindBendEffect>(
+                    m_target, replace_with_var, to_replace_var,
+                    getEffectContext())};
+                game.addEndOfTurnEffect(std::move(undo_effect));
+            }
+        }
 
         return nullptr;
     }

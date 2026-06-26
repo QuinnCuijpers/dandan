@@ -6,6 +6,7 @@
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <algorithm>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace dandan::effects
@@ -22,7 +23,7 @@ namespace dandan::effects
         explicit EffectList(
             const std::vector<std::unique_ptr<IOneShotEffect>> &effects,
             EffectContext context)
-            : IOneShotEffect(context)
+            : IOneShotEffect(std::move(context))
         {
             std::transform(effects.begin(), effects.end(),
                            std::back_inserter(m_effects),

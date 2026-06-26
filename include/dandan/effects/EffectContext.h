@@ -3,6 +3,7 @@
 
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/Expire.h"
 #include "dandan/core/PlayerID.h"
 #include <optional>
 
@@ -43,6 +44,7 @@ namespace dandan::effects
         std::optional<core::PlayerID> player_id;
         std::optional<size_t> chosen_mode_index;
         std::optional<std::vector<core::TextReplacement>> text_replacements;
+        core::ExpireTime expires{core::ExpireTime::None};
     };
 } // namespace dandan::effects
 

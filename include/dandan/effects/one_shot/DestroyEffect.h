@@ -5,6 +5,7 @@
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
@@ -20,7 +21,7 @@ namespace dandan::effects
          * @param card The card to destroy.
          */
         explicit DestroyEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(context), m_card{card}
+            : IOneShotEffect(std::move(context)), m_card{card}
         {
         }
 

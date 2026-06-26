@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <utility>
 #include <vector>
 
 // TODO: add doc explaining how this is different from ETBEffect
@@ -29,7 +30,7 @@ namespace dandan::effects
          *@param card The card that would be played
          */
         explicit PlayCardEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(context), m_card{card}
+            : IOneShotEffect(std::move(context)), m_card{card}
         {
         }
 

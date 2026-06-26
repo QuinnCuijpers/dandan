@@ -1,6 +1,8 @@
 #ifndef DANDAN_LOSE_GAME_EFFECT_H
 #define DANDAN_LOSE_GAME_EFFECT_H
 
+#include <utility>
+
 #include "dandan/core/Game.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/effects/EffectContext.h"
@@ -21,7 +23,7 @@ namespace dandan::effects
          */
         explicit LoseGameEffect(const core::PlayerID &player,
                                 EffectContext context)
-            : IOneShotEffect(context), m_player(player)
+            : IOneShotEffect(std::move(context)), m_player(player)
         {
         }
 

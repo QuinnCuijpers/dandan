@@ -1,6 +1,7 @@
 #ifndef DANDAN_IONESHOTEFFECTDEFINITION_H
 #define DANDAN_IONESHOTEFFECTDEFINITION_H
 
+#include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -83,9 +84,20 @@ namespace dandan::effects
             }
         }
 
+        [[nodiscard]] core::ExpireTime expires() const
+        {
+            return m_expires;
+        }
+
+        void addExpireTime(core::ExpireTime expire_time)
+        {
+            m_expires = expire_time;
+        }
+
     private:
         std::optional<links> m_write_links;
         std::optional<links> m_read_links;
+        core::ExpireTime m_expires{core::ExpireTime::None};
     };
 } // namespace dandan::effects
 

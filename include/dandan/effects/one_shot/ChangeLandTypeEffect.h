@@ -19,7 +19,7 @@ namespace dandan::effects
 
         ChangeLandTypeEffect(core::SubType basic_land_1,
                              core::SubType basic_land_2, EffectContext context)
-            : IOneShotEffect(context), m_basic_land_1(basic_land_1),
+            : IOneShotEffect(std::move(context)), m_basic_land_1(basic_land_1),
               m_basic_land_2(basic_land_2) {};
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override

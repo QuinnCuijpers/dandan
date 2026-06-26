@@ -13,7 +13,8 @@
                                         "Permanent"
                                     ]
                                 }
-                            ]
+                            ],
+                            "expires": "EndOfTurn"
                         }
                     },
                     {

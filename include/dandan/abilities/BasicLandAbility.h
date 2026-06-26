@@ -55,7 +55,7 @@ namespace dandan::abilities
 
         [[nodiscard]] bool canActivate(
             [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] AbilityContext context) const override
+            [[maybe_unused]] const AbilityContext &context) const override
         {
             auto *card{game.getCardByID(context.source_card_id)};
             return m_basic_land_ability_map->at(card->getCurrentSubType())

@@ -44,7 +44,7 @@ namespace dandan::abilities
     }
 
     [[nodiscard]] bool ActivatedAbility::canActivate(
-        core::Game &game, AbilityContext context) const
+        core::Game &game, const AbilityContext &context) const
     {
         if (m_cost)
         {

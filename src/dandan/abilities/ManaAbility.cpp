@@ -57,8 +57,8 @@ namespace dandan::abilities
             m_mana_list.getOptions()[0]->getMana(), effect_context);
     }
 
-    [[nodiscard]] bool ManaAbility::canActivate(core::Game &game,
-                                                AbilityContext context) const
+    [[nodiscard]] bool ManaAbility::canActivate(
+        core::Game &game, const AbilityContext &context) const
     {
         if (m_cost)
         {

@@ -1,5 +1,6 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
 #include "dandan/core/CardData.h"
+#include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
 #include "dandan/effects/one_shot/ChooseCardNameAndMillEffect.h"
@@ -50,6 +51,11 @@ namespace dandan::serialization
             {
                 json["data"]["writes"].push_back(write_link);
             }
+        }
+
+        if (auto expire = effect->expires(); expire != core::ExpireTime::None)
+        {
+            json["data"]["expires"] = expire;
         }
 
         if (const auto *targets = effect->getTargetRequirement())
@@ -212,9 +218,12 @@ namespace dandan::serialization
         effects::IOneShotEffectDefinition>::create_product(const nlohmann::json
                                                                &json)
     {
+        // TODO: add read and write links
         const auto &type = json.at("type").get<std::string>();
         const auto &data = json.at("data");
         const auto &targets = json["data"].find("targets");
+        const auto &expire = json["data"].find("expires");
+        auto expiry{core::ExpireTime::None};
         std::vector<std::vector<dandan::core::TargetType>> target_types;
 
         if (targets != json["data"].end())
@@ -231,6 +240,11 @@ namespace dandan::serialization
                                .get<std::vector<dandan::core::TargetType>>()};
                 target_types.push_back(types);
             }
+        }
+
+        if (expire != json["data"].end())
+        {
+            expiry = json["data"].at("expires");
         }
 
         if (type == "ModalEffect")
@@ -325,8 +339,11 @@ namespace dandan::serialization
         }
         if (type == "MindBendEffect")
         {
-            return std::make_unique<effects::BounceEffectDefinition>(
-                dandan::core::TargetRequirement{target_types});
+            // TODO: add expiry option to other locations as well
+            auto effect{std::make_unique<effects::MindBendEffectDefinition>(
+                core::TargetRequirement{target_types})};
+            effect->addExpireTime(expiry);
+            return effect;
         }
         if (type == "BounceEffect")
         {

@@ -59,8 +59,8 @@ namespace dandan::abilities
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
-        [[nodiscard]] bool canActivate(core::Game &game,
-                                       AbilityContext context) const override;
+        [[nodiscard]] bool canActivate(
+            core::Game &game, const AbilityContext &context) const override;
 
         [[nodiscard]] size_t optionsAmount() const override
         {

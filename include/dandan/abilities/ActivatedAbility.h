@@ -59,8 +59,8 @@ namespace dandan::abilities
             return m_effect.get();
         }
 
-        [[nodiscard]] bool canActivate(core::Game &game,
-                                       AbilityContext context) const override;
+        [[nodiscard]] bool canActivate(
+            core::Game &game, const AbilityContext &context) const override;
 
     private:
         std::unique_ptr<costs::ICost> m_cost;

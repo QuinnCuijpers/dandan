@@ -285,6 +285,8 @@ namespace dandan::core
 
         void addEndOfTurnEffect(std::unique_ptr<effects::IOneShotEffect> effect)
         {
+            std::cout << "added end of turn effect: " << typeid(effect).name()
+                      << '\n';
             m_end_of_turn_effects.push_back(std::move(effect));
         }
 

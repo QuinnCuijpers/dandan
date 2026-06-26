@@ -4,6 +4,7 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/conditions/MatchesReadLinksCondition.h"
+#include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
@@ -153,9 +154,12 @@ Crystal_Spray_Abilities()
     auto ability_effects{std::vector<
         std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
 
-    ability_effects.emplace_back(
+    auto mind_bend_effect{
         std::make_unique<dandan::effects::MindBendEffectDefinition>(
-            target_req));
+            target_req)};
+    mind_bend_effect->addExpireTime(dandan::core::ExpireTime::EnfOfTurn);
+
+    ability_effects.emplace_back(std::move(mind_bend_effect));
 
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::DrawEffectDefinition>(1));

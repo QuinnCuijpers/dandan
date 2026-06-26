@@ -1,6 +1,8 @@
 #ifndef DANDAN_OPTIONALDRAWEFFECT_H
 #define DANDAN_OPTIONALDRAWEFFECT_H
 
+#include <utility>
+
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
@@ -11,7 +13,7 @@ namespace dandan::effects
     {
     public:
         OptionalDrawEffect(int amount, bool each_player, EffectContext context)
-            : IOneShotEffect(context), m_amount(amount),
+            : IOneShotEffect(std::move(context)), m_amount(amount),
               m_each_player(each_player)
         {
         }

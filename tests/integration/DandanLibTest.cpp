@@ -1186,3 +1186,86 @@ TEST(DandanLibTest, MemoryLapseTest)
 
     EXPECT_EQ(memory->getZone(), dandan::core::Zone::GRAVEYARD);
 }
+
+TEST(DandanLibTest, DandanCrystalSprayTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_ISLANDS{6};
+    static constexpr int NUM_CRYSTAL{30};
+
+    auto island_abilities{::Island_TESTS_Abilities()};
+    auto crystal_abilities{::Crystal_Spray_Abilities()};
+
+    auto island_data{dandan::core::CardData{
+        "Island", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land, dandan::core::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
+
+    auto crystal_data{dandan::core::CardData{
+        "Crystal Spray",
+        std::make_unique<dandan::mana::AndMana>(
+            std::make_unique<dandan::mana::BlueMana>(1),
+            std::make_unique<dandan::mana::GenericMana>(2)),
+        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::SuperType::None, std::move(crystal_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
+    auto crystal_cards{createTestCards(NUM_CRYSTAL, &crystal_data)};
+
+    cards.insert(cards.end(), crystal_cards.begin(), crystal_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    std::stringstream stream{};
+
+    auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
+    auto island_1_2{game.activePlayer().hand().getCards()[1].getID()};
+    auto island_1_3{game.activePlayer().hand().getCards()[2].getID()};
+
+    auto island_2_1{game.nonActivePlayer().hand().getCards()[0].getID()};
+    auto island_2_2{game.nonActivePlayer().hand().getCards()[1].getID()};
+
+    auto crystal_1_1{game.activePlayer().hand().getCards()[4].getID()};
+
+    // turn 1 player 1
+    stream << "play " << island_1_1 << '\n';
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "play " << island_2_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 1
+    stream << "play " << island_1_2 << '\n';
+    stream << "pass\n";
+
+    // turn 2 player 2
+    stream << "play " << island_2_2 << '\n';
+    stream << "pass\n";
+
+    // turn 3 player 1
+    stream << "play " << island_1_3 << '\n';
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "activate " << island_1_3 << '\n';
+    stream << "play " << crystal_1_1 << '\n';
+
+    stream << "0\n"; // target land
+    stream << "island\n";
+    stream << "mountain\n";
+    stream << "pass\n";
+
+    // turn 3 player 2
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *crystal{game.getCardByID(crystal_1_1)};
+    EXPECT_EQ(crystal->getZone(), dandan::core::Zone::GRAVEYARD);
+
+    auto *island{game.getCardByID(island_1_1)};
+    EXPECT_EQ(island->getCurrentSubType(), dandan::core::SubType::Island);
+}

@@ -4,7 +4,9 @@
 #include <utility>
 
 #include "dandan/core/Game.h"
+#include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
+#include "dandan/core/TextReplacement.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
@@ -18,6 +20,16 @@ namespace dandan::effects
             : IOneShotEffect(std::move(context)), m_target(std::move(target))
         {
         }
+
+        // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+        MindBendEffect(core::Target target, core::ReplacementType to_replace,
+                       core::ReplacementType replace_with,
+                       EffectContext context)
+            : IOneShotEffect(std::move(context)), m_target(std::move(target)),
+              m_to_replace(to_replace), m_replace_with(replace_with)
+        {
+        }
+        // NOLINTEND(bugprone-easily-swappable-parameters)
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
@@ -37,6 +49,8 @@ namespace dandan::effects
 
     private:
         core::Target m_target;
+        std::optional<core::ReplacementType> m_to_replace;
+        std::optional<core::ReplacementType> m_replace_with;
     };
 
     class MindBendEffectDefinition : public IOneShotEffectDefinition
@@ -55,6 +69,7 @@ namespace dandan::effects
             const auto *card{game.getCardByID(context.card_id.value())};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
+            context.expires = expires();
             return std::make_unique<MindBendEffect>(choice, context);
         }
 

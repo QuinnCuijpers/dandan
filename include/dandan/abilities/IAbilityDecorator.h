@@ -33,8 +33,8 @@ namespace dandan::abilities
             return m_ability.get();
         }
 
-        [[nodiscard]] bool canActivate(core::Game &game,
-                                       AbilityContext context) const override
+        [[nodiscard]] bool canActivate(
+            core::Game &game, const AbilityContext &context) const override
         {
             return m_ability->canActivate(game, context);
         }

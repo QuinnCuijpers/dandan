@@ -1,0 +1,27 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "SpinToTopEffect",
+                        "data": {
+                            "targets": [
+                                "Permanent"
+                            ],
+                            "writes": "targetOwner"
+                        }
+                    },
+                    {
+                        "type": "ShowAndTellEffect",
+                        "data": {}
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Metamorphose",
+    "type": "Instant",
+    "cost": "(1)U"
+}

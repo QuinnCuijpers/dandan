@@ -1,6 +1,8 @@
 #ifndef DANDAN_JSON_ENUMS_H
 #define DANDAN_JSON_ENUMS_H
 
+#include "dandan/core/Expire.h"
+#include "nlohmann/detail/macro_scope.hpp"
 #ifdef DANDAN_SERIALIZE
 #include "dandan/core/CardData.h"
 #include "dandan/core/TargetRequirement.h"
@@ -41,6 +43,10 @@ namespace dandan::core
                                   {core::TargetType::Spell, "Spell"},
                                   {core::TargetType::Card, "Card"},
                                   {core::TargetType::Any, "Any"}});
+
+    NLOHMANN_JSON_SERIALIZE_ENUM(core::ExpireTime, // NOLINT
+                                 {{ExpireTime::EnfOfTurn, "EndOfTurn"},
+                                  {ExpireTime::None, "None"}});
 
 } // namespace dandan::core
 

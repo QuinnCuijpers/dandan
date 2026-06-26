@@ -10,7 +10,7 @@
 2 Mind Bend [x]
 2 Mystical Tutor [x]
 2 Mystic Retrieval 
-2 Predict
+2 Predict [x]
 2 Ray of Command 
 2 Supplant Form 
 2 Unsubstantiate [x]

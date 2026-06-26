@@ -5,6 +5,7 @@
 #include "dandan/events/IEvent.h"
 #include <memory>
 #include <stdexcept>
+#include <utility>
 
 namespace dandan::core
 {
@@ -21,7 +22,7 @@ namespace dandan::effects
     {
     public:
         IOneShotEffect(EffectContext effect_context)
-            : m_effect_context(effect_context)
+            : m_effect_context(std::move(effect_context))
         {
         }
 

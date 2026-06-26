@@ -6,6 +6,7 @@
 #include "dandan/effects/EffectContext.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
+#include <utility>
 namespace dandan::effects
 {
     /** @brief Represents the effect of a card entering the battlefield.
@@ -20,7 +21,7 @@ namespace dandan::effects
          * @param card the card that would be entering the battlefield
          */
         explicit ETBEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(context), m_card{card}
+            : IOneShotEffect(std::move(context)), m_card{card}
         {
         }
 
