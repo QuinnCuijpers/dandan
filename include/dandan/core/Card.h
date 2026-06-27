@@ -216,6 +216,11 @@ namespace dandan::core
             return m_current_abilities;
         }
 
+        const std::vector<abilities::BoundAbility> &getCurrentAbilities() const
+        {
+            return m_current_abilities;
+        }
+
         // TODO: should generate a damage event
         /** Take damage.
          * @param damage The damage to take.

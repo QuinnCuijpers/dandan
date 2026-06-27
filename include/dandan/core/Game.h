@@ -438,7 +438,9 @@ namespace dandan::core
          */
         void quit(const Player &player);
 
-        std::vector<core::Target> getValidTargets(core::TargetType type) const
+        std::vector<core::Target> getValidTargets(
+            core::TargetType type,
+            Controller controller = Controller::Any) const
         {
             switch (type)
             {
@@ -455,10 +457,12 @@ namespace dandan::core
             case TargetType::Creature:
             {
                 std::vector<Target> targets;
-                auto starting_player_id{activePlayer().getID()};
+                auto starting_player_id{
+                    m_priority_manager.getPlayerWithPriority()};
                 auto current_player_id{starting_player_id};
 
-                while (true)
+                if (controller == Controller::You ||
+                    controller == Controller::Any)
                 {
                     const auto &player{getPlayer(current_player_id)};
                     const auto &creatures =
@@ -469,15 +473,31 @@ namespace dandan::core
                                    std::back_inserter(targets),
                                    [](const Permanent &perm) -> Target
                                    { return perm; });
-                    current_player_id = getNextPlayerID(current_player_id);
-                    if (current_player_id == starting_player_id)
+                }
+                if (controller == Controller::Opponent ||
+                    controller == Controller::Any)
+                {
+
+                    while (true)
                     {
-                        break;
+                        const auto &player{getPlayer(current_player_id)};
+                        const auto &creatures =
+                            player.battlefield().permanents().at(
+                                CardData::Type::Creature);
+
+                        std::transform(creatures.begin(), creatures.end(),
+                                       std::back_inserter(targets),
+                                       [](const Permanent &perm) -> Target
+                                       { return perm; });
+                        current_player_id = getNextPlayerID(current_player_id);
+                        if (current_player_id == starting_player_id)
+                        {
+                            break;
+                        }
                     }
                 }
                 return targets;
             }
-
             case TargetType::Permanent:
             {
                 std::vector<Target> targets;

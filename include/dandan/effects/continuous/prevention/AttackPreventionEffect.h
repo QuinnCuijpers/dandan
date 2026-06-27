@@ -2,13 +2,10 @@
 #define DANDAN_ATTACKPREVENTIONEFFECT_H
 
 #include "IPreventionEffect.h"
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
-#include "dandan/core/TextReplacement.h"
 #include "dandan/effects/EffectContext.h"
 #include <memory>
 #include <optional>
-#include <vector>
 
 namespace dandan::effects
 {

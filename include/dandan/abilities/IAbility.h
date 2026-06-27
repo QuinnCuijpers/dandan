@@ -88,20 +88,6 @@ namespace dandan::abilities
                 "Unimplemented options count for ability " +
                 std::string(typeid(*this).name()));
         }
-
-        // // NOLINTBEGIN(bugprone-easily-swappable-parameters)
-        // virtual void replaceColorWord(
-        //     [[maybe_unused]] core::ColorWord from,
-        //     [[maybe_unused]] core::ColorWord new_color)
-        // {
-        // }
-
-        // virtual void replaceBasicWord([[maybe_unused]] core::SubType from,
-        //                               [[maybe_unused]] core::SubType
-        //                               new_basic)
-        // {
-        // }
-        // // NOLINTEND(bugprone-easily-swappable-parameters)
     };
 }; // namespace dandan::abilities
 

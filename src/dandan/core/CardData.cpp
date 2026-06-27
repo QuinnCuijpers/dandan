@@ -95,6 +95,8 @@ namespace dandan::core
             return "Swamp";
         case SubType::Fish:
             return "Fish";
+        case SubType::Illusion:
+            return "Illusion";
         }
         assert(false && "Unreachable Card subtype");
     }

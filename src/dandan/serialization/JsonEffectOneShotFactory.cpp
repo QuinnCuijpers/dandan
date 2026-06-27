@@ -1,11 +1,16 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
+#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
+#include "dandan/effects/one_shot/ChangeCharasticsEffect.h"
 #include "dandan/effects/one_shot/ChooseCardNameAndMillEffect.h"
 #include "dandan/effects/one_shot/MemoryLapseEffect.h"
 #include "dandan/effects/one_shot/MindBendEffect.h"
+#include "dandan/effects/one_shot/ShowAndTellEffect.h"
+#include "dandan/effects/one_shot/SpinToTopEffect.h"
+#include "dandan/serialization/JsonFactory.h"
 #include <algorithm>
 #include <iterator>
 #include <optional>
@@ -63,7 +68,18 @@ namespace dandan::serialization
             json["data"]["targets"] = nlohmann::json::array();
             for (const auto &target_types : targets->getTargetTypes())
             {
-                json["data"]["targets"].push_back({{"types", target_types}});
+                auto target_obj = nlohmann::json::object();
+                target_obj["types"] = target_types.types;
+                if (target_types.controller != core::Controller::Any)
+                {
+                    target_obj["controller"] = target_types.controller;
+                }
+                if (target_types.source == core::TargetSource::Linked &&
+                    target_types.key.has_value())
+                {
+                    target_obj["reads"] = target_types.key.value();
+                }
+                json["data"]["targets"].push_back(target_obj);
             }
         }
 
@@ -209,6 +225,46 @@ namespace dandan::serialization
             return json;
         }
 
+        if (const auto *change_effect = dynamic_cast<
+                const effects::ChangeCharacteristicsEffectDefinition *>(effect))
+        {
+            json["type"] = "ChangeCharacteristicsEffect";
+            auto characteristics{change_effect->getCharacteristics()};
+            auto characteristics_json = nlohmann::json::object();
+            characteristics_json["color"] = characteristics.color;
+            characteristics_json["subtype"] = characteristics.subtype;
+            characteristics_json["base_power"] =
+                characteristics.base_stats.power;
+            characteristics_json["base_thoughness"] =
+                characteristics.base_stats.toughness;
+            characteristics_json["loses_all_abilities"] =
+                characteristics.loses_all_abilities;
+            characteristics_json["additional_abilities"] =
+                nlohmann::json::array();
+            for (auto *ability : characteristics.additional_abilities)
+            {
+                auto sub_json{
+                    JsonFactory<abilities::IAbility>::create_json(ability)};
+                characteristics_json["additional_abilities"].push_back(
+                    sub_json);
+            }
+            json["data"]["characteristics"] = characteristics_json;
+            return json;
+        }
+
+        if (dynamic_cast<const effects::SpinToTopEffectDefinition *>(effect) !=
+            nullptr)
+        {
+            json["type"] = "SpinToTopEffect";
+            return json;
+        }
+        if (dynamic_cast<const effects::ShowAndTellEffectDefinition *>(
+                effect) != nullptr)
+        {
+            json["type"] = "ShowAndTellEffect";
+            return json;
+        }
+
         throw std::runtime_error(
             "Unknown effect type for JSON serialization: " +
             std::string(typeid(*effect).name()));
@@ -224,7 +280,7 @@ namespace dandan::serialization
         const auto &targets = json["data"].find("targets");
         const auto &expire = json["data"].find("expires");
         auto expiry{core::ExpireTime::None};
-        std::vector<std::vector<dandan::core::TargetType>> target_types;
+        std::vector<core::TargetSpec> target_specs;
 
         if (targets != json["data"].end())
         {
@@ -238,7 +294,17 @@ namespace dandan::serialization
                 }
                 auto types{target_json.at("types")
                                .get<std::vector<dandan::core::TargetType>>()};
-                target_types.push_back(types);
+
+                if (target_json.contains("controller"))
+                {
+                    core::Controller controller{target_json.at("controller")};
+                    core::TargetSpec target_spec{types, controller};
+                    target_specs.emplace_back(target_spec);
+                }
+                else
+                {
+                    target_specs.emplace_back(types);
+                }
             }
         }
 
@@ -267,7 +333,7 @@ namespace dandan::serialization
         {
             return std::make_unique<effects::MillEffectDefinition>(
                 data.at("amount").get<int>(),
-                dandan::core::TargetRequirement{target_types});
+                dandan::core::TargetRequirement{target_specs});
         }
         if (type == "ScryEffect")
         {
@@ -341,27 +407,27 @@ namespace dandan::serialization
         {
             // TODO: add expiry option to other locations as well
             auto effect{std::make_unique<effects::MindBendEffectDefinition>(
-                core::TargetRequirement{target_types})};
+                core::TargetRequirement{target_specs})};
             effect->addExpireTime(expiry);
             return effect;
         }
         if (type == "BounceEffect")
         {
             return std::make_unique<effects::BounceEffectDefinition>(
-                core::TargetRequirement{target_types});
+                core::TargetRequirement{target_specs});
         }
         if (type == "MemoryLapseEffect")
         {
 
             return std::make_unique<effects::MemoryLapseEffectDefinition>(
-                core::TargetRequirement{target_types});
+                core::TargetRequirement{target_specs});
         }
         if (type == "ChooseCardNameAndMillEffect")
         {
             return std::make_unique<
                 effects::ChooseCardNameAndMillEffectDefinition>(
                 data.at("amount").get<int>(),
-                core::TargetRequirement{target_types});
+                core::TargetRequirement{target_specs});
         }
 
         throw std::runtime_error("Unknown effect type: " + type);

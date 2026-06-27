@@ -3,10 +3,10 @@
 8 Memory Lapse [x]
 4 Accumulated Knowledge [x]
 2 Brainstorm [x]
-2 Crystal Spray []
-2 Dance of the Skywise 
+2 Crystal Spray [x]
+2 Dance of the Skywise [serializable]
 2 Diminishing Returns [x]
-2 Metamorphose
+2 Metamorphose [serializable]
 2 Mind Bend [x]
 2 Mystical Tutor [x]
 2 Mystic Retrieval 

@@ -2,15 +2,16 @@
 #define DANDAN_TARGETREQUIREMENT_H
 
 #include <cstdint>
+#include <optional>
 #include <ostream>
+#include <utility>
 #include <vector>
 namespace dandan::core
 {
 
-    enum class TargetType : int8_t
+    enum class TargetType : uint8_t
     {
         Player,
-        Opponent,
         Creature,
         Land,
         Permanent,
@@ -20,14 +21,25 @@ namespace dandan::core
         Any
     };
 
+    enum class Controller : uint8_t
+    {
+        You,
+        Opponent,
+        Any,
+    };
+
+    enum class TargetSource : uint8_t
+    {
+        Prompt,
+        Linked,
+    };
+
     inline std::string targetTypeToString(TargetType target_type)
     {
         switch (target_type)
         {
         case TargetType::Player:
             return "Player";
-        case TargetType::Opponent:
-            return "Opponent";
         case TargetType::Creature:
             return "Creature";
         case TargetType::Permanent:
@@ -53,23 +65,51 @@ namespace dandan::core
         return ostream << targetTypeToString(target_type);
     }
 
+    struct TargetSpec
+    {
+        std::vector<TargetType> types;
+        Controller controller{Controller::Any};
+        TargetSource source{TargetSource::Prompt};
+        std::optional<std::string> key;
+
+        TargetSpec(std::vector<TargetType> types,
+                   Controller controller = Controller::Any)
+            : types(std::move(types)), controller(controller)
+        {
+        }
+
+        TargetSpec(std::vector<TargetType> types, std::string key,
+                   Controller controller = Controller::Any)
+            : types(std::move(types)), controller(controller),
+              source(TargetSource::Linked), key(key)
+        {
+        }
+    };
+
     class TargetRequirement
     {
     public:
-        explicit TargetRequirement(
-            std::vector<std::vector<TargetType>> target_types)
-            : m_target_types(std::move(target_types))
+        explicit TargetRequirement(const std::vector<TargetSpec> &target_types)
+            : m_targets(target_types)
         {
         }
 
-        [[nodiscard]] const std::vector<std::vector<TargetType>> &
-        getTargetTypes() const
+        explicit TargetRequirement(
+            const std::vector<std::vector<TargetType>> &target_types)
         {
-            return m_target_types;
+            for (const auto &target_type : target_types)
+            {
+                m_targets.emplace_back(target_type);
+            }
+        }
+
+        [[nodiscard]] const std::vector<TargetSpec> &getTargetTypes() const
+        {
+            return m_targets;
         }
 
     private:
-        std::vector<std::vector<TargetType>> m_target_types;
+        std::vector<TargetSpec> m_targets;
     };
 } // namespace dandan::core
 

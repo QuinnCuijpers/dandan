@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonEffectContinuousFactory.h"
+#include "dandan/effects/continuous/prevention/BlockPreventionEffect.h"
 #ifdef DANDAN_SERIALIZE
 #include "dandan/conditions/ICondition.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
@@ -20,6 +21,16 @@ namespace dandan::serialization
             json["data"]["condition"] =
                 JsonFactory<conditions::ICondition>::create_json(
                     attackPreventionEffect->getCondition());
+            return json;
+        }
+        if (const auto *blockPreventionEffect =
+                dynamic_cast<const effects::BlockPreventionEffect *>(effect))
+        {
+            auto json = nlohmann::json{{"type", "BlockPreventionEffect"},
+                                       {"data", nlohmann::json::object()}};
+            json["data"]["condition"] =
+                JsonFactory<conditions::ICondition>::create_json(
+                    blockPreventionEffect->getCondition());
             return json;
         }
         if ([[maybe_unused]] const auto *entersTappedEffect =

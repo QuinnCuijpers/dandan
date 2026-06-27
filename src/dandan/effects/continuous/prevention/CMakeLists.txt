@@ -3,7 +3,7 @@ add_library(DandanContinuousPreventionEffects OBJECT)
 target_sources(
   DandanContinuousPreventionEffects
   PRIVATE AttackPreventionEffect.cpp DrawPreventionEffect.cpp
-          PlayCardPreventionEffect.cpp)
+          PlayCardPreventionEffect.cpp BlockPreventionEffect.cpp)
 
 target_sources(DandanContinuousPreventionEffects
                PUBLIC FILE_SET HEADERS BASE_DIRS ${CMAKE_SOURCE_DIR}/include)

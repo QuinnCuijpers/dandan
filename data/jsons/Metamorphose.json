@@ -1,0 +1,47 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "type": "SpinToTopEffect",
+                        "data": {
+                            "targets": [
+                                {
+                                    "controller": "Opponent",
+                                    "types": [
+                                        "Permanent"
+                                    ]
+                                }
+                            ],
+                            "writes": [
+                                "targetOwner"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "ShowAndTellEffect",
+                        "data": {
+                            "targets": [
+                                {
+                                    "types": [
+                                        "Player"
+                                    ],
+                                    "controller": "Opponent",
+                                    "reads": "targetOwner"
+                                }
+                            ],
+                            "reads": [
+                                "targetOwner"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "name": "Metamorphose",
+    "type": "Instant",
+    "cost": "(1)U"
+}

@@ -1,0 +1,54 @@
+{
+    "abilities": [
+        {
+            "data": {
+                "effect_list": [
+                    {
+                        "data": {
+                            "characteristics": {
+                                "additional_abilities": [
+                                    [
+                                        {
+                                            "data": {
+                                                "continuous_effect": {
+                                                    "data": {
+                                                        "condition": {
+                                                            "data": {},
+                                                            "type": "FlyingCondition"
+                                                        }
+                                                    },
+                                                    "type": "BlockPreventionEffect"
+                                                },
+                                                "static_type": "Prevention"
+                                            },
+                                            "type": "StaticAbility"
+                                        }
+                                    ]
+                                ],
+                                "base_power": 4,
+                                "base_thoughness": 4,
+                                "color": "Blue",
+                                "loses_all_abilities": true,
+                                "subtype": "None"
+                            },
+                            "expires": "EndOfTurn",
+                            "targets": [
+                                {
+                                    "controller": "You",
+                                    "types": [
+                                        "Creature"
+                                    ]
+                                }
+                            ]
+                        },
+                        "type": "ChangeCharacteristicsEffect"
+                    }
+                ]
+            },
+            "type": "SpellAbility"
+        }
+    ],
+    "cost": "(1)U",
+    "name": "Dance of the Skywise",
+    "type": "Instant"
+}

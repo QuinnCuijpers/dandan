@@ -1,6 +1,7 @@
 #ifndef DANDAN_JSON_ENUMS_H
 #define DANDAN_JSON_ENUMS_H
 
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
 #include "nlohmann/detail/macro_scope.hpp"
 #ifdef DANDAN_SERIALIZE
@@ -47,6 +48,19 @@ namespace dandan::core
     NLOHMANN_JSON_SERIALIZE_ENUM(core::ExpireTime, // NOLINT
                                  {{ExpireTime::EnfOfTurn, "EndOfTurn"},
                                   {ExpireTime::None, "None"}});
+
+    NLOHMANN_JSON_SERIALIZE_ENUM(core::Controller, // NOLINT
+                                 {{Controller::Any, "Any"},
+                                  {Controller::You, "You"},
+                                  {Controller::Opponent, "Opponent"}})
+
+    NLOHMANN_JSON_SERIALIZE_ENUM(ColorWord, // NOLINT
+                                 {{ColorWord::Black, "Black"},
+                                  {ColorWord::Blue, "Blue"},
+                                  {ColorWord::Green, "Green"},
+                                  {ColorWord::None, "None"},
+                                  {ColorWord::Red, "Red"},
+                                  {ColorWord::White, "White"}})
 
 } // namespace dandan::core
 

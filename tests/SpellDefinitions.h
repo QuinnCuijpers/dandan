@@ -2,12 +2,18 @@
 #define DANDAN_SPELL_DEFINITIONS_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/abilities/KeyWords.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/conditions/MatchesReadLinksCondition.h"
+#include "dandan/core/CardCharacteristics.h"
+#include "dandan/core/CardData.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
+#include "dandan/core/SubType.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
+#include "dandan/effects/one_shot/ChangeCharasticsEffect.h"
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/effects/one_shot/ChooseCardNameAndMillEffect.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
@@ -19,6 +25,8 @@
 #include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
+#include "dandan/effects/one_shot/ShowAndTellEffect.h"
+#include "dandan/effects/one_shot/SpinToTopEffect.h"
 #include "dandan/effects/one_shot/TimeTwisterEffect.h"
 #include "dandan/effects/one_shot/TutorTopEffect.h"
 #include "dandan/numbers/ConditionalNumber.h"
@@ -281,4 +289,88 @@ Predict_Abilities()
     return abilities;
 }
 
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Dance_of_the_Skywise_Abilities()
+{
+
+    auto types{std::vector<dandan::core::TargetType>{
+        dandan::core::TargetType::Creature}};
+
+    auto *flying{dandan::abilities::FLYING_ABILITY.get()};
+
+    auto added_abilities{std::vector<dandan::abilities::IAbility *>{}};
+
+    added_abilities.push_back(flying);
+
+    auto changes{dandan::core::CardCharacteristics{
+        dandan::core::ColorWord::Blue, dandan::core::SubType::Illusion,
+        dandan::core::Stats{4, 4}, true, std::move(added_abilities)}};
+
+    dandan::core::TargetSpec target_spec{types, dandan::core::Controller::You};
+
+    auto target_req{dandan::core::TargetRequirement{{target_spec}}};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    auto change_effect{std::make_unique<
+        dandan::effects::ChangeCharacteristicsEffectDefinition>(target_req,
+                                                                changes)};
+    change_effect->addExpireTime(dandan::core::ExpireTime::EnfOfTurn);
+
+    ability_effects.push_back(std::move(change_effect));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Metamorphose_Abilities()
+{
+    auto controller{dandan::core::Controller::Opponent};
+    auto types{std::vector<dandan::core::TargetType>{
+        dandan::core::TargetType::Permanent}};
+
+    dandan::core::TargetSpec target_specs{types, controller};
+
+    auto target_specs_1{std::vector<dandan::core::TargetSpec>{target_specs}};
+
+    dandan::core::TargetRequirement target_req{target_specs_1};
+
+    auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+
+    auto spin_effect{
+        std::make_unique<dandan::effects::SpinToTopEffectDefinition>(
+            target_req)};
+    spin_effect->addWriteLink("targetOwner");
+
+    ability_effects.push_back(std::move(spin_effect));
+
+    auto types_2{std::vector<dandan::core::TargetType>{
+        dandan::core::TargetType::Player}};
+    dandan::core::TargetSpec target_spec_2{types_2, "targetOwner", controller};
+
+    dandan::core::TargetRequirement targets_2{
+        std::vector<dandan::core::TargetSpec>{target_spec_2}};
+
+    auto show_and_tell_effect{
+        std::make_unique<dandan::effects::ShowAndTellEffectDefinition>(
+            targets_2)};
+
+    show_and_tell_effect->addReadLink("targetOwner");
+
+    ability_effects.push_back(std::move(show_and_tell_effect));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
 #endif

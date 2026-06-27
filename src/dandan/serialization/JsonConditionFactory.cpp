@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonConditionFactory.h"
+#include "dandan/conditions/FlyingCondition.h"
 #include <memory>
 #ifdef DANDAN_SERIALIZE
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
@@ -42,6 +43,14 @@ namespace dandan::serialization
             json["data"]["second"] = matches->getSecond();
             return json;
         }
+        if (dynamic_cast<const conditions::FlyingCondition *>(condition) !=
+            nullptr)
+        {
+            auto json = nlohmann::json{{"type", "FlyingCondition"},
+                                       {"data", nlohmann::json::object()}};
+            return json;
+        }
+
         throw std::runtime_error(
             "create_json for this type of ICondition is not "
             "implemented yet.");

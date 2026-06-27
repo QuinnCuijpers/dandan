@@ -117,7 +117,8 @@ namespace dandan::effects
                             {
                                 auto valid_targets =
                                     std::vector<core::Target>{};
-                                for (const auto &target_type : target_types)
+                                for (const auto &target_type :
+                                     target_types.types)
                                 {
 
                                     auto new_valid_targets =
@@ -161,7 +162,7 @@ namespace dandan::effects
                              targets->getTargetTypes())
                         {
                             auto valid_targets = std::vector<core::Target>{};
-                            for (const auto &type : target_type)
+                            for (const auto &type : target_type.types)
                             {
                                 auto new_valid_targets =
                                     game.getValidTargets(type);

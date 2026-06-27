@@ -2,7 +2,6 @@
 #define DANDAN_IPREVENTION_EFFECT_H
 
 #include "../IContinuousEffect.h"
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/effects/EffectContext.h"

@@ -24,6 +24,7 @@ namespace dandan::core
         Swamp,
         /// The fish creature subtype for dandan
         Fish,
+        Illusion,
     };
 } // namespace dandan::core
 
