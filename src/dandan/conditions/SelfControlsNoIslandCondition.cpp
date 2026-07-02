@@ -1,5 +1,6 @@
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/SubType.h"
 #include <algorithm>
 
 namespace dandan::conditions
@@ -31,9 +32,12 @@ namespace dandan::conditions
         auto no_basic_filter = [&](const core::CardID &card_id)
         {
             const auto *card = game.getCardByID(card_id);
+            auto subtypes = card->getCurrentSubTypes();
             return card != nullptr &&
                    card->getData().getType() == core::CardData::Type::Land &&
-                   card->getCurrentSubType() != basic;
+                   std::all_of(subtypes.begin(), subtypes.end(),
+                               [&](core::SubType type)
+                               { return basic != type; });
         };
         std::cout << "Checking SelfControlsNoBasicCondition for player "
                   << context->player_id.value() << '\n';

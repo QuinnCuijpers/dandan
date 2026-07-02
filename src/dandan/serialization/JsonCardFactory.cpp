@@ -27,9 +27,9 @@ namespace dandan::serialization
         json["name"] = card->getName();
         json["cost"] = JsonFactory<mana::Mana>::create_json(card->getCost());
         json["type"] = card->getType();
-        if (card->getSubType() != core::SubType::None)
+        if (!card->getSubTypes().empty())
         {
-            json["subtype"] = card->getSubType();
+            json["subtypes"] = card->getSubTypes();
         }
         if (card->getSuperType() != core::CardData::SuperType::None)
         {

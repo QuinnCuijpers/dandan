@@ -38,12 +38,15 @@ namespace dandan::conditions
                 }
             }
         }
-        auto no_basic_filter = [&game, this](const core::CardID &card_id)
+        auto no_basic_filter = [&](const core::CardID &card_id)
         {
             const auto *card = game.getCardByID(card_id);
+            auto subtypes = card->getCurrentSubTypes();
             return card != nullptr &&
                    card->getData().getType() == core::CardData::Type::Land &&
-                   card->getData().getSubType() != m_type;
+                   std::all_of(subtypes.begin(), subtypes.end(),
+                               [&](core::SubType type)
+                               { return basic != type; });
         };
         std::cout << "Checking DefenderControlsNoIslandCondition for player "
                   << game.nonActivePlayer().getID().id() << '\n';

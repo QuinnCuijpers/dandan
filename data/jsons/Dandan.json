@@ -40,6 +40,8 @@
         "power": 4,
         "toughness": 1
     },
-    "subtype": "Fish",
+    "subtypes": [
+        "Fish"
+    ],
     "type": "Creature"
 }

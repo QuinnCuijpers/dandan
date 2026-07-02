@@ -303,8 +303,11 @@ Dance_of_the_Skywise_Abilities()
     added_abilities.push_back(flying);
 
     auto changes{dandan::core::CardCharacteristics{
-        dandan::core::ColorWord::Blue, dandan::core::SubType::Illusion,
-        dandan::core::Stats{4, 4}, true, std::move(added_abilities)}};
+        dandan::core::ColorWord::Blue,
+        {dandan::core::SubType::Dragon, dandan::core::SubType::Illusion},
+        dandan::core::Stats{4, 4},
+        true,
+        std::move(added_abilities)}};
 
     dandan::core::TargetSpec target_spec{types, dandan::core::Controller::You};
 

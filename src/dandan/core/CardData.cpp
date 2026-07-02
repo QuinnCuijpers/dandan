@@ -1,5 +1,6 @@
 #include "dandan/core/CardData.h"
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/SubType.h"
 #include <cassert>
 #include <memory>
 
@@ -45,9 +46,13 @@ namespace dandan::core
         std::vector<std::unique_ptr<abilities::IAbility>> abilities,
         std::optional<Stats> stats)
         : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-          m_subtype{subtype}, m_supertype{supertype},
+          m_subtypes{subtype}, m_supertype{supertype},
           m_abilities{std::move(abilities)}, m_stats{stats}
     {
+        if (m_subtypes == std::vector{SubType::None})
+        {
+            m_subtypes.clear();
+        }
     }
 
     void CardData::addAbility(std::unique_ptr<abilities::IAbility> ability)
@@ -97,6 +102,8 @@ namespace dandan::core
             return "Fish";
         case SubType::Illusion:
             return "Illusion";
+        case SubType::Dragon:
+            return "Dragon";
         }
         assert(false && "Unreachable Card subtype");
     }

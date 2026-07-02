@@ -110,9 +110,9 @@ namespace dandan::core
         /** Gets the subtype of the card.
          * @return The subtype of the card.
          */
-        [[nodiscard]] SubType getSubType() const
+        [[nodiscard]] std::vector<SubType> getSubTypes() const
         {
-            return m_subtype;
+            return m_subtypes;
         }
 
         [[nodiscard]] SuperType getSuperType() const
@@ -148,8 +148,11 @@ namespace dandan::core
             ostream << "Card{name: " << card.m_name << ", cost: "
                     << dandan::mana::ManaToSymbols(card.m_mana_cost->getMana())
                     << ", type: " << CardData::TypeToString(card.m_type)
-                    << ", subtype: "
-                    << CardData::SubTypeToString(card.m_subtype) << '}';
+                    << ", subtypes: ";
+            for (auto type : card.m_subtypes)
+            {
+                ostream << CardData::SubTypeToString(type) << '}';
+            }
             return ostream;
         }
 
@@ -176,7 +179,7 @@ namespace dandan::core
         std::string m_name{"unknown"};
         std::unique_ptr<mana::Mana> m_mana_cost;
         Type m_type{Type::Land};
-        SubType m_subtype{SubType::None};
+        std::vector<SubType> m_subtypes;
         SuperType m_supertype{SuperType::None};
         std::vector<std::unique_ptr<abilities::IAbility>> m_abilities;
         std::optional<Stats> m_stats;

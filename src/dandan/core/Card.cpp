@@ -27,7 +27,7 @@ namespace dandan::core
                 setCurrentPower(stats->power);
                 setCurrentToughness(stats->toughness);
             }
-            setCurrentSubType(m_card_data->getSubType());
+            setCurrentSubTypes(m_card_data->getSubTypes());
 
             auto bound_abilities{std::vector<abilities::BoundAbility>{}};
             for (const auto &ability : m_card_data->getAbilities())
@@ -55,7 +55,7 @@ namespace dandan::core
                 setCurrentPower(stats->power);
                 setCurrentToughness(stats->toughness);
             }
-            setCurrentSubType(m_card_data->getSubType());
+            setCurrentSubTypes(m_card_data->getSubTypes());
         }
     }
 
@@ -87,9 +87,12 @@ namespace dandan::core
     // NOLINTBEGIN(bugprone-easily-swappable-parameters)
     void Card::replaceText(SubType from, SubType new_basic)
     {
-        if (getCurrentSubType() == from)
+        for (auto type : getCurrentSubTypes())
         {
-            setCurrentSubType(new_basic);
+            if (type == from)
+            {
+                setCurrentSubTypes({new_basic});
+            }
         }
 
         for (auto &ability : getCurrentAbilities())

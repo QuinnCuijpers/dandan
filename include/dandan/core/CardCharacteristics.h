@@ -6,12 +6,14 @@
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/SubType.h"
 #include <vector>
+
 namespace dandan::core
 {
     struct CardCharacteristics
     {
         ColorWord color;
-        SubType subtype;
+        // could be unordered set, but json requires order preservation
+        std::vector<SubType> subtypes;
         Stats base_stats;
         bool loses_all_abilities;
         std::vector<abilities::IAbility *> additional_abilities;

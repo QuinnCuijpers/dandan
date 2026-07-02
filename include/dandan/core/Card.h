@@ -4,6 +4,7 @@
 #include "CardData.h"
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/CardCharacteristics.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Memorable.h"
@@ -182,7 +183,7 @@ namespace dandan::core
          */
         [[nodiscard]] int getPower() const
         {
-            return m_current_power;
+            return m_charcateristics.base_stats.power;
         }
 
         /** Get the toughness of the card.
@@ -190,7 +191,7 @@ namespace dandan::core
          */
         [[nodiscard]] int getToughness() const
         {
-            return m_current_toughness;
+            return m_charcateristics.base_stats.toughness;
         }
 
         /** Get the damage marked on the card.
@@ -201,14 +202,14 @@ namespace dandan::core
             return m_marked_damage;
         }
 
-        [[nodiscard]] SubType getCurrentSubType() const
+        [[nodiscard]] std::vector<SubType> getCurrentSubTypes() const
         {
-            return m_current_subtype;
+            return m_charcateristics.subtypes;
         }
 
-        void setCurrentSubType(SubType subtype)
+        void setCurrentSubTypes(std::vector<SubType> subtypes)
         {
-            m_current_subtype = subtype;
+            m_charcateristics.subtypes = std::move(subtypes);
         }
 
         std::vector<abilities::BoundAbility> &getCurrentAbilities()
@@ -252,8 +253,8 @@ namespace dandan::core
             m_blocking = false;
             if (const auto stats = getData().getStats(); stats.has_value())
             {
-                m_current_power = stats->power;
-                m_current_toughness = stats->toughness;
+                setCurrentPower(stats->power);
+                setCurrentToughness(stats->toughness);
             }
             m_marked_damage = 0;
         }
@@ -361,10 +362,9 @@ namespace dandan::core
 
         bool m_can_be_countered{true};
 
-        int m_current_power{};
-        int m_current_toughness{};
-        SubType m_current_subtype{};
         std::vector<abilities::BoundAbility> m_current_abilities;
+
+        CardCharacteristics m_charcateristics;
 
         int m_marked_damage{};
 
@@ -379,12 +379,12 @@ namespace dandan::core
 
         void setCurrentPower(int power)
         {
-            m_current_power = power;
+            m_charcateristics.base_stats.power = power;
         }
 
         void setCurrentToughness(int toughness)
         {
-            m_current_toughness = toughness;
+            m_charcateristics.base_stats.toughness = toughness;
         }
     };
 } // namespace dandan::core

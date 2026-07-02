@@ -57,9 +57,29 @@ namespace dandan::abilities
             [[maybe_unused]] core::Game &game,
             [[maybe_unused]] const AbilityContext &context) const override
         {
+            auto res{false};
             auto *card{game.getCardByID(context.source_card_id)};
-            return m_basic_land_ability_map->at(card->getCurrentSubType())
-                ->canActivate(game, context);
+            for (auto subtype : card->getCurrentSubTypes())
+            {
+                switch (subtype)
+                {
+
+                case core::SubType::Forest:
+                case core::SubType::Island:
+                case core::SubType::Mountain:
+                case core::SubType::Plains:
+                case core::SubType::Swamp:
+                    res = res ||
+                          m_basic_land_ability_map->at(subtype)->canActivate(
+                              game, context);
+                case core::SubType::None:
+                case core::SubType::Fish:
+                case core::SubType::Illusion:
+                case core::SubType::Dragon:
+                    break;
+                }
+            }
+            return res;
         }
 
         /** @brief Get the number of options for the ability
@@ -76,15 +96,19 @@ namespace dandan::abilities
             core::Game &game, AbilityContext context) const override
         {
             const auto *cardp = game.getCardByID(context.source_card_id);
-            return m_basic_land_ability_map->at(cardp->getCurrentSubType())
-                ->createEffect(game, context);
+            assert(cardp->getCurrentSubTypes().size() == 1);
+            auto type{cardp->getCurrentSubTypes()[0]};
+            return m_basic_land_ability_map->at(type)->createEffect(game,
+                                                                    context);
         }
 
         const ManaAbility *getManaAbility(core::Game &game,
                                           const AbilityContext &context) const
         {
             auto *card{game.getCardByID(context.source_card_id)};
-            return m_basic_land_ability_map->at(card->getCurrentSubType());
+            assert(card->getCurrentSubTypes().size() == 1);
+            auto type{card->getCurrentSubTypes()[0]};
+            return m_basic_land_ability_map->at(type);
         }
 
     private:

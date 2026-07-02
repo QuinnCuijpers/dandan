@@ -2,6 +2,8 @@
     "cost": "(0)",
     "name": "Island",
     "type": "Land",
-    "subtype": "Island",
+    "subtypes": [
+        "Island"
+    ],
     "supertype": "Basic"
 }

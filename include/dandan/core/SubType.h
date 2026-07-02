@@ -25,6 +25,7 @@ namespace dandan::core
         /// The fish creature subtype for dandan
         Fish,
         Illusion,
+        Dragon,
     };
 } // namespace dandan::core
 

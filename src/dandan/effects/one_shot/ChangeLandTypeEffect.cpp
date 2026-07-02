@@ -1,6 +1,5 @@
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/core/Game.h"
-#include "dandan/effects/EffectContext.h"
 #include "dandan/utils/stringToBasicLandType.h"
 #include <iostream>
 #include <memory>
@@ -41,9 +40,13 @@ namespace dandan::effects
         for (const auto &card_id : game.cards())
         {
             auto *card{game.getCardByID(card_id)};
-            if (card->getCurrentSubType() == basic_land_1)
+            for (auto subtype : card->getCurrentSubTypes())
             {
-                card->setCurrentSubType(basic_land_2.value());
+                if (subtype == basic_land_1)
+                {
+                    card->setCurrentSubTypes({basic_land_2.value()});
+                    break;
+                }
             }
         }
 

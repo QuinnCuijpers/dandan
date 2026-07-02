@@ -3,6 +3,8 @@
 
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
+#include "dandan/core/Keyword.h"
+#include "dandan/core/SubType.h"
 #include "nlohmann/detail/macro_scope.hpp"
 #ifdef DANDAN_SERIALIZE
 #include "dandan/core/CardData.h"
@@ -28,7 +30,9 @@ namespace dandan::core
                                   {SubType::Mountain, "Mountain"},
                                   {SubType::Forest, "Forest"},
                                   {SubType::Plains, "Plains"},
-                                  {SubType::Fish, "Fish"}});
+                                  {SubType::Fish, "Fish"},
+                                  {SubType::Illusion, "Illusion"},
+                                  {SubType::Dragon, "Dragon"}});
 
     NLOHMANN_JSON_SERIALIZE_ENUM(CardData::SuperType, // NOLINT
                                  {{CardData::SuperType::None, "None"},
@@ -61,6 +65,9 @@ namespace dandan::core
                                   {ColorWord::None, "None"},
                                   {ColorWord::Red, "Red"},
                                   {ColorWord::White, "White"}})
+
+    // NOLINTNEXTLINE
+    NLOHMANN_JSON_SERIALIZE_ENUM(Keyword, {{Keyword::Flying, "Flying"}})
 
 } // namespace dandan::core
 

@@ -1,5 +1,7 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
 #include "dandan/abilities/IAbility.h"
+#include "dandan/abilities/KeyWords.h"
+#include "dandan/core/CardCharacteristics.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
@@ -16,6 +18,7 @@
 #include <optional>
 #include <vector>
 #ifdef DANDAN_SERIALIZE
+#include "dandan/core/Keyword.h"
 #include "dandan/effects/one_shot/BounceLandEffect.h"
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
@@ -232,21 +235,29 @@ namespace dandan::serialization
             auto characteristics{change_effect->getCharacteristics()};
             auto characteristics_json = nlohmann::json::object();
             characteristics_json["color"] = characteristics.color;
-            characteristics_json["subtype"] = characteristics.subtype;
+            characteristics_json["subtypes"] = characteristics.subtypes;
             characteristics_json["base_power"] =
                 characteristics.base_stats.power;
             characteristics_json["base_thoughness"] =
                 characteristics.base_stats.toughness;
             characteristics_json["loses_all_abilities"] =
                 characteristics.loses_all_abilities;
-            characteristics_json["additional_abilities"] =
+            characteristics_json["additional_keywords"] =
                 nlohmann::json::array();
             for (auto *ability : characteristics.additional_abilities)
             {
-                auto sub_json{
-                    JsonFactory<abilities::IAbility>::create_json(ability)};
-                characteristics_json["additional_abilities"].push_back(
-                    sub_json);
+                if (core::isFlyingAbility(*ability))
+                {
+                    characteristics_json["additional_keywords"].push_back(
+                        "Flying");
+                }
+                else
+                {
+                    auto sub_json{
+                        JsonFactory<abilities::IAbility>::create_json(ability)};
+                    characteristics_json["additional_abilities"].push_back(
+                        sub_json);
+                }
             }
             json["data"]["characteristics"] = characteristics_json;
             return json;
@@ -429,8 +440,50 @@ namespace dandan::serialization
                 data.at("amount").get<int>(),
                 core::TargetRequirement{target_specs});
         }
+        if (type == "ChangeCharacteristicsEffect")
+        {
+            const auto &characteristics_json = data.at("characteristics");
 
+            auto color = characteristics_json["color"];
+            auto subtypes = characteristics_json["subtypes"];
+            auto base_power = characteristics_json["base_power"];
+            auto base_thoughness = characteristics_json["base_thoughness"];
+            auto stats{core::Stats{base_power, base_thoughness}};
+            auto loses_all_abilities =
+                characteristics_json["loses_all_abilities"];
+
+            auto additional_keywords_json =
+                characteristics_json["additional_keywords"];
+
+            auto additional_keywords{std::vector<core::Keyword>{}};
+
+            for (const auto &keyword : additional_keywords_json)
+            {
+                core::Keyword keyword_v = keyword;
+                additional_keywords.push_back(keyword_v);
+            }
+
+            auto additional_abilities{std::vector<abilities::IAbility *>{}};
+
+            for (auto keyword : additional_keywords)
+            {
+                auto *ability = getKeywordAbility(keyword);
+                additional_abilities.push_back(ability);
+            }
+
+            auto card_characteristics{core::CardCharacteristics{
+                color, subtypes, stats, loses_all_abilities,
+                additional_abilities}};
+
+            auto effect{std::make_unique<
+                effects::ChangeCharacteristicsEffectDefinition>(
+                core::TargetRequirement{target_specs}, card_characteristics)};
+
+            effect->addExpireTime(expiry);
+            return effect;
+        }
         throw std::runtime_error("Unknown effect type: " + type);
     }
+
 } // namespace dandan::serialization
 #endif // DANDAN_SERIALIZE

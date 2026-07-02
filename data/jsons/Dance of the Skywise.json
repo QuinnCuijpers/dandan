@@ -6,30 +6,17 @@
                     {
                         "data": {
                             "characteristics": {
-                                "additional_abilities": [
-                                    [
-                                        {
-                                            "data": {
-                                                "continuous_effect": {
-                                                    "data": {
-                                                        "condition": {
-                                                            "data": {},
-                                                            "type": "FlyingCondition"
-                                                        }
-                                                    },
-                                                    "type": "BlockPreventionEffect"
-                                                },
-                                                "static_type": "Prevention"
-                                            },
-                                            "type": "StaticAbility"
-                                        }
-                                    ]
+                                "additional_keywords": [
+                                    "Flying"
                                 ],
                                 "base_power": 4,
                                 "base_thoughness": 4,
                                 "color": "Blue",
                                 "loses_all_abilities": true,
-                                "subtype": "None"
+                                "subtypes": [
+                                    "Dragon",
+                                    "Illusion"
+                                ]
                             },
                             "expires": "EndOfTurn",
                             "targets": [
