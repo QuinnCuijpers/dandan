@@ -2,6 +2,7 @@
 #define DANDAN_CARD_DATA_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/SubType.h"
 #include "dandan/mana/Mana.h"
 
 #include <cstdint>
@@ -74,6 +75,22 @@ namespace dandan::core
          * @param name The name of the card.
          * @param cost The mana cost of the card.
          * @param type The type of the card.
+         * @param subtypes The subtypes of the card.
+         * @param abilities The abilities of the card.
+         * @param stats The optional stats of the card, should be set when the
+         * card is a creature.
+         */
+        CardData(
+            std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
+            std::vector<SubType> subtypes = {SubType::None},
+            SuperType supertype = SuperType::None,
+            std::vector<std::unique_ptr<abilities::IAbility>> abilities = {},
+            std::optional<Stats> stats = std::nullopt);
+
+        /** Constructor for creating a custom CardData instance.
+         * @param name The name of the card.
+         * @param cost The mana cost of the card.
+         * @param type The type of the card.
          * @param subtype The subtype of the card.
          * @param abilities The abilities of the card.
          * @param stats The optional stats of the card, should be set when the
@@ -110,7 +127,7 @@ namespace dandan::core
         /** Gets the subtype of the card.
          * @return The subtype of the card.
          */
-        [[nodiscard]] std::vector<SubType> getSubTypes() const
+        [[nodiscard]] const std::vector<SubType> &getSubTypes() const
         {
             return m_subtypes;
         }

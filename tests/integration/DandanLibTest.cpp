@@ -1266,7 +1266,13 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
     auto *crystal{game.getCardByID(crystal_1_1)};
     EXPECT_EQ(crystal->getZone(), dandan::core::Zone::GRAVEYARD);
 
-    auto *island{game.getCardByID(island_1_1)};
-    EXPECT_EQ(island->getCurrentSubTypes(),
-              std::vector{dandan::core::SubType::Island});
+    for (auto &player : game.getPlayers())
+    {
+        for (auto card : player.battlefield().getLands())
+        {
+            auto *cardp{game.getCardByID(card)};
+            EXPECT_EQ(cardp->getCurrentSubTypes(),
+                      std::vector{dandan::core::SubType::Island});
+        }
+    }
 }

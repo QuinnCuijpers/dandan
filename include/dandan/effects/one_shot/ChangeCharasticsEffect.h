@@ -9,7 +9,6 @@
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <memory>
-#include <stdexcept>
 #include <utility>
 
 namespace dandan::effects
@@ -18,26 +17,27 @@ namespace dandan::effects
     {
 
     public:
-        ChangeCharacteristicsEffect(core::Target target, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_target(std::move(target))
+        ChangeCharacteristicsEffect(
+            core::Target target,
+            const core::CardCharacteristics &characteristics,
+            EffectContext context)
+            : IOneShotEffect(std::move(context)), m_target(std::move(target)),
+              m_card_characteristics(characteristics)
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
             return std::make_unique<ChangeCharacteristicsEffect>(
-                m_target, getEffectContext());
+                m_target, m_card_characteristics, getEffectContext());
         }
 
         std::unique_ptr<events::IEvent> apply_impl(
-            [[maybe_unused]] core::Game &game) const override
-        {
-            throw std::runtime_error(
-                "Unimplemented apply impl for change characteristics");
-        }
+            [[maybe_unused]] core::Game &game) const override;
 
     private:
         core::Target m_target;
+        const core::CardCharacteristics &m_card_characteristics;
     };
 
     class ChangeCharacteristicsEffectDefinition
@@ -51,6 +51,9 @@ namespace dandan::effects
             : m_target_requirements(std::move(target_reqs)),
               m_card_characteristics(std::move(characteristics))
         {
+            std::cout << "Size of addditional abilities after construction: "
+                      << m_card_characteristics.additional_abilities.size()
+                      << '\n';
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
@@ -59,8 +62,9 @@ namespace dandan::effects
             const auto *card{game.getCardByID(context.card_id.value())};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
-            return std::make_unique<ChangeCharacteristicsEffect>(choice,
-                                                                 context);
+            context.expires = expires();
+            return std::make_unique<ChangeCharacteristicsEffect>(
+                choice, m_card_characteristics, context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
@@ -76,7 +80,8 @@ namespace dandan::effects
             return &m_target_requirements;
         }
 
-        [[nodiscard]] core::CardCharacteristics getCharacteristics() const
+        [[nodiscard]] const core::CardCharacteristics &getCharacteristics()
+            const
         {
             return m_card_characteristics;
         }

@@ -72,13 +72,13 @@ namespace dandan::core
         TargetSource source{TargetSource::Prompt};
         std::optional<std::string> key;
 
-        TargetSpec(std::vector<TargetType> types,
-                   Controller controller = Controller::Any)
+        explicit TargetSpec(std::vector<TargetType> types,
+                            Controller controller = Controller::Any)
             : types(std::move(types)), controller(controller)
         {
         }
 
-        TargetSpec(std::vector<TargetType> types, std::string key,
+        TargetSpec(std::vector<TargetType> types, const std::string &key,
                    Controller controller = Controller::Any)
             : types(std::move(types)), controller(controller),
               source(TargetSource::Linked), key(key)

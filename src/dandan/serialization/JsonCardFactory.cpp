@@ -58,10 +58,10 @@ namespace dandan::serialization
         auto cost = JsonFactory<mana::Mana>::create_product(json.at("cost"));
         auto type = json.at("type").get<core::CardData::Type>();
 
-        auto subtype = core::SubType::None;
-        if (json.contains("subtype"))
+        auto subtypes = std::vector{core::SubType::None};
+        if (json.contains("subtypes"))
         {
-            subtype = json.at("subtype").get<core::SubType>();
+            subtypes = json["subtypes"];
         }
 
         auto supertype = core::CardData::SuperType::None;
@@ -90,7 +90,7 @@ namespace dandan::serialization
         }
 
         return std::make_unique<core::CardData>(name, std::move(cost), type,
-                                                subtype, supertype,
+                                                subtypes, supertype,
                                                 std::move(abilities));
     }
 } // namespace dandan::serialization

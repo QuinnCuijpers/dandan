@@ -5,6 +5,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/Target.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
@@ -120,9 +121,10 @@ namespace dandan::effects
                                 for (const auto &target_type :
                                      target_types.types)
                                 {
-
                                     auto new_valid_targets =
-                                        game.getValidTargets(target_type);
+                                        game.getValidTargets(
+                                            target_type,
+                                            target_types.controller);
 
                                     valid_targets.insert(
                                         valid_targets.end(),

@@ -54,7 +54,7 @@ namespace dandan::effects
     {
 
     public:
-        SpinToTopEffectDefinition(core::TargetRequirement target_req)
+        explicit SpinToTopEffectDefinition(core::TargetRequirement target_req)
             : m_target_requirements(std::move(target_req))
         {
         }

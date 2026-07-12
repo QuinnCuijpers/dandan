@@ -183,7 +183,7 @@ namespace dandan::core
          */
         [[nodiscard]] int getPower() const
         {
-            return m_charcateristics.base_stats.power;
+            return m_characteristics.base_stats.power;
         }
 
         /** Get the toughness of the card.
@@ -191,7 +191,7 @@ namespace dandan::core
          */
         [[nodiscard]] int getToughness() const
         {
-            return m_charcateristics.base_stats.toughness;
+            return m_characteristics.base_stats.toughness;
         }
 
         /** Get the damage marked on the card.
@@ -202,14 +202,14 @@ namespace dandan::core
             return m_marked_damage;
         }
 
-        [[nodiscard]] std::vector<SubType> getCurrentSubTypes() const
+        [[nodiscard]] const std::vector<SubType> &getCurrentSubTypes() const
         {
-            return m_charcateristics.subtypes;
+            return m_characteristics.subtypes;
         }
 
         void setCurrentSubTypes(std::vector<SubType> subtypes)
         {
-            m_charcateristics.subtypes = std::move(subtypes);
+            m_characteristics.subtypes = std::move(subtypes);
         }
 
         std::vector<abilities::BoundAbility> &getCurrentAbilities()
@@ -220,6 +220,40 @@ namespace dandan::core
         const std::vector<abilities::BoundAbility> &getCurrentAbilities() const
         {
             return m_current_abilities;
+        }
+
+        CardCharacteristics &getCharacteristics()
+        {
+            return m_characteristics;
+        }
+
+        CardCharacteristics &getPrevCharacteristics()
+        {
+            return m_prev_characteristics;
+        }
+
+        void setCharacteristics(const CardCharacteristics &character)
+        {
+            std::cout << "Setting characteristics of cardID: " << m_card_id
+                      << '\n';
+            m_characteristics = character;
+            if (character.loses_all_abilities)
+            {
+                m_current_abilities.clear();
+            }
+            std::cout << "Size of additional abilities: "
+                      << character.additional_abilities.size() << '\n';
+            for (const auto *ability : character.additional_abilities)
+            {
+                std::cout << "Adding ability: \n";
+                auto bound{abilities::BoundAbility{*ability, this}};
+                m_current_abilities.push_back(bound);
+            }
+        }
+
+        void setPrevCharacteristics(CardCharacteristics character)
+        {
+            m_prev_characteristics = std::move(character);
         }
 
         // TODO: should generate a damage event
@@ -364,7 +398,8 @@ namespace dandan::core
 
         std::vector<abilities::BoundAbility> m_current_abilities;
 
-        CardCharacteristics m_charcateristics;
+        CardCharacteristics m_characteristics;
+        CardCharacteristics m_prev_characteristics;
 
         int m_marked_damage{};
 
@@ -379,12 +414,12 @@ namespace dandan::core
 
         void setCurrentPower(int power)
         {
-            m_charcateristics.base_stats.power = power;
+            m_characteristics.base_stats.power = power;
         }
 
         void setCurrentToughness(int toughness)
         {
-            m_charcateristics.base_stats.toughness = toughness;
+            m_characteristics.base_stats.toughness = toughness;
         }
     };
 } // namespace dandan::core

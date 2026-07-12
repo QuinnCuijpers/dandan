@@ -356,8 +356,9 @@ namespace dandan::core
                 {
                     std::cout << card->getData().getName() << "("
                               << "CardID: " << card->getID().getID() << ", ";
-                    std::cout << "Tapped: " << std::boolalpha
-                              << card->getTapped() << ") ";
+                    std::cout
+                        << "#Abilities: " << card->getCurrentAbilities().size()
+                        << ") ";
                 }
             }
             std::cout << "]\n";

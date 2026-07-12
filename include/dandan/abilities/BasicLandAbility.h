@@ -106,6 +106,7 @@ namespace dandan::abilities
                                           const AbilityContext &context) const
         {
             auto *card{game.getCardByID(context.source_card_id)};
+            std::cout << card->getCurrentSubTypes().size() << '\n';
             assert(card->getCurrentSubTypes().size() == 1);
             auto type{card->getCurrentSubTypes()[0]};
             return m_basic_land_ability_map->at(type);
