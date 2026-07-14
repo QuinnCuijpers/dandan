@@ -25,6 +25,13 @@ namespace dandan::core
          */
         void unsubscribe(Card &card);
 
+        void unsubscribe(const abilities::BoundAbility &ability);
+
+        [[nodiscard]] std::size_t size() const
+        {
+            return m_replacement_effects.size();
+        }
+
         /** Applies all active replacement effects to the given effect.
          * @param effect The effect to apply replacement effects to.
          * @param game The game instance.

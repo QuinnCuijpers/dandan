@@ -23,6 +23,8 @@ namespace dandan::core
          */
         void unsubscribe(const Card &card);
 
+        void unsubscribe(const abilities::BoundAbility &ability);
+
         /** Notifies all subscribers of an event.
          * @param event The event to notify subscribers of.
          * @param game The game instance.

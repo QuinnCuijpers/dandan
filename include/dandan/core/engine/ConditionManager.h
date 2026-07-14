@@ -7,6 +7,8 @@
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/CardID.h"
 #include "dandan/effects/EffectContext.h"
+#include <algorithm>
+#include <cstddef>
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -64,6 +66,29 @@ namespace dandan::core
             }
         }
 
+        void removeStateTriggeredAbility(const abilities::BoundAbility &ability)
+        {
+            auto source{ability.sourceCard()};
+            auto source_triggered_it{m_trigger_records.find(source)};
+            if (source_triggered_it == m_trigger_records.end())
+            {
+                std::cout << "NO TRIGGER RECORD FOR " << source.getID() << '\n';
+                return;
+            }
+            if (source_triggered_it->second.empty())
+            {
+                std::cout << "TRIGGER RECORD IS EMPTY\n";
+                m_trigger_records.erase(source_triggered_it);
+                return;
+            }
+            auto &source_abilities{m_trigger_records[source]};
+            source_abilities.erase(
+                std::remove_if(source_abilities.begin(), source_abilities.end(),
+                               [&ability](const TriggeredRecord &record)
+                               { return record.bound_ability == &ability; }),
+                source_abilities.end());
+        }
+
         /** @brief Remove all conditions associated with a card.
          * @param card_id The ID of the card.
          */
@@ -105,6 +130,16 @@ namespace dandan::core
                     }
                 }
             }
+        }
+
+        std::size_t size() const
+        {
+            std::size_t total{};
+            for (const auto &[card_id, vec] : m_trigger_records)
+            {
+                total += vec.size();
+            }
+            return total;
         }
 
         /** @brief Get the trigger records.

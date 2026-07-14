@@ -53,6 +53,14 @@ namespace dandan::core
          */
         void unsubscribe(CardID card_id);
 
+        void unsubscribe(const abilities::BoundAbility &ability);
+
+        std::size_t size() const
+        {
+            return m_card_preventions.size() + m_global_preventions.size() +
+                   m_player_preventions.size();
+        }
+
         /** Check if an action is prevented.
          * @param action The action to check.
          * @param game The game instance. Game is treated as const but as bound
@@ -77,9 +85,12 @@ namespace dandan::core
         static void removeFromPreventionList(
             PreventionList &list, const effects::IPreventionEffect *effect);
 
-        // TODO: Game is used as const as there is no bound ability that has a
-        // prevention effect that requires a cost to  create, but this should be
-        // fixed at some point
+        static void removeFromPreventionList(
+            PreventionList &list, const abilities::BoundAbility &ability);
+
+        // TODO: Game is used as const as there is no bound ability that has
+        // a prevention effect that requires a cost to  create, but this
+        // should be fixed at some point
         static bool isPreventedByPreventionList(const PreventionList &list,
                                                 const IAction &action,
                                                 Game &game);
