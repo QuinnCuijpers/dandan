@@ -4,6 +4,7 @@
 #include "dandan/abilities/EventTriggeredAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/Game.h"
+#include <algorithm>
 
 namespace dandan::core
 {
@@ -20,6 +21,25 @@ namespace dandan::core
     void EventManager::unsubscribe(const Card &card)
     {
         m_subscribers.erase(card.getID());
+    }
+
+    void EventManager::unsubscribe(const abilities::BoundAbility &ability)
+    {
+        auto source{ability.sourceCard()};
+        if (m_subscribers.find(source) == m_subscribers.end())
+        {
+            return;
+        }
+        if (m_subscribers.at(source).empty())
+        {
+            return;
+        }
+        auto source_abilities{m_subscribers[source]};
+        source_abilities.erase(
+            std::remove_if(source_abilities.begin(), source_abilities.end(),
+                           [&ability](auto *sub_ability)
+                           { return sub_ability == &ability; }),
+            source_abilities.end());
     }
 
     void EventManager::notify(const events::IEvent &event,

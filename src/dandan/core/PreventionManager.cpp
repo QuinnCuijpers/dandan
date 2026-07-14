@@ -129,6 +129,24 @@ namespace dandan::core
                        }),
                    list.end());
     }
+    void PreventionManager::removeFromPreventionList(
+        PreventionList &list, const abilities::BoundAbility &ability)
+    {
+        list.erase(
+            std::remove_if(
+                list.begin(), list.end(),
+                [&ability](const PreventionEffect &candidate)
+                {
+                    return std::visit(
+                        utils::overloaded{
+                            [](const std::unique_ptr<effects::IPreventionEffect>
+                                   &) { return false; },
+                            [&](const abilities::BoundAbility *sub_ability)
+                            { return sub_ability == &ability; }},
+                        candidate);
+                }),
+            list.end());
+    }
 
     void PreventionManager::unsubscribe(
         const effects::IPreventionEffect *effect)
@@ -209,6 +227,40 @@ namespace dandan::core
             }
         }
         return false;
+    }
+
+    void PreventionManager::unsubscribe(const abilities::BoundAbility &ability)
+    {
+
+        removeFromPreventionList(m_global_preventions, ability);
+
+        for (auto player_it = m_player_preventions.begin();
+             player_it != m_player_preventions.end();)
+        {
+            removeFromPreventionList(player_it->second, ability);
+            if (player_it->second.empty())
+            {
+                player_it = m_player_preventions.erase(player_it);
+            }
+            else
+            {
+                ++player_it;
+            }
+        }
+
+        for (auto card_it = m_card_preventions.begin();
+             card_it != m_card_preventions.end();)
+        {
+            removeFromPreventionList(card_it->second, ability);
+            if (card_it->second.empty())
+            {
+                card_it = m_card_preventions.erase(card_it);
+            }
+            else
+            {
+                ++card_it;
+            }
+        }
     }
 
     bool PreventionManager::isPrevented(const IAction &action, Game &game) const

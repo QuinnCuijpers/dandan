@@ -64,4 +64,14 @@ namespace dandan::core
         }
         return current_effect->copy();
     }
+
+    void ReplacementManager::unsubscribe(const abilities::BoundAbility &ability)
+    {
+        auto source_abilities{m_replacement_effects};
+        source_abilities.erase(
+            std::remove_if(source_abilities.begin(), source_abilities.end(),
+                           [&ability](auto *sub_ability)
+                           { return sub_ability == &ability; }),
+            source_abilities.end());
+    }
 } // namespace dandan::core
