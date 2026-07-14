@@ -481,7 +481,9 @@ namespace dandan::core
 
                     while (true)
                     {
-                        const auto &player{getPlayer(current_player_id)};
+                        const auto nextPlayer{
+                            getNextPlayerID(current_player_id)};
+                        const auto &player{getPlayer(nextPlayer)};
                         const auto &creatures =
                             player.battlefield().permanents().at(
                                 CardData::Type::Creature);
