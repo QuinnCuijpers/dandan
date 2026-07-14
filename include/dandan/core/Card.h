@@ -232,24 +232,8 @@ namespace dandan::core
             return m_prev_characteristics;
         }
 
-        void setCharacteristics(const CardCharacteristics &character)
-        {
-            std::cout << "Setting characteristics of cardID: " << m_card_id
-                      << '\n';
-            m_characteristics = character;
-            if (character.loses_all_abilities)
-            {
-                m_current_abilities.clear();
-            }
-            std::cout << "Size of additional abilities: "
-                      << character.additional_abilities.size() << '\n';
-            for (const auto *ability : character.additional_abilities)
-            {
-                std::cout << "Adding ability: \n";
-                auto bound{abilities::BoundAbility{*ability, this}};
-                m_current_abilities.push_back(bound);
-            }
-        }
+        void setCharacteristics(const CardCharacteristics &character,
+                                Game &game);
 
         void setPrevCharacteristics(CardCharacteristics character)
         {

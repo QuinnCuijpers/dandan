@@ -1,5 +1,6 @@
 #include "dandan/core/Card.h"
 #include "dandan/abilities/BoundAbility.h"
+#include "dandan/core/CardCharacteristics.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Game.h"
@@ -71,6 +72,39 @@ namespace dandan::core
         game.preventionManager().unsubscribe(card->getID());
         game.replacementManager().unsubscribe(*card);
         game.graveyard().addCard(*card);
+    }
+    void Card::setCharacteristics(const CardCharacteristics &character,
+                                  Game &game)
+    {
+        std::cout << "Setting characteristics of cardID: " << m_card_id << '\n';
+        m_characteristics = character;
+        if (character.loses_all_abilities)
+        {
+            for (const auto &ability : m_current_abilities)
+            {
+
+                game.eventManager().unsubscribe(ability);
+
+                game.replacementManager().unsubscribe(ability);
+
+                game.preventionManager().unsubscribe(ability);
+
+                std::cout << "before: " << game.conditionManager().size()
+                          << '\n';
+                game.conditionManager().removeStateTriggeredAbility(ability);
+                std::cout << "after: " << game.conditionManager().size()
+                          << '\n';
+            }
+            m_current_abilities.clear();
+        }
+        std::cout << "Size of additional abilities: "
+                  << character.additional_abilities.size() << '\n';
+        for (const auto *ability : character.additional_abilities)
+        {
+            std::cout << "Adding ability: \n";
+            auto bound{abilities::BoundAbility{*ability, this}};
+            m_current_abilities.push_back(bound);
+        }
     }
 
     // NOLINTBEGIN(bugprone-easily-swappable-parameters)
