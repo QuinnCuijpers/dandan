@@ -18,7 +18,15 @@ namespace dandan::effects
         }
         auto permanent_id{std::get<core::Permanent>(m_target)};
         auto *card{game.getCardByID(permanent_id)};
+
+        auto &old_abilities{card->getCurrentAbilities()};
         auto old_characteristics{card->getCharacteristics()};
+        for (const auto &ability : old_abilities)
+        {
+            old_characteristics.additional_abilities.push_back(
+                &ability.definition());
+        }
+
         card->setCharacteristics(m_card_characteristics, game);
         card->setPrevCharacteristics(old_characteristics);
 
@@ -29,6 +37,7 @@ namespace dandan::effects
             {
                 auto old_characistics{card->getPrevCharacteristics()};
                 old_characteristics.loses_all_abilities = true;
+
                 auto context{getEffectContext()};
                 context.expires = core::ExpireTime::None;
                 auto undo_effect{std::make_unique<ChangeCharacteristicsEffect>(
