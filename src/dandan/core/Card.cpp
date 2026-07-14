@@ -89,11 +89,7 @@ namespace dandan::core
 
                 game.preventionManager().unsubscribe(ability);
 
-                std::cout << "before: " << game.conditionManager().size()
-                          << '\n';
                 game.conditionManager().removeStateTriggeredAbility(ability);
-                std::cout << "after: " << game.conditionManager().size()
-                          << '\n';
             }
             m_current_abilities.clear();
         }
