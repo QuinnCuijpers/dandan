@@ -19,7 +19,7 @@ namespace dandan::effects
         auto permanent_id{std::get<core::Permanent>(m_target)};
         auto *card{game.getCardByID(permanent_id)};
         auto old_characteristics{card->getCharacteristics()};
-        card->setCharacteristics(m_card_characteristics);
+        card->setCharacteristics(m_card_characteristics, game);
         card->setPrevCharacteristics(old_characteristics);
 
         if (auto expiry = getEffectContext().expires;
