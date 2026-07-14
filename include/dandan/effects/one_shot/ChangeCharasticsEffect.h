@@ -17,12 +17,11 @@ namespace dandan::effects
     {
 
     public:
-        ChangeCharacteristicsEffect(
-            core::Target target,
-            const core::CardCharacteristics &characteristics,
-            EffectContext context)
+        ChangeCharacteristicsEffect(core::Target target,
+                                    core::CardCharacteristics characteristics,
+                                    EffectContext context)
             : IOneShotEffect(std::move(context)), m_target(std::move(target)),
-              m_card_characteristics(characteristics)
+              m_card_characteristics(std::move(characteristics))
         {
         }
 
@@ -37,7 +36,7 @@ namespace dandan::effects
 
     private:
         core::Target m_target;
-        const core::CardCharacteristics &m_card_characteristics;
+        core::CardCharacteristics m_card_characteristics;
     };
 
     class ChangeCharacteristicsEffectDefinition
