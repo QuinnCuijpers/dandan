@@ -4,6 +4,7 @@
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Constants.h"
+#include "dandan/core/Keyword.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/SubType.h"
@@ -1275,4 +1276,197 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
                       std::vector{dandan::core::SubType::Island});
         }
     }
+}
+
+TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
+{
+    dandan::core::PlayerID::reset();
+
+    // global: one land a turn
+    // player: no draw on first turn
+    // card: summoning sickness per card (3 islands and a dandan)
+    static constexpr int EXPECTED_NUM_PREVENTIONS{1 + 1 + 4};
+
+    static constexpr int NUM_DANDANS{4};
+    static constexpr int NUM_ISLANDS{4};
+    static constexpr int NUM_DANCE{30};
+
+    auto dandan_abilities{::Dandan_Abilities()};
+    auto island_abilities{::Island_TESTS_Abilities()};
+    auto dance_abilities{::Dance_of_the_Skywise_Abilities()};
+
+    auto island_data{dandan::core::CardData{
+        "Island", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land, dandan::core::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
+
+    auto dandan_data{dandan::core::CardData{
+        "Dandan", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Creature, dandan::core::SubType::Fish,
+        dandan::core::CardData::SuperType::None, std::move(dandan_abilities)}};
+
+    auto mind_bend_data{dandan::core::CardData{
+        "Dance of the Skywise", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::SuperType::None, std::move(dance_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
+    auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
+    auto dance_cards{createTestCards(NUM_DANCE, &mind_bend_data)};
+
+    cards.insert(cards.end(), dandan_cards.begin(), dandan_cards.end());
+    cards.insert(cards.end(), dance_cards.begin(), dance_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    std::stringstream stream{};
+
+    auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
+
+    auto island_1_2{game.activePlayer().hand().getCards()[1].getID()};
+
+    auto island_2_1{game.nonActivePlayer().hand().getCards()[0].getID()};
+
+    auto dandan_1_1{game.activePlayer().hand().getCards()[2].getID()};
+    auto dance_1_1{game.activePlayer().hand().getCards()[4].getID()};
+
+    auto discard_2_1{game.nonActivePlayer().hand().getCards().back().getID()};
+
+    // turn 1 player 1
+    stream << "play " << island_1_1 << '\n';
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "play " << island_2_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 1
+    stream << "play " << island_1_2 << '\n';
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "play " << dandan_1_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 2
+    stream << "pass\n";
+    stream << discard_2_1 << '\n';
+
+    // turn 3 player 1
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "play " << dance_1_1 << '\n';
+    stream << "0\n";    // choose dandan as target
+    stream << "quit\n"; // quit immediately such that dance of the skywise is
+                        // still applied
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *dandan{game.getCardByID(dandan_1_1)};
+    auto expected_subtypes{std::vector{dandan::core::SubType::Dragon,
+                                       dandan::core::SubType::Illusion}};
+    EXPECT_EQ(dandan->getCurrentAbilities().size(), 1);
+    EXPECT_TRUE(dandan::core::isFlyingAbility(
+        dandan->getCurrentAbilities()[0].definition()));
+    EXPECT_EQ(dandan->getPower(), 4);
+    EXPECT_EQ(dandan->getToughness(), 4);
+    EXPECT_EQ(dandan->getCurrentSubTypes(), expected_subtypes);
+    EXPECT_EQ(game.conditionManager().size(), 0);
+    EXPECT_EQ(game.replacementManager().size(), 0);
+    EXPECT_EQ(game.eventManager().size(), 0);
+    EXPECT_EQ(game.preventionManager().size(), EXPECTED_NUM_PREVENTIONS);
+}
+
+TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_DANDANS{4};
+    static constexpr int NUM_ISLANDS{4};
+    static constexpr int NUM_DANCE{30};
+
+    auto dandan_abilities{::Dandan_Abilities()};
+    auto island_abilities{::Island_TESTS_Abilities()};
+    auto dance_abilities{::Dance_of_the_Skywise_Abilities()};
+
+    auto island_data{dandan::core::CardData{
+        "Island", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land, dandan::core::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
+
+    auto dandan_data{dandan::core::CardData{
+        "Dandan", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Creature, dandan::core::SubType::Fish,
+        dandan::core::CardData::SuperType::None, std::move(dandan_abilities)}};
+
+    auto mind_bend_data{dandan::core::CardData{
+        "Dance of the Skywise", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::SuperType::None, std::move(dance_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
+    auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
+    auto dance_cards{createTestCards(NUM_DANCE, &mind_bend_data)};
+
+    cards.insert(cards.end(), dandan_cards.begin(), dandan_cards.end());
+    cards.insert(cards.end(), dance_cards.begin(), dance_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    std::stringstream stream{};
+
+    auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
+
+    auto island_1_2{game.activePlayer().hand().getCards()[1].getID()};
+
+    auto island_2_1{game.nonActivePlayer().hand().getCards()[0].getID()};
+
+    auto dandan_1_1{game.activePlayer().hand().getCards()[2].getID()};
+    auto dance_1_1{game.activePlayer().hand().getCards()[4].getID()};
+
+    auto discard_2_1{game.nonActivePlayer().hand().getCards().back().getID()};
+
+    // turn 1 player 1
+    stream << "play " << island_1_1 << '\n';
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "play " << island_2_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 1
+    stream << "play " << island_1_2 << '\n';
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "play " << dandan_1_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 2
+    stream << "pass\n";
+    stream << discard_2_1 << '\n';
+
+    // turn 3 player 1
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "play " << dance_1_1 << '\n';
+    stream << "0\n"; // choose dandan as target
+    stream << "pass\n";
+
+    // turn 3 player 2
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *dandan{game.getCardByID(dandan_1_1)};
+    auto expected_subtypes{std::vector{dandan::core::SubType::Fish}};
+    EXPECT_EQ(dandan->getCurrentAbilities().size(), 2);
+    EXPECT_FALSE(dandan::core::isFlyingAbility(
+        dandan->getCurrentAbilities()[0].definition()));
+    EXPECT_FALSE(dandan::core::isFlyingAbility(
+        dandan->getCurrentAbilities()[1].definition()));
+    EXPECT_EQ(dandan->getToughness(), 1);
+    EXPECT_EQ(dandan->getCurrentSubTypes(), expected_subtypes);
 }
