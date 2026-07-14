@@ -463,11 +463,12 @@ namespace dandan::serialization
                 additional_keywords.push_back(keyword_v);
             }
 
-            auto additional_abilities{std::vector<abilities::IAbility *>{}};
+            auto additional_abilities{
+                std::vector<const abilities::IAbility *>{}};
 
             for (auto keyword : additional_keywords)
             {
-                auto *ability = getKeywordAbility(keyword);
+                const auto *ability = getKeywordAbility(keyword);
                 additional_abilities.push_back(ability);
             }
 

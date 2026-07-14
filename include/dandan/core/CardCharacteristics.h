@@ -16,7 +16,7 @@ namespace dandan::core
         std::vector<SubType> subtypes;
         Stats base_stats;
         bool loses_all_abilities;
-        std::vector<abilities::IAbility *> additional_abilities;
+        std::vector<const abilities::IAbility *> additional_abilities;
     };
 } // namespace dandan::core
 

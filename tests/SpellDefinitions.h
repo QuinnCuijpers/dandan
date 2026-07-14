@@ -298,7 +298,7 @@ Dance_of_the_Skywise_Abilities()
 
     auto *flying{dandan::abilities::FLYING_ABILITY.get()};
 
-    auto added_abilities{std::vector<dandan::abilities::IAbility *>{}};
+    auto added_abilities{std::vector<const dandan::abilities::IAbility *>{}};
 
     added_abilities.push_back(flying);
 
