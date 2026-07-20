@@ -34,6 +34,7 @@
             "type": "StaticAbility"
         }
     ],
+    "color": "Blue",
     "cost": "UU",
     "name": "Dandan",
     "stats": {

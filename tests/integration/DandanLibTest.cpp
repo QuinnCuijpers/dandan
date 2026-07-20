@@ -3,6 +3,7 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Keyword.h"
 #include "dandan/core/Player.h"
@@ -1366,6 +1367,8 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     auto *dandan{game.getCardByID(dandan_1_1)};
     auto expected_subtypes{std::vector{dandan::core::SubType::Dragon,
                                        dandan::core::SubType::Illusion}};
+
+    EXPECT_EQ(dandan->getColor(), dandan::core::ColorWord::Blue);
     EXPECT_EQ(dandan->getCurrentAbilities().size(), 1);
     EXPECT_TRUE(dandan::core::isFlyingAbility(
         dandan->getCurrentAbilities()[0].definition()));
@@ -1398,7 +1401,8 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
     auto dandan_data{dandan::core::CardData{
         "Dandan", std::make_unique<dandan::mana::BlueMana>(2),
         dandan::core::CardData::Type::Creature, dandan::core::SubType::Fish,
-        dandan::core::CardData::SuperType::None, std::move(dandan_abilities)}};
+        dandan::core::CardData::SuperType::None, std::move(dandan_abilities),
+        dandan::core::Stats{4, 1}, dandan::core::ColorWord::Blue}};
 
     auto mind_bend_data{dandan::core::CardData{
         "Dance of the Skywise", std::make_unique<dandan::mana::BlueMana>(2),
@@ -1462,6 +1466,8 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
 
     auto *dandan{game.getCardByID(dandan_1_1)};
     auto expected_subtypes{std::vector{dandan::core::SubType::Fish}};
+
+    EXPECT_EQ(dandan->getColor(), dandan::core::ColorWord::Blue);
     EXPECT_EQ(dandan->getCurrentAbilities().size(), 2);
     EXPECT_FALSE(dandan::core::isFlyingAbility(
         dandan->getCurrentAbilities()[0].definition()));
