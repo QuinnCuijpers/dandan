@@ -5,7 +5,8 @@ Checks: >
     performance-*,
     readability-*,
     -modernize-use-trailing-return-type,
-    -clang-diagnostic-ignored-optimization-argument
+    -clang-diagnostic-ignored-optimization-argument,
+    -cppcoreguidelines-pro-type-reinterpret-cast
 
 HeaderFilterRegex: '.*/(include/dandan|src/dandan|src/main\.cpp).*'
 WarningsAsErrors: '*'

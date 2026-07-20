@@ -4,31 +4,13 @@
 #ifdef DANDAN_ENABLE_LOGGING
 #include <filesystem>
 #include <plog/Log.h>
+// dandan/log.h
 
-#define DLOGI                                                                  \
-    /* NOLINTBEGIN */                                                          \
-    PLOGI                                                                      \
-    /* NOLINTEND */
-
-#define DLOGD                                                                  \
-    /*NOLINTBEGIN*/                                                            \
-    PLOGD                                                                      \
-    /*NOLINTEND*/
-
-#define DLOGW                                                                  \
-    /*NOLINTBEGIN*/                                                            \
-    PLOGW                                                                      \
-    /*NOLINTEND*/
-
-#define DLOGE                                                                  \
-    /*NOLINTBEGIN*/                                                            \
-    PLOGE                                                                      \
-    /*NOLINTEND*/
-
-#define DLOGF                                                                  \
-    /*NOLINTBEGIN*/                                                            \
-    PLOGF                                                                      \
-    /*NOLINTEND*/
+#define DLOGI PLOGI
+#define DLOGD PLOGD
+#define DLOGW PLOGW
+#define DLOGE PLOGE
+#define DLOGF PLOGF
 
 namespace dandan
 {
