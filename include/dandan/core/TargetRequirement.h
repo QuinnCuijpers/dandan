@@ -1,6 +1,7 @@
 #ifndef DANDAN_TARGETREQUIREMENT_H
 #define DANDAN_TARGETREQUIREMENT_H
 
+#include <algorithm>
 #include <cstdint>
 #include <optional>
 #include <ostream>
@@ -97,10 +98,11 @@ namespace dandan::core
         explicit TargetRequirement(
             const std::vector<std::vector<TargetType>> &target_types)
         {
-            for (const auto &target_type : target_types)
-            {
-                m_targets.emplace_back(target_type);
-            }
+            m_targets.reserve(target_types.size());
+            std::transform(target_types.begin(), target_types.end(),
+                           std::back_inserter(m_targets),
+                           [](const std::vector<TargetType> &target_type)
+                           { return TargetSpec{target_type}; });
         }
 
         [[nodiscard]] const std::vector<TargetSpec> &getTargetTypes() const

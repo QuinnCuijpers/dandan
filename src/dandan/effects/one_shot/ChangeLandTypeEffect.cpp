@@ -1,8 +1,10 @@
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
 #include "dandan/core/Game.h"
 #include "dandan/utils/stringToBasicLandType.h"
+#include <algorithm>
 #include <iostream>
 #include <memory>
+#include <tuple>
 
 namespace dandan::effects
 {
@@ -40,14 +42,19 @@ namespace dandan::effects
         for (const auto &card_id : game.cards())
         {
             auto *card{game.getCardByID(card_id)};
-            for (auto subtype : card->getCurrentSubTypes())
-            {
-                if (subtype == basic_land_1)
-                {
-                    card->setCurrentSubTypes({basic_land_2.value()});
-                    break;
-                }
-            }
+
+            auto subtypes{card->getCurrentSubTypes()};
+            std::ignore = std::any_of(subtypes.begin(), subtypes.end(),
+                                      [&](const auto subtype)
+                                      {
+                                          if (subtype == basic_land_1)
+                                          {
+                                              card->setCurrentSubTypes(
+                                                  {basic_land_2.value()});
+                                              return true;
+                                          }
+                                          return false;
+                                      });
         }
 
         game.addEndOfTurnEffect(std::make_unique<ChangeLandTypeEffect>(
