@@ -62,7 +62,7 @@ namespace dandan::core
                                  {{ColorWord::Black, "Black"},
                                   {ColorWord::Blue, "Blue"},
                                   {ColorWord::Green, "Green"},
-                                  {ColorWord::None, "None"},
+                                  {ColorWord::Colorless, "None"},
                                   {ColorWord::Red, "Red"},
                                   {ColorWord::White, "White"}})
 

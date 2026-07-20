@@ -29,6 +29,7 @@ namespace dandan::core
                 setCurrentToughness(stats->toughness);
             }
             setCurrentSubTypes(m_card_data->getSubTypes());
+            getCharacteristics().color = m_card_data->getColor();
 
             auto bound_abilities{std::vector<abilities::BoundAbility>{}};
             for (const auto &ability : m_card_data->getAbilities())
@@ -57,6 +58,7 @@ namespace dandan::core
                 setCurrentToughness(stats->toughness);
             }
             setCurrentSubTypes(m_card_data->getSubTypes());
+            getCharacteristics().color = m_card_data->getColor();
         }
     }
 

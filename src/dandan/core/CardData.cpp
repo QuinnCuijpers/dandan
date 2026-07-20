@@ -1,5 +1,6 @@
 #include "dandan/core/CardData.h"
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/SubType.h"
 #include <cassert>
 #include <memory>
@@ -45,9 +46,9 @@ namespace dandan::core
         std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
         std::vector<SubType> subtypes, SuperType supertype,
         std::vector<std::unique_ptr<abilities::IAbility>> abilities,
-        std::optional<Stats> stats)
-        : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-          m_subtypes{std::move(subtypes)}, m_supertype{supertype},
+        std::optional<Stats> stats, ColorWord color)
+        : m_name{name}, m_mana_cost{std::move(cost)}, m_color{color},
+          m_type{type}, m_subtypes{std::move(subtypes)}, m_supertype{supertype},
           m_abilities{std::move(abilities)}, m_stats{stats}
     {
         if (m_subtypes == std::vector{SubType::None})
@@ -60,9 +61,9 @@ namespace dandan::core
         std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
         SubType subtype, SuperType supertype,
         std::vector<std::unique_ptr<abilities::IAbility>> abilities,
-        std::optional<Stats> stats)
-        : m_name{name}, m_mana_cost{std::move(cost)}, m_type{type},
-          m_subtypes{subtype}, m_supertype{supertype},
+        std::optional<Stats> stats, ColorWord color)
+        : m_name{name}, m_mana_cost{std::move(cost)}, m_color(color),
+          m_type{type}, m_subtypes{subtype}, m_supertype{supertype},
           m_abilities{std::move(abilities)}, m_stats{stats}
     {
         if (m_subtypes == std::vector{SubType::None})

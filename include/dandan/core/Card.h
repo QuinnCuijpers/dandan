@@ -255,6 +255,11 @@ namespace dandan::core
             return m_can_be_countered;
         }
 
+        ColorWord getColor() const
+        {
+            return m_characteristics.color;
+        }
+
         /** Destroy the card.
          * @param game The game instance.
          */

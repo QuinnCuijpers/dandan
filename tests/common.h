@@ -15,7 +15,7 @@
                 dandan::core::CardData::Type::Creature,                        \
                 dandan::core::SubType::Fish,                                   \
                 dandan::core::CardData::SuperType::None, name##_Abilities(),   \
-                dandan::core::Stats{4, 1}                                      \
+                dandan::core::Stats{4, 1}, dandan::core::ColorWord::Blue       \
         }                                                                      \
     }
 

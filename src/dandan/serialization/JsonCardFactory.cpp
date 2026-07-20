@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonCardFactory.h"
+#include "dandan/core/ColorWord.h"
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/abilities/IAbility.h"
@@ -27,6 +28,12 @@ namespace dandan::serialization
         json["name"] = card->getName();
         json["cost"] = JsonFactory<mana::Mana>::create_json(card->getCost());
         json["type"] = card->getType();
+
+        if (card->getColor() != core::ColorWord::Colorless)
+        {
+            json["color"] = card->getColor();
+        }
+
         if (!card->getSubTypes().empty())
         {
             json["subtypes"] = card->getSubTypes();
@@ -89,9 +96,15 @@ namespace dandan::serialization
             }
         }
 
-        return std::make_unique<core::CardData>(name, std::move(cost), type,
-                                                subtypes, supertype,
-                                                std::move(abilities));
+        auto color{core::ColorWord::Colorless};
+        if (json.contains("color"))
+        {
+            color = json.at("color");
+        }
+
+        return std::make_unique<core::CardData>(
+            name, std::move(cost), type, subtypes, supertype,
+            std::move(abilities), stats, color);
     }
 } // namespace dandan::serialization
 

@@ -38,7 +38,7 @@ namespace dandan::utils
             return core::ColorWord::Green;
         }
 
-        return core::ColorWord::None;
+        return core::ColorWord::Colorless;
     }
 } // namespace dandan::utils
 #endif

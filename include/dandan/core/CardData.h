@@ -2,6 +2,7 @@
 #define DANDAN_CARD_DATA_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/core/SubType.h"
 #include "dandan/mana/Mana.h"
 
@@ -85,7 +86,8 @@ namespace dandan::core
             std::vector<SubType> subtypes = {SubType::None},
             SuperType supertype = SuperType::None,
             std::vector<std::unique_ptr<abilities::IAbility>> abilities = {},
-            std::optional<Stats> stats = std::nullopt);
+            std::optional<Stats> stats = std::nullopt,
+            ColorWord color = ColorWord::Colorless);
 
         /** Constructor for creating a custom CardData instance.
          * @param name The name of the card.
@@ -101,7 +103,8 @@ namespace dandan::core
             SubType subtype = SubType::None,
             SuperType supertype = SuperType::None,
             std::vector<std::unique_ptr<abilities::IAbility>> abilities = {},
-            std::optional<Stats> stats = std::nullopt);
+            std::optional<Stats> stats = std::nullopt,
+            ColorWord color = ColorWord::Colorless);
 
         /** Gets the name of the card.
          * @return The name of the card.
@@ -154,6 +157,11 @@ namespace dandan::core
             return m_abilities;
         }
 
+        [[nodiscard]] ColorWord getColor() const
+        {
+            return m_color;
+        }
+
         /** Outputs the card data to an output stream.
          * @param ostream The output stream.
          * @param card The card data to output.
@@ -195,6 +203,7 @@ namespace dandan::core
     private:
         std::string m_name{"unknown"};
         std::unique_ptr<mana::Mana> m_mana_cost;
+        ColorWord m_color{ColorWord::Colorless};
         Type m_type{Type::Land};
         std::vector<SubType> m_subtypes;
         SuperType m_supertype{SuperType::None};

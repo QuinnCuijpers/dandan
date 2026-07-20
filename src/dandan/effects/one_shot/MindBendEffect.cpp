@@ -93,7 +93,7 @@ namespace dandan::effects
                     std::getline(game.istream(), replace_with_color_str);
                     auto replace_with_color{
                         utils::stringToColorWord(replace_with_color_str)};
-                    if (replace_with_color == core::ColorWord::None)
+                    if (replace_with_color == core::ColorWord::Colorless)
                     {
                         throw std::runtime_error("Invalid color word: " +
                                                  replace_with_color_str);
