@@ -294,6 +294,7 @@ namespace dandan::core
         {
             for (const auto &effect : m_end_of_turn_effects)
             {
+                std::cout << "Applying end of turn effect\n";
                 effect->apply(*this);
             }
             m_end_of_turn_effects.clear();

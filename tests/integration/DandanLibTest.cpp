@@ -19,6 +19,7 @@
 #include <cstddef>
 #include <gtest/gtest.h>
 #include <memory>
+#include <optional>
 #include <sstream>
 #include <unordered_map>
 #include <vector>
@@ -1475,4 +1476,133 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
         dandan->getCurrentAbilities()[1].definition()));
     EXPECT_EQ(dandan->getToughness(), 1);
     EXPECT_EQ(dandan->getCurrentSubTypes(), expected_subtypes);
+}
+
+TEST(DandanLibTest, DanceSavesDandan)
+{
+    dandan::core::PlayerID::reset();
+
+    static constexpr int NUM_DANDANS{4};
+    static constexpr int NUM_ISLANDS{6};
+    static constexpr int NUM_CRYSTAL{2};
+    static constexpr int NUM_DANCE{20};
+
+    auto dandan_abilities{::Dandan_Abilities()};
+    auto island_abilities{::Island_TESTS_Abilities()};
+    auto crystal_abilities{::Crystal_Spray_Abilities()};
+    auto dance_abilities{::Dance_of_the_Skywise_Abilities()};
+
+    auto island_data{dandan::core::CardData{
+        "Island", std::make_unique<dandan::mana::GenericMana>(0),
+        dandan::core::CardData::Type::Land, dandan::core::SubType::Island,
+        dandan::core::CardData::SuperType::Basic, std::move(island_abilities)}};
+
+    auto crystal_data{dandan::core::CardData{
+        "Crystal Spray",
+        std::make_unique<dandan::mana::AndMana>(
+            std::make_unique<dandan::mana::GenericMana>(2),
+            std::make_unique<dandan::mana::BlueMana>(1)),
+        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::SuperType::None, std::move(crystal_abilities),
+        std::nullopt, dandan::core::ColorWord::Blue}};
+
+    auto dandan_data{dandan::core::CardData{
+        "Dandan", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Creature, dandan::core::SubType::Fish,
+        dandan::core::CardData::SuperType::None, std::move(dandan_abilities),
+        dandan::core::Stats{4, 1}, dandan::core::ColorWord::Blue}};
+
+    auto mind_bend_data{dandan::core::CardData{
+        "Dance of the Skywise", std::make_unique<dandan::mana::BlueMana>(2),
+        dandan::core::CardData::Type::Instant, dandan::core::SubType::None,
+        dandan::core::CardData::SuperType::None, std::move(dance_abilities)}};
+
+    auto cards{createTestCards(NUM_ISLANDS, &island_data)};
+    auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
+    auto dance_cards{createTestCards(NUM_DANCE, &mind_bend_data)};
+    auto crystal_cards{createTestCards(NUM_CRYSTAL, &crystal_data)};
+
+    cards.insert(cards.end(), dandan_cards.begin(), dandan_cards.end());
+    cards.insert(cards.end(), crystal_cards.begin(), crystal_cards.end());
+    cards.insert(cards.end(), dance_cards.begin(), dance_cards.end());
+
+    // cards are dealt one at a time to each player starting with the first
+    // player
+    dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    std::stringstream stream{};
+
+    auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
+    auto island_1_2{game.activePlayer().hand().getCards()[1].getID()};
+    auto island_1_3{game.activePlayer().hand().getCards()[2].getID()};
+
+    auto island_2_1{game.nonActivePlayer().hand().getCards()[0].getID()};
+    auto island_2_2{game.nonActivePlayer().hand().getCards()[1].getID()};
+
+    auto dandan_1_1{game.activePlayer().hand().getCards()[3].getID()};
+
+    auto crystal_1_1{
+        game.activePlayer()
+            .hand()
+            .getCards()[5] // NOLINT(cppcoreguidelines-avoid-magic-numbers,
+                           // readability-magic-numbers)
+            .getID()};
+
+    auto dance_2_1{
+        game.nonActivePlayer()
+            .hand()
+            .getCards()[6] // NOLINT(cppcoreguidelines-avoid-magic-numbers,
+                           // readability-magic-numbers)
+            .getID()};
+
+    // turn 1 player 1
+    stream << "play " << island_1_1 << '\n';
+    stream << "pass\n";
+
+    // turn 1 player 2
+    stream << "play " << island_2_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 1
+    stream << "play " << island_1_2 << '\n';
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "play " << dandan_1_1 << '\n';
+    stream << "pass\n"; // pass turn
+
+    // turn 2 player 2
+    stream << "play " << island_2_2 << '\n';
+    stream << "pass\n";
+
+    // turn 3 player 1
+
+    stream << "play " << island_1_3 << '\n';
+    stream << "activate " << island_1_1 << '\n';
+    stream << "activate " << island_1_2 << '\n';
+    stream << "activate " << island_1_3 << '\n';
+
+    stream << "play " << crystal_1_1 << '\n';
+    stream << 3
+           << '\n'; // index 3 of targets for crystal spray to target dandan
+
+    // cast dance in response
+    stream << "activate " << island_2_1 << '\n';
+    stream << "activate " << island_2_2 << '\n';
+    stream << "play " << dance_2_1 << '\n';
+    stream << "0\n"; // choose dandan as target
+
+    // choose replacement for resolving crystal spray
+    stream << "island\n";
+    stream << "swamp\n";
+
+    stream << "pass\n";
+
+    // turn 3 player 2
+    stream << "quit\n";
+
+    game.setIstream(stream);
+    game.run();
+
+    auto *dandan{game.getCardByID(dandan_1_1)};
+
+    EXPECT_EQ(dandan->getZone(), dandan::core::Zone::BATTLEFIELD);
 }
