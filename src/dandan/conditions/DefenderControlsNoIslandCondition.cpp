@@ -1,4 +1,3 @@
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Card.h"
@@ -42,8 +41,7 @@ namespace dandan::conditions
         {
             const auto *card = game.getCardByID(card_id);
             auto subtypes = card->getCurrentSubTypes();
-            return card != nullptr &&
-                   card->getData().getType() == core::CardData::Type::Land &&
+            return card->getData().getType() == core::CardData::Type::Land &&
                    std::all_of(subtypes.begin(), subtypes.end(),
                                [&](core::SubType type)
                                { return basic != type; });

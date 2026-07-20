@@ -3,7 +3,6 @@
 
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
-#include "dandan/core/CardData.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"

@@ -19,7 +19,7 @@ namespace dandan::effects
         auto permanent_id{std::get<core::Permanent>(m_target)};
         auto *card{game.getCardByID(permanent_id)};
 
-        auto &old_abilities{card->getCurrentAbilities()};
+        const auto &old_abilities{card->getCurrentAbilities()};
         auto old_characteristics{card->getCharacteristics()};
         for (const auto &ability : old_abilities)
         {

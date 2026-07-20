@@ -6,6 +6,7 @@
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
@@ -28,7 +29,7 @@ namespace dandan::effects
          * @param card The card to be untapped by this effect.
          */
         explicit UntapEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(context), m_card{card}
+            : IOneShotEffect(std::move(context)), m_card{card}
         {
         }
 

@@ -1,6 +1,5 @@
 #include "dandan/serialization/JsonEffectOneShotFactory.h"
 #include "dandan/abilities/IAbility.h"
-#include "dandan/abilities/KeyWords.h"
 #include "dandan/core/CardCharacteristics.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/Expire.h"
@@ -244,7 +243,7 @@ namespace dandan::serialization
                 characteristics.loses_all_abilities;
             characteristics_json["additional_keywords"] =
                 nlohmann::json::array();
-            for (auto *ability : characteristics.additional_abilities)
+            for (const auto *ability : characteristics.additional_abilities)
             {
                 if (core::isFlyingAbility(*ability))
                 {

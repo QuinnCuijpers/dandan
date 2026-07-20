@@ -15,10 +15,10 @@ namespace dandan::effects
             auto blocker{block_action->getBlocker()};
 
             // check condition for blocker
-            EffectContext context{blocker};
+            EffectContext block_context{blocker};
 
             std::cout << "Checking block prevention effect condition\n";
-            if (getCondition()->isSatisfied(game, context))
+            if (getCondition()->isSatisfied(game, block_context))
             {
                 return true;
             }

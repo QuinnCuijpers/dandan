@@ -2,6 +2,7 @@
 #ifndef DANDAN_BOUNCEEffect_H
 #define DANDAN_BOUNCEEffect_H
 
+#include <stdexcept>
 #include <utility>
 
 #include "dandan/core/Game.h"
@@ -50,7 +51,14 @@ namespace dandan::effects
             [[maybe_unused]] const core::Game &game,
             [[maybe_unused]] EffectContext context) const override
         {
-            const auto *card{game.getCardByID(context.card_id.value())};
+            if (!context.card_id.has_value())
+            {
+                throw std::runtime_error(
+                    "tried binding a Bounce Effect without a source card");
+            }
+
+            auto source{context.card_id.value()};
+            const auto *card{game.getCardByID(source)};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             return std::make_unique<BounceEffect>(choice, context);
