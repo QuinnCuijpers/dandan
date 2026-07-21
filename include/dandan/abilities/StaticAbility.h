@@ -46,27 +46,15 @@ namespace dandan::abilities
         /** Get the type of the static ability
          * @return The type of the static ability
          */
-        [[nodiscard]] Type getType() const
-        {
-            return m_type;
-        }
+        [[nodiscard]] Type getType() const;
 
         /** Get the effect of the static ability
          * @return The effect of the static ability
          */
-        [[nodiscard]] const effects::IContinuousEffect *getEffect() const
-        {
-            return m_effect.get();
-        }
+        [[nodiscard]] const effects::IContinuousEffect *getEffect() const;
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
-
-        // void replaceBasicWord(core::SubType from,
-        //                       core::SubType new_basic) override;
-
-        // void replaceColorWord(core::ColorWord from,
-        //                       core::ColorWord new_color) override;
 
     private:
         Type m_type{};

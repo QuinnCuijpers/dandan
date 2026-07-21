@@ -42,7 +42,16 @@ namespace dandan::abilities
         return m_effect->bind(game,
                               effects::EffectContext(context.controller_id));
     }
+    [[nodiscard]] const costs::ICost *ActivatedAbility::getCost() const
+    {
+        return m_cost.get();
+    }
 
+    [[nodiscard]] const effects::IOneShotEffectDefinition *ActivatedAbility::
+        getEffect() const
+    {
+        return m_effect.get();
+    }
     [[nodiscard]] bool ActivatedAbility::canActivate(
         core::Game &game, const AbilityContext &context) const
     {

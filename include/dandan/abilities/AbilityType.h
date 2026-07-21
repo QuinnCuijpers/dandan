@@ -23,14 +23,9 @@ namespace dandan::abilities
             AbilityDecorator
         };
 
-        explicit AbilityType(Type type) : m_type(type)
-        {
-        }
+        explicit AbilityType(Type type);
 
-        [[nodiscard]] Type getType() const
-        {
-            return m_type;
-        }
+        [[nodiscard]] Type getType() const;
 
         static AbilityType from(const IAbility *ability);
 

@@ -13,4 +13,14 @@ namespace dandan::abilities
         std::cout << "Resolving StaticAbility\n";
         return nullptr;
     }
+    [[nodiscard]] StaticAbility::Type StaticAbility::getType() const
+    {
+        return m_type;
+    }
+
+    [[nodiscard]] const effects::IContinuousEffect *StaticAbility::getEffect()
+        const
+    {
+        return m_effect.get();
+    }
 } // namespace dandan::abilities

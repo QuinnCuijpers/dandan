@@ -5,28 +5,11 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/core/Game.h"
-#include "dandan/mana/BlackMana.h"
-#include "dandan/mana/BlueMana.h"
-#include "dandan/mana/GreenMana.h"
-#include "dandan/mana/RedMana.h"
-#include "dandan/mana/WhiteMana.h"
+#include <memory>
 #include <unordered_map>
 
 namespace dandan::abilities
 {
-    static const std::unordered_map<core::SubType, const ManaAbility *>
-        s_land_ability_map{
-            {core::SubType::Plains, new ManaAbility(mana::ManaList{
-                                        std::make_unique<mana::WhiteMana>(1)})},
-            {core::SubType::Island, new ManaAbility(mana::ManaList{
-                                        std::make_unique<mana::BlueMana>(1)})},
-            {core::SubType::Swamp, new ManaAbility(mana::ManaList{
-                                       std::make_unique<mana::BlackMana>(1)})},
-            {core::SubType::Mountain, new ManaAbility(mana::ManaList{
-                                          std::make_unique<mana::RedMana>(1)})},
-            {core::SubType::Forest, new ManaAbility(mana::ManaList{
-                                        std::make_unique<mana::GreenMana>(1)})},
-        };
 
     /** @brief An ability that represents a basic land's ability to produce
      * mana.
@@ -37,84 +20,31 @@ namespace dandan::abilities
     class BasicLandAbility final : public IAbility
     {
     public:
-        BasicLandAbility() = default;
+        BasicLandAbility();
 
-        [[nodiscard]] std::string display() const override
-        {
-            // for now display islands
-            return m_basic_land_ability_map->at(core::SubType::Island)
-                ->display();
-        }
+        [[nodiscard]] std::string display() const override;
 
         [[nodiscard]] std::string displayOption(
-            [[maybe_unused]] size_t index) const override
-        {
-            // FIXME: hacky when cards can have multiple subtypes
-            return display();
-        }
+            [[maybe_unused]] size_t index) const override;
 
         [[nodiscard]] bool canActivate(
             [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] const AbilityContext &context) const override
-        {
-            auto res{false};
-            auto *card{game.getCardByID(context.source_card_id)};
-            for (auto subtype : card->getCurrentSubTypes())
-            {
-                switch (subtype)
-                {
-
-                case core::SubType::Forest:
-                case core::SubType::Island:
-                case core::SubType::Mountain:
-                case core::SubType::Plains:
-                case core::SubType::Swamp:
-                    res = res ||
-                          m_basic_land_ability_map->at(subtype)->canActivate(
-                              game, context);
-                case core::SubType::None:
-                case core::SubType::Fish:
-                case core::SubType::Illusion:
-                case core::SubType::Dragon:
-                    break;
-                }
-            }
-            return res;
-        }
+            [[maybe_unused]] const AbilityContext &context) const override;
 
         /** @brief Get the number of options for the ability
          * @return The number of options
          */
-        [[nodiscard]] size_t optionsAmount() const override
-        {
-            // FIXME:
-            // hacky when cards can have multiple subtypes
-            return 1;
-        }
+        [[nodiscard]] size_t optionsAmount() const override;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const override
-        {
-            const auto *cardp = game.getCardByID(context.source_card_id);
-            assert(cardp->getCurrentSubTypes().size() == 1);
-            auto type{cardp->getCurrentSubTypes()[0]};
-            return m_basic_land_ability_map->at(type)->createEffect(game,
-                                                                    context);
-        }
+            core::Game &game, AbilityContext context) const override;
 
         const ManaAbility *getManaAbility(core::Game &game,
-                                          const AbilityContext &context) const
-        {
-            auto *card{game.getCardByID(context.source_card_id)};
-            std::cout << card->getCurrentSubTypes().size() << '\n';
-            assert(card->getCurrentSubTypes().size() == 1);
-            auto type{card->getCurrentSubTypes()[0]};
-            return m_basic_land_ability_map->at(type);
-        }
+                                          const AbilityContext &context) const;
 
     private:
-        const std::unordered_map<core::SubType, const ManaAbility *>
-            *m_basic_land_ability_map = &s_land_ability_map;
+        const std::unordered_map<core::SubType, std::unique_ptr<ManaAbility>>
+            m_basic_land_ability_map;
     };
 } // namespace dandan::abilities
 

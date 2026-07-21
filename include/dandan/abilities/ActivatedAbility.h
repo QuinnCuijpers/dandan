@@ -46,18 +46,13 @@ namespace dandan::abilities
         /** Get the cost of the ability
          * @return The cost of the ability
          */
-        [[nodiscard]] const costs::ICost *getCost() const
-        {
-            return m_cost.get();
-        }
+        [[nodiscard]] const costs::ICost *getCost() const;
 
         /** Get the effect of the ability
          * @return The effect of the ability
          */
-        [[nodiscard]] const effects::IOneShotEffectDefinition *getEffect() const
-        {
-            return m_effect.get();
-        }
+        [[nodiscard]] const effects::IOneShotEffectDefinition *getEffect()
+            const;
 
         [[nodiscard]] bool canActivate(
             core::Game &game, const AbilityContext &context) const override;

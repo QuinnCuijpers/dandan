@@ -11,6 +11,16 @@
 
 namespace dandan::abilities
 {
+
+    AbilityType::AbilityType(Type type) : m_type(type)
+    {
+    }
+
+    AbilityType::Type AbilityType::getType() const
+    {
+        return m_type;
+    }
+
     AbilityType AbilityType::from(const IAbility *ability)
     {
         if (dynamic_cast<const ActivatedAbility *>(ability) != nullptr)
