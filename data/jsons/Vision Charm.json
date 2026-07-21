@@ -1,38 +1,39 @@
 {
-    "abilities": [
-        {
+  "abilities": [
+    {
+      "data": {
+        "effect_list": [
+          {
+            "type": "ModalEffect",
             "data": {
-                "effect_list": [
-                    {
-                        "type": "ModalEffect",
-                        "data": {
-                            "options": [
-                                {
-                                    "type": "MillEffect",
-                                    "data": {
-                                        "amount": 4,
-                                        "targets": [
-                                            {
-                                                "types": [
-                                                    "Player"
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "type": "ChangeLandTypeEffect",
-                                    "data": {}
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "type": "SpellAbility"
-        }
-    ],
-    "name": "Vision Charm",
-    "type": "Instant",
-    "cost": "U"
+              "options": [
+                {
+                  "type": "MillEffect",
+                  "data": {
+                    "amount": 4,
+                    "targets": [
+                      {
+                        "types": [
+                          "Player"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "ChangeLandTypeEffect",
+                  "data": {}
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "SpellAbility"
+    }
+  ],
+  "color": "Blue",
+  "name": "Vision Charm",
+  "type": "Instant",
+  "cost": "U"
 }

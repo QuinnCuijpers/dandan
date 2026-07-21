@@ -1,27 +1,28 @@
 {
-    "abilities": [
-        {
+  "abilities": [
+    {
+      "data": {
+        "effect_list": [
+          {
+            "type": "BounceEffect",
             "data": {
-                "effect_list": [
-                    {
-                        "type": "BounceEffect",
-                        "data": {
-                            "targets": [
-                                {
-                                    "types": [
-                                        "Spell",
-                                        "Creature"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "type": "SpellAbility"
-        }
-    ],
-    "name": "Unsubstantiate",
-    "type": "Instant",
-    "cost": "(1)U"
+              "targets": [
+                {
+                  "types": [
+                    "Spell",
+                    "Creature"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "SpellAbility"
+    }
+  ],
+  "color": "Blue",
+  "name": "Unsubstantiate",
+  "type": "Instant",
+  "cost": "(1)U"
 }

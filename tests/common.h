@@ -39,6 +39,7 @@
             formatCardName(#name), cost, dandan::CardData::Type::type,         \
                 dandan::core::SubType::None,                                   \
                 dandan::core::CardData::SuperType::None, name##_Abilities(),   \
+                std::nullopt, dandan::core::ColorWord::Blue                    \
         }                                                                      \
     }
 
@@ -54,7 +55,7 @@ inline std::string CardParamName(const std::string_view raw_name)
     return name;
 }
 
-inline static std::string formatCardName(std::string_view name)
+inline std::string formatCardName(std::string_view name)
 {
     std::string result{};
     for (char char_ : name)

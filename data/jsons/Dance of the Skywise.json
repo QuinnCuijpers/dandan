@@ -1,41 +1,42 @@
 {
-    "abilities": [
-        {
+  "abilities": [
+    {
+      "data": {
+        "effect_list": [
+          {
             "data": {
-                "effect_list": [
-                    {
-                        "data": {
-                            "characteristics": {
-                                "additional_keywords": [
-                                    "Flying"
-                                ],
-                                "base_power": 4,
-                                "base_thoughness": 4,
-                                "color": "Blue",
-                                "loses_all_abilities": true,
-                                "subtypes": [
-                                    "Dragon",
-                                    "Illusion"
-                                ]
-                            },
-                            "expires": "EndOfTurn",
-                            "targets": [
-                                {
-                                    "controller": "You",
-                                    "types": [
-                                        "Creature"
-                                    ]
-                                }
-                            ]
-                        },
-                        "type": "ChangeCharacteristicsEffect"
-                    }
+              "characteristics": {
+                "additional_keywords": [
+                  "Flying"
+                ],
+                "base_power": 4,
+                "base_thoughness": 4,
+                "color": "Blue",
+                "loses_all_abilities": true,
+                "subtypes": [
+                  "Dragon",
+                  "Illusion"
                 ]
+              },
+              "expires": "EndOfTurn",
+              "targets": [
+                {
+                  "controller": "You",
+                  "types": [
+                    "Creature"
+                  ]
+                }
+              ]
             },
-            "type": "SpellAbility"
-        }
-    ],
-    "cost": "(1)U",
-    "name": "Dance of the Skywise",
-    "type": "Instant"
+            "type": "ChangeCharacteristicsEffect"
+          }
+        ]
+      },
+      "type": "SpellAbility"
+    }
+  ],
+  "color": "Blue",
+  "cost": "(1)U",
+  "name": "Dance of the Skywise",
+  "type": "Instant"
 }

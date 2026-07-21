@@ -1,48 +1,48 @@
 {
-    "abilities": [
-        {
-            "data": {
-                "kind": "state",
-                "effect": {
-                    "data": {},
-                    "type": "SelfSacrificeEffect"
-                },
-                "condition": {
-                    "data": {
-                        "type": "Island"
-                    },
-                    "type": "SelfControlsNoBasicCondition"
-                }
-            },
-            "type": "TriggeredAbility"
+  "abilities": [
+    {
+      "data": {
+        "kind": "state",
+        "effect": {
+          "data": {},
+          "type": "SelfSacrificeEffect"
         },
-        {
-            "data": {
-                "continuous_effect": {
-                    "data": {
-                        "condition": {
-                            "data": {
-                                "type": "Island"
-                            },
-                            "type": "DefenderControlsNoBasicCondition"
-                        }
-                    },
-                    "type": "AttackPreventionEffect"
-                },
-                "static_type": "Prevention"
-            },
-            "type": "StaticAbility"
+        "condition": {
+          "data": {
+            "type": "Island"
+          },
+          "type": "SelfControlsNoBasicCondition"
         }
-    ],
-    "color": "Blue",
-    "cost": "UU",
-    "name": "Dandan",
-    "stats": {
-        "power": 4,
-        "toughness": 1
+      },
+      "type": "TriggeredAbility"
     },
-    "subtypes": [
-        "Fish"
-    ],
-    "type": "Creature"
+    {
+      "data": {
+        "continuous_effect": {
+          "data": {
+            "condition": {
+              "data": {
+                "type": "Island"
+              },
+              "type": "DefenderControlsNoBasicCondition"
+            }
+          },
+          "type": "AttackPreventionEffect"
+        },
+        "static_type": "Prevention"
+      },
+      "type": "StaticAbility"
+    }
+  ],
+  "color": "Blue",
+  "cost": "UU",
+  "name": "Dandan",
+  "stats": {
+    "power": 4,
+    "toughness": 1
+  },
+  "subtypes": [
+    "Fish"
+  ],
+  "type": "Creature"
 }

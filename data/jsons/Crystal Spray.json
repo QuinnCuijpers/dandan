@@ -1,34 +1,35 @@
 {
-    "abilities": [
-        {
+  "abilities": [
+    {
+      "data": {
+        "effect_list": [
+          {
+            "type": "MindBendEffect",
             "data": {
-                "effect_list": [
-                    {
-                        "type": "MindBendEffect",
-                        "data": {
-                            "targets": [
-                                {
-                                    "types": [
-                                        "Spell",
-                                        "Permanent"
-                                    ]
-                                }
-                            ],
-                            "expires": "EndOfTurn"
-                        }
-                    },
-                    {
-                        "type": "DrawEffect",
-                        "data": {
-                            "amount": 1
-                        }
-                    }
-                ]
-            },
-            "type": "SpellAbility"
-        }
-    ],
-    "name": "Crystal Spray",
-    "type": "Instant",
-    "cost": "(2)U"
+              "targets": [
+                {
+                  "types": [
+                    "Spell",
+                    "Permanent"
+                  ]
+                }
+              ],
+              "expires": "EndOfTurn"
+            }
+          },
+          {
+            "type": "DrawEffect",
+            "data": {
+              "amount": 1
+            }
+          }
+        ]
+      },
+      "type": "SpellAbility"
+    }
+  ],
+  "color": "Blue",
+  "name": "Crystal Spray",
+  "type": "Instant",
+  "cost": "(2)U"
 }

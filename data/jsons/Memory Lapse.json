@@ -1,26 +1,27 @@
 {
-    "abilities": [
-        {
+  "abilities": [
+    {
+      "data": {
+        "effect_list": [
+          {
+            "type": "MemoryLapseEffect",
             "data": {
-                "effect_list": [
-                    {
-                        "type": "MemoryLapseEffect",
-                        "data": {
-                            "targets": [
-                                {
-                                    "types": [
-                                        "Spell"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "type": "SpellAbility"
-        }
-    ],
-    "name": "Memory Lapse",
-    "type": "Instant",
-    "cost": "(1)U"
+              "targets": [
+                {
+                  "types": [
+                    "Spell"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "SpellAbility"
+    }
+  ],
+  "color": "Blue",
+  "name": "Memory Lapse",
+  "type": "Instant",
+  "cost": "(1)U"
 }

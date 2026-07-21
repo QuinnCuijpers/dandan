@@ -1,26 +1,27 @@
 {
-    "abilities": [
-        {
+  "abilities": [
+    {
+      "data": {
+        "effect_list": [
+          {
+            "type": "MindBendEffect",
             "data": {
-                "effect_list": [
-                    {
-                        "type": "MindBendEffect",
-                        "data": {
-                            "targets": [
-                                {
-                                    "types": [
-                                        "Permanent"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "type": "SpellAbility"
-        }
-    ],
-    "name": "Mind Bend",
-    "type": "Instant",
-    "cost": "U"
+              "targets": [
+                {
+                  "types": [
+                    "Permanent"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "SpellAbility"
+    }
+  ],
+  "color": "Blue",
+  "name": "Mind Bend",
+  "type": "Instant",
+  "cost": "U"
 }
