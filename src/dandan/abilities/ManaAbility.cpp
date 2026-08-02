@@ -7,6 +7,16 @@
 
 namespace dandan::abilities
 {
+    ManaAbility::ManaAbility(mana::ManaList manaList)
+        : m_mana_list(std::move(manaList))
+    {
+    }
+
+    ManaAbility::ManaAbility(std::unique_ptr<costs::ICost> cost,
+                             mana::ManaList manaList)
+        : m_cost(std::move(cost)), m_mana_list(std::move(manaList))
+    {
+    }
 
     std::string ManaAbility::displayOption(size_t index) const
     {
@@ -38,6 +48,17 @@ namespace dandan::abilities
         return res;
     }
 
+    [[nodiscard]] const mana::ManaList *ManaAbility::getManaList() const
+    {
+        return &m_mana_list;
+    }
+
+    [[nodiscard]] const costs::ICost *ManaAbility::getCost() const
+
+    {
+        return m_cost.get();
+    }
+
     std::unique_ptr<effects::IOneShotEffect> ManaAbility::createEffect(
         [[maybe_unused]] core::Game &game,
         [[maybe_unused]] AbilityContext context) const
@@ -67,6 +88,11 @@ namespace dandan::abilities
                                   game.getPlayer(source->getControllerID()));
         }
         return true;
+    }
+
+    [[nodiscard]] size_t ManaAbility::optionsAmount() const
+    {
+        return m_mana_list.getOptions().size();
     }
 
 } // namespace dandan::abilities

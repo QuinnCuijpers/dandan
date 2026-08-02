@@ -23,10 +23,7 @@ namespace dandan::abilities
          */
         StateTriggeredAbility(
             std::unique_ptr<conditions::ICondition> condition,
-            std::unique_ptr<effects::IOneShotEffectDefinition> effect)
-            : m_condition(std::move(condition)), m_effect(std::move(effect))
-        {
-        }
+            std::unique_ptr<effects::IOneShotEffectDefinition> effect);
 
         /** Create an effect instance for this ability.
          * @param game The game instance.
@@ -35,42 +32,23 @@ namespace dandan::abilities
          */
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] AbilityContext context) const override
-        {
-            return m_effect->bind(
-                game, effects::EffectContext(context.source_card_id,
-                                             context.controller_id));
-        }
+            [[maybe_unused]] AbilityContext context) const override;
 
         /** Get the condition for the ability as a const pointer
          * @return The condition for the ability
          */
-        [[nodiscard]] const conditions::ICondition *condition() const
-        {
-            return m_condition.get();
-        }
+        [[nodiscard]] const conditions::ICondition *condition() const;
 
         /** Get the condition for the ability as a mutable pointer
          * @return The condition for the ability
          */
-        [[nodiscard]] conditions::ICondition *condition()
-        {
-            return m_condition.get();
-        }
+        [[nodiscard]] conditions::ICondition *condition();
 
         /** Get the effect of the ability
          * @return The effect of the ability
          */
-        [[nodiscard]] const effects::IOneShotEffectDefinition *getEffect() const
-        {
-            return m_effect.get();
-        }
-
-        // void replaceBasicWord(core::SubType from,
-        //                       core::SubType new_basic) override;
-
-        // void replaceColorWord(core::ColorWord from,
-        //                       core::ColorWord new_color) override;
+        [[nodiscard]] const effects::IOneShotEffectDefinition *getEffect()
+            const;
 
     private:
         std::unique_ptr<conditions::ICondition> m_condition;

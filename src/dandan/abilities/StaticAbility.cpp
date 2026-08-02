@@ -6,6 +6,12 @@
 namespace dandan::abilities
 {
 
+    StaticAbility::StaticAbility(
+        Type type, std::unique_ptr<effects::IContinuousEffect> effect)
+        : m_type(type), m_effect(std::move(effect))
+    {
+    }
+
     std::unique_ptr<effects::IOneShotEffect> StaticAbility::createEffect(
         [[maybe_unused]] core::Game &game,
         [[maybe_unused]] AbilityContext context) const

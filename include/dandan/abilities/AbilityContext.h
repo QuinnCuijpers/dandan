@@ -15,25 +15,6 @@ namespace dandan::abilities
      */
     struct AbilityContext
     {
-        /** Constructor
-         * @param source_card_id The CardID of the card that generated the
-         * @param controller_id The PlayerID of the player who controls the
-         * ability
-         * @param chosen_mode_index An optional index of the chosen mode for
-         * modal ability
-         * @param text_replacements An optional vector of text replacements that
-         * are being applied to the ability
-         */
-        AbilityContext(core::CardID source_card_id,
-                       core::PlayerID controller_id,
-                       std::optional<size_t> chosen_mode_index = std::nullopt,
-                       std::optional<std::vector<core::TextReplacement>>
-                           text_replacements = std::nullopt)
-            : source_card_id(source_card_id), controller_id(controller_id),
-              chosen_mode_index(chosen_mode_index),
-              text_replacements(std::move(text_replacements))
-        {
-        }
 
         /// The CardID of the card that generated the ability.
         core::CardID source_card_id;
@@ -41,9 +22,10 @@ namespace dandan::abilities
         /// generally this is also the player who controls the ability
         core::PlayerID controller_id;
         /// for modal abilities this represents the index of the chosen mode
-        std::optional<size_t> chosen_mode_index;
+        std::optional<size_t> chosen_mode_index = std::nullopt;
         /// Optional text replacements
-        std::optional<std::vector<core::TextReplacement>> text_replacements;
+        std::optional<std::vector<core::TextReplacement>> text_replacements =
+            std::nullopt;
     };
 } // namespace dandan::abilities
 

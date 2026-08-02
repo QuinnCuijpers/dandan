@@ -22,39 +22,28 @@ namespace dandan::abilities
         /** Constructor
          * @param manaList The list of mana to produce
          */
-        explicit ManaAbility(mana::ManaList manaList)
-            : m_mana_list(std::move(manaList))
-        {
-        }
-
-        [[nodiscard]] std::string display() const override;
-
-        [[nodiscard]] std::string displayOption(size_t index) const override;
+        explicit ManaAbility(mana::ManaList manaList);
 
         /** Constructor
          * @param cost The cost to activate the ability
          * @param manaList The list of mana to produce
          */
-        ManaAbility(std::unique_ptr<costs::ICost> cost, mana::ManaList manaList)
-            : m_cost(std::move(cost)), m_mana_list(std::move(manaList))
-        {
-        }
+        ManaAbility(std::unique_ptr<costs::ICost> cost,
+                    mana::ManaList manaList);
+
+        [[nodiscard]] std::string display() const override;
+
+        [[nodiscard]] std::string displayOption(size_t index) const override;
 
         /** Get the mana produced by the ability
          * @return The mana produced by the ability
          */
-        [[nodiscard]] const mana::ManaList *getManaList() const
-        {
-            return &m_mana_list;
-        }
+        [[nodiscard]] const mana::ManaList *getManaList() const;
 
         /** Get the cost of the ability
          * @return The cost of the ability
          */
-        [[nodiscard]] const costs::ICost *getCost() const
-        {
-            return m_cost.get();
-        }
+        [[nodiscard]] const costs::ICost *getCost() const;
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
@@ -62,10 +51,7 @@ namespace dandan::abilities
         [[nodiscard]] bool canActivate(
             core::Game &game, const AbilityContext &context) const override;
 
-        [[nodiscard]] size_t optionsAmount() const override
-        {
-            return m_mana_list.getOptions().size();
-        }
+        [[nodiscard]] size_t optionsAmount() const override;
 
     private:
         std::unique_ptr<costs::ICost> m_cost{

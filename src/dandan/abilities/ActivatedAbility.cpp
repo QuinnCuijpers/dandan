@@ -6,6 +6,13 @@
 
 namespace dandan::abilities
 {
+    ActivatedAbility::ActivatedAbility(
+        std::unique_ptr<costs::ICost> cost,
+        std::unique_ptr<effects::IOneShotEffectDefinition> effect)
+        : m_cost(std::move(cost)), m_effect(std::move(effect))
+    {
+    }
+
     std::string ActivatedAbility::display() const
     {
         std::string res{};

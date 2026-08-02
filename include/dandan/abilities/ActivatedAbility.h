@@ -30,10 +30,7 @@ namespace dandan::abilities
          */
         ActivatedAbility(
             std::unique_ptr<costs::ICost> cost,
-            std::unique_ptr<effects::IOneShotEffectDefinition> effect)
-            : m_cost(std::move(cost)), m_effect(std::move(effect))
-        {
-        }
+            std::unique_ptr<effects::IOneShotEffectDefinition> effect);
 
         [[nodiscard]] std::string display() const override;
         [[nodiscard]] std::string displayOption(size_t index) const override;

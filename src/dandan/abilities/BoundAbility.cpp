@@ -5,6 +5,17 @@
 
 namespace dandan::abilities
 {
+
+    BoundAbility::BoundAbility(
+        const IAbility &definition, core::Card *source_card,
+        std::optional<size_t> chosen_mode_index,
+        std::optional<std::vector<core::TextReplacement>> text_replacements)
+        : m_definition(&definition), m_source_card(source_card),
+          m_ability_type(AbilityType::from(&definition)),
+          m_chosen_mode_index(chosen_mode_index),
+          m_text_replacement(std::move(text_replacements))
+    {
+    }
     core::CardID BoundAbility::sourceCard() const
     {
         return m_source_card->getID();
@@ -15,10 +26,16 @@ namespace dandan::abilities
         return m_source_card->getControllerID();
     }
 
-    /** Create an effect instance for this ability.
-     * @param game The game instance.
-     * @return The created effect instance.
-     */
+    [[nodiscard]] const IAbility &BoundAbility::definition() const
+    {
+        return *m_definition;
+    }
+
+    [[nodiscard]] AbilityType::Type BoundAbility::type() const
+    {
+        return m_ability_type.getType();
+    }
+
     [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> BoundAbility::
         createEffect(core::Game &game) const
     {
@@ -29,9 +46,31 @@ namespace dandan::abilities
         return effect;
     }
 
+    void BoundAbility::addTextReplacement(
+        core::TextReplacement text_replacement)
+    {
+        if (m_text_replacement.has_value())
+        {
+            m_text_replacement->push_back(text_replacement);
+        }
+        else
+        {
+            m_text_replacement =
+                std::vector<core::TextReplacement>{text_replacement};
+        }
+    }
+
     AbilityContext BoundAbility::getContext() const
     {
         return {sourceCard(), sourcePlayer(), m_chosen_mode_index,
                 m_text_replacement};
     }
+
+    bool BoundAbility::operator==(const BoundAbility &ability) const
+    {
+        return ability.m_ability_type.getType() == m_ability_type.getType() &&
+               m_definition == ability.m_definition &&
+               m_source_card == ability.m_source_card;
+    }
+
 } // namespace dandan::abilities

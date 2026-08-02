@@ -5,6 +5,14 @@
 
 namespace dandan::abilities
 {
+
+    SpellAbility::SpellAbility(
+        std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
+            &&effects)
+        : m_effects(std::move(effects))
+    {
+    }
+
     std::unique_ptr<effects::IOneShotEffect> SpellAbility::createEffect(
         [[maybe_unused]] core::Game &game,
         [[maybe_unused]] AbilityContext context) const
@@ -30,6 +38,13 @@ namespace dandan::abilities
         }
         return std::make_unique<effects::EffectList>(std::move(bound_effects),
                                                      effect_context);
+    }
+
+    [[nodiscard]] const std::vector<
+        std::unique_ptr<effects::IOneShotEffectDefinition>> &
+    SpellAbility::effects() const
+    {
+        return m_effects;
     }
 
 } // namespace dandan::abilities

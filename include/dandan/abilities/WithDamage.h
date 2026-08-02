@@ -1,10 +1,7 @@
 #ifndef WITHDAMAGE_H
 #define WITHDAMAGE_H
 
-#include <utility>
-
 #include "IAbilityDecorator.h"
-#include "dandan/abilities/EventTriggeredAbility.h"
 
 namespace dandan::abilities
 {
@@ -20,16 +17,13 @@ namespace dandan::abilities
          * the self damage amount is set to 1 by default
          * @param ability The ability to decorate
          */
-        explicit WithDamage(std::unique_ptr<IAbility> ability)
-            : IAbilityDecorator(std::move(ability)) {};
+        explicit WithDamage(std::unique_ptr<IAbility> ability);
+
         /** Constructor
          * @param ability The ability to decorate
          * @param damage The amount of damage to add
          */
-        WithDamage(std::unique_ptr<IAbility> ability, int damage)
-            : IAbilityDecorator(std::move(ability)), m_damage{damage}
-        {
-        }
+        WithDamage(std::unique_ptr<IAbility> ability, int damage);
 
         [[nodiscard]] std::string display() const override;
         [[nodiscard]] std::string displayOption(size_t index) const override;
@@ -37,10 +31,7 @@ namespace dandan::abilities
         /** Get the damage amount
          * @return The damage amount
          */
-        [[nodiscard]] int getDamage() const
-        {
-            return m_damage;
-        }
+        [[nodiscard]] int getDamage() const;
 
         /** Check if the decorated ability applies to a given event and context.
          * @param event The event to check.
@@ -48,17 +39,7 @@ namespace dandan::abilities
          * @return True if the ability applies, false otherwise.
          */
         [[nodiscard]] bool appliesTo(const events::IEvent &event,
-                                     abilities::AbilityContext context) const
-        {
-            if (const auto *eventTriggeredAbility =
-                    dynamic_cast<const EventTriggeredAbility *>(
-                        m_ability.get()))
-            {
-                return eventTriggeredAbility->appliesTo(event,
-                                                        std::move(context));
-            }
-            return false;
-        }
+                                     abilities::AbilityContext context) const;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;

@@ -38,10 +38,7 @@ namespace dandan::abilities
          *@param effect The continuous effect of the static ability
          */
         StaticAbility(Type type,
-                      std::unique_ptr<effects::IContinuousEffect> effect)
-            : m_type(type), m_effect(std::move(effect))
-        {
-        }
+                      std::unique_ptr<effects::IContinuousEffect> effect);
 
         /** Get the type of the static ability
          * @return The type of the static ability

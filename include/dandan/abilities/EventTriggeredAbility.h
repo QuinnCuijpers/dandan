@@ -6,7 +6,6 @@
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/triggers/ITrigger.h"
 #include <memory>
-#include <utility>
 
 namespace dandan::abilities
 {
@@ -25,10 +24,7 @@ namespace dandan::abilities
          */
         EventTriggeredAbility(
             std::unique_ptr<dandan::triggers::ITrigger> trigger,
-            std::unique_ptr<dandan::effects::IOneShotEffectDefinition> effect)
-            : m_trigger(std::move(trigger)), m_effect(std::move(effect))
-        {
-        }
+            std::unique_ptr<dandan::effects::IOneShotEffectDefinition> effect);
 
         /** Check if the triiggered ability applies to a given event and
          * context.
@@ -37,44 +33,26 @@ namespace dandan::abilities
          * @return True if the ability applies, false otherwise.
          */
         [[nodiscard]] bool appliesTo(const events::IEvent &event,
-                                     abilities::AbilityContext context) const
-        {
-            return m_trigger->triggersOn(event, std::move(context));
-        }
+                                     abilities::AbilityContext context) const;
 
         /** Get the trigger for the ability as a const pointer
          * @return The trigger for the ability
          */
-        [[nodiscard]] const dandan::triggers::ITrigger *trigger() const
-        {
-            return m_trigger.get();
-        }
+        [[nodiscard]] const dandan::triggers::ITrigger *trigger() const;
 
         /** Get the trigger for the ability as a mutable pointer
          * @return The trigger for the ability
          */
-        [[nodiscard]] dandan::triggers::ITrigger *trigger()
-        {
-            return m_trigger.get();
-        }
+        [[nodiscard]] dandan::triggers::ITrigger *trigger();
 
         /** Get the effect of the ability
          * @return The effect of the ability
          */
         [[nodiscard]] const dandan::effects::IOneShotEffectDefinition *
-        getEffect() const
-        {
-            return m_effect.get();
-        }
+        getEffect() const;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
-
-        // void replaceBasicWord(core::SubType from,
-        //                       core::SubType new_basic) override;
-
-        // void replaceColorWord(core::ColorWord from,
-        //                       core::ColorWord new_color) override;
 
     private:
         std::unique_ptr<dandan::triggers::ITrigger> m_trigger;

@@ -20,12 +20,10 @@ namespace dandan::abilities
          * @param effects The vector of effect definitions for the spell
          * ability.
          */
+        // TODO: change to take value instead of Rvalue
         explicit SpellAbility(
             std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
-                &&effects)
-            : m_effects(std::move(effects))
-        {
-        }
+                &&effects);
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
@@ -35,10 +33,7 @@ namespace dandan::abilities
          */
         [[nodiscard]] const std::vector<
             std::unique_ptr<effects::IOneShotEffectDefinition>> &
-        effects() const
-        {
-            return m_effects;
-        }
+        effects() const;
 
     private:
         std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
