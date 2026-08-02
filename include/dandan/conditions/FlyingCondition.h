@@ -15,10 +15,7 @@ namespace dandan::conditions
             std::optional<effects::EffectContext> context =
                 std::nullopt) const override;
 
-        [[nodiscard]] std::unique_ptr<ICondition> clone() const override
-        {
-            return std::make_unique<FlyingCondition>();
-        }
+        [[nodiscard]] std::unique_ptr<ICondition> clone() const override;
     };
 } // namespace dandan::conditions
 

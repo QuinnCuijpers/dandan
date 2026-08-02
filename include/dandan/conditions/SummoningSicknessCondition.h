@@ -18,19 +18,14 @@ namespace dandan::conditions
         /** Constructor
          * @param card_id The ID of the card to check for summoning sickness
          */
-        explicit SummoningSicknessCondition(core::CardID card_id)
-            : m_card_id(card_id)
-        {
-        }
+        explicit SummoningSicknessCondition(core::CardID card_id);
+
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
             std::optional<effects::EffectContext> context =
                 std::nullopt) const override;
 
-        [[nodiscard]] std::unique_ptr<ICondition> clone() const override
-        {
-            return std::make_unique<SummoningSicknessCondition>(m_card_id);
-        }
+        [[nodiscard]] std::unique_ptr<ICondition> clone() const override;
 
     private:
         core::CardID m_card_id;

@@ -1,7 +1,6 @@
 #ifndef DANDAN_DEFENDERCONTROLSNOBASICCONDITION_H
 #define DANDAN_DEFENDERCONTROLSNOBASICCONDITION_H
 
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/IMindBendable.h"
@@ -14,15 +13,9 @@ namespace dandan::conditions
     {
 
     public:
-        explicit DefenderControlsNoBasicCondition(core::SubType type)
-            : m_type(type)
-        {
-        }
+        explicit DefenderControlsNoBasicCondition(core::SubType type);
 
-        [[nodiscard]] core::SubType type() const
-        {
-            return m_type;
-        }
+        [[nodiscard]] core::SubType type() const;
 
         [[nodiscard]] bool isSatisfied(
             const core::Game &game,
@@ -36,13 +29,8 @@ namespace dandan::conditions
 
         // NOLINTBEGIN(bugprone-easily-swappable-parameters)
         void replaceBasicWord(core::SubType from,
-                              core::SubType new_basic) override
-        {
-            if (m_type == from)
-            {
-                m_type = new_basic;
-            }
-        }
+                              core::SubType new_basic) override;
+
         // NOLINTEND(bugprone-easily-swappable-parameters)
 
     private:

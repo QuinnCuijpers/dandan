@@ -1,5 +1,4 @@
 #include "dandan/conditions/PlayedLandCondition.h"
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/core/Game.h"
 #include <optional>
 
@@ -10,5 +9,10 @@ namespace dandan::conditions
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
         return game.activePlayer().playedLandThisTurn();
+    }
+
+    [[nodiscard]] std::unique_ptr<ICondition> PlayedLandCondition::clone() const
+    {
+        return std::make_unique<PlayedLandCondition>();
     }
 } // namespace dandan::conditions

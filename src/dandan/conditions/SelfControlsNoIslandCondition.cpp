@@ -5,6 +5,18 @@
 
 namespace dandan::conditions
 {
+
+    SelfControlsNoBasicCondition::SelfControlsNoBasicCondition(
+        core::SubType basic_land_type)
+        : m_basic_type(basic_land_type)
+    {
+    }
+
+    [[nodiscard]] core::SubType SelfControlsNoBasicCondition::type() const
+    {
+        return m_basic_type;
+    }
+
     bool SelfControlsNoBasicCondition::isSatisfied(
         [[maybe_unused]] const core::Game &game,
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
@@ -46,5 +58,16 @@ namespace dandan::conditions
         return std::all_of(battlefield.getLands().begin(),
                            battlefield.getLands().end(), no_basic_filter);
     }
+
+    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+    void SelfControlsNoBasicCondition::replaceBasicWord(core::SubType from,
+                                                        core::SubType new_basic)
+    {
+        if (m_basic_type == from)
+        {
+            m_basic_type = new_basic;
+        }
+    }
+    // NOLINTEND(bugprone-easily-swappable-parameters)
 
 } // namespace dandan::conditions

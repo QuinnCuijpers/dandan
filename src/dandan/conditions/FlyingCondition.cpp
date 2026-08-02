@@ -19,4 +19,9 @@ namespace dandan::conditions
             [](const abilities::BoundAbility &ability)
             { return core::isFlyingAbility(ability.definition()); });
     }
+
+    [[nodiscard]] std::unique_ptr<ICondition> FlyingCondition::clone() const
+    {
+        return std::make_unique<FlyingCondition>();
+    }
 } // namespace dandan::conditions

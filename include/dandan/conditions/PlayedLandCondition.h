@@ -1,12 +1,9 @@
 #ifndef DANDAN_PLAYEDLANDCONDITION_H
 #define DANDAN_PLAYEDLANDCONDITION_H
 
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
-#include "dandan/core/TextReplacement.h"
 #include <memory>
 #include <optional>
-#include <vector>
 
 namespace dandan::conditions
 {
@@ -24,10 +21,7 @@ namespace dandan::conditions
             std::optional<effects::EffectContext> context =
                 std::nullopt) const override;
 
-        [[nodiscard]] std::unique_ptr<ICondition> clone() const override
-        {
-            return std::make_unique<PlayedLandCondition>();
-        }
+        [[nodiscard]] std::unique_ptr<ICondition> clone() const override;
     };
 } // namespace dandan::conditions
 

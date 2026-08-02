@@ -1,12 +1,14 @@
 #include "dandan/conditions/SummoningSicknessCondition.h"
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/core/Game.h"
-#include "dandan/core/TextReplacement.h"
 #include <optional>
-#include <vector>
 
 namespace dandan::conditions
 {
+
+    SummoningSicknessCondition::SummoningSicknessCondition(core::CardID card_id)
+        : m_card_id(card_id)
+    {
+    }
 
     bool SummoningSicknessCondition::isSatisfied(
         const core::Game &game,
@@ -23,6 +25,12 @@ namespace dandan::conditions
         // TODO: consider splitting this into two conditions, one for summoning
         // sickness and one for attacking status
         return card->getSummoningSickness() || card->isAttacking();
+    }
+
+    [[nodiscard]] std::unique_ptr<ICondition> SummoningSicknessCondition::
+        clone() const
+    {
+        return std::make_unique<SummoningSicknessCondition>(m_card_id);
     }
 
 } // namespace dandan::conditions

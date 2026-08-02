@@ -13,6 +13,16 @@
 
 namespace dandan::conditions
 {
+    DefenderControlsNoBasicCondition::DefenderControlsNoBasicCondition(
+        core::SubType type)
+        : m_type(type)
+    {
+    }
+
+    [[nodiscard]] core::SubType DefenderControlsNoBasicCondition::type() const
+    {
+        return m_type;
+    }
 
     bool DefenderControlsNoBasicCondition::isSatisfied(
         const core::Game &game,
@@ -20,6 +30,7 @@ namespace dandan::conditions
     {
         auto basic{m_type};
         auto text_replacements{context->text_replacements};
+
         if (text_replacements.has_value())
         {
             auto text_replacements_v{text_replacements.value()};
@@ -37,6 +48,7 @@ namespace dandan::conditions
                 }
             }
         }
+
         auto no_basic_filter = [&](const core::CardID &card_id)
         {
             const auto *card = game.getCardByID(card_id);
@@ -46,11 +58,25 @@ namespace dandan::conditions
                                [&](core::SubType type)
                                { return basic != type; });
         };
+
         std::cout << "Checking DefenderControlsNoIslandCondition for player "
                   << game.nonActivePlayer().getID().id() << '\n';
+
         const core::Player &defending_player = game.nonActivePlayer();
         const auto &battlefield{defending_player.battlefield()};
+
         return std::all_of(battlefield.getLands().begin(),
                            battlefield.getLands().end(), no_basic_filter);
     }
+
+    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+    void DefenderControlsNoBasicCondition::replaceBasicWord(
+        core::SubType from, core::SubType new_basic)
+    {
+        if (m_type == from)
+        {
+            m_type = new_basic;
+        }
+    }
+    // NOLINTEND(bugprone-easily-swappable-parameters)
 } // namespace dandan::conditions
