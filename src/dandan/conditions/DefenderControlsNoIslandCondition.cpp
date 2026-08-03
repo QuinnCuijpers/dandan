@@ -1,9 +1,7 @@
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Card.h"
-#include "dandan/core/CardData.h"
 #include "dandan/core/Player.h"
-#include "dandan/core/SubType.h"
 #include "dandan/core/TextReplacement.h"
 #include "dandan/effects/EffectContext.h"
 #include <algorithm>
@@ -53,7 +51,7 @@ namespace dandan::conditions
         {
             const auto *card = game.getCardByID(card_id);
             auto subtypes = card->getCurrentSubTypes();
-            return card->getData().getType() == core::CardData::Type::Land &&
+            return card->getData().type == core::Type::Land &&
                    std::all_of(subtypes.begin(), subtypes.end(),
                                [&](core::SubType type)
                                { return basic != type; });

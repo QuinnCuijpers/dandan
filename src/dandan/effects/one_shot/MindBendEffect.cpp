@@ -1,7 +1,6 @@
 #include "dandan/effects/one_shot/MindBendEffect.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
-#include "dandan/core/SubType.h"
 #include "dandan/core/TextReplacement.h"
 #include "dandan/utils/overloadVisitor.h"
 #include "dandan/utils/stringToBasicLandType.h"

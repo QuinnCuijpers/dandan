@@ -67,13 +67,12 @@ namespace dandan::core
                                      { return card_id == other; });
             if (iter != m_cards.end())
             {
-                std::cout << "Removing card:" << card.getData().getName()
-                          << '\n';
+                std::cout << "Removing card:" << card.getData().name << '\n';
                 m_cards.erase(iter);
             }
             else
             {
-                std::cout << "Couldn't find card " << card.getData().getName()
+                std::cout << "Couldn't find card " << card.getData().name
                           << " in hand to remove\n";
             }
         }

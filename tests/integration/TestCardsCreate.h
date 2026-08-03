@@ -3,6 +3,7 @@
 
 #include "dandan/core/CardData.h"
 #include "dandan/dandan.h"
+#include <optional>
 
 inline std::vector<dandan::Card> createTestCards(
     int amount_cards, dandan::core::CardData *cardData = nullptr)
@@ -15,10 +16,11 @@ inline std::vector<dandan::Card> createTestCards(
         static dandan::core::CardData default_card_data{
             "Test Card",
             std::make_unique<dandan::mana::GenericMana>(0),
-            dandan::core::CardData::Type::Land,
-            dandan::core::SubType::Island,
-            dandan::core::CardData::SuperType::None,
-            std::move(abilities)};
+            dandan::core::Type::Land,
+            {dandan::core::SubType::Island},
+            dandan::core::SuperType::None,
+            std::move(abilities),
+            std::nullopt};
 
         cardData = &default_card_data;
     }

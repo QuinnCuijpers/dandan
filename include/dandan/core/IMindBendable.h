@@ -1,8 +1,8 @@
 #ifndef DANDAN_IMINDBENABLE_H
 #define DANDAN_IMINDBENABLE_H
 
+#include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
-#include "dandan/core/SubType.h"
 
 namespace dandan::core
 {

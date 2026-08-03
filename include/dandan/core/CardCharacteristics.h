@@ -4,7 +4,6 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
-#include "dandan/core/SubType.h"
 #include <vector>
 
 namespace dandan::core

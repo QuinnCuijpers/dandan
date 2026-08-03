@@ -8,7 +8,9 @@ TEST(CardDataTest, NonExistantFile)
     const auto *card_name = "NonExistantCard";
     std::ostringstream buffer;
     auto *old = std::cerr.rdbuf(buffer.rdbuf());
-    dandan::core::CardData card_data(card_name);
+    auto card_data(dandan::core::getCardData(card_name));
+
+    EXPECT_FALSE(card_data.has_value());
 
     std::string output = buffer.str();
     std::cerr.rdbuf(old);

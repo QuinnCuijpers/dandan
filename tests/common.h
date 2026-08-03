@@ -12,9 +12,8 @@
         {                                                                      \
             formatCardName(#name),                                             \
                 std::make_unique<dandan::mana::BlueMana>(2),                   \
-                dandan::core::CardData::Type::Creature,                        \
-                dandan::core::SubType::Fish,                                   \
-                dandan::core::CardData::SuperType::None, name##_Abilities(),   \
+                dandan::core::Type::Creature, {dandan::core::SubType::Fish},   \
+                dandan::core::SuperType::None, name##_Abilities(),             \
                 dandan::core::Stats{4, 1}, dandan::core::ColorWord::Blue       \
         }                                                                      \
     }
@@ -26,8 +25,9 @@
         {                                                                      \
             formatCardName(#name),                                             \
                 std::make_unique<dandan::mana::GenericMana>(0),                \
-                dandan::CardData::Type::Land, dandan::core::SubType::subtype,  \
-                dandan::CardData::SuperType::supertype, name##_Abilities()     \
+                dandan::core::Type::Land, {dandan::core::SubType::subtype},    \
+                dandan::core::SuperType::supertype, name##_Abilities(),        \
+                std::nullopt, dandan::core::ColorWord::Colorless               \
         }                                                                      \
     }
 
@@ -36,10 +36,10 @@
     {                                                                          \
         new dandan::CardData                                                   \
         {                                                                      \
-            formatCardName(#name), cost, dandan::CardData::Type::type,         \
-                dandan::core::SubType::None,                                   \
-                dandan::core::CardData::SuperType::None, name##_Abilities(),   \
-                std::nullopt, dandan::core::ColorWord::Blue                    \
+            formatCardName(#name), cost, dandan::core::Type::type,             \
+                {dandan::core::SubType::None}, dandan::core::SuperType::None,  \
+                name##_Abilities(), std::nullopt,                              \
+                dandan::core::ColorWord::Blue                                  \
         }                                                                      \
     }
 

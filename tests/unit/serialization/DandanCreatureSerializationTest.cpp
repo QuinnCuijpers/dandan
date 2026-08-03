@@ -15,9 +15,9 @@ static const std::vector<const dandan::Card *> &getCards()
     return cards;
 };
 
-INSTANTIATE_TEST_SUITE_P(
-    CreatureTests, DeserializeTest, testing::ValuesIn(getCards()),
-    [](::testing::TestParamInfo<const dandan::Card *> info)
-    { return CardParamName(info.param->getData().getName()); });
+INSTANTIATE_TEST_SUITE_P(CreatureTests, DeserializeTest,
+                         testing::ValuesIn(getCards()),
+                         [](::testing::TestParamInfo<const dandan::Card *> info)
+                         { return CardParamName(info.param->getData().name); });
 
 #endif

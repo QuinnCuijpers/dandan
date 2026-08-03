@@ -62,4 +62,4 @@ static const std::vector<const dandan::Card *> &getCards()
 INSTANTIATE_TEST_SUITE_P(
     SpellTests, DeserializeTest, testing::ValuesIn(getCards()),
     [](const ::testing::TestParamInfo<const dandan::Card *> &info)
-    { return CardParamName(info.param->getData().getName()); });
+    { return CardParamName(info.param->getData().name); });

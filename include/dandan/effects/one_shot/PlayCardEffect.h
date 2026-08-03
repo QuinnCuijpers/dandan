@@ -46,32 +46,31 @@ namespace dandan::effects
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{
                 game.getPlayer(game.priorityManager().getPlayerWithPriority())};
-            const auto *mana_cost = m_card.getData().getCost();
+            const auto *mana_cost = m_card.getData().mana_cost.get();
             if (prio_player.manaPool().canPay(*mana_cost))
             {
                 prio_player.manaPool().pay(*mana_cost);
             }
             else
             {
-                throw std::runtime_error(
-                    "Not enough mana to play card " +
-                    std::string{m_card.getData().getName()});
+                throw std::runtime_error("Not enough mana to play card " +
+                                         std::string{m_card.getData().name});
             }
 
             auto *cardp = game.getCardByID(m_card.getID());
-            if (cardp->getData().getType() == core::CardData::Type::Instant ||
-                cardp->getData().getType() == core::CardData::Type::Sorcery)
+            if (cardp->getData().type == core::Type::Instant ||
+                cardp->getData().type == core::Type::Sorcery)
             {
                 auto spell_ability_it{std::find_if(
-                    cardp->getData().getAbilities().begin(),
-                    cardp->getData().getAbilities().end(),
+                    cardp->getData().abilities.begin(),
+                    cardp->getData().abilities.end(),
                     [](const auto &ability)
                     {
                         return dynamic_cast<const abilities::SpellAbility *>(
                                    ability.get()) != nullptr;
                     })};
 
-                if (spell_ability_it == cardp->getData().getAbilities().end())
+                if (spell_ability_it == cardp->getData().abilities.end())
                 {
                     throw std::runtime_error(
                         "Instant or sorcery card does not have a spell "

@@ -12,15 +12,14 @@ namespace dandan::effects
         core::Game &game) const
     {
         // get all cards matching the filter types
-        auto included =
-            [&game](const core::CardID &card_id,
-                    const std::vector<core::CardData::Type> &filter_types)
+        auto included = [&game](const core::CardID &card_id,
+                                const std::vector<core::Type> &filter_types)
         {
             return std::any_of(filter_types.begin(), filter_types.end(),
                                [&card_id, &game](const auto &type)
                                {
                                    const auto *card = game.getCardByID(card_id);
-                                   return card->getData().getType() == type;
+                                   return card->getData().type == type;
                                });
         };
 

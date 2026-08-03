@@ -198,6 +198,8 @@ namespace dandan::core
         size_t m_max_hand_size{STARTING_HAND_SIZE};
         // bool m_won_game{false};
         bool m_lost_game{false};
+
+        mana::Mana getAvailableMana(core::Game &game) const;
     };
 } // namespace dandan::core
 

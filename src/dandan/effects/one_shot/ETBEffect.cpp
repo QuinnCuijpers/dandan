@@ -15,7 +15,7 @@ namespace dandan::effects
         game.moveCardFromZone(game.getPlayer(card->getControllerID()), m_card);
         std::cout << "Applying ETBEffect\n";
         card->setTapped(m_tapped);
-        if (card->getData().getType() == core::CardData::Type::Land)
+        if (card->getData().type == core::Type::Land)
         {
             game.activePlayer().setPlayedLandThisTurn(true);
         }

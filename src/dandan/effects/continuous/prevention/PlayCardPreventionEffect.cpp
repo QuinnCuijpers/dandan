@@ -14,7 +14,7 @@ namespace dandan::effects
         {
             const auto *card{game.getCardByID(play_card_action->getCardID())};
             if (getCondition()->isSatisfied(game, context) &&
-                card->getData().getType() == core::CardData::Type::Land)
+                card->getData().type == core::Type::Land)
             {
                 DLOGI << "Play card prevention effect prevents playing card\n";
                 return true;

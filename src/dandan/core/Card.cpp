@@ -22,17 +22,17 @@ namespace dandan::core
               << " with ID: " << m_card_id.getID() << '\n';
         if (m_card_data != nullptr)
         {
-            auto stats = m_card_data->getStats();
+            auto stats = m_card_data->stats;
             if (stats.has_value())
             {
                 setCurrentPower(stats->power);
                 setCurrentToughness(stats->toughness);
             }
-            setCurrentSubTypes(m_card_data->getSubTypes());
-            getCharacteristics().color = m_card_data->getColor();
+            setCurrentSubTypes(m_card_data->subtypes);
+            getCharacteristics().color = m_card_data->color;
 
             auto bound_abilities{std::vector<abilities::BoundAbility>{}};
-            for (const auto &ability : m_card_data->getAbilities())
+            for (const auto &ability : m_card_data->abilities)
             {
                 auto *definition{ability.get()};
                 auto bound{abilities::BoundAbility{*definition, this}};
@@ -47,24 +47,24 @@ namespace dandan::core
         : m_card_id(CardID::generate()), m_controller_id(controller_id),
           m_card_data(card_data)
     {
-        DLOGI << "Creating card: " << card_data->getName()
+        DLOGI << "Creating card: " << card_data->name
               << " with ID: " << m_card_id.getID() << '\n';
         if (m_card_data != nullptr)
         {
-            auto stats = m_card_data->getStats();
+            auto stats = m_card_data->stats;
             if (stats.has_value())
             {
                 setCurrentPower(stats->power);
                 setCurrentToughness(stats->toughness);
             }
-            setCurrentSubTypes(m_card_data->getSubTypes());
-            getCharacteristics().color = m_card_data->getColor();
+            setCurrentSubTypes(m_card_data->subtypes);
+            getCharacteristics().color = m_card_data->color;
         }
     }
 
     void Card::destroy([[maybe_unused]] Game &game) const
     {
-        std::cout << "Destroying card " << getData().getName() << '\n';
+        std::cout << "Destroying card " << getData().name << '\n';
         auto *card{game.getCardByID(getID())};
         auto &player{game.getPlayer(card->getControllerID())};
         game.moveCardFromZone(player, *card);
@@ -75,6 +75,7 @@ namespace dandan::core
         game.replacementManager().unsubscribe(*card);
         game.graveyard().addCard(*card);
     }
+
     void Card::setCharacteristics(const CardCharacteristics &character,
                                   Game &game)
     {

@@ -7,7 +7,7 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> UntapEffect::apply_impl(
         [[maybe_unused]] core::Game &game) const
     {
-        DLOGI << "Untapping " << m_card.getData().getName() << " with ID "
+        DLOGI << "Untapping " << m_card.getData().name << " with ID "
               << m_card.getID().getID() << "\n";
         m_card.setTapped(false);
         return std::make_unique<events::UntapEvent>(m_card);

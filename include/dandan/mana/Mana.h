@@ -103,9 +103,9 @@ namespace dandan::mana
     public:
         Mana() = default;
         Mana(const Mana &) = delete;
-        Mana(Mana &&) = delete;
+        Mana(Mana &&) = default;
         Mana &operator=(const Mana &) = delete;
-        Mana &operator=(Mana &&) = delete;
+        Mana &operator=(Mana &&) = default;
         virtual ~Mana() = default;
 
         /** Adds mana to the resource pool.

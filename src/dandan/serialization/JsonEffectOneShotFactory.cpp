@@ -401,11 +401,11 @@ namespace dandan::serialization
         }
         if (type == "TutorTopEffect")
         {
-            std::vector<core::CardData::Type> filter_types;
+            std::vector<core::Type> filter_types;
             std::transform(
                 data.at("filter_types").begin(), data.at("filter_types").end(),
                 std::back_inserter(filter_types), [](const auto &type_json)
-                { return type_json.template get<core::CardData::Type>(); });
+                { return type_json.template get<core::Type>(); });
             // for (const auto &type_json : data.at("filter_types"))
             // {
             //     filter_types.push_back(type_json.get<core::CardData::Type>());

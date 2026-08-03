@@ -9,7 +9,6 @@
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
-#include "dandan/core/SubType.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/one_shot/BounceEffect.h"
@@ -109,9 +108,8 @@ Mystical_Tutor_Abilities()
         std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::TutorTopEffectDefinition>(
-            std::vector<dandan::CardData::Type>{
-                dandan::CardData::Type::Instant,
-                dandan::CardData::Type::Sorcery}));
+            std::vector<dandan::core::Type>{dandan::core::Type::Instant,
+                                            dandan::core::Type::Sorcery}));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));

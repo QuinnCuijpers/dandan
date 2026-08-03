@@ -1,7 +1,7 @@
 #ifndef DANDAN_STRINGTOBASICLANDTYPE_H
 #define DANDAN_STRINGTOBASICLANDTYPE_H
 
-#include "dandan/core/SubType.h"
+#include "dandan/core/CardTypes.h"
 #include <algorithm>
 #include <cctype>
 #include <string>

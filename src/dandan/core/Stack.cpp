@@ -32,14 +32,14 @@ namespace dandan::core
                     CardID card_id) -> std::unique_ptr<effects::IOneShotEffect>
                 {
                     auto *card{game.getCardByID(card_id)};
-                    if (card->getData().getType() == CardData::Type::Instant ||
-                        card->getData().getType() == CardData::Type::Sorcery)
+                    if (card->getData().type == Type::Instant ||
+                        card->getData().type == Type::Sorcery)
                     {
                         resolvingSpell = true;
 
                         auto spell_ability_it{std::find_if(
-                            card->getData().getAbilities().begin(),
-                            card->getData().getAbilities().end(),
+                            card->getData().abilities.begin(),
+                            card->getData().abilities.end(),
                             [](const auto &ability)
                             {
                                 return dynamic_cast<

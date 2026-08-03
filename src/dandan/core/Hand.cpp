@@ -6,7 +6,7 @@ namespace dandan::core
     void Hand::discardCard(CardID card_id, Game &game)
     {
         auto *card = game.getCardByID(card_id);
-        std::cout << "Discarding card " << card->getData().getName() << '\n';
+        std::cout << "Discarding card " << card->getData().name << '\n';
         removeCard(*card);
         game.graveyard().addCard(*card);
     }

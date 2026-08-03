@@ -3,7 +3,6 @@
 
 #include <utility>
 
-#include "dandan/core/CardData.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
@@ -13,7 +12,7 @@ namespace dandan::effects
     class TutorTopEffect : public IOneShotEffect
     {
     public:
-        TutorTopEffect(std::vector<core::CardData::Type> filter_types,
+        TutorTopEffect(std::vector<core::Type> filter_types,
                        core::PlayerID player_id, EffectContext context)
             : IOneShotEffect(std::move(context)),
               m_filter_types(std::move(filter_types)), m_player_id(player_id)
@@ -30,7 +29,7 @@ namespace dandan::effects
             core::Game &game) const override;
 
     private:
-        std::vector<core::CardData::Type> m_filter_types;
+        std::vector<core::Type> m_filter_types;
         core::PlayerID m_player_id;
     };
 
@@ -38,7 +37,7 @@ namespace dandan::effects
     {
     public:
         explicit TutorTopEffectDefinition(
-            std::vector<dandan::core::CardData::Type> filter_types)
+            std::vector<dandan::core::Type> filter_types)
             : m_filter_types(std::move(filter_types))
         {
         }
@@ -57,14 +56,14 @@ namespace dandan::effects
             return std::make_unique<TutorTopEffectDefinition>(m_filter_types);
         }
 
-        [[nodiscard]] const std::vector<dandan::core::CardData::Type> &
-        getFilterTypes() const
+        [[nodiscard]] const std::vector<dandan::core::Type> &getFilterTypes()
+            const
         {
             return m_filter_types;
         }
 
     private:
-        std::vector<dandan::core::CardData::Type> m_filter_types;
+        std::vector<dandan::core::Type> m_filter_types;
     };
 } // namespace dandan::effects
 

@@ -5,7 +5,6 @@
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/conditions/MatchesReadLinksCondition.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
-#include "dandan/core/SubType.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include <nlohmann/json.hpp>
 

@@ -24,7 +24,7 @@ namespace dandan::core
          */
         void addCard(Card &card)
         {
-            std::cout << "Adding card " << card.getData().getName()
+            std::cout << "Adding card " << card.getData().name
                       << " with ID: " << card.getID().getID()
                       << " to graveyard\n";
             card.setZone(Zone::GRAVEYARD);

@@ -4,6 +4,7 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/core/CardData.h"
 #include <memory>
+#include <stdexcept>
 #include <unordered_map>
 
 #ifdef DANDAN_SERIALIZE
@@ -19,7 +20,7 @@ namespace dandan::core
     {
     public:
 #ifdef DANDAN_SERIALIZE
-        static CardData &createCardData(const std::string_view name)
+        static const CardData &createCardData(const std::string_view name)
         {
             std::string key{name};
             if (auto iter = m_card_data_cache.find(key);
@@ -27,15 +28,25 @@ namespace dandan::core
             {
                 return *(iter->second);
             }
-            auto new_card_data{std::make_unique<CardData>(name)};
-            if (new_card_data->getSuperType() ==
-                core::CardData::SuperType::Basic)
+
+            auto new_card_data{getCardData(name)};
+            if (new_card_data.has_value())
             {
-                new_card_data->addAbility(
-                    std::make_unique<abilities::BasicLandAbility>());
+                auto ptr{std::make_unique<CardData>(
+                    std::move(new_card_data.value()))};
+                if (ptr->supertype == core::SuperType::Basic)
+                {
+                    ptr->abilities.push_back(
+                        std::make_unique<abilities::BasicLandAbility>());
+                }
+                auto &ref = *ptr;
+                m_card_data_cache[key] = std::move(ptr);
+                return ref;
             }
-            m_card_data_cache[key] = std::move(new_card_data);
-            return *m_card_data_cache[key];
+
+            throw std::runtime_error(
+                "No CardData found for card with this name: " +
+                std::string{name});
         }
 #endif
 

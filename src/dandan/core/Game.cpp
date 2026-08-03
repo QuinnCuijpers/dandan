@@ -61,7 +61,7 @@ namespace dandan::core
         for (auto &card : m_cards)
         {
             auto bound_abilities{std::vector<abilities::BoundAbility>{}};
-            for (const auto &ability : card.getData().getAbilities())
+            for (const auto &ability : card.getData().abilities)
             {
                 auto *definition{ability.get()};
                 auto bound{abilities::BoundAbility{*definition, &card}};
@@ -317,7 +317,7 @@ namespace dandan::core
                 utils::overloaded{[this](const CardID &card_id)
                                   {
                                       const auto *card = getCardByID(card_id);
-                                      std::cout << card->getData().getName()
+                                      std::cout << card->getData().name
                                                 << " (Card)\n";
                                   },
                                   [](const abilities::BoundAbility &ability)

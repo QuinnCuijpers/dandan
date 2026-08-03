@@ -20,7 +20,7 @@ namespace dandan::effects
             for (auto card_id : hand_card_ids)
             {
                 auto *card{game.getCardByID(card_id)};
-                std::cout << "Moving card " << card->getData().getName()
+                std::cout << "Moving card " << card->getData().name
                           << " with ID " << card_id.getID()
                           << " and zone: " << card->getZone()
                           << " from hand to library\n";

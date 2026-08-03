@@ -37,7 +37,6 @@ namespace dandan::core
 #ifdef DANDAN_SERIALIZE
         explicit Card(std::string_view card_name,
                       PlayerID controller_id = PlayerID::getInvalidID());
-
 #endif
 
         /** Constructor for creating a card instance.
@@ -91,7 +90,7 @@ namespace dandan::core
          */
         void setZone(Zone zone)
         {
-            std::cout << "Setting zone of card " << getData().getName()
+            std::cout << "Setting zone of card " << getData().name
                       << " with ID: " << getID().getID() << " to "
                       << zoneToString(zone) << '\n';
             m_zone = zone;
@@ -274,7 +273,7 @@ namespace dandan::core
             m_is_attacking = false;
             m_is_blocked = false;
             m_blocking = false;
-            if (const auto stats = getData().getStats(); stats.has_value())
+            if (const auto stats = getData().stats; stats.has_value())
             {
                 setCurrentPower(stats->power);
                 setCurrentToughness(stats->toughness);
@@ -399,7 +398,7 @@ namespace dandan::core
         // static pointer to card data, as the data is shared among all
         // instances of the same card, and we want to avoid copying it for each
         // instance
-        CardData *m_card_data;
+        const CardData *m_card_data;
 
         void setCurrentPower(int power)
         {

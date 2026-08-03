@@ -2,7 +2,8 @@
 #define DANDAN_BOARD_H
 
 #include "Card.h"
-#include "dandan/core/CardData.h"
+#include "dandan/core/CardTypes.h"
+
 #include <algorithm>
 #include <map>
 #include <vector>
@@ -13,7 +14,7 @@ namespace dandan::core
     class Game;
 
     using Permanent = CardID;
-    using PermanentMap = std::map<CardData::Type, std::vector<Permanent>>;
+    using PermanentMap = std::map<core::Type, std::vector<Permanent>>;
 
     // TODO: expand docs
     /** @brief A class representing the battlefield.
@@ -28,7 +29,7 @@ namespace dandan::core
         void addCard(Card &card)
         {
             card.setZone(Zone::BATTLEFIELD);
-            m_permanents[card.getData().getType()].emplace_back(card.getID());
+            m_permanents[card.getData().type].emplace_back(card.getID());
         }
 
         /** Get the permanents on the battlefield mutably.
@@ -52,7 +53,7 @@ namespace dandan::core
          */
         [[nodiscard]] const std::vector<Permanent> &getLands() const
         {
-            return m_permanents.at(CardData::Type::Land);
+            return m_permanents.at(Type::Land);
         }
 
         /** Get the creatures on the battlefield.
@@ -60,7 +61,7 @@ namespace dandan::core
          */
         [[nodiscard]] const std::vector<Permanent> &getCreatures() const
         {
-            return m_permanents.at(CardData::Type::Creature);
+            return m_permanents.at(Type::Creature);
         }
 
         /** Get a land from the battlefield, the land is removed from the
@@ -70,7 +71,7 @@ namespace dandan::core
          */
         [[nodiscard]] Permanent getLand(int card_index)
         {
-            auto &vec = m_permanents.at(CardData::Type::Land);
+            auto &vec = m_permanents.at(Type::Land);
             auto card = vec[card_index];
             vec.erase(vec.begin() + card_index);
             return card;
@@ -82,12 +83,12 @@ namespace dandan::core
         void removeCard(const Card &card)
         {
             auto card_id = card.getID();
-            auto &vec = m_permanents.at(card.getData().getType());
+            auto &vec = m_permanents.at(card.getData().type);
             auto iter = std::find_if(vec.begin(), vec.end(),
                                      [&card_id](const Permanent &other)
                                      { return card_id == other; });
-            std::cout << "Removing card " << card.getData().getName()
-                      << " with ID " << card_id.getID() << '\n';
+            std::cout << "Removing card " << card.getData().name << " with ID "
+                      << card_id.getID() << '\n';
             if (iter != vec.end())
             {
                 vec.erase(iter);
@@ -97,11 +98,10 @@ namespace dandan::core
         void sacrificeCard(Card &card, core::Game &game);
 
     private:
-        PermanentMap m_permanents{
-            {CardData::Type::Land, {}},        {CardData::Type::Creature, {}},
-            {CardData::Type::Sorcery, {}},     {CardData::Type::Instant, {}},
-            {CardData::Type::Enchantment, {}}, {CardData::Type::Artifact, {}},
-            {CardData::Type::Planeswalker, {}}};
+        PermanentMap m_permanents{{Type::Land, {}},        {Type::Creature, {}},
+                                  {Type::Sorcery, {}},     {Type::Instant, {}},
+                                  {Type::Enchantment, {}}, {Type::Artifact, {}},
+                                  {Type::Planeswalker, {}}};
     };
 }; // namespace dandan::core
 

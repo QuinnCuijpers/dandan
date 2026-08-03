@@ -1,9 +1,8 @@
 #include "dandan/core/CardData.h"
-#include "dandan/abilities/IAbility.h"
-#include "dandan/core/ColorWord.h"
-#include "dandan/core/SubType.h"
+#include "dandan/core/CardTypes.h"
 #include <cassert>
 #include <memory>
+#include <optional>
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
@@ -15,7 +14,7 @@ namespace dandan::core
 {
 #ifdef DANDAN_SERIALIZE
 
-    CardData::CardData(std::string_view name)
+    std::optional<CardData> getCardData(std::string_view name)
     {
         auto json_path{std::filesystem::path(DANDAN_PROJECT_SOURCE) /
                        "data/jsons" / (std::string(name) + ".json")};
@@ -23,11 +22,12 @@ namespace dandan::core
         if (!file)
         {
             std::cerr << "Failed to open JSON file for card: " << name << '\n';
-            return;
+            return std::nullopt;
         }
         nlohmann::json json;
         file >> json;
-        *this = json.get<CardData>();
+        CardData card_data{json.get<core::CardData>()};
+        return std::make_optional(std::move(card_data));
     }
 
     void from_json(const nlohmann::json &json, CardData &card)
@@ -42,86 +42,18 @@ namespace dandan::core
             dandan::core::CardData>::create_json(&card);
     }
 #endif
-    CardData::CardData(
-        std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
-        std::vector<SubType> subtypes, SuperType supertype,
-        std::vector<std::unique_ptr<abilities::IAbility>> abilities,
-        std::optional<Stats> stats, ColorWord color)
-        : m_name{name}, m_mana_cost{std::move(cost)}, m_color{color},
-          m_type{type}, m_subtypes{std::move(subtypes)}, m_supertype{supertype},
-          m_abilities{std::move(abilities)}, m_stats{stats}
+
+    std::ostream &operator<<(std::ostream &ostream,
+                             const dandan::core::CardData &card)
     {
-        if (m_subtypes == std::vector{SubType::None})
+        ostream << "Card{name: " << card.name << ", cost: "
+                << dandan::mana::ManaToSymbols(card.mana_cost->getMana())
+                << ", type: " << TypeToString(card.type) << ", subtypes: ";
+        for (auto type : card.subtypes)
         {
-            m_subtypes.clear();
+            ostream << SubTypeToString(type) << '}';
         }
+        return ostream;
     }
 
-    CardData::CardData(
-        std::string_view name, std::unique_ptr<mana::Mana> cost, Type type,
-        SubType subtype, SuperType supertype,
-        std::vector<std::unique_ptr<abilities::IAbility>> abilities,
-        std::optional<Stats> stats, ColorWord color)
-        : m_name{name}, m_mana_cost{std::move(cost)}, m_color(color),
-          m_type{type}, m_subtypes{subtype}, m_supertype{supertype},
-          m_abilities{std::move(abilities)}, m_stats{stats}
-    {
-        if (m_subtypes == std::vector{SubType::None})
-        {
-            m_subtypes.clear();
-        }
-    }
-
-    void CardData::addAbility(std::unique_ptr<abilities::IAbility> ability)
-    {
-        m_abilities.push_back(std::move(ability));
-    }
-
-    std::string_view CardData::TypeToString(Type type)
-    {
-        switch (type)
-        {
-        case Type::Land:
-            return "Land";
-        case Type::Creature:
-            return "Creature";
-        case Type::Sorcery:
-            return "Sorcery";
-        case Type::Instant:
-            return "Instant";
-        case Type::Enchantment:
-            return "Enchantment";
-        case Type::Artifact:
-            return "Artifact";
-        case Type::Planeswalker:
-            return "Planeswalker";
-        }
-        assert(false && "Unreachable Card type");
-    }
-
-    std::string_view CardData::SubTypeToString(SubType subtype)
-    {
-        switch (subtype)
-        {
-        case SubType::None:
-            return "None";
-        case SubType::Forest:
-            return "Forest";
-        case SubType::Island:
-            return "Island";
-        case SubType::Mountain:
-            return "Mountain";
-        case SubType::Plains:
-            return "Plains";
-        case SubType::Swamp:
-            return "Swamp";
-        case SubType::Fish:
-            return "Fish";
-        case SubType::Illusion:
-            return "Illusion";
-        case SubType::Dragon:
-            return "Dragon";
-        }
-        assert(false && "Unreachable Card subtype");
-    }
 } // namespace dandan::core

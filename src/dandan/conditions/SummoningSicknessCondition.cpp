@@ -16,7 +16,7 @@ namespace dandan::conditions
     {
         const auto *card = game.getCardByID(m_card_id);
         std::cout << "Checking summoning sickness condition for card "
-                  << card->getData().getName()
+                  << card->getData().name
                   << " (CardID: " << card->getID().getID() << ")\n";
         std::cout << "Card state: tapped=" << std::boolalpha
                   << card->getTapped()

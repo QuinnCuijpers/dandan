@@ -32,7 +32,7 @@ namespace dandan::core
 
         const auto &data = card->getData();
 
-        std::cout << "Playing card: " << data.getName() << '\n';
+        std::cout << "Playing card: " << data.name << '\n';
 
         for (auto &ability : card->getCurrentAbilities())
         {
@@ -48,14 +48,14 @@ namespace dandan::core
         effects::EffectContext context{card->getControllerID()};
 
         // lands dont use the stack and thus immediately enter
-        switch (data.getType())
+        switch (data.type)
         {
-        case CardData::Type::Land:
+        case Type::Land:
             return std::make_unique<effects::ETBEffect>(*card, context);
 
-        case CardData::Type::Creature:
-        case CardData::Type::Sorcery:
-        case CardData::Type::Instant:
+        case Type::Creature:
+        case Type::Sorcery:
+        case Type::Instant:
             return std::make_unique<effects::PlayCardEffect>(*card, context);
 
         default:

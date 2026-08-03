@@ -1,7 +1,6 @@
 #ifndef DANDAN_GRAVEYARDCOUNT_H
 #define DANDAN_GRAVEYARDCOUNT_H
 
-#include "dandan/core/Context.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/numbers/INumber.h"
 #include <algorithm>
@@ -29,8 +28,7 @@ namespace dandan::numbers
                                      [this, &game](const auto &card_id)
                                      {
                                          auto card{game.getCardByID(card_id)};
-                                         return card->getData().getName() ==
-                                                m_name;
+                                         return card->getData().name == m_name;
                                      })};
             return static_cast<int>(count);
         }

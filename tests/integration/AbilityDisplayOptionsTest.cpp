@@ -23,7 +23,7 @@ TEST_P(AbilityOptionsDisplayTest, DisplaysExpectedActivatableAbilities)
     auto card{dandan::Card{test_case.card_name}};
 
     std::string actual{};
-    for (const auto &ability : card.getData().getAbilities())
+    for (const auto &ability : card.getData().abilities)
     {
         // triggered and static abilities cant be activated, so we ignore them
         // for this test

@@ -65,7 +65,7 @@ namespace dandan::core
                 if (card->getToughness() > 0 &&
                     card->getDamageMarked() >= card->getToughness())
                 {
-                    std::cout << "Creature " << card->getData().getName()
+                    std::cout << "Creature " << card->getData().name
                               << " with ID " << card->getID().getID()
                               << " has been dealt lethal damage and is "
                                  "destroyed.\n";

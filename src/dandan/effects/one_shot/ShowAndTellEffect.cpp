@@ -18,7 +18,7 @@ namespace dandan::effects
         {
             auto *card{game.getCardByID(card_id)};
             const auto *fit{std::find(m_types.begin(), m_types.end(),
-                                      card->getData().getType())};
+                                      card->getData().type)};
             return (fit != m_types.end());
         };
 

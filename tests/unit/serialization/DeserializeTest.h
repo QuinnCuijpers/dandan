@@ -20,7 +20,7 @@ protected:
     {
         const auto *params{GetParam()};
         const auto *card = params;
-        std::string_view name{card->getData().getName()};
+        std::string_view name{card->getData().name};
 
         auto json_file_path{std::filesystem::path{DANDAN_PROJECT_SOURCE} /
                             "data/jsons" / name};

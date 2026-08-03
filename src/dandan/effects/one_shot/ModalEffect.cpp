@@ -7,8 +7,8 @@ namespace dandan::effects
         const core::Game &game, EffectContext context) const
     {
         const auto *card{game.getCardByID(context.card_id.value())};
-        std::cout << "Binding modal effect for card "
-                  << card->getData().getName() << '\n';
+        std::cout << "Binding modal effect for card " << card->getData().name
+                  << '\n';
         auto modal_choice{card->getModalChoice(*this)};
         return m_options.at(modal_choice)->bind(game, context);
     }

@@ -1,7 +1,6 @@
 #ifndef DANDAN_CHANGE_LAND_TYPE_EFFECT_H
 #define DANDAN_CHANGE_LAND_TYPE_EFFECT_H
 
-#include "dandan/core/SubType.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"

@@ -1,11 +1,12 @@
 #include "dandan/core/phases/BeginningPhase.h"
-#include "dandan/core/CardData.h"
+#include "dandan/core/CardTypes.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/CardDrawAction.h"
 #include "dandan/core/phases/IPhase.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/UntapEffect.h"
 #include "dandan/log.h"
+
 #include <memory>
 #include <utility>
 
@@ -47,7 +48,7 @@ namespace dandan::core
                 // TODO: throw generated events onto a queue
                 effect->apply(game());
 
-                if (type == CardData::Type::Creature)
+                if (type == Type::Creature)
                 {
                     cardp->setSummoningSickness(false);
                 }

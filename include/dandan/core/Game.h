@@ -354,7 +354,7 @@ namespace dandan::core
                 const auto *card = getCardByID(card_id);
                 if (card != nullptr)
                 {
-                    std::cout << card->getData().getName() << "("
+                    std::cout << card->getData().name << "("
                               << "CardID: " << card->getID().getID() << ", ";
                     std::cout
                         << "#Abilities: " << card->getCurrentAbilities().size()
@@ -467,8 +467,7 @@ namespace dandan::core
                 {
                     const auto &player{getPlayer(current_player_id)};
                     const auto &creatures =
-                        player.battlefield().permanents().at(
-                            CardData::Type::Creature);
+                        player.battlefield().permanents().at(Type::Creature);
 
                     std::transform(creatures.begin(), creatures.end(),
                                    std::back_inserter(targets),
@@ -486,7 +485,7 @@ namespace dandan::core
                         const auto &player{getPlayer(nextPlayer)};
                         const auto &creatures =
                             player.battlefield().permanents().at(
-                                CardData::Type::Creature);
+                                Type::Creature);
 
                         std::transform(creatures.begin(), creatures.end(),
                                        std::back_inserter(targets),
@@ -501,6 +500,7 @@ namespace dandan::core
                 }
                 return targets;
             }
+
             case TargetType::Permanent:
             {
                 std::vector<Target> targets;

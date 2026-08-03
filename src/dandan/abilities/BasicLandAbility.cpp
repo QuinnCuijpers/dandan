@@ -1,6 +1,5 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
-#include "dandan/core/SubType.h"
 #include "dandan/mana/BlackMana.h"
 #include "dandan/mana/BlueMana.h"
 #include "dandan/mana/GreenMana.h"

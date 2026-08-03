@@ -11,7 +11,7 @@ namespace dandan::effects
         for (const auto &card : cards)
         {
             auto *cardp{game.getCardByID(card)};
-            std::cout << cardp->getData().getName() << " ,";
+            std::cout << cardp->getData().name << " ,";
         }
         std::cout << " ]\n";
 

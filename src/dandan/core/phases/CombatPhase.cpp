@@ -43,7 +43,7 @@ namespace dandan::core
                     std::make_unique<core::AttackAction>(*creature)};
                 if (!game().isActionPrevented(*attack_action))
                 {
-                    std::cout << "Creature " << creature->getData().getName()
+                    std::cout << "Creature " << creature->getData().name
                               << " (CardID: " << creature->getID().getID()
                               << ") can attack\n";
                     std::cout << "Summoning sickness: " << std::boolalpha
@@ -126,7 +126,7 @@ namespace dandan::core
                 continue;
             }
             std::cout << "Which attacker would you like to block with "
-                      << creature->getData().getName()
+                      << creature->getData().name
                       << " (or none to not block with it): ";
             std::string input{};
             std::getline(game().istream(), input);
@@ -144,8 +144,8 @@ namespace dandan::core
                 continue;
             }
             addBlocker(attacking_creature, creature);
-            std::cout << creature->getData().getName() << " is blocking "
-                      << attacking_creature->getData().getName() << '\n';
+            std::cout << creature->getData().name << " is blocking "
+                      << attacking_creature->getData().name << '\n';
         }
         m_step = Step::CombatDamage;
     }
@@ -177,14 +177,14 @@ namespace dandan::core
                 if (!creature->isBlocked())
                 {
                     std::cout << "Dealing damage to opponent from "
-                              << creature->getData().getName() << '\n';
+                              << creature->getData().name << '\n';
                     game().nonActivePlayer().takeDamage(creature->getPower(),
                                                         game());
                 }
                 else
                 {
                     std::cout << "Dealing damage to blocking creature from "
-                              << creature->getData().getName() << '\n';
+                              << creature->getData().name << '\n';
                     for (auto *blocking_creature : m_blockers[creature])
                     {
                         std::cout << "Dealing damage to attacking creature "
