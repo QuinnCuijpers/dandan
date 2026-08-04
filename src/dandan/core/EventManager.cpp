@@ -83,4 +83,9 @@ namespace dandan::core
             }
         }
     }
+
+    [[nodiscard]] size_t EventManager::size() const
+    {
+        return m_subscribers.size();
+    }
 } // namespace dandan::core

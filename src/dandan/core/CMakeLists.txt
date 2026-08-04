@@ -13,6 +13,7 @@ target_sources(
           phases/BeginningPhase.cpp
           phases/MainPhase.cpp
           phases/EndingPhase.cpp
+          engine/ConditionManager.cpp
           PreventionManager.cpp
           PlayerID.cpp
           ReplacementManager.cpp
@@ -24,6 +25,7 @@ target_sources(
           Player.cpp
           actions/ActivateAbilityAction.cpp
           actions/AttackAction.cpp
+          actions/BlockAction.cpp
           CardID.cpp
           SBAManager.cpp
           PriorityManager.cpp

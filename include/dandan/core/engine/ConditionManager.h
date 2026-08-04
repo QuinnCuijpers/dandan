@@ -1,15 +1,10 @@
 #ifndef DANDAN_CONDITION_MANAGER_H
 #define DANDAN_CONDITION_MANAGER_H
 
-#include "dandan/abilities/AbilityType.h"
 #include "dandan/abilities/BoundAbility.h"
-#include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/core/CardID.h"
-#include "dandan/effects/EffectContext.h"
-#include <algorithm>
 #include <cstddef>
-#include <iostream>
 #include <unordered_map>
 #include <vector>
 // 603.8. Some triggered abilities trigger when a game state (such as a player
@@ -54,102 +49,28 @@ namespace dandan::core
          * @param source The card ID of the source.
          * @param ability The state-triggered ability.
          */
-        void addStateTriggeredAbility(abilities::BoundAbility *ability)
-        {
+        void addStateTriggeredAbility(abilities::BoundAbility *ability);
 
-            if (ability->type() == abilities::AbilityType::Type::StateTriggered)
-            {
-                std::cout << "Adding StateTriggered ability\n";
-                auto source{ability->sourceCard()};
-                auto triggered_record{TriggeredRecord{ability, false}};
-                m_trigger_records[source].push_back(triggered_record);
-            }
-        }
-
-        void removeStateTriggeredAbility(const abilities::BoundAbility &ability)
-        {
-            auto source{ability.sourceCard()};
-            auto source_triggered_it{m_trigger_records.find(source)};
-            if (source_triggered_it == m_trigger_records.end())
-            {
-                std::cout << "NO TRIGGER RECORD FOR " << source.getID() << '\n';
-                return;
-            }
-            if (source_triggered_it->second.empty())
-            {
-                std::cout << "TRIGGER RECORD IS EMPTY\n";
-                m_trigger_records.erase(source_triggered_it);
-                return;
-            }
-            auto &source_abilities{m_trigger_records[source]};
-            source_abilities.erase(
-                std::remove_if(source_abilities.begin(), source_abilities.end(),
-                               [&ability](const TriggeredRecord &record)
-                               { return record.bound_ability == &ability; }),
-                source_abilities.end());
-        }
+        void removeStateTriggeredAbility(
+            const abilities::BoundAbility &ability);
 
         /** @brief Remove all conditions associated with a card.
          * @param card_id The ID of the card.
          */
-        void removeCardConditions(CardID card_id)
-        {
-            m_trigger_records.erase(card_id);
-        }
+        void removeCardConditions(CardID card_id);
 
         /** @brief Update the conditions for all tracked abilities.
          * @param game The game instance.
          */
-        void checkConditions(const Game &game)
-        {
-            for (auto &[card_id, triggered_records] : m_trigger_records)
-            {
-                for (auto &triggered_record : triggered_records)
-                {
-                    const auto &underlying_ability{
-                        triggered_record.bound_ability->definition()};
+        void checkConditions(const Game &game);
 
-                    if (const auto *triggered_ability = dynamic_cast<
-                            const abilities::StateTriggeredAbility *>(
-                            &underlying_ability))
-                    {
-                        auto context{
-                            triggered_record.bound_ability->getContext()};
-                        effects::EffectContext effect_context{context};
-                        bool currently_satisfied =
-                            triggered_ability->condition()->isSatisfied(
-                                game, effect_context);
-
-                        if (currently_satisfied && !triggered_record.satisfied)
-                        {
-                            std::cout << "Condition for ability on card "
-                                      << card_id.getID()
-                                      << " is now satisfied\n";
-                            triggered_record.satisfied = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        std::size_t size() const
-        {
-            std::size_t total{};
-            for (const auto &[card_id, vec] : m_trigger_records)
-            {
-                total += vec.size();
-            }
-            return total;
-        }
+        std::size_t size() const;
 
         /** @brief Get the trigger records.
          * @return A const reference to the map of trigger records.
          */
         const std::unordered_map<CardID, std::vector<TriggeredRecord>> &
-        getTriggerRecords() const
-        {
-            return m_trigger_records;
-        }
+        getTriggerRecords() const;
 
     private:
         std::unordered_map<CardID, std::vector<TriggeredRecord>>

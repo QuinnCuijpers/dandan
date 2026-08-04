@@ -34,10 +34,7 @@ namespace dandan::core
         /** Gets the number of subscribers.
          * @return The number of subscribers.
          */
-        [[nodiscard]] size_t size() const
-        {
-            return m_subscribers.size();
-        }
+        [[nodiscard]] size_t size() const;
 
     private:
         std::unordered_map<CardID, std::vector<abilities::BoundAbility *>>

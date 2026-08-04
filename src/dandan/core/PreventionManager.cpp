@@ -13,6 +13,102 @@
 #include <stdexcept>
 #include <variant>
 
+namespace
+{
+    using PreventionEffect =
+        std::variant<std::unique_ptr<dandan::effects::IPreventionEffect>,
+                     dandan::abilities::BoundAbility *>;
+    using PreventionList = std::vector<PreventionEffect>;
+
+    using namespace dandan;
+
+    void removeFromPreventionList(PreventionList &list,
+                                  const effects::IPreventionEffect *effect)
+    {
+        list.erase(
+            std::remove_if(
+                list.begin(), list.end(),
+                [effect](const PreventionEffect &candidate)
+                {
+                    return std::visit(
+                        dandan::utils::overloaded{
+                            [&](const std::unique_ptr<
+                                dandan::effects::IPreventionEffect> &prevention)
+                            { return prevention.get() == effect; },
+                            [](const dandan::abilities::BoundAbility *)
+                            { return false; }},
+                        candidate);
+                }),
+            list.end());
+    }
+
+    void removeFromPreventionList(
+        PreventionList &list, const dandan::abilities::BoundAbility &ability)
+    {
+        list.erase(std::remove_if(
+                       list.begin(), list.end(),
+                       [&ability](const PreventionEffect &candidate)
+                       {
+                           return std::visit(
+                               dandan::utils::overloaded{
+                                   [](const std::unique_ptr<
+                                       dandan::effects::IPreventionEffect> &)
+                                   { return false; },
+                                   [&](const dandan::abilities::BoundAbility
+                                           *sub_ability)
+                                   { return sub_ability == &ability; }},
+                               candidate);
+                       }),
+                   list.end());
+    }
+
+    // TODO: Game is used as const as there is no bound ability that has
+    // a prevention effect that requires a cost to  create, but this
+    // should be fixed at some point
+    bool isPreventedByPreventionList(const PreventionList &list,
+                                     const dandan::core::IAction &action,
+                                     dandan::core::Game &game)
+    {
+        for (const auto &prevention : list)
+        {
+            auto prevented{std::visit(
+                dandan::utils::overloaded{
+                    [&](const std::unique_ptr<
+                        dandan::effects::IPreventionEffect> &prevention_effect)
+                    { return prevention_effect->prevents(action, game); },
+                    [&](const abilities::BoundAbility *ability)
+                    {
+                        if (const auto *static_ability =
+                                dynamic_cast<const abilities::StaticAbility *>(
+                                    &ability->definition()))
+                        {
+                            assert(static_ability->getType() ==
+                                   abilities::StaticAbility::Type::Prevention);
+                            if (const auto *prevention_effect = dynamic_cast<
+                                    const effects::IPreventionEffect *>(
+                                    static_ability->getEffect()))
+                            {
+                                effects::EffectContext context{
+                                    ability->getContext()};
+                                return prevention_effect->prevents(action, game,
+                                                                   context);
+                            }
+                        }
+                        // should be unreachable as only prevention effects are
+                        // registered in this class
+                        return false;
+                    }},
+                prevention)};
+            if (prevented)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+} // namespace
+
 namespace dandan::core
 {
     void PreventionManager::subscribe(
@@ -111,43 +207,6 @@ namespace dandan::core
         }
     }
 
-    void PreventionManager::removeFromPreventionList(
-        PreventionList &list, const effects::IPreventionEffect *effect)
-    {
-        list.erase(std::remove_if(
-                       list.begin(), list.end(),
-                       [effect](const PreventionEffect &candidate)
-                       {
-                           return std::visit(
-                               utils::overloaded{
-                                   [&](const std::unique_ptr<
-                                       effects::IPreventionEffect> &prevention)
-                                   { return prevention.get() == effect; },
-                                   [](const abilities::BoundAbility *)
-                                   { return false; }},
-                               candidate);
-                       }),
-                   list.end());
-    }
-    void PreventionManager::removeFromPreventionList(
-        PreventionList &list, const abilities::BoundAbility &ability)
-    {
-        list.erase(
-            std::remove_if(
-                list.begin(), list.end(),
-                [&ability](const PreventionEffect &candidate)
-                {
-                    return std::visit(
-                        utils::overloaded{
-                            [](const std::unique_ptr<effects::IPreventionEffect>
-                                   &) { return false; },
-                            [&](const abilities::BoundAbility *sub_ability)
-                            { return sub_ability == &ability; }},
-                        candidate);
-                }),
-            list.end());
-    }
-
     void PreventionManager::unsubscribe(
         const effects::IPreventionEffect *effect)
     {
@@ -188,47 +247,6 @@ namespace dandan::core
         m_card_preventions.erase(card_id);
     }
 
-    bool PreventionManager::isPreventedByPreventionList(
-        const PreventionList &list, const IAction &action, Game &game)
-    {
-        for (const auto &prevention : list)
-        {
-            auto prevented{std::visit(
-                utils::overloaded{
-                    [&](const std::unique_ptr<effects::IPreventionEffect>
-                            &prevention_effect)
-                    { return prevention_effect->prevents(action, game); },
-                    [&](const abilities::BoundAbility *ability)
-                    {
-                        if (const auto *static_ability =
-                                dynamic_cast<const abilities::StaticAbility *>(
-                                    &ability->definition()))
-                        {
-                            assert(static_ability->getType() ==
-                                   abilities::StaticAbility::Type::Prevention);
-                            if (const auto *prevention_effect = dynamic_cast<
-                                    const effects::IPreventionEffect *>(
-                                    static_ability->getEffect()))
-                            {
-                                effects::EffectContext context{
-                                    ability->getContext()};
-                                return prevention_effect->prevents(action, game,
-                                                                   context);
-                            }
-                        }
-                        // should be unreachable as only prevention effects are
-                        // registered in this class
-                        return false;
-                    }},
-                prevention)};
-            if (prevented)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     void PreventionManager::unsubscribe(const abilities::BoundAbility &ability)
     {
 
@@ -261,6 +279,12 @@ namespace dandan::core
                 ++card_it;
             }
         }
+    }
+
+    std::size_t PreventionManager::size() const
+    {
+        return m_card_preventions.size() + m_global_preventions.size() +
+               m_player_preventions.size();
     }
 
     bool PreventionManager::isPrevented(const IAction &action, Game &game) const

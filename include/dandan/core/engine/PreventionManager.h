@@ -55,11 +55,7 @@ namespace dandan::core
 
         void unsubscribe(const abilities::BoundAbility &ability);
 
-        std::size_t size() const
-        {
-            return m_card_preventions.size() + m_global_preventions.size() +
-                   m_player_preventions.size();
-        }
+        std::size_t size() const;
 
         /** Check if an action is prevented.
          * @param action The action to check.
@@ -77,23 +73,10 @@ namespace dandan::core
                          abilities::BoundAbility *>;
         using PreventionList = std::vector<PreventionEffect>;
 
-        // split into three do differentiate which scope they have
+        // split into three to differentiate which scope they have
         PreventionList m_global_preventions;
         std::unordered_map<PlayerID, PreventionList> m_player_preventions;
         std::unordered_map<CardID, PreventionList> m_card_preventions;
-
-        static void removeFromPreventionList(
-            PreventionList &list, const effects::IPreventionEffect *effect);
-
-        static void removeFromPreventionList(
-            PreventionList &list, const abilities::BoundAbility &ability);
-
-        // TODO: Game is used as const as there is no bound ability that has
-        // a prevention effect that requires a cost to  create, but this
-        // should be fixed at some point
-        static bool isPreventedByPreventionList(const PreventionList &list,
-                                                const IAction &action,
-                                                Game &game);
     };
 } // namespace dandan::core
 

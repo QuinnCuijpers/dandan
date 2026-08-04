@@ -27,10 +27,7 @@ namespace dandan::core
 
         void unsubscribe(const abilities::BoundAbility &ability);
 
-        [[nodiscard]] std::size_t size() const
-        {
-            return m_replacement_effects.size();
-        }
+        [[nodiscard]] std::size_t size() const;
 
         /** Applies all active replacement effects to the given effect.
          * @param effect The effect to apply replacement effects to.

@@ -41,6 +41,21 @@ namespace dandan::core
             m_replacement_effects.end());
     }
 
+    void ReplacementManager::unsubscribe(const abilities::BoundAbility &ability)
+    {
+        auto source_abilities{m_replacement_effects};
+        source_abilities.erase(
+            std::remove_if(source_abilities.begin(), source_abilities.end(),
+                           [&ability](auto *sub_ability)
+                           { return sub_ability == &ability; }),
+            source_abilities.end());
+    }
+
+    [[nodiscard]] std::size_t ReplacementManager::size() const
+    {
+        return m_replacement_effects.size();
+    }
+
     std::unique_ptr<effects::IOneShotEffect> ReplacementManager::
         applyReplacementEffects(effects::IOneShotEffect &effect,
                                 [[maybe_unused]] Game &game) const
@@ -65,13 +80,4 @@ namespace dandan::core
         return current_effect->copy();
     }
 
-    void ReplacementManager::unsubscribe(const abilities::BoundAbility &ability)
-    {
-        auto source_abilities{m_replacement_effects};
-        source_abilities.erase(
-            std::remove_if(source_abilities.begin(), source_abilities.end(),
-                           [&ability](auto *sub_ability)
-                           { return sub_ability == &ability; }),
-            source_abilities.end());
-    }
 } // namespace dandan::core
