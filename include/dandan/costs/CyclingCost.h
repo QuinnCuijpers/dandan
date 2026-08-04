@@ -19,8 +19,7 @@ namespace dandan::costs
         /** Constructs a CyclingCost with an inner cost.
          * @param inner_cost The inner cost to decorate.
          */
-        explicit CyclingCost(std::unique_ptr<ICost> inner_cost)
-            : m_inner_cost{std::move(inner_cost)} {};
+        explicit CyclingCost(std::unique_ptr<ICost> inner_cost);
 
         [[nodiscard]] std::string display(
             [[maybe_unused]] bool isFinal = true) const override;
@@ -28,31 +27,13 @@ namespace dandan::costs
         /** Gets the inner cost.
          * @return A pointer to the inner cost.
          */
-        [[nodiscard]] const ICost *getInnerCost() const
-        {
-            return m_inner_cost.get();
-        }
+        [[nodiscard]] const ICost *getInnerCost() const;
 
         [[nodiscard]] bool canPay(const core::Card &source,
-                                  const core::Player &player) const override
-        {
-            if (source.getZone() != core::Zone::HAND)
-            {
-                return false;
-            }
-            return m_inner_cost->canPay(source, player);
-        }
+                                  const core::Player &player) const override;
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
-        {
-            m_inner_cost->pay(game, context);
-            auto player_id{context.controller_id};
-            auto &player{game.getPlayer(player_id)};
-            auto *card{game.getCardByID(context.source_card_id)};
-            player.discardCard(*card, game);
-        }
+        void pay(core::Game &game,
+                 abilities::AbilityContext context) const override;
 
     private:
         std::unique_ptr<ICost> m_inner_cost;

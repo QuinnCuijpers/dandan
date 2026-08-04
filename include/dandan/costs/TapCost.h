@@ -2,7 +2,6 @@
 #define DANDAN_TAPCOST_H
 
 #include "dandan/core/Game.h"
-#include "dandan/core/Zone.h"
 #include "dandan/costs/ICost.h"
 
 namespace dandan::costs
@@ -19,24 +18,13 @@ namespace dandan::costs
     public:
         TapCost() = default;
 
-        [[nodiscard]] std::string display(
-            [[maybe_unused]] bool isFinal = true) const override;
+        [[nodiscard]] std::string display(bool isFinal = true) const override;
 
-        [[nodiscard]] bool canPay(
-            const core::Card &source,
-            [[maybe_unused]] const core::Player &player) const override
-        {
-            return !source.getTapped() &&
-                   source.getZone() == core::Zone::BATTLEFIELD;
-        }
+        [[nodiscard]] bool canPay(const core::Card &source,
+                                  const core::Player &player) const override;
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
-        {
-            auto *card = game.getCardByID(context.source_card_id);
-            card->setTapped(true);
-        }
+        void pay(core::Game &game,
+                 abilities::AbilityContext context) const override;
     };
 } // namespace dandan::costs
 

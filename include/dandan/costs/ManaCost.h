@@ -19,8 +19,7 @@ namespace dandan::costs
         /** Constructs a ManaCost with a specific amount of mana.
          * @param mana The mana requirement for the cost.
          */
-        explicit ManaCost(std::unique_ptr<mana::Mana> mana)
-            : m_mana{std::move(mana)} {};
+        explicit ManaCost(std::unique_ptr<mana::Mana> mana);
 
         [[nodiscard]] std::string display(
             [[maybe_unused]] bool isFinal = true) const override;
@@ -28,24 +27,13 @@ namespace dandan::costs
         /** Gets the mana requirement.
          * @return A pointer to the mana requirement.
          */
-        [[nodiscard]] mana::Mana *getMana() const
-        {
-            return m_mana.get();
-        }
+        [[nodiscard]] mana::Mana *getMana() const;
 
-        [[nodiscard]] bool canPay([[maybe_unused]] const core::Card &source,
-                                  const core::Player &player) const override
-        {
-            return player.manaPool().canPay(*m_mana);
-        }
+        [[nodiscard]] bool canPay(const core::Card &source,
+                                  const core::Player &player) const override;
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
-        {
-            auto &player = game.getPlayer(context.controller_id);
-            player.manaPool().pay(*m_mana);
-        }
+        void pay(core::Game &game,
+                 abilities::AbilityContext context) const override;
 
     private:
         std::unique_ptr<mana::Mana> m_mana;

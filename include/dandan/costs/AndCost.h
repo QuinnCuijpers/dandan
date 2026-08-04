@@ -20,10 +20,7 @@ namespace dandan::costs
          * @param first The first sub-cost.
          * @param second The second sub-cost.
          */
-        AndCost(std::unique_ptr<ICost> first, std::unique_ptr<ICost> second)
-            : m_first(std::move(first)), m_second(std::move(second))
-        {
-        }
+        AndCost(std::unique_ptr<ICost> first, std::unique_ptr<ICost> second);
 
         [[nodiscard]] std::string display(
             [[maybe_unused]] bool isFinal = true) const override;
@@ -31,25 +28,13 @@ namespace dandan::costs
         /** Gets the sub-costs.
          * @return A vector of the sub-costs.
          */
-        [[nodiscard]] std::vector<ICost *> getCosts() const
-        {
-            return {m_first.get(), m_second.get()};
-        }
+        [[nodiscard]] std::vector<ICost *> getCosts() const;
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
-        {
-            m_first->pay(game, context);
-            m_second->pay(game, context);
-        }
+        void pay(core::Game &game,
+                 abilities::AbilityContext context) const override;
 
         [[nodiscard]] bool canPay(const core::Card &source,
-                                  const core::Player &player) const override
-        {
-            return m_first->canPay(source, player) &&
-                   m_second->canPay(source, player);
-        }
+                                  const core::Player &player) const override;
 
     private:
         std::unique_ptr<ICost> m_first;

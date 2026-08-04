@@ -20,20 +20,10 @@ namespace dandan::costs
             [[maybe_unused]] bool isFinal = true) const override;
 
         [[nodiscard]] bool canPay(const core::Card &source,
-                                  const core::Player &player) const override
-        {
-            return source.getControllerID().id() == player.getID().id();
-        }
+                                  const core::Player &player) const override;
 
-        void pay(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] abilities::AbilityContext context) const override
-        {
-            [[maybe_unused]] auto &player =
-                game.getPlayer(context.controller_id);
-            auto *card = game.getCardByID(context.source_card_id);
-            player.sacrificeCard(*card, game);
-        }
+        void pay(core::Game &game,
+                 abilities::AbilityContext context) const override;
     };
 } // namespace dandan::costs
 
