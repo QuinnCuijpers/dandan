@@ -9,6 +9,12 @@
 
 namespace dandan::core
 {
+
+    ActivateAbilityAction::ActivateAbilityAction(
+        const abilities::IAbility *ability, abilities::AbilityContext context)
+        : m_ability(ability), m_context(std::move(context))
+    {
+    }
     std::unique_ptr<effects::IOneShotEffect> ActivateAbilityAction::
         createEffect(core::Game &game)
     {

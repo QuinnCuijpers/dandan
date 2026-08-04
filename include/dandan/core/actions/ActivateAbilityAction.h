@@ -1,8 +1,6 @@
 #ifndef DANDAN_ACTIVATEABILITYACTION_H
 #define DANDAN_ACTIVATEABILITYACTION_H
 
-#include <utility>
-
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -24,10 +22,7 @@ namespace dandan::core
          * @param context The context for the ability's execution.
          */
         ActivateAbilityAction(const abilities::IAbility *ability,
-                              abilities::AbilityContext context)
-            : m_ability(ability), m_context(std::move(context))
-        {
-        }
+                              abilities::AbilityContext context);
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game) override;

@@ -23,14 +23,9 @@ namespace dandan::core
         /** Constructor
          * @param player The player who will draw the card.
          */
-        explicit CardDrawAction(PlayerID player) : m_player{player}
-        {
-        }
+        explicit CardDrawAction(PlayerID player);
 
-        [[nodiscard]] ActionActor getActor() const override
-        {
-            return m_player;
-        }
+        [[nodiscard]] ActionActor getActor() const override;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game) override;

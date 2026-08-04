@@ -25,22 +25,12 @@ namespace dandan::core
         /** Constructor
          * @param creature the creature card that would attack
          */
-        explicit AttackAction(core::Card &creature) : m_creature{creature}
-        {
-        }
+        explicit AttackAction(core::Card &creature);
 
-        [[nodiscard]] ActionActor getActor() const override
-        {
-            return m_creature.getID();
-        }
+        [[nodiscard]] ActionActor getActor() const override;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            [[maybe_unused]] core::Game &game) override
-        {
-            std::cout << "Executing attack action\n";
-            effects::EffectContext context{m_creature.getID()};
-            return std::make_unique<effects::AttackEffect>(m_creature, context);
-        }
+            [[maybe_unused]] core::Game &game) override;
 
     private:
         Card &m_creature;

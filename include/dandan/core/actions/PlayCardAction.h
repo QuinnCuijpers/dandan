@@ -21,17 +21,12 @@ namespace dandan::core
          * Constructs a new play card action.
          * @param card_id The card_id of the card to play.
          */
-        explicit PlayCardAction(CardID card_id) : m_card_id{card_id}
-        {
-        }
+        explicit PlayCardAction(CardID card_id);
 
         /** Get the card ID of the card to play.
          * @return The card ID of the card to play.
          */
-        [[nodiscard]] CardID getCardID() const
-        {
-            return m_card_id;
-        }
+        [[nodiscard]] CardID getCardID() const;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game) override;

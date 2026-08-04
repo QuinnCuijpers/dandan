@@ -7,6 +7,16 @@
 
 namespace dandan::core
 {
+
+    PlayCardAction::PlayCardAction(CardID card_id) : m_card_id{card_id}
+    {
+    }
+
+    [[nodiscard]] CardID PlayCardAction::getCardID() const
+    {
+        return m_card_id;
+    }
+
     std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect(
         core::Game &game)
     {

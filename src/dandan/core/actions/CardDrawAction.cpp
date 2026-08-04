@@ -6,6 +6,15 @@
 
 namespace dandan::core
 {
+    CardDrawAction::CardDrawAction(PlayerID player) : m_player{player}
+    {
+    }
+
+    [[nodiscard]] ActionActor CardDrawAction::getActor() const
+    {
+        return m_player;
+    }
+
     std::unique_ptr<effects::IOneShotEffect> CardDrawAction::createEffect(
         [[maybe_unused]] core::Game &game)
     {

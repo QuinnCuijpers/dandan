@@ -3,34 +3,20 @@
 
 #include "dandan/core/CardID.h"
 #include "dandan/core/actions/IAction.h"
-#include <stdexcept>
 namespace dandan::core
 {
     class BlockAction : public IAction
     {
 
     public:
-        BlockAction(CardID blocker, CardID attacker)
-            : m_blocker(blocker), m_attacker(attacker)
-        {
-        }
+        BlockAction(CardID blocker, CardID attacker);
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            [[maybe_unused]] core::Game &game) override
-        {
-            throw std::runtime_error(
-                "Creating block effect not yet implemented");
-        }
+            [[maybe_unused]] core::Game &game) override;
 
-        [[nodiscard]] CardID getAttacker() const
-        {
-            return m_attacker;
-        }
+        [[nodiscard]] CardID getAttacker() const;
 
-        [[nodiscard]] CardID getBlocker() const
-        {
-            return m_blocker;
-        }
+        [[nodiscard]] CardID getBlocker() const;
 
     private:
         CardID m_blocker;
