@@ -7,10 +7,6 @@
 
 namespace dandan::core
 {
-    MainPhase::MainPhase(Game &game)
-        : IPhase(game), m_next_phase(std::make_unique<CombatPhase>(game))
-    {
-    }
 
     MainPhase::MainPhase(Game &game, bool pre_combat)
         : IPhase(game), m_pre_combat_main_phase(pre_combat)
@@ -82,6 +78,11 @@ namespace dandan::core
                 "Invalid input: " + (input.empty() ? input : "empty input"));
         }
         return std::move(m_next_phase);
+    }
+
+    [[nodiscard]] std::string MainPhase::name() const
+    {
+        return "Main Phase";
     }
 
 } // namespace dandan::core

@@ -6,6 +6,8 @@
 namespace dandan::core
 {
 
+    EndingPhase::EndingPhase(Game &game) : IPhase(game) {};
+
     void EndingPhase::handleNextStep()
     {
         switch (m_step)
@@ -80,6 +82,11 @@ namespace dandan::core
             handleNextStep();
         }
         return std::move(m_next_phase);
+    }
+
+    [[nodiscard]] std::string EndingPhase::name() const
+    {
+        return "Ending Phase";
     }
 
 } // namespace dandan::core

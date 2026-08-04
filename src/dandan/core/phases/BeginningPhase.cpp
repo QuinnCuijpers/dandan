@@ -18,6 +18,7 @@
 // called the “summoning sickness” rule.
 namespace dandan::core
 {
+    BeginningPhase::BeginningPhase(Game &game) : IPhase(game) {};
 
     std::unique_ptr<IPhase> BeginningPhase::handle()
     {
@@ -28,6 +29,11 @@ namespace dandan::core
         }
         DLOGI << "Switching phases to " << m_next_phase->name() << "\n";
         return std::move(m_next_phase);
+    }
+
+    [[nodiscard]] std::string BeginningPhase::name() const
+    {
+        return "Beginning Phase";
     }
 
     void BeginningPhase::handleUntapStep()

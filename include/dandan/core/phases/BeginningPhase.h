@@ -46,14 +46,11 @@ namespace dandan::core
          * Constructor
          * @param game The game instance.
          */
-        explicit BeginningPhase(Game &game) : IPhase(game) {};
+        explicit BeginningPhase(Game &game);
 
         std::unique_ptr<IPhase> handle() override;
 
-        [[nodiscard]] std::string name() const override
-        {
-            return "Beginning Phase";
-        }
+        [[nodiscard]] std::string name() const override;
 
     private:
         Step m_step{Step::Untap};

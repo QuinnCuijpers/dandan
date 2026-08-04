@@ -24,6 +24,29 @@ namespace dandan::core
         return std::move(m_next_phase);
     }
 
+    [[nodiscard]] std::string CombatPhase::name() const
+    {
+        return "Combat Phase";
+    }
+
+    void CombatPhase::addAttacker(Card *creature)
+    {
+        m_attackers.emplace_back(creature);
+    }
+
+    /** Adds a blocker to the specified attacking creature.
+     * @param attacking_creature The attacking creature to add the blocker
+     * to.
+     * @param blocking_creature The creature to add as a blocker.
+     */
+    void CombatPhase::addBlocker(Card *attacking_creature,
+                                 Card *blocking_creature)
+    {
+        attacking_creature->setBlocked(true);
+        blocking_creature->setBlocking(true);
+        m_blockers[attacking_creature].emplace_back(blocking_creature);
+    }
+
     void CombatPhase::handleDeclareAttackersStep()
     {
         game().priorityManager().setPriorityToPlayer(

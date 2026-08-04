@@ -7,8 +7,6 @@
 // 505. Main Phase
 namespace dandan::core
 {
-    class CombatPhase;
-    class EndingPhase;
     // TODO: improve docs for main phase and add more details about what happens
     // in the main phase, and what actions can be taken, etc.
     /**
@@ -20,25 +18,21 @@ namespace dandan::core
     class MainPhase : public IPhase
     {
     public:
-        /** Constructor, pre_combat defaults to true, as the first main phase of
-         * the turn is the pre-combat main phase
-         *
+        /** Constructor
          * @param game The game instance.
+         * @param pre_combat Whether this is a pre-combat main phase. Defaults
+         * to true.
          */
-        explicit MainPhase(Game &game);
+        explicit MainPhase(Game &game, bool pre_combat = true);
 
         /** Constructor
          * @param game The game instance.
          * @param pre_combat Whether this is a pre-combat main phase.
          */
-        MainPhase(Game &game, bool pre_combat);
 
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;
 
-        [[nodiscard]] std::string name() const override
-        {
-            return "Main Phase";
-        }
+        [[nodiscard]] std::string name() const override;
 
     private:
         std::unique_ptr<IPhase> m_next_phase;
