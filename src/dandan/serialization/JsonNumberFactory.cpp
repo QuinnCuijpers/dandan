@@ -6,6 +6,7 @@
 #include "dandan/numbers/INumber.h"
 #include "dandan/serialization/JsonFactory.h"
 #include <memory>
+#include <nlohmann/json.hpp>
 
 namespace dandan::serialization
 {
