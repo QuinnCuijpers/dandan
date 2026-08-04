@@ -23,6 +23,7 @@ target_sources(
           Zone.cpp
           Player.cpp
           actions/ActivateAbilityAction.cpp
+          actions/AttackAction.cpp
           CardID.cpp
           SBAManager.cpp
           PriorityManager.cpp
