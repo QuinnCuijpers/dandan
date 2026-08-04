@@ -6,6 +6,55 @@
 #include "dandan/core/Game.h"
 #include "dandan/mana/Mana.h"
 
+namespace
+{
+    using namespace dandan;
+
+    mana::ManaMap getMaxManaForLand(const core::Card &land,
+                                    const core::Game &game)
+    {
+        mana::ManaMap max_mana_for_land{};
+        for (const auto &ability : land.getCurrentAbilities())
+        {
+            if (ability.type() == abilities::AbilityType::Type::Mana)
+            {
+                const auto *mana_ability =
+                    dynamic_cast<const abilities::ManaAbility *>(
+                        &ability.definition());
+                for (const auto &option :
+                     mana_ability->getManaList()->getOptions())
+                {
+                    if (mana::MoreManaThan(option->getMana(),
+                                           max_mana_for_land))
+                    {
+                        max_mana_for_land = option->getMana();
+                    }
+                }
+            }
+            else if (ability.type() == abilities::AbilityType::Type::BasicLand)
+            {
+                const auto *basic_ability =
+                    dynamic_cast<const abilities::BasicLandAbility *>(
+                        &ability.definition());
+                const auto *mana_ability{
+                    basic_ability->getManaAbility(game, ability.getContext())};
+                const auto *mana_list{mana_ability->getManaList()};
+
+                for (const auto &option : mana_list->getOptions())
+                {
+                    if (mana::MoreManaThan(option->getMana(),
+                                           max_mana_for_land))
+                    {
+                        max_mana_for_land = option->getMana();
+                    }
+                }
+            }
+        }
+        return max_mana_for_land;
+    }
+
+} // namespace
+
 namespace dandan::core
 {
     void Player::drawCard(Game &game)
@@ -76,7 +125,7 @@ namespace dandan::core
         return false;
     }
 
-    mana::Mana Player::getAvailableMana(core::Game &game) const
+    mana::Mana Player::getAvailableMana(const core::Game &game) const
     {
         mana::Mana available_mana{};
         for (const auto &[type, amount] : m_mana_pool.getMana())
@@ -86,51 +135,13 @@ namespace dandan::core
 
         for (const auto &land_id : m_battlefield.getLands())
         {
-            auto *land{game.getCardByID(land_id)};
+            const auto *land{game.getCardByID(land_id)};
             if (land->getTapped())
             {
                 continue;
             }
 
-            mana::ManaMap max_mana_for_land{};
-            for (const auto &ability : land->getCurrentAbilities())
-            {
-                if (ability.type() == abilities::AbilityType::Type::Mana)
-                {
-                    const auto *mana_ability =
-                        dynamic_cast<const abilities::ManaAbility *>(
-                            &ability.definition());
-                    for (const auto &option :
-                         mana_ability->getManaList()->getOptions())
-                    {
-                        if (mana::MoreManaThan(option->getMana(),
-                                               max_mana_for_land))
-                        {
-                            max_mana_for_land = option->getMana();
-                        }
-                    }
-                }
-                else if (ability.type() ==
-                         abilities::AbilityType::Type::BasicLand)
-                {
-                    const auto *basic_ability =
-                        dynamic_cast<const abilities::BasicLandAbility *>(
-                            &ability.definition());
-                    const auto *mana_ability{basic_ability->getManaAbility(
-                        game, ability.getContext())};
-                    const auto *mana_list{mana_ability->getManaList()};
-
-                    for (const auto &option : mana_list->getOptions())
-                    {
-                        if (mana::MoreManaThan(option->getMana(),
-                                               max_mana_for_land))
-                        {
-                            max_mana_for_land = option->getMana();
-                        }
-                    }
-                }
-            }
-
+            auto max_mana_for_land{getMaxManaForLand(*land, game)};
             for (const auto &[type, amount] : max_mana_for_land)
             {
                 available_mana.addMana(type, amount);

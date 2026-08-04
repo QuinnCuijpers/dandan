@@ -2,6 +2,8 @@
 #include "dandan/conditions/PlayedLandCondition.h"
 #include "dandan/conditions/StartingPlayerCondition.h"
 #include "dandan/core/Player.h"
+#include "dandan/core/Target.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/core/actions/ActivateAbilityAction.h"
 #include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/core/phases/BeginningPhase.h"
@@ -9,16 +11,38 @@
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
 #include "dandan/log.h"
 #include "dandan/utils/overloadVisitor.h"
+#include <algorithm>
 #include <deque>
 #include <memory>
 #include <random>
 #include <sstream>
 #include <string>
 #include <utility>
+#include <vector>
 
 #ifdef DANDAN_SERIALIZE
 #include <fstream>
 #endif
+
+namespace
+{
+    using namespace dandan;
+
+    std::vector<core::Target> getCreaturesForPlayer(const core::Player &player)
+    {
+        auto targets{std::vector<core::Target>{}};
+
+        const auto &creatures =
+            player.battlefield().permanents().at(core::Type::Creature);
+
+        std::transform(
+            creatures.begin(), creatures.end(), std::back_inserter(targets),
+            [](const core::Permanent &perm) -> core::Target { return perm; });
+
+        return targets;
+    }
+
+} // namespace
 
 namespace dandan::core
 {
@@ -342,6 +366,72 @@ namespace dandan::core
         std::exit(0);
     }
 
+    std::vector<core::Target> Game::getValidTargets(core::TargetType type,
+                                                    Controller controller) const
+    {
+        switch (type)
+        {
+        case TargetType::Player:
+        {
+            const auto &players = getPlayers();
+            std::vector<Target> targets;
+            std::transform(
+                players.begin(), players.end(), std::back_inserter(targets),
+                [](const Player &player) -> Target { return player.getID(); });
+            return targets;
+        }
+        case TargetType::Creature:
+            return getValidCreatures(controller);
+        case TargetType::Permanent:
+        {
+            std::vector<Target> targets;
+            auto starting_player_id{activePlayer().getID()};
+            auto current_player_id{starting_player_id};
+
+            while (true)
+            {
+                const auto &player{getPlayer(current_player_id)};
+                const auto &player_permanents =
+                    player.battlefield().permanents();
+                for (const auto &[permanent_type, permanents] :
+                     player_permanents)
+                {
+                    std::transform(permanents.begin(), permanents.end(),
+                                   std::back_inserter(targets),
+                                   [](const Permanent &perm) -> Target
+                                   { return perm; });
+                }
+                current_player_id = getNextPlayerID(current_player_id);
+                if (current_player_id == starting_player_id)
+                {
+                    break;
+                }
+            }
+            return targets;
+        }
+        case TargetType::Land:
+        case TargetType::Planeswalker:
+        case TargetType::Card:
+        case TargetType::Any:
+        case TargetType::Spell:
+        {
+            std::vector<Target> targets{};
+            for (const auto &object : m_stack.getStackObjects())
+            {
+                if (std::holds_alternative<CardID>(object))
+                {
+                    targets.emplace_back(std::get<CardID>(object));
+                }
+            }
+            return targets;
+        }
+        default:
+            throw std::runtime_error("getValidTargets for type " +
+                                     targetTypeToString(type) +
+                                     " is not implemented yet");
+        }
+    }
+
     void Game::handlePlay(const std::string &input)
     {
 
@@ -486,5 +576,42 @@ namespace dandan::core
         {
             eventManager().notify(*event, *this);
         }
+    }
+
+    std::vector<core::Target> Game::getValidCreatures(
+        Controller controller) const
+    {
+        std::vector<core::Target> targets{};
+        auto starting_player_id{m_priority_manager.getPlayerWithPriority()};
+        auto current_player_id{starting_player_id};
+
+        if (controller == Controller::You || controller == Controller::Any)
+        {
+            const auto &player{getPlayer(current_player_id)};
+            auto creatures{getCreaturesForPlayer(player)};
+
+            targets.insert(targets.end(), creatures.begin(), creatures.end());
+        }
+        if (controller == Controller::Opponent || controller == Controller::Any)
+        {
+
+            while (true)
+            {
+                const auto nextPlayer{getNextPlayerID(current_player_id)};
+                const auto &player{getPlayer(nextPlayer)};
+
+                auto creatures{getCreaturesForPlayer(player)};
+
+                targets.insert(targets.end(), creatures.begin(),
+                               creatures.end());
+
+                current_player_id = getNextPlayerID(current_player_id);
+                if (current_player_id == starting_player_id)
+                {
+                    break;
+                }
+            }
+        }
+        return targets;
     }
 } // namespace dandan::core

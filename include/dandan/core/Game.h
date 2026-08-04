@@ -29,7 +29,6 @@
 #include <iterator>
 #include <memory>
 #include <unordered_map>
-#include <variant>
 #include <vector>
 
 namespace dandan::core
@@ -441,115 +440,7 @@ namespace dandan::core
 
         std::vector<core::Target> getValidTargets(
             core::TargetType type,
-            Controller controller = Controller::Any) const
-        {
-            switch (type)
-            {
-            case TargetType::Player:
-            {
-                const auto &players = getPlayers();
-                std::vector<Target> targets;
-                std::transform(players.begin(), players.end(),
-                               std::back_inserter(targets),
-                               [](const Player &player) -> Target
-                               { return player.getID(); });
-                return targets;
-            }
-            case TargetType::Creature:
-            {
-                std::vector<Target> targets;
-                auto starting_player_id{
-                    m_priority_manager.getPlayerWithPriority()};
-                auto current_player_id{starting_player_id};
-
-                if (controller == Controller::You ||
-                    controller == Controller::Any)
-                {
-                    const auto &player{getPlayer(current_player_id)};
-                    const auto &creatures =
-                        player.battlefield().permanents().at(Type::Creature);
-
-                    std::transform(creatures.begin(), creatures.end(),
-                                   std::back_inserter(targets),
-                                   [](const Permanent &perm) -> Target
-                                   { return perm; });
-                }
-                if (controller == Controller::Opponent ||
-                    controller == Controller::Any)
-                {
-
-                    while (true)
-                    {
-                        const auto nextPlayer{
-                            getNextPlayerID(current_player_id)};
-                        const auto &player{getPlayer(nextPlayer)};
-                        const auto &creatures =
-                            player.battlefield().permanents().at(
-                                Type::Creature);
-
-                        std::transform(creatures.begin(), creatures.end(),
-                                       std::back_inserter(targets),
-                                       [](const Permanent &perm) -> Target
-                                       { return perm; });
-                        current_player_id = getNextPlayerID(current_player_id);
-                        if (current_player_id == starting_player_id)
-                        {
-                            break;
-                        }
-                    }
-                }
-                return targets;
-            }
-
-            case TargetType::Permanent:
-            {
-                std::vector<Target> targets;
-                auto starting_player_id{activePlayer().getID()};
-                auto current_player_id{starting_player_id};
-
-                while (true)
-                {
-                    const auto &player{getPlayer(current_player_id)};
-                    const auto &player_permanents =
-                        player.battlefield().permanents();
-                    for (const auto &[permanent_type, permanents] :
-                         player_permanents)
-                    {
-                        std::transform(permanents.begin(), permanents.end(),
-                                       std::back_inserter(targets),
-                                       [](const Permanent &perm) -> Target
-                                       { return perm; });
-                    }
-                    current_player_id = getNextPlayerID(current_player_id);
-                    if (current_player_id == starting_player_id)
-                    {
-                        break;
-                    }
-                }
-                return targets;
-            }
-            case TargetType::Land:
-            case TargetType::Planeswalker:
-            case TargetType::Card:
-            case TargetType::Any:
-            case TargetType::Spell:
-            {
-                std::vector<Target> targets{};
-                for (const auto &object : m_stack.getStackObjects())
-                {
-                    if (std::holds_alternative<CardID>(object))
-                    {
-                        targets.emplace_back(std::get<CardID>(object));
-                    }
-                }
-                return targets;
-            }
-            default:
-                throw std::runtime_error("getValidTargets for type " +
-                                         targetTypeToString(type) +
-                                         " is not implemented yet");
-            }
-        }
+            Controller controller = Controller::Any) const;
 
         void handlePlay(const std::string &input);
         void handleActivate(const std::string &input);
@@ -589,6 +480,9 @@ namespace dandan::core
         void GameSetup(bool shuffle = true);
 
         void loadCards(const std::filesystem::path &path);
+
+        std::vector<Target> getValidCreatures(
+            Controller controller = Controller::Any) const;
 
         static void clearScreen();
     };
