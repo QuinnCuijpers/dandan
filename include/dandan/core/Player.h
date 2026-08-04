@@ -199,7 +199,7 @@ namespace dandan::core
         // bool m_won_game{false};
         bool m_lost_game{false};
 
-        mana::Mana getAvailableMana(core::Game &game) const;
+        [[nodiscard]] mana::Mana getAvailableMana(const core::Game &game) const;
     };
 } // namespace dandan::core
 

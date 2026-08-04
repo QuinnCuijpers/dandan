@@ -110,9 +110,9 @@ namespace dandan::abilities
     }
 
     const ManaAbility *BasicLandAbility::getManaAbility(
-        core::Game &game, const AbilityContext &context) const
+        const core::Game &game, const AbilityContext &context) const
     {
-        auto *card{game.getCardByID(context.source_card_id)};
+        const auto *card{game.getCardByID(context.source_card_id)};
         assert(card->getCurrentSubTypes().size() == 1);
         auto type{card->getCurrentSubTypes()[0]};
         return m_basic_land_ability_map.at(type).get();

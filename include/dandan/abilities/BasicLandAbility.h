@@ -39,7 +39,7 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::Game &game, AbilityContext context) const override;
 
-        const ManaAbility *getManaAbility(core::Game &game,
+        const ManaAbility *getManaAbility(const core::Game &game,
                                           const AbilityContext &context) const;
 
     private:

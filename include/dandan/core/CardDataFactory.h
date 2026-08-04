@@ -39,7 +39,7 @@ namespace dandan::core
                     ptr->abilities.push_back(
                         std::make_unique<abilities::BasicLandAbility>());
                 }
-                auto &ref = *ptr;
+                const auto &ref = *ptr;
                 m_card_data_cache[key] = std::move(ptr);
                 return ref;
             }
