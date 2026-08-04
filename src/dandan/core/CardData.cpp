@@ -12,8 +12,21 @@
 #endif
 namespace dandan::core
 {
-#ifdef DANDAN_SERIALIZE
 
+    std::ostream &operator<<(std::ostream &ostream,
+                             const dandan::core::CardData &card)
+    {
+        ostream << "Card{name: " << card.name << ", cost: "
+                << dandan::mana::ManaToSymbols(card.mana_cost->getMana())
+                << ", type: " << TypeToString(card.type) << ", subtypes: ";
+        for (auto type : card.subtypes)
+        {
+            ostream << SubTypeToString(type) << '}';
+        }
+        return ostream;
+    }
+
+#ifdef DANDAN_SERIALIZE
     std::optional<CardData> getCardData(std::string_view name)
     {
         auto json_path{std::filesystem::path(DANDAN_PROJECT_SOURCE) /
@@ -42,18 +55,4 @@ namespace dandan::core
             dandan::core::CardData>::create_json(&card);
     }
 #endif
-
-    std::ostream &operator<<(std::ostream &ostream,
-                             const dandan::core::CardData &card)
-    {
-        ostream << "Card{name: " << card.name << ", cost: "
-                << dandan::mana::ManaToSymbols(card.mana_cost->getMana())
-                << ", type: " << TypeToString(card.type) << ", subtypes: ";
-        for (auto type : card.subtypes)
-        {
-            ostream << SubTypeToString(type) << '}';
-        }
-        return ostream;
-    }
-
 } // namespace dandan::core

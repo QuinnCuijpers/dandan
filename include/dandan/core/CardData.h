@@ -13,7 +13,7 @@
 #include <string_view>
 
 #ifdef DANDAN_SERIALIZE
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 #endif
 
 namespace dandan::core
@@ -55,9 +55,8 @@ namespace dandan::core
     std::ostream &operator<<(std::ostream &ostream,
                              const dandan::core::CardData &card);
 
-    std::optional<CardData> getCardData(std::string_view name);
-
 #ifdef DANDAN_SERIALIZE
+    std::optional<CardData> getCardData(std::string_view name);
     void from_json(const nlohmann::json &json, CardData &card);
     void to_json(nlohmann::json &json, const CardData &card);
 #endif
