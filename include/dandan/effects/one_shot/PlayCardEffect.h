@@ -165,8 +165,8 @@ namespace dandan::effects
                             auto valid_targets = std::vector<core::Target>{};
                             for (const auto &type : target_type.types)
                             {
-                                auto new_valid_targets =
-                                    game.getValidTargets(type);
+                                auto new_valid_targets = game.getValidTargets(
+                                    type, target_type.controller);
 
                                 valid_targets.insert(valid_targets.end(),
                                                      new_valid_targets.begin(),
