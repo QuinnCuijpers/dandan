@@ -18,10 +18,7 @@ namespace dandan::events
          * @param card_id The CardID of the source card that generated the event
          * @param controller The Controller of the source card
          */
-        explicit ETBEvent(core::CardID card_id, core::PlayerID controller)
-            : IEvent{card_id, controller}
-        {
-        }
+        explicit ETBEvent(core::CardID card_id, core::PlayerID controller);
 
         // void setTapped(bool tapped)
         // {
@@ -31,10 +28,7 @@ namespace dandan::events
         /** query whether the card entered tapped
          * @returns a boolean representing whether the card entered tapped
          */
-        [[nodiscard]] bool isTapped() const
-        {
-            return m_tapped.value_or(false);
-        }
+        [[nodiscard]] bool isTapped() const;
 
     private:
         std::optional<bool> m_tapped;

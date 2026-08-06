@@ -18,10 +18,8 @@ namespace dandan::events
          * event
          * @param controller The Controller of the source card
          */
-        explicit NoIslandsEvent(core::CardID card_id, core::PlayerID controller)
-            : IEvent(card_id, controller)
-        {
-        }
+        explicit NoIslandsEvent(core::CardID card_id,
+                                core::PlayerID controller);
     };
 } // namespace dandan::events
 

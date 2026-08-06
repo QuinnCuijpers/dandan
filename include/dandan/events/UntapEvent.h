@@ -18,10 +18,7 @@ namespace dandan::events
         /** Constructor
          * @param card The card that was untapped
          */
-        explicit UntapEvent(core::Card &card)
-            : IEvent(card.getID(), card.getControllerID())
-        {
-        }
+        explicit UntapEvent(core::Card &card);
     };
 } // namespace dandan::events
 
