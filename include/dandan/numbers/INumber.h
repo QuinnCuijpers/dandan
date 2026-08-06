@@ -1,7 +1,6 @@
 #ifndef DANDAN_INUMBER_H
 #define DANDAN_INUMBER_H
 
-#include "dandan/core/Context.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/EffectContext.h"
 

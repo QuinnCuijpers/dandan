@@ -1,1 +1,4 @@
-target_sources(DandanLib PRIVATE ConditionalNumber.cpp)
+target_sources(DandanLib PRIVATE
+  ConditionalNumber.cpp
+  ExactNumber.cpp
+  GraveyardCount.cpp)

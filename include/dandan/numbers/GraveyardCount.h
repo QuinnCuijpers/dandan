@@ -3,40 +3,21 @@
 
 #include "dandan/effects/EffectContext.h"
 #include "dandan/numbers/INumber.h"
-#include <algorithm>
 
 namespace dandan::numbers
 {
     class GraveyardCount : public INumber
     {
     public:
-        explicit GraveyardCount(std::string name) : m_name(std::move(name))
-        {
-        }
+        explicit GraveyardCount(std::string name);
 
-        [[nodiscard]] const std::string &getName() const
-        {
-            return m_name;
-        }
+        [[nodiscard]] const std::string &getName() const;
 
         [[nodiscard]] int getValue(
-            [[maybe_unused]] core::Game &game,
-            [[maybe_unused]] effects::EffectContext context) const override
-        {
-            auto count{std::count_if(game.graveyard().getCards().begin(),
-                                     game.graveyard().getCards().end(),
-                                     [this, &game](const auto &card_id)
-                                     {
-                                         auto card{game.getCardByID(card_id)};
-                                         return card->getData().name == m_name;
-                                     })};
-            return static_cast<int>(count);
-        }
+            core::Game &game,
+            [[maybe_unused]] effects::EffectContext context) const override;
 
-        [[nodiscard]] std::unique_ptr<INumber> clone() const override
-        {
-            return std::make_unique<GraveyardCount>(m_name);
-        }
+        [[nodiscard]] std::unique_ptr<INumber> clone() const override;
 
     private:
         std::string m_name;
