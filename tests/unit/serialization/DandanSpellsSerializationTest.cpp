@@ -3,8 +3,6 @@
 #include "common.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
-#include "dandan/mana/BlueMana.h"
-#include "dandan/mana/GenericMana.h"
 #include <gtest/gtest.h>
 #include <memory>
 

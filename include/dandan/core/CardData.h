@@ -4,7 +4,7 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/mana/Manapool.h"
 
 #include <iostream>
 #include <memory>
@@ -38,7 +38,7 @@ namespace dandan::core
     struct CardData
     {
         std::string name{"unknown"};
-        std::unique_ptr<mana::Mana> mana_cost;
+        std::unique_ptr<mana::Manapool> mana_cost;
         Type type{Type::Land};
         std::vector<SubType> subtypes;
         SuperType supertype{SuperType::None};

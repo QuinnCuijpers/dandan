@@ -95,18 +95,18 @@ namespace dandan::mana
         return ostream;
     }
 
-    /** @brief A class representing mana in the game.
-     * @class Mana
+    /** @brief A class representing a manapool in the game.
+     * @class Manapool
      */
-    class Mana
+    class Manapool
     {
     public:
-        Mana() = default;
-        Mana(const Mana &) = delete;
-        Mana(Mana &&) = default;
-        Mana &operator=(const Mana &) = delete;
-        Mana &operator=(Mana &&) = default;
-        virtual ~Mana() = default;
+        Manapool() = default;
+        Manapool(const Manapool &) = delete;
+        Manapool(Manapool &&) = default;
+        Manapool &operator=(const Manapool &) = delete;
+        Manapool &operator=(Manapool &&) = default;
+        virtual ~Manapool() = default;
 
         /** Adds mana to the resource pool.
          * @param type The type of mana to add.
@@ -137,7 +137,7 @@ namespace dandan::mana
          * @param cost The cost to check.
          * @return True if the mana can pay the cost, false otherwise.
          */
-        [[nodiscard]] bool canPay(const Mana &cost) const
+        [[nodiscard]] bool canPay(const Manapool &cost) const
         {
             int generic_cost = cost.getMana().at(ManaType::GENERIC);
             int available_generic{};
@@ -159,7 +159,7 @@ namespace dandan::mana
         /** Pays the cost of the mana passed in.
          * @param cost The cost to pay.
          */
-        void pay(const Mana &cost)
+        void pay(const Manapool &cost)
         {
             std::cout << "Paying cost: " << cost << '\n';
             int generic_cost = cost.getMana().at(ManaType::GENERIC);
@@ -196,7 +196,8 @@ namespace dandan::mana
          * @param mana The mana to output.
          * @return The output stream.
          */
-        friend std::ostream &operator<<(std::ostream &ostream, const Mana &mana)
+        friend std::ostream &operator<<(std::ostream &ostream,
+                                        const Manapool &mana)
         {
             ostream << ManaToSymbols(mana.getMana());
             return ostream;
@@ -210,7 +211,6 @@ namespace dandan::mana
             {ManaType::GENERIC, 0},
         };
     };
-
 } // namespace dandan::mana
 
 #endif // DANDAN_MANA_H

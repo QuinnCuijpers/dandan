@@ -1,7 +1,7 @@
 #ifndef DANDAN_ANDMANA_H
 #define DANDAN_ANDMANA_H
 
-#include "Mana.h"
+#include "Manapool.h"
 #include <memory>
 
 namespace dandan::mana
@@ -11,24 +11,15 @@ namespace dandan::mana
      *
      * @implements Mana
      */
-    class AndMana : public Mana
+    class AndMana : public Manapool
     {
     public:
         /** Constructs an AndMana instance.
          * @param a The first mana resource.
          * @param b The second mana resource.
          */
-        AndMana(std::unique_ptr<Mana> a, std::unique_ptr<Mana> b) // NOLINT
-        {
-            for (const auto &[type, amount] : a->getMana())
-            {
-                addMana(type, amount);
-            }
-            for (const auto &[type, amount] : b->getMana())
-            {
-                addMana(type, amount);
-            }
-        }
+        AndMana(std::unique_ptr<Manapool> first,
+                std::unique_ptr<Manapool> second);
     };
 } // namespace dandan::mana
 

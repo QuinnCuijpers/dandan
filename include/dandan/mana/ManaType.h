@@ -3,8 +3,6 @@
 
 #include <cassert>
 #include <cstdint>
-#include <stdexcept>
-#include <string>
 #include <string_view>
 
 namespace dandan::mana
@@ -20,64 +18,7 @@ namespace dandan::mana
         GREEN,
     };
 
-    // [[maybe_unused]]
-    // static std::string_view ManaTypeToString(ManaType type)
-    // {
-    //     switch (type)
-    //     {
-    //     case ManaType::COLORLESS:
-    //         return "Colorless";
-    //     case ManaType::WHITE:
-    //         return "White";
-    //     case ManaType::BLUE:
-    //         return "Blue";
-    //     case ManaType::BLACK:
-    //         return "Black";
-    //     case ManaType::RED:
-    //         return "Red";
-    //     case ManaType::GREEN:
-    //         return "Green";
-    //     case ManaType::GENERIC:
-    //         return "Generic";
-    //     }
-
-    //     assert(false && "Unknown mana type in ManaTypeToString");
-    // }
-
-    [[maybe_unused]]
-    static ManaType ManaTypeFromString(const std::string_view &str)
-    {
-        if (str == "Colorless")
-        {
-            return ManaType::COLORLESS;
-        }
-        if (str == "White")
-        {
-            return ManaType::WHITE;
-        }
-        if (str == "Blue")
-        {
-            return ManaType::BLUE;
-        }
-        if (str == "Black")
-        {
-            return ManaType::BLACK;
-        }
-        if (str == "Red")
-        {
-            return ManaType::RED;
-        }
-        if (str == "Green")
-        {
-            return ManaType::GREEN;
-        }
-        if (str == "Generic")
-        {
-            return ManaType::GENERIC;
-        }
-        throw std::invalid_argument(std::string("Invalid mana type string: ") +
-                                    std::string(str));
-    }
+    inline ManaType ManaTypeFromString(std::string_view str);
 
 } // namespace dandan::mana
 

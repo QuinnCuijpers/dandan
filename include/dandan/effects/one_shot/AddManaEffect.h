@@ -5,7 +5,7 @@
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/events/IEvent.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/mana/Manapool.h"
 #include <memory>
 #include <utility>
 namespace dandan::effects

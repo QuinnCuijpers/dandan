@@ -1,6 +1,7 @@
 #ifndef DANDAN_TESTS_COMMON_H
 #define DANDAN_TESTS_COMMON_H
 
+#include "dandan/mana/ManaPip.h"
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <string>

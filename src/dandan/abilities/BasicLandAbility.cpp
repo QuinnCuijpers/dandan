@@ -1,11 +1,7 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
-#include "dandan/mana/BlackMana.h"
-#include "dandan/mana/BlueMana.h"
-#include "dandan/mana/GreenMana.h"
 #include "dandan/mana/ManaList.h"
-#include "dandan/mana/RedMana.h"
-#include "dandan/mana/WhiteMana.h"
+#include "dandan/mana/ManaPip.h"
 #include <memory>
 #include <unordered_map>
 

@@ -4,7 +4,7 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/core/Game.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/mana/Manapool.h"
 
 namespace
 {
@@ -125,9 +125,9 @@ namespace dandan::core
         return false;
     }
 
-    mana::Mana Player::getAvailableMana(const core::Game &game) const
+    mana::Manapool Player::getAvailableMana(const core::Game &game) const
     {
-        mana::Mana available_mana{};
+        mana::Manapool available_mana{};
         for (const auto &[type, amount] : m_mana_pool.getMana())
         {
             available_mana.addMana(type, amount);

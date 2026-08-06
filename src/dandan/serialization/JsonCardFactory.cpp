@@ -5,7 +5,7 @@
 #ifdef DANDAN_SERIALIZE
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/mana/Manapool.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include "dandan/serialization/JsonFactory.h"
 #include <nlohmann/json.hpp>
@@ -29,7 +29,7 @@ namespace dandan::serialization
 
         json["name"] = card->name;
         json["cost"] =
-            JsonFactory<mana::Mana>::create_json(card->mana_cost.get());
+            JsonFactory<mana::Manapool>::create_json(card->mana_cost.get());
         json["type"] = card->type;
 
         if (card->color != core::ColorWord::Colorless)
@@ -66,7 +66,8 @@ namespace dandan::serialization
     {
 
         auto name = json.at("name").get<std::string>();
-        auto cost = JsonFactory<mana::Mana>::create_product(json.at("cost"));
+        auto cost =
+            JsonFactory<mana::Manapool>::create_product(json.at("cost"));
         auto type = json.at("type").get<core::Type>();
 
         auto subtypes = std::vector<core::SubType>{};

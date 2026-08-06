@@ -6,7 +6,7 @@
 #include "dandan/costs/ManaCost.h"
 #include "dandan/costs/SelfSacrificeCost.h"
 #include "dandan/costs/TapCost.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/mana/Manapool.h"
 #include "dandan/serialization/JsonManaFactory.h"
 #include <nlohmann/json.hpp>
 
@@ -30,7 +30,7 @@ namespace dandan::serialization
             auto json = nlohmann::json{{"type", "ManaCost"},
                                        {"data", nlohmann::json::object()}};
             json["data"]["mana"] =
-                JsonFactory<mana::Mana>::create_json(mana_cost->getMana());
+                JsonFactory<mana::Manapool>::create_json(mana_cost->getMana());
             return json;
         }
         if ([[maybe_unused]] const auto *self_sacrifice_cost =
@@ -81,7 +81,7 @@ namespace dandan::serialization
         if (type == "ManaCost")
         {
             const auto &mana_json = data.at("mana");
-            auto mana = JsonFactory<mana::Mana>::create_product(mana_json);
+            auto mana = JsonFactory<mana::Manapool>::create_product(mana_json);
             return std::make_unique<costs::ManaCost>(std::move(mana));
         }
         if (type == "SelfSacrificeCost")

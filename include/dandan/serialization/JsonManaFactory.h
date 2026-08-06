@@ -17,11 +17,11 @@ namespace dandan::serialization
             const nlohmann::json &json);
     };
 
-    template <> class JsonFactory<dandan::mana::Mana>
+    template <> class JsonFactory<dandan::mana::Manapool>
     {
     public:
-        static nlohmann::json create_json(const dandan::mana::Mana *mana);
-        static std::unique_ptr<dandan::mana::Mana> create_product(
+        static nlohmann::json create_json(const dandan::mana::Manapool *mana);
+        static std::unique_ptr<dandan::mana::Manapool> create_product(
             const nlohmann::json &json);
     };
 } // namespace dandan::serialization

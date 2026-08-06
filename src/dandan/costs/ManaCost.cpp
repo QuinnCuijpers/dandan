@@ -1,10 +1,10 @@
 #include "dandan/costs/ManaCost.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/mana/Manapool.h"
 
 namespace dandan::costs
 {
 
-    ManaCost::ManaCost(std::unique_ptr<mana::Mana> mana)
+    ManaCost::ManaCost(std::unique_ptr<mana::Manapool> mana)
         : m_mana{std::move(mana)} {};
 
     std::string ManaCost::display([[maybe_unused]] bool isFinal) const
@@ -14,7 +14,7 @@ namespace dandan::costs
         return res;
     }
 
-    [[nodiscard]] mana::Mana *ManaCost::getMana() const
+    [[nodiscard]] mana::Manapool *ManaCost::getMana() const
     {
         return m_mana.get();
     }

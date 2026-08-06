@@ -11,8 +11,6 @@
 #include "dandan/core/Zone.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
-#include "dandan/mana/BlueMana.h"
-#include "dandan/mana/GenericMana.h"
 #include <algorithm>
 #include <array>
 #include <cstddef>

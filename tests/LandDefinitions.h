@@ -5,6 +5,7 @@
 #include "dandan/costs/AndCost.h"
 #include "dandan/dandan.h"
 #include "dandan/mana/AndMana.h"
+#include "dandan/mana/ManaPip.h"
 #include <memory>
 #include <vector>
 
@@ -91,7 +92,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Shivan_Reef_Abilities()
         std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
             std::make_unique<dandan::mana::ColorlessMana>()}));
 
-    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Mana>>{}};
+    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Manapool>>{}};
     mana_list.emplace_back(std::make_unique<dandan::mana::BlueMana>());
     mana_list.emplace_back(std::make_unique<dandan::mana::RedMana>());
 
@@ -106,7 +107,7 @@ Temple_of_Epiphany_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Mana>>{}};
+    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Manapool>>{}};
     mana_list.emplace_back(std::make_unique<dandan::mana::BlueMana>());
     mana_list.emplace_back(std::make_unique<dandan::mana::RedMana>());
 
@@ -155,13 +156,13 @@ Svyelunite_Temple_Abilities()
         std::make_unique<dandan::EntersTappedEffect>()));
 
     abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::ManaList{std::make_unique<dandan::BlueMana>()}));
+        dandan::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
 
     abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
         std::make_unique<dandan::costs::AndCost>(
             std::make_unique<dandan::costs::TapCost>(),
             std::make_unique<dandan::costs::SelfSacrificeCost>()),
-        dandan::ManaList{std::make_unique<dandan::BlueMana>(2)}));
+        dandan::ManaList{std::make_unique<dandan::mana::BlueMana>(2)}));
 
     return abilities;
 }

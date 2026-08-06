@@ -1,8 +1,8 @@
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/AddManaEffect.h"
-#include "dandan/mana/Mana.h"
 #include "dandan/mana/ManaList.h"
+#include "dandan/mana/Manapool.h"
 #include <memory>
 
 namespace dandan::abilities

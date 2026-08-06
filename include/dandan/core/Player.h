@@ -3,7 +3,7 @@
 
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Hand.h"
-#include "dandan/mana/Mana.h"
+#include "dandan/mana/Manapool.h"
 #include <cstddef>
 
 const static int STARTING_HAND_SIZE{7};
@@ -142,7 +142,7 @@ namespace dandan::core
         /** Gets the mana pool of the player mutably.
          * @return A reference to the mana pool of the player.
          */
-        [[nodiscard]] mana::Mana &manaPool()
+        [[nodiscard]] mana::Manapool &manaPool()
         {
             return m_mana_pool;
         }
@@ -150,7 +150,7 @@ namespace dandan::core
         /** Gets the mana pool of the player immutably.
          * @return A const reference to the mana pool of the player.
          */
-        [[nodiscard]] const mana::Mana &manaPool() const
+        [[nodiscard]] const mana::Manapool &manaPool() const
         {
             return m_mana_pool;
         }
@@ -192,14 +192,15 @@ namespace dandan::core
         int m_life_total{STARTING_LIFE_TOTAL};
         Battlefield m_battlefield;
         Hand m_hand;
-        mana::Mana m_mana_pool;
+        mana::Manapool m_mana_pool;
         bool m_played_land_this_turn{false};
         bool m_drew_card_from_empty_library{false};
         size_t m_max_hand_size{STARTING_HAND_SIZE};
         // bool m_won_game{false};
         bool m_lost_game{false};
 
-        [[nodiscard]] mana::Mana getAvailableMana(const core::Game &game) const;
+        [[nodiscard]] mana::Manapool getAvailableMana(
+            const core::Game &game) const;
     };
 } // namespace dandan::core
 
