@@ -3,7 +3,6 @@
 #define DANDAN_ETBTRIGGER_H
 
 #include "ITrigger.h"
-#include "dandan/events/ETBEvent.h"
 #include "dandan/events/IEvent.h"
 #include <optional>
 
@@ -14,7 +13,7 @@ namespace dandan::triggers
      *
      * @implements ITrigger
      */
-    class ETBTrigger : public ITrigger
+    template <bool self_trigger = false> class ETBTrigger : public ITrigger
     {
     public:
         ETBTrigger() = default;
@@ -39,25 +38,16 @@ namespace dandan::triggers
 
         [[nodiscard]] bool triggersOn(
             const events::IEvent &other,
-            [[maybe_unused]] abilities::AbilityContext context) const override
-        {
-            const auto *otherETB =
-                dynamic_cast<const events::ETBEvent *>(&other);
-            if (otherETB == nullptr)
-            {
-                return false;
-            }
-            if (m_tapped.has_value() &&
-                otherETB->isTapped() != m_tapped.value())
-            {
-                return false;
-            }
-            return true;
-        }
+            [[maybe_unused]] abilities::AbilityContext context) const override;
 
     private:
         std::optional<bool> m_tapped;
     };
+
+    using SelfETBTrigger = ETBTrigger<true>;
+
+    extern template class ETBTrigger<true>;
+    extern template class ETBTrigger<false>;
 } // namespace dandan::triggers
 
 #endif

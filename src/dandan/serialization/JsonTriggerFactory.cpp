@@ -2,7 +2,6 @@
 #ifdef DANDAN_SERIALIZE
 #include "dandan/triggers/ETBtrigger.h"
 #include "dandan/triggers/ITrigger.h"
-#include "dandan/triggers/SelfETBtrigger.h"
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -21,7 +20,8 @@ namespace dandan::serialization
             }
             return json;
         }
-        if (dynamic_cast<const triggers::ETBTrigger *>(trigger) != nullptr)
+        if (dynamic_cast<const triggers::ETBTrigger<> *>(trigger) != nullptr)
+
         {
             return nlohmann::json{{"type", "ETBTrigger"},
                                   {"data", nlohmann::json::object()}};
@@ -47,7 +47,7 @@ namespace dandan::serialization
         }
         if (type == "ETBTrigger")
         {
-            return std::make_unique<triggers::ETBTrigger>();
+            return std::make_unique<triggers::ETBTrigger<>>();
         }
 
         throw std::runtime_error("Unknown trigger type: " + type);
