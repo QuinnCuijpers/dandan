@@ -4,7 +4,7 @@
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Game.h"
-#include "dandan/log.h"
+#include "dandan/utils/log.h"
 #include <vector>
 
 #ifdef DANDAN_SERIALIZE

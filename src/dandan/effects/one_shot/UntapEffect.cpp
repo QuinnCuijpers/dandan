@@ -1,6 +1,6 @@
 #include "dandan/effects/one_shot//UntapEffect.h"
 #include "dandan/events/UntapEvent.h"
-#include "dandan/log.h"
+#include "dandan/utils/log.h"
 
 namespace dandan::effects
 {

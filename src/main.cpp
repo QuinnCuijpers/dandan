@@ -1,5 +1,5 @@
 #include "dandan/dandan.h"
-#include "dandan/log.h"
+#include "dandan/utils/log.h"
 
 #include <iostream>
 
@@ -11,7 +11,7 @@
 int main()
 {
 #ifdef DANDAN_ENABLE_LOGGING
-    dandan::initLogging(dandan::DANDAN_LOG_FILE_PATH.string());
+    dandan::log::initLogging(dandan::log::DANDAN_LOG_FILE_PATH.string());
     DLOGI << "Application started";
 #endif
 

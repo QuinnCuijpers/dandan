@@ -5,7 +5,7 @@
 #include "dandan/core/phases/IPhase.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/UntapEffect.h"
-#include "dandan/log.h"
+#include "dandan/utils/log.h"
 
 #include <memory>
 #include <utility>

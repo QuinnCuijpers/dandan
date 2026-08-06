@@ -1,6 +1,6 @@
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/Game.h"
-#include "dandan/log.h"
+#include "dandan/utils/log.h"
 #include <string>
 
 namespace dandan::core

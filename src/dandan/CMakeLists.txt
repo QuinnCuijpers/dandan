@@ -3,13 +3,16 @@ add_library(DandanLib)
 target_sources(DandanLib PUBLIC FILE_SET HEADERS BASE_DIRS
                                 ${CMAKE_SOURCE_DIR}/include)
 
-target_sources(DandanLib PRIVATE FILE_SET internal_headers TYPE HEADERS
-                                 BASE_DIRS ${CMAKE_SOURCE_DIR}/src)
+target_sources(DandanLib
+  PRIVATE
+  FILE_SET internal_headers
+  TYPE HEADERS
+  BASE_DIRS ${CMAKE_SOURCE_DIR}/src)
 
 target_compile_features(DandanLib PRIVATE cxx_std_17)
 
 if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-   OR (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"))
+  OR(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"))
 
   target_compile_options(DandanLib PRIVATE /W4)
 
@@ -20,10 +23,6 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 
 endif()
 
-if(DANDAN_ENABLE_LOGGING)
-  target_sources(DandanLib PRIVATE log.cpp)
-endif()
-
 add_subdirectory(core)
 add_subdirectory(abilities)
 add_subdirectory(effects)
@@ -32,6 +31,7 @@ add_subdirectory(costs)
 add_subdirectory(conditions)
 add_subdirectory(triggers)
 add_subdirectory(numbers)
+add_subdirectory(mana)
 
 if(DANDAN_BUILD_SERIALIZE)
   add_subdirectory(serialization)
@@ -45,7 +45,8 @@ target_link_libraries(
           DandanEvents
           DandanCosts
           DandanConditions
-          DandanTriggers)
+          DandanTriggers
+          DandanMana)
 
 if(DANDAN_BUILD_SERIALIZE)
   target_link_libraries(DandanLib PRIVATE DandanSerialize
