@@ -16,32 +16,9 @@ namespace dandan::core
         STACK
     };
 
-    inline std::string zoneToString(Zone zone)
-    {
-        switch (zone)
-        {
-        case Zone::LIBRARY:
-            return "Library";
-        case Zone::HAND:
-            return "Hand";
-        case Zone::BATTLEFIELD:
-            return "Battlefield";
-        case Zone::GRAVEYARD:
-            return "Graveyard";
-        case Zone::EXILE:
-            return "Exile";
-        case Zone::STACK:
-            return "Stack";
-        default:
-            return "Unknown Zone";
-        }
-    }
+    std::string zoneToString(Zone zone);
 
-    inline std::ostream &operator<<(std::ostream &ostream, Zone zone)
-    {
-        ostream << zoneToString(zone);
-        return ostream;
-    }
+    std::ostream &operator<<(std::ostream &ostream, Zone zone);
 
 } // namespace dandan::core
 

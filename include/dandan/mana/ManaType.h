@@ -18,7 +18,7 @@ namespace dandan::mana
         GREEN,
     };
 
-    inline ManaType ManaTypeFromString(std::string_view str);
+    ManaType ManaTypeFromString(std::string_view str);
 
 } // namespace dandan::mana
 
