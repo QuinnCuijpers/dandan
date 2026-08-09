@@ -1,89 +1,41 @@
 #include "dandan/serialization/JsonConditionFactory.h"
-#include "dandan/conditions/FlyingCondition.h"
-#include <memory>
 #ifdef DANDAN_SERIALIZE
-#include "dandan/conditions/DefenderControlsNoBasicCondition.h"
-#include "dandan/conditions/MatchesReadLinksCondition.h"
-#include "dandan/conditions/SelfControlsNoBasicCondition.h"
+#include "dandan/conditions/ICondition.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <memory>
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
 {
+
     nlohmann::json JsonFactory<conditions::ICondition>::create_json(
-        [[maybe_unused]] const conditions::ICondition *condition)
+        const conditions::ICondition *condition)
     {
-        if (const auto *selfControlsNoIslandCondition =
-                dynamic_cast<const conditions::SelfControlsNoBasicCondition *>(
-                    condition))
+        auto json = nlohmann::json::object();
+        const auto &registration{
+            ConditionRegistry::instance().serializerFor(*condition)};
+
+        auto data = registration.serializer(condition);
+
+        if (registration.representation == JsonRepresentation::INLINE)
         {
-            auto json = nlohmann::json{{"type", "SelfControlsNoBasicCondition"},
-                                       {"data", nlohmann::json::object()}};
-            json["data"]["type"] = selfControlsNoIslandCondition->type();
-            return json;
-        }
-        if (const auto *defenderControlsNoBasicCondition = dynamic_cast<
-                const conditions::DefenderControlsNoBasicCondition *>(
-                condition))
-        {
-            auto json =
-                nlohmann::json{{"type", "DefenderControlsNoBasicCondition"},
-                               {"data", nlohmann::json::object()}};
-            json["data"]["type"] = defenderControlsNoBasicCondition->type();
-            return json;
-        }
-        if (const auto *matches =
-                dynamic_cast<const conditions::MatchesReadLinksCondition *>(
-                    condition))
-        {
-            auto json = nlohmann::json{{"type", "MatchesReadLinksCondition"},
-                                       {"data", nlohmann::json::object()}};
-            json["data"]["first"] = matches->getfirst();
-            json["data"]["second"] = matches->getSecond();
-            return json;
-        }
-        if (dynamic_cast<const conditions::FlyingCondition *>(condition) !=
-            nullptr)
-        {
-            auto json = nlohmann::json{{"type", "FlyingCondition"},
-                                       {"data", nlohmann::json::object()}};
-            return json;
+            return data;
         }
 
-        throw std::runtime_error(
-            "create_json for this type of ICondition is not "
-            "implemented yet.");
+        json["type"] = registration.name;
+        json["data"] = data;
+
+        return json;
     }
 
     std::unique_ptr<conditions::ICondition> JsonFactory<
-        conditions::ICondition>::
-        create_product([[maybe_unused]] const nlohmann::json &json)
+        conditions::ICondition>::create_product(const nlohmann::json &json)
     {
-        const std::string type{json.at("type").get<std::string>()};
-        const nlohmann::json &data{json.at("data")};
 
-        if (type == "SelfControlsNoBasicCondition")
-        {
-            return std::make_unique<conditions::SelfControlsNoBasicCondition>(
-                data.at("type").get<core::SubType>());
-        }
-        if (type == "DefenderControlsNoBasicCondition")
-        {
-
-            return std::make_unique<
-                conditions::DefenderControlsNoBasicCondition>(
-                data.at("type").get<core::SubType>());
-        }
-        if (type == "MatchesReadLinksCondition")
-        {
-            std::string first{data.at("first")};
-            std::string second{data.at("second")};
-            return std::make_unique<conditions::MatchesReadLinksCondition>(
-                first, second);
-        }
-
-        throw std::runtime_error(
-            "create_product for ICondition is not implemented yet.");
+        const auto &type = json.at("type").get<std::string>();
+        return ConditionRegistry::instance().deserializerFor(type)(
+            json.at("data"));
     }
 
 } // namespace dandan::serialization

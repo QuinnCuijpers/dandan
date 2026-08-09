@@ -44,7 +44,6 @@ target_link_libraries(
           DandanEffects
           DandanEvents
           DandanCosts
-          DandanConditions
           DandanTriggers
           DandanMana)
 
