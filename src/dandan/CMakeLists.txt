@@ -43,7 +43,6 @@ target_link_libraries(
           DandanAbilities
           DandanEffects
           DandanEvents
-          DandanTriggers
           DandanMana)
 
 if(DANDAN_BUILD_SERIALIZE)

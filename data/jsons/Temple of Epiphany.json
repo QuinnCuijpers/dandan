@@ -33,7 +33,9 @@
                     "type": "ScryEffect"
                 },
                 "trigger": {
-                    "data": {},
+                    "data": {
+                        "tapped": false
+                    },
                     "type": "SelfETBTrigger"
                 }
             },

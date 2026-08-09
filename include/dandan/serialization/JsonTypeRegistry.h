@@ -3,6 +3,7 @@
 
 #include "dandan/costs/ICost.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
+#include "dandan/triggers/ITrigger.h"
 #ifdef DANDAN_SERIALIZE
 
 #include "dandan/conditions/ICondition.h"
@@ -102,6 +103,7 @@ namespace dandan::serialization
     using CostsRegistry = JsonTypeRegistry<costs::ICost>;
     using ContinuousEffectRegistry =
         JsonTypeRegistry<effects::IContinuousEffect>;
+    using TriggerRegistry = JsonTypeRegistry<triggers::ITrigger>;
 } // namespace dandan::serialization
 
 #endif
