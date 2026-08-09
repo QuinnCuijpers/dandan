@@ -2,13 +2,9 @@
 #define DANDAN_ATTACK_ACTION_H
 
 #include "dandan/core/Card.h"
-#include "dandan/core/CardID.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/actions/IAction.h"
-#include "dandan/effects/EffectContext.h"
-#include "dandan/effects/one_shot/AttackEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
-#include <iostream>
 #include <memory>
 
 namespace dandan::core
