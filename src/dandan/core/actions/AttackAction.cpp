@@ -1,4 +1,5 @@
 #include "dandan/core/actions/AttackAction.h"
+#include "dandan/effects/one_shot/AttackEffect.h"
 
 namespace dandan::core
 {

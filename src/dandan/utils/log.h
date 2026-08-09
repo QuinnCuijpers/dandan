@@ -25,7 +25,7 @@ namespace dandan::log
     const std::filesystem::path DANDAN_LOG_FILE_PATH =
         std::filesystem::path{DANDAN_PROJECT_SOURCE} / "logs/dandan.log";
 
-    void initLogging(const std::string &path)
+    inline void initLogging(const std::string &path)
     {
         plog::init(plog::info, path.c_str(), MAX_FILE_SIZE, MAX_FILES);
     }
