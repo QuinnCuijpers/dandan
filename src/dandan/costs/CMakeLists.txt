@@ -1,33 +1,8 @@
-add_library(DandanCosts OBJECT)
+target_sources(DandanLib PRIVATE
+                CyclingCost.cpp
+                ManaCost.cpp
+                SelfSacrificeCost.cpp
+                TapCost.cpp
+                AndCost.cpp)
 
-target_sources(DandanCosts PRIVATE CyclingCost.cpp ManaCost.cpp
-                                   SelfSacrificeCost.cpp TapCost.cpp
-                                   AndCost.cpp)
 
-target_sources(DandanCosts PUBLIC FILE_SET HEADERS BASE_DIRS
-                                  ${CMAKE_SOURCE_DIR}/include)
-
-target_compile_features(DandanCosts PRIVATE cxx_std_17)
-
-if((CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-   OR (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"))
-
-  target_compile_options(DandanCosts PRIVATE /W4)
-
-elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
-                                                  "Clang"))
-
-  target_compile_options(DandanCosts PRIVATE -Wall -Wextra -Wpedantic)
-
-endif()
-
-if(DANDAN_ENABLE_LOGGING)
-  target_link_libraries(DandanCosts PRIVATE plog::plog)
-endif()
-
-target_include_directories(DandanCosts PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_include_directories(DandanOneShotEffects PRIVATE ${CMAKE_SOURCE_DIR}/src)
-
-if(CODE_COVERAGE)
-  target_code_coverage(DandanCosts)
-endif()

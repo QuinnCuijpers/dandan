@@ -1,6 +1,7 @@
 #ifndef DANDAN_JSONTYPEREGISTRY_H
 #define DANDAN_JSONTYPEREGISTRY_H
 
+#include "dandan/costs/ICost.h"
 #ifdef DANDAN_SERIALIZE
 
 #include "dandan/conditions/ICondition.h"
@@ -97,6 +98,7 @@ namespace dandan::serialization
 
     using NumberRegistry = JsonTypeRegistry<numbers::INumber>;
     using ConditionRegistry = JsonTypeRegistry<conditions::ICondition>;
+    using CostsRegistry = JsonTypeRegistry<costs::ICost>;
 } // namespace dandan::serialization
 
 #endif

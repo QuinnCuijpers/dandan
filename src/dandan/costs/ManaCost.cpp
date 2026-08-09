@@ -1,5 +1,40 @@
 #include "dandan/costs/ManaCost.h"
 #include "dandan/mana/Manapool.h"
+#include "dandan/serialization/JsonFactory.h"
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace
+{
+    using namespace dandan::conditions;
+    using namespace dandan::serialization;
+    using namespace dandan::costs;
+    using namespace dandan::mana;
+
+    const auto registered = []
+    {
+        CostsRegistry::instance().registerType<ManaCost>(
+            "ManaCost",
+            [](const ICost *cost)
+            {
+                auto json = nlohmann::json::object();
+                const auto *mana_cost{dynamic_cast<const ManaCost *>(cost)};
+                json["mana"] =
+                    JsonFactory<Manapool>::create_json(mana_cost->getMana());
+                return json;
+            },
+            [](const nlohmann::json &json)
+            {
+                const auto &mana_json = json.at("mana");
+                auto mana = JsonFactory<Manapool>::create_product(mana_json);
+                return std::make_unique<ManaCost>(std::move(mana));
+            });
+        return true;
+    }();
+} // namespace
+#endif
 
 namespace dandan::costs
 {
