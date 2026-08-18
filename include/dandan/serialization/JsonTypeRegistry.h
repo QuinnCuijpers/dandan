@@ -1,6 +1,7 @@
 #ifndef DANDAN_JSONTYPEREGISTRY_H
 #define DANDAN_JSONTYPEREGISTRY_H
 
+#include "dandan/abilities/IAbility.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
 #include "dandan/triggers/ITrigger.h"
@@ -104,6 +105,7 @@ namespace dandan::serialization
     using ContinuousEffectRegistry =
         JsonTypeRegistry<effects::IContinuousEffect>;
     using TriggerRegistry = JsonTypeRegistry<triggers::ITrigger>;
+    using AbilityRegistry = JsonTypeRegistry<abilities::IAbility>;
 } // namespace dandan::serialization
 
 #endif

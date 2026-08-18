@@ -5,6 +5,46 @@
 #include "dandan/mana/Manapool.h"
 #include <memory>
 
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace
+{
+    using namespace dandan::abilities;
+    using namespace dandan::serialization;
+    using namespace dandan::costs;
+    using namespace dandan::mana;
+
+    const auto registered = []
+    {
+        AbilityRegistry::instance().registerType<ManaAbility>(
+            "ManaAbility",
+            [](const IAbility *ability)
+            {
+                auto json = nlohmann::json::object();
+                const auto *mana{dynamic_cast<const ManaAbility *>(ability)};
+                json["cost"] = JsonFactory<ICost>::create_json(mana->getCost());
+                json["mana_list"] =
+                    JsonFactory<ManaList>::create_json(mana->getManaList());
+
+                return json;
+            },
+            [](const nlohmann::json &json)
+            {
+                std::unique_ptr<ManaList> mana_list{
+                    JsonFactory<ManaList>::create_product(
+                        json.at("mana_list"))};
+                std::unique_ptr<ICost> cost{
+                    JsonFactory<ICost>::create_product(json.at("cost"))};
+                return std::make_unique<ManaAbility>(std::move(cost),
+                                                     std::move(*mana_list));
+            });
+        return true;
+    }();
+} // namespace
+#endif
+
 namespace dandan::abilities
 {
     ManaAbility::ManaAbility(mana::ManaList manaList)
