@@ -2,7 +2,6 @@
 #define DANDAN_SPINTOTOPEFFECT_H
 
 #include <memory>
-#include <stdexcept>
 #include <utility>
 #include <variant>
 
@@ -20,31 +19,12 @@ namespace dandan::effects
     {
 
     public:
-        SpinToTopEffect(core::Target target, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_target(std::move(target))
-        {
-        }
+        SpinToTopEffect(core::Target target, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<SpinToTopEffect>(m_target,
-                                                     getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override
-        {
-            if (!std::holds_alternative<core::CardID>(m_target))
-            {
-                throw std::runtime_error(
-                    "Spin to top effect target is not a card ID");
-            }
-            auto permanent{std::get<core::CardID>(m_target)};
-            auto *card{game.getCardByID(permanent)};
-            game.moveCardFromZone(game.activePlayer(), *card);
-            game.library().addCardTop(*card);
-            return nullptr;
-        }
+            core::Game &game) const override;
 
     private:
         core::Target m_target;

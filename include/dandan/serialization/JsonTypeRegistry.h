@@ -2,9 +2,13 @@
 #define DANDAN_JSONTYPEREGISTRY_H
 
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/Expire.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/triggers/ITrigger.h"
+#include <vector>
 #ifdef DANDAN_SERIALIZE
 
 #include "dandan/conditions/ICondition.h"
@@ -106,6 +110,10 @@ namespace dandan::serialization
         JsonTypeRegistry<effects::IContinuousEffect>;
     using TriggerRegistry = JsonTypeRegistry<triggers::ITrigger>;
     using AbilityRegistry = JsonTypeRegistry<abilities::IAbility>;
+    using OneShotEffectRegistry =
+        JsonTypeRegistry<effects::IOneShotEffectDefinition,
+                         const std::vector<core::TargetSpec> &,
+                         core::ExpireTime>;
 } // namespace dandan::serialization
 
 #endif

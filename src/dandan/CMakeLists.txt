@@ -40,7 +40,6 @@ endif()
 target_link_libraries(
   DandanLib
   PRIVATE DandanCore
-          DandanEffects
           DandanEvents
           DandanMana)
 
