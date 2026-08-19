@@ -25,7 +25,8 @@ namespace dandan::serialization
             json["data"]["inner_cost"] = create_json(inner_cost);
             return json;
         }
-        if (const auto *mana_cost = dynamic_cast<const costs::ManaCost *>(cost))
+        if (const auto *mana_cost =
+                dynamic_cast<const costs::ManaPrice *>(cost))
         {
             auto json = nlohmann::json{{"type", "ManaCost"},
                                        {"data", nlohmann::json::object()}};
@@ -82,7 +83,7 @@ namespace dandan::serialization
         {
             const auto &mana_json = data.at("mana");
             auto mana = JsonFactory<mana::Manapool>::create_product(mana_json);
-            return std::make_unique<costs::ManaCost>(std::move(mana));
+            return std::make_unique<costs::ManaPrice>(std::move(mana));
         }
         if (type == "SelfSacrificeCost")
         {

@@ -10,10 +10,10 @@
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Zone.h"
 #include "dandan/dandan.h"
-#include "dandan/mana/AndMana.h"
 #include <algorithm>
 #include <array>
 #include <cstddef>
+#include <cstdlib>
 #include <gtest/gtest.h>
 #include <memory>
 #include <optional>
@@ -24,6 +24,9 @@
 #include "CreatureDefinitions.h"
 #include "LandDefinitions.h"
 #include "TestCardsCreate.h"
+#include "dandan/mana/ManaBag.h"
+#include "dandan/mana/ManaPrice.h"
+#include "dandan/mana/ManaType.h"
 
 static constexpr int TEST_DECK_SIZE{20};
 
@@ -91,14 +94,13 @@ TEST(DandanLibTest, Bounceland)
 
     auto abilities{Izzet_Boilerworks_Abilities()};
 
-    auto data =
-        dandan::core::CardData{"Test Card ",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::None,
-                               std::move(abilities),
-                               std::nullopt};
+    auto data = dandan::core::CardData{"Test Card ",
+                                       dandan::mana::ManaPrice{},
+                                       dandan::core::Type::Land,
+                                       {dandan::core::SubType::Island},
+                                       dandan::core::SuperType::None,
+                                       std::move(abilities),
+                                       std::nullopt};
 
     auto test_cards = createTestCards(TEST_DECK_SIZE, &data);
     std::stringstream stream{};
@@ -188,7 +190,8 @@ TEST(DandanLibTest, PlayCreatureTest)
 
     auto data =
         dandan::core::CardData{"Test Card ",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -212,8 +215,8 @@ TEST(DandanLibTest, PlayCreatureTest)
     game.handlePhase();
 
     // main phase
-    game.activePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE,
-                                           2 * (STARTING_HAND_SIZE - 1));
+    game.activePlayer().manaPool().add(dandan::mana::ManaBag{
+        {dandan::mana::ManaType::BLUE, 2 * (STARTING_HAND_SIZE - 1)}});
 
     // should play 6 dandan
     game.run();
@@ -230,7 +233,8 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
 
     auto data =
         dandan::core::CardData{"Test Card ",
-                               std::make_unique<dandan::mana::BlueMana>(0),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 0}}},
                                dandan::core::Type::Land,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -254,8 +258,8 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
     game.handlePhase();
 
     // main phase
-    game.activePlayer().manaPool().addMana(dandan::mana::ManaType::BLUE,
-                                           2 * (STARTING_HAND_SIZE - 1));
+    game.activePlayer().manaPool().add(dandan::mana::ManaBag{
+        {dandan::mana::ManaType::BLUE, 2 * (STARTING_HAND_SIZE - 1)}});
 
     // should activate 6 cycling abilities
     game.run();
@@ -270,14 +274,25 @@ TEST(DandanLibTest, CombatTest)
 {
     dandan::core::PlayerID::reset();
 
+    auto island_abilities{Island_TESTS_Abilities()};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
+
     // dandan can't attack unless the defending player controls an island
     auto abilities{Dandan_Abilities()};
-    auto island1{LAND(Island, Island, Basic)};
-    auto island2{LAND(Island, Island, Basic)};
+    dandan::Card island1{&island_data};
+    dandan::Card island2{&island_data};
 
     auto data =
         dandan::core::CardData{"Dandan",
-                               std::make_unique<dandan::mana::BlueMana>(0),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 0}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -361,13 +376,22 @@ TEST(DandanLibTest, ManaAbilities)
 {
     dandan::core::PlayerID::reset();
 
-    std::vector<dandan::Card> lands{LAND(Island, Island, Basic),
-                                    LAND(Remote_Isle, None, None),
-                                    LAND(Lonely_Sandbar, None, None),
-                                    LAND(Shivan_Reef, None, None),
-                                    LAND(Temple_of_Epiphany, None, None),
-                                    LAND(Izzet_Boilerworks, None, None),
-                                    LAND(Svyelunite_Temple, None, None)};
+    std::vector<dandan::CardData *> land_data{
+        LAND_DATA(Island, Island, Basic),
+        LAND_DATA(Remote_Isle, None, None),
+        LAND_DATA(Lonely_Sandbar, None, None),
+        LAND_DATA(Shivan_Reef, None, None),
+        LAND_DATA(Temple_of_Epiphany, None, None),
+        LAND_DATA(Izzet_Boilerworks, None, None),
+        LAND_DATA(Svyelunite_Temple, None, None)};
+
+    std::vector<dandan::Card> lands{};
+
+    lands.reserve(land_data.size());
+    for (auto &data : land_data)
+    {
+        lands.emplace_back(data);
+    }
 
     std::unordered_map<std::string, bool> requires_option{
         {"Island", false},
@@ -429,6 +453,11 @@ TEST(DandanLibTest, ManaAbilities)
 
     game.setIstream(stream);
     game.run();
+
+    for (auto &data : land_data)
+    {
+        delete data;
+    }
 }
 
 TEST(DandanLibTest, TempleOfEpiphanyTest)
@@ -437,14 +466,14 @@ TEST(DandanLibTest, TempleOfEpiphanyTest)
 
     auto abilities{Temple_of_Epiphany_Abilities()};
 
-    auto data =
-        dandan::core::CardData{"Test Card ",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::None},
-                               dandan::core::SuperType::None,
-                               std::move(abilities),
-                               std::nullopt};
+    auto data = dandan::core::CardData{
+        "Test Card ",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::None},
+        dandan::core::SuperType::None,
+        std::move(abilities),
+        std::nullopt};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -482,14 +511,14 @@ TEST(DandanLibTest, HalimarDepthsAbilities)
 
     auto abilities{Halimar_Depths_Abilities()};
 
-    auto data =
-        dandan::core::CardData{"Test Card ",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::None},
-                               dandan::core::SuperType::None,
-                               std::move(abilities),
-                               std::nullopt};
+    auto data = dandan::core::CardData{
+        "Test Card ",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::None},
+        dandan::core::SuperType::None,
+        std::move(abilities),
+        std::nullopt};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
@@ -576,18 +605,19 @@ TEST(DandanLibTest, BrainstormTest)
     auto island_abilities{Island_TESTS_Abilities()};
     auto brainstorm_abilities{Brainstorm_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Island",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto brainstorm_data{
         dandan::core::CardData{"Brainstorm",
-                               std::make_unique<dandan::mana::BlueMana>(1),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 1}}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -655,20 +685,19 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     auto svyenulite_abilities{Svyelunite_Temple_Abilities()};
     auto accumulated_knowledge_abilities{Accumulated_Knowledge_Abilities()};
 
-    auto svyenulite_temple_data{
-        dandan::core::CardData{"Svyelunite Temple",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::None},
-                               dandan::core::SuperType::None,
-                               std::move(svyenulite_abilities),
-                               std::nullopt}};
+    auto svyenulite_temple_data{dandan::core::CardData{
+        "Svyelunite Temple",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::None},
+        dandan::core::SuperType::None,
+        std::move(svyenulite_abilities),
+        std::nullopt}};
 
     auto accumulated_knowledge_data{dandan::core::CardData{
         "Accumulated Knowledge",
-        std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::BlueMana>(1),
-            std::make_unique<dandan::mana::GenericMana>(1)),
+        dandan::mana::ManaPrice{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 1},
         dandan::core::Type::Instant,
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
@@ -780,20 +809,19 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     auto svyenulite_abilities{Svyelunite_Temple_Abilities()};
     auto diminishing_returns_abilities{Diminishing_Returns_Abilities()};
 
-    auto svyenulite_temple_data{
-        dandan::core::CardData{"Svyelunite Temple",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::None},
-                               dandan::core::SuperType::None,
-                               std::move(svyenulite_abilities),
-                               std::nullopt}};
+    auto svyenulite_temple_data{dandan::core::CardData{
+        "Svyelunite Temple",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::None},
+        dandan::core::SuperType::None,
+        std::move(svyenulite_abilities),
+        std::nullopt}};
 
     auto diminishing_returns_data{dandan::core::CardData{
         "Diminishing Returns",
-        std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::BlueMana>(2),
-            std::make_unique<dandan::mana::GenericMana>(2)),
+        dandan::mana::ManaPrice{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 2}}, 2},
         dandan::core::Type::Sorcery,
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
@@ -890,18 +918,19 @@ TEST(DandanLibTest, MysticalTutorTest)
     auto island_abilities{::Island_TESTS_Abilities()};
     auto mystical_tutor_abilities{::Mystical_Tutor_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Svyelunite Temple",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Svyelunite Temple",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto mystical_tutor_data{
         dandan::core::CardData{"Mystical Tutor",
-                               std::make_unique<dandan::mana::BlueMana>(1),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 1}}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -965,18 +994,19 @@ TEST(DandanLibTest, DandanMindBendTest)
     auto island_abilities{::Island_TESTS_Abilities()};
     auto mind_bend_abilities{::Mind_Bend_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Svyelunite Temple",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Svyelunite Temple",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
@@ -985,7 +1015,8 @@ TEST(DandanLibTest, DandanMindBendTest)
 
     auto mind_bend_data{
         dandan::core::CardData{"Mind Bend",
-                               std::make_unique<dandan::mana::BlueMana>(1),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 1}}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -1057,18 +1088,19 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
     auto island_abilities{::Island_TESTS_Abilities()};
     auto unsub_abilities{::Unsubstantiate_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Island",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
@@ -1077,9 +1109,8 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
 
     auto unsub_data{dandan::core::CardData{
         "Unsubstantiate",
-        std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::BlueMana>(1),
-            std::make_unique<dandan::mana::GenericMana>(1)),
+        dandan::mana::ManaPrice{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 1},
         dandan::core::Type::Instant,
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
@@ -1156,18 +1187,19 @@ TEST(DandanLibTest, MemoryLapseTest)
     auto island_abilities{::Island_TESTS_Abilities()};
     auto memory_abilities{::Memory_Lapse_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Island",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
@@ -1176,9 +1208,8 @@ TEST(DandanLibTest, MemoryLapseTest)
 
     auto memory_data{dandan::core::CardData{
         "Memory Lapse",
-        std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::BlueMana>(1),
-            std::make_unique<dandan::mana::GenericMana>(1)),
+        dandan::mana::ManaPrice{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 1},
         dandan::core::Type::Instant,
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
@@ -1256,20 +1287,19 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
     auto island_abilities{::Island_TESTS_Abilities()};
     auto crystal_abilities{::Crystal_Spray_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Island",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto crystal_data{dandan::core::CardData{
         "Crystal Spray",
-        std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::BlueMana>(1),
-            std::make_unique<dandan::mana::GenericMana>(2)),
+        dandan::mana::ManaPrice{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 2},
         dandan::core::Type::Instant,
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
@@ -1360,18 +1390,19 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     auto island_abilities{::Island_TESTS_Abilities()};
     auto dance_abilities{::Dance_of_the_Skywise_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Island",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
@@ -1380,7 +1411,8 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
 
     auto mind_bend_data{
         dandan::core::CardData{"Dance of the Skywise",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -1469,18 +1501,19 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
     auto island_abilities{::Island_TESTS_Abilities()};
     auto dance_abilities{::Dance_of_the_Skywise_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Island",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
@@ -1490,7 +1523,8 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
 
     auto mind_bend_data{
         dandan::core::CardData{"Dance of the Skywise",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -1579,20 +1613,19 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
     auto crystal_abilities{::Crystal_Spray_Abilities()};
     auto dance_abilities{::Dance_of_the_Skywise_Abilities()};
 
-    auto island_data{
-        dandan::core::CardData{"Island",
-                               std::make_unique<dandan::mana::GenericMana>(0),
-                               dandan::core::Type::Land,
-                               {dandan::core::SubType::Island},
-                               dandan::core::SuperType::Basic,
-                               std::move(island_abilities),
-                               std::nullopt}};
+    auto island_data{dandan::core::CardData{
+        "Island",
+        dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
+        dandan::core::Type::Land,
+        {dandan::core::SubType::Island},
+        dandan::core::SuperType::Basic,
+        std::move(island_abilities),
+        std::nullopt}};
 
     auto crystal_data{dandan::core::CardData{
         "Crystal Spray",
-        std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::GenericMana>(2),
-            std::make_unique<dandan::mana::BlueMana>(1)),
+        dandan::mana::ManaPrice{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 1},
         dandan::core::Type::Instant,
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
@@ -1602,7 +1635,8 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
@@ -1612,7 +1646,8 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 
     auto mind_bend_data{
         dandan::core::CardData{"Dance of the Skywise",
-                               std::make_unique<dandan::mana::BlueMana>(2),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
@@ -1724,7 +1759,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 //     auto dance_abilities{::Dance_of_the_Skywise_Abilities()};
 //
 //     auto island_data{dandan::core::CardData{
-//         "Island", std::make_unique<dandan::mana::GenericMana>(0),
+//         "Island", dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 0},
 //         dandan::core::Type::Land, dandan::core::SubType::Island,
 //         dandan::core::SuperType::Basic,
 //         std::move(island_abilities)}};

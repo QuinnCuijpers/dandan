@@ -15,7 +15,8 @@ inline std::vector<dandan::Card> createTestCards(
 
         static dandan::core::CardData default_card_data{
             "Test Card",
-            std::make_unique<dandan::mana::GenericMana>(0),
+            dandan::mana::ManaPrice{
+                dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 0}}},
             dandan::core::Type::Land,
             {dandan::core::SubType::Island},
             dandan::core::SuperType::None,

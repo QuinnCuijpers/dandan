@@ -4,16 +4,16 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
-#include "dandan/mana/Manapool.h"
+#include "dandan/mana/ManaPrice.h"
 
 #include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
-#include <string_view>
 
 #ifdef DANDAN_SERIALIZE
 #include <nlohmann/json_fwd.hpp>
+#include <string_view>
 #endif
 
 namespace dandan::core
@@ -38,7 +38,7 @@ namespace dandan::core
     struct CardData
     {
         std::string name{"unknown"};
-        std::unique_ptr<mana::Manapool> mana_cost;
+        mana::ManaPrice mana_cost;
         Type type{Type::Land};
         std::vector<SubType> subtypes;
         SuperType supertype{SuperType::None};

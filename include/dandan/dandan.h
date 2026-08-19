@@ -68,6 +68,7 @@ namespace dandan
     using costs::TapCost;
 
     using mana::ManaList;
+    using mana::ManaPrice;
 
 } // namespace dandan
 

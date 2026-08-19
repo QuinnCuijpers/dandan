@@ -3,6 +3,7 @@
 
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Hand.h"
+#include "dandan/mana/ManaBag.h"
 #include "dandan/mana/Manapool.h"
 #include <cstddef>
 
@@ -32,11 +33,7 @@ namespace dandan::core
         /** Constructs a player with the given name.
          * @param name The name of the player.
          */
-        explicit Player(std::string name)
-            : m_player_id(PlayerID::generate()), m_name(std::move(name))
-        {
-            std::cout << "Constructed player with name " << m_name << '\n';
-        }
+        explicit Player(std::string name);
 
         /** Gets the name of the player.
          * @return a const reference to the name of the player.
@@ -196,10 +193,9 @@ namespace dandan::core
         bool m_played_land_this_turn{false};
         bool m_drew_card_from_empty_library{false};
         size_t m_max_hand_size{STARTING_HAND_SIZE};
-        // bool m_won_game{false};
         bool m_lost_game{false};
 
-        [[nodiscard]] mana::Manapool getAvailableMana(
+        [[nodiscard]] mana::ManaBag getAvailableMana(
             const core::Game &game) const;
     };
 } // namespace dandan::core
