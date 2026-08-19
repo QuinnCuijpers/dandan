@@ -1,9 +1,10 @@
 
 #include "dandan/mana/ManaList.h"
+#include "dandan/mana/ManaBag.h"
 
 namespace dandan::mana
 {
-    ManaList::ManaList(std::unique_ptr<Manapool> mana)
+    ManaList::ManaList(ManaBag mana)
     {
         m_options.push_back(std::move(mana));
     }
@@ -11,7 +12,7 @@ namespace dandan::mana
     /** Constructs a ManaList instance with the specified mana options.
      * @param options The mana options to add.
      */
-    ManaList::ManaList(std::vector<std::unique_ptr<Manapool>> options)
+    ManaList::ManaList(std::vector<ManaBag> options)
         : m_options{std::move(options)}
     {
     }
@@ -19,8 +20,7 @@ namespace dandan::mana
     /** Returns the list of mana options.
      * @returns The list of mana options.
      */
-    [[nodiscard]] const std::vector<std::unique_ptr<Manapool>> &ManaList::
-        getOptions() const
+    [[nodiscard]] const std::vector<ManaBag> &ManaList::getOptions() const
     {
         return m_options;
     }

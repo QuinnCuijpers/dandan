@@ -31,10 +31,7 @@ namespace dandan::mana
         {
             return ManaType::GREEN;
         }
-        if (str == "Generic")
-        {
-            return ManaType::GENERIC;
-        }
+
         throw std::invalid_argument(std::string("Invalid mana type string: ") +
                                     std::string(str));
     }
