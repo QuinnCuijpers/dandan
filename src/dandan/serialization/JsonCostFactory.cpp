@@ -1,4 +1,5 @@
 #include "dandan/serialization/JsonCostFactory.h"
+#include "dandan/mana/ManaPrice.h"
 #ifdef DANDAN_SERIALIZE
 #include "dandan/costs/AndCost.h"
 #include "dandan/costs/CyclingCost.h"
@@ -25,13 +26,13 @@ namespace dandan::serialization
             json["data"]["inner_cost"] = create_json(inner_cost);
             return json;
         }
-        if (const auto *mana_cost =
-                dynamic_cast<const costs::ManaPrice *>(cost))
+        if (const auto *mana_cost = dynamic_cast<const costs::ManaCost *>(cost))
         {
             auto json = nlohmann::json{{"type", "ManaCost"},
                                        {"data", nlohmann::json::object()}};
+            auto mana = mana_cost->getMana();
             json["data"]["mana"] =
-                JsonFactory<mana::Manapool>::create_json(mana_cost->getMana());
+                JsonFactory<mana::ManaPrice>::create_json(&mana);
             return json;
         }
         if ([[maybe_unused]] const auto *self_sacrifice_cost =
@@ -82,8 +83,8 @@ namespace dandan::serialization
         if (type == "ManaCost")
         {
             const auto &mana_json = data.at("mana");
-            auto mana = JsonFactory<mana::Manapool>::create_product(mana_json);
-            return std::make_unique<costs::ManaPrice>(std::move(mana));
+            auto mana = JsonFactory<mana::ManaPrice>::create_product(mana_json);
+            return std::make_unique<costs::ManaCost>(std::move(mana));
         }
         if (type == "SelfSacrificeCost")
         {

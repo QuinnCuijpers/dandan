@@ -1,6 +1,10 @@
 #include "dandan/serialization/JsonManaFactory.h"
+#include "dandan/mana/ManaBag.h"
+#include "dandan/mana/ManaPrice.h"
+#include "dandan/mana/ManaType.h"
+#include <cstddef>
+#include <string>
 #ifdef DANDAN_SERIALIZE
-#include "dandan/mana/Manapool.h"
 #include <algorithm>
 #include <nlohmann/json.hpp>
 
@@ -15,8 +19,7 @@ namespace dandan::serialization
             std::back_inserter(json),
             [](const auto &option)
             {
-                return JsonFactory<dandan::mana::Manapool>::create_json(
-                    option.get());
+                return JsonFactory<dandan::mana::ManaBag>::create_json(&option);
             });
         return json;
     }
@@ -24,28 +27,36 @@ namespace dandan::serialization
     std::unique_ptr<dandan::mana::ManaList> JsonFactory<
         dandan::mana::ManaList>::create_product(const nlohmann::json &json)
     {
-        std::vector<std::unique_ptr<dandan::mana::Manapool>> options{};
+        std::vector<mana::ManaBag> options{};
         std::transform(
             json.begin(), json.end(), std::back_inserter(options),
             [](const auto &option_json)
             {
-                return JsonFactory<dandan::mana::Manapool>::create_product(
+                return JsonFactory<dandan::mana::ManaBag>::create_product(
                     option_json);
             });
         return std::make_unique<dandan::mana::ManaList>(std::move(options));
     }
 
-    nlohmann::json JsonFactory<dandan::mana::Manapool>::create_json(
-        const dandan::mana::Manapool *mana)
+    nlohmann::json JsonFactory<dandan::mana::ManaPrice>::create_json(
+        const dandan::mana::ManaPrice *mana)
     {
-        return ManaToSymbols(mana->getMana());
+        auto specific = mana::ManaBag::ManaToSymbols(mana->specific());
+        std::string generic = mana->generic() > 0
+                                  ? "(" + std::to_string(mana->generic()) + ")"
+                                  : "";
+
+        auto cost{generic + specific};
+
+        return !cost.empty() ? cost : "(0)";
     }
 
-    std::unique_ptr<dandan::mana::Manapool> JsonFactory<
-        dandan::mana::Manapool>::create_product(const nlohmann::json &json)
+    dandan::mana::ManaPrice JsonFactory<
+        dandan::mana::ManaPrice>::create_product(const nlohmann::json &json)
     {
         const std::string mana_str = json.get<std::string>();
-        auto mana = std::make_unique<dandan::mana::Manapool>();
+        auto specific_mana = mana::ManaBag{};
+        size_t generic_amount{};
 
         for (std::size_t i = 0; i < mana_str.size(); ++i)
         {
@@ -53,22 +64,28 @@ namespace dandan::serialization
             switch (char_)
             {
             case 'C':
-                mana->addMana(mana::ManaType::COLORLESS, 1);
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::COLORLESS, 1}});
                 continue;
             case 'W':
-                mana->addMana(mana::ManaType::WHITE, 1);
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::WHITE, 1}});
                 continue;
             case 'U':
-                mana->addMana(mana::ManaType::BLUE, 1);
+                specific_mana =
+                    specific_mana.add(mana::ManaBag{{mana::ManaType::BLUE, 1}});
                 continue;
             case 'B':
-                mana->addMana(mana::ManaType::BLACK, 1);
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::BLACK, 1}});
                 continue;
             case 'R':
-                mana->addMana(mana::ManaType::RED, 1);
+                specific_mana =
+                    specific_mana.add(mana::ManaBag{{mana::ManaType::RED, 1}});
                 continue;
             case 'G':
-                mana->addMana(mana::ManaType::GREEN, 1);
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::GREEN, 1}});
                 continue;
             case '(':
             {
@@ -81,10 +98,10 @@ namespace dandan::serialization
 
                 const std::string generic_amount_str =
                     mana_str.substr(i + 1, close_pos - (i + 1));
-                const int generic_amount = std::stoi(generic_amount_str);
-                mana->addMana(mana::ManaType::GENERIC, generic_amount);
+                generic_amount = std::stoi(generic_amount_str);
 
-                // Move iterator to ')' so loop increment goes to next symbol.
+                // Move iterator to ')' so loop increment goes to next
+                // symbol.
                 i = close_pos;
                 continue;
             }
@@ -93,7 +110,56 @@ namespace dandan::serialization
                                          std::string(1, char_));
             }
         }
-        return mana;
+        return mana::ManaPrice{specific_mana, generic_amount};
+    }
+
+    nlohmann::json JsonFactory<dandan::mana::ManaBag>::create_json(
+        const dandan::mana::ManaBag *mana)
+    {
+        return mana::ManaBag::ManaToSymbols(*mana);
+    }
+
+    dandan::mana::ManaBag JsonFactory<dandan::mana::ManaBag>::create_product(
+        const nlohmann::json &json)
+    {
+        const std::string mana_str = json.get<std::string>();
+        auto specific_mana = mana::ManaBag{};
+
+        for (char char_ : mana_str)
+        {
+            switch (char_)
+            {
+            case 'C':
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::COLORLESS, 1}});
+                continue;
+            case 'W':
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::WHITE, 1}});
+                continue;
+            case 'U':
+                specific_mana =
+                    specific_mana.add(mana::ManaBag{{mana::ManaType::BLUE, 1}});
+                continue;
+            case 'B':
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::BLACK, 1}});
+                continue;
+            case 'R':
+                specific_mana =
+                    specific_mana.add(mana::ManaBag{{mana::ManaType::RED, 1}});
+                continue;
+            case 'G':
+                specific_mana = specific_mana.add(
+                    mana::ManaBag{{mana::ManaType::GREEN, 1}});
+                continue;
+
+            default:
+                throw std::runtime_error("Unknown mana symbol in JSON: " +
+                                         std::string(1, char_));
+            }
+        }
+        return specific_mana;
     }
 } // namespace dandan::serialization
 
