@@ -1,6 +1,7 @@
 #include "dandan/costs/ManaCost.h"
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/ManaPrice.h"
+#include <string>
 
 namespace dandan::costs
 {
@@ -10,7 +11,10 @@ namespace dandan::costs
     std::string ManaCost::display([[maybe_unused]] bool isFinal) const
     {
         std::string res{};
-
+        auto generic_str = m_mana.generic() != 0
+                               ? "(" + std::to_string(m_mana.generic()) + ")"
+                               : "";
+        res += generic_str;
         res += mana::ManaBag::ManaToSymbols(m_mana.specific());
         return res;
     }
