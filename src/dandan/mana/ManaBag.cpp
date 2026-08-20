@@ -24,15 +24,9 @@ namespace dandan::mana
 
     [[nodiscard]] bool ManaBag::contains(const ManaBag &other) const
     {
-        return std::all_of(
-            other.data().begin(), other.data().end(),
-            [this](const auto &pair)
-            {
-                std::cout << "Color num: " << (int)pair.first << '\n';
-                std::cout << "gotten: " << get(pair.first) << '\n';
-                std::cout << "amount req: " << pair.second << '\n';
-                return get(pair.first) >= pair.second;
-            });
+        return std::all_of(other.data().begin(), other.data().end(),
+                           [this](const auto &pair)
+                           { return get(pair.first) >= pair.second; });
     }
 
     [[nodiscard]] size_t ManaBag::total() const
@@ -52,10 +46,15 @@ namespace dandan::mana
         ManaBag result = *this;
         for (const auto &[color, amt] : other.m_map)
         {
-            result.m_map[color] -= amt;
-            if (result.m_map[color] == 0)
+            auto iter = result.m_map.find(color);
+            if (iter == result.m_map.end())
             {
-                result.m_map.erase(color);
+                continue;
+            }
+            iter->second -= amt;
+            if (iter->second == 0)
+            {
+                result.m_map.erase(iter);
             }
         }
         return result;
@@ -93,9 +92,19 @@ namespace dandan::mana
             size_t remove = std::min(amt, amount);
             result.m_map[type] -= remove;
             amount -= remove;
-            if (result.m_map[type] == 0)
+        }
+
+        // clear zeroed amounts
+        for (auto iter{result.m_map.begin()}; iter != result.m_map.end();)
+        {
+            const auto &[color, amt] = *iter;
+            if (amt == 0)
             {
-                result.m_map.erase(type);
+                iter = result.m_map.erase(iter);
+            }
+            else
+            {
+                ++iter;
             }
         }
         return result;

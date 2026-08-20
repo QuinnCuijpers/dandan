@@ -4,7 +4,6 @@
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/ManaPrice.h"
 #include <cassert>
-#include <ios>
 #include <iostream>
 
 namespace dandan::mana
@@ -43,8 +42,6 @@ namespace dandan::mana
          */
         [[nodiscard]] bool canPay(const ManaPrice &price) const
         {
-            std::cout << "contains: " << std::boolalpha
-                      << m_manapool.contains(price.specific()) << '\n';
             if (!m_manapool.contains(price.specific()))
             {
                 return false;
