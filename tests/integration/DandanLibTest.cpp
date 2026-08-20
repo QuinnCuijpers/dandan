@@ -3,6 +3,7 @@
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/Keyword.h"
@@ -375,22 +376,42 @@ TEST(DandanLibTest, CombatTest)
 TEST(DandanLibTest, ManaAbilities)
 {
     dandan::core::PlayerID::reset();
+    std::vector<std::unique_ptr<dandan::CardData>> land_data;
 
-    std::vector<dandan::CardData *> land_data{
-        LAND_DATA(Island, Island, Basic),
-        LAND_DATA(Remote_Isle, None, None),
-        LAND_DATA(Lonely_Sandbar, None, None),
-        LAND_DATA(Shivan_Reef, None, None),
-        LAND_DATA(Temple_of_Epiphany, None, None),
-        LAND_DATA(Izzet_Boilerworks, None, None),
-        LAND_DATA(Svyelunite_Temple, None, None)};
+    land_data.push_back(create_land_data(
+        "Island", dandan::core::SuperType::Basic, dandan::core::SubType::None,
+        Island_TESTS_Abilities()));
+
+    land_data.push_back(
+        create_land_data("Remote_Isle", dandan::core::SuperType::None,
+                         dandan::core::SubType::None, Remote_Isle_Abilities()));
+
+    land_data.push_back(create_land_data(
+        "Lonely_Sandbar", dandan::core::SuperType::None,
+        dandan::core::SubType::None, Lonely_Sandbar_Abilities()));
+
+    land_data.push_back(
+        create_land_data("Shivan_Reef", dandan::core::SuperType::None,
+                         dandan::core::SubType::None, Shivan_Reef_Abilities()));
+
+    land_data.push_back(create_land_data(
+        "Temple_of_Epiphany", dandan::core::SuperType::None,
+        dandan::core::SubType::None, Temple_of_Epiphany_Abilities()));
+
+    land_data.push_back(create_land_data(
+        "Izzet_Boilerworks", dandan::core::SuperType::None,
+        dandan::core::SubType::None, Izzet_Boilerworks_Abilities()));
+
+    land_data.push_back(create_land_data(
+        "Svyelunite_Temple", dandan::core::SuperType::None,
+        dandan::core::SubType::None, Svyelunite_Temple_Abilities()));
 
     std::vector<dandan::Card> lands{};
 
     lands.reserve(land_data.size());
     for (auto &data : land_data)
     {
-        lands.emplace_back(data);
+        lands.emplace_back(data.get());
     }
 
     std::unordered_map<std::string, bool> requires_option{
@@ -453,11 +474,6 @@ TEST(DandanLibTest, ManaAbilities)
 
     game.setIstream(stream);
     game.run();
-
-    for (auto &data : land_data)
-    {
-        delete data;
-    }
 }
 
 TEST(DandanLibTest, TempleOfEpiphanyTest)
