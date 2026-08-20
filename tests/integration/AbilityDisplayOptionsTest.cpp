@@ -8,8 +8,8 @@
 
 struct AbilityDisplayCase
 {
-    const char *card_name;
-    const char *expected_display;
+    std::string card_name;
+    std::string expected_display;
 };
 
 class AbilityOptionsDisplayTest
