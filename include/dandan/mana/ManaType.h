@@ -9,7 +9,6 @@ namespace dandan::mana
 {
     enum class ManaType : std::uint8_t
     {
-        GENERIC,
         COLORLESS,
         WHITE,
         BLUE,

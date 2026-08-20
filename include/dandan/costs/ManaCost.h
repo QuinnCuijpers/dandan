@@ -3,8 +3,7 @@
 
 #include "ICost.h"
 #include "dandan/core/Game.h"
-#include "dandan/mana/Manapool.h"
-#include <memory>
+#include "dandan/mana/ManaPrice.h"
 
 namespace dandan::costs
 {
@@ -19,7 +18,7 @@ namespace dandan::costs
         /** Constructs a ManaCost with a specific amount of mana.
          * @param mana The mana requirement for the cost.
          */
-        explicit ManaCost(std::unique_ptr<mana::Manapool> mana);
+        explicit ManaCost(mana::ManaPrice price);
 
         [[nodiscard]] std::string display(
             [[maybe_unused]] bool isFinal = true) const override;
@@ -27,7 +26,7 @@ namespace dandan::costs
         /** Gets the mana requirement.
          * @return A pointer to the mana requirement.
          */
-        [[nodiscard]] mana::Manapool *getMana() const;
+        [[nodiscard]] mana::ManaPrice getMana() const;
 
         [[nodiscard]] bool canPay(const core::Card &source,
                                   const core::Player &player) const override;
@@ -36,7 +35,7 @@ namespace dandan::costs
                  abilities::AbilityContext context) const override;
 
     private:
-        std::unique_ptr<mana::Manapool> m_mana;
+        mana::ManaPrice m_mana;
     };
 } // namespace dandan::costs
 

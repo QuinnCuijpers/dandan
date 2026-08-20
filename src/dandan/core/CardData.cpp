@@ -1,15 +1,16 @@
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardTypes.h"
+#include "dandan/mana/ManaBag.h"
 #include <cassert>
-#include <memory>
-#include <optional>
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <optional>
 #include <utility>
 #endif
+
 namespace dandan::core
 {
 
@@ -17,7 +18,8 @@ namespace dandan::core
                              const dandan::core::CardData &card)
     {
         ostream << "Card{name: " << card.name << ", cost: "
-                << dandan::mana::ManaToSymbols(card.mana_cost->getMana())
+                << dandan::mana::ManaBag::ManaToSymbols(
+                       card.mana_cost.specific())
                 << ", type: " << TypeToString(card.type) << ", subtypes: ";
         for (auto type : card.subtypes)
         {

@@ -1,8 +1,8 @@
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/AddManaEffect.h"
+#include "dandan/mana/ManaBag.h"
 #include "dandan/mana/ManaList.h"
-#include "dandan/mana/Manapool.h"
 #include <memory>
 
 #ifdef DANDAN_SERIALIZE
@@ -63,8 +63,8 @@ namespace dandan::abilities
         std::string res{};
         res += m_cost->display();
         res += "Add ";
-        auto *option{m_mana_list.getOptions().at(index).get()};
-        res += mana::ManaToSymbols(option->getMana());
+        auto option{m_mana_list.getOptions().at(index)};
+        res += mana::ManaBag::ManaToSymbols(option);
         return res;
     }
 
@@ -76,14 +76,14 @@ namespace dandan::abilities
 
         assert(!getManaList()->getOptions().empty() &&
                "Mana List was empty when trying to display ManaAbility");
-        const auto *mana{m_mana_list.getOptions().at(0).get()};
-        res += mana::ManaToSymbols(mana->getMana());
+        const auto mana{m_mana_list.getOptions().at(0)};
+        res += mana::ManaBag::ManaToSymbols(mana);
 
         for (size_t i{1}; i < m_mana_list.getOptions().size(); ++i)
         {
             res += " or ";
-            const auto *mana_option{m_mana_list.getOptions().at(i).get()};
-            res += mana::ManaToSymbols(mana_option->getMana());
+            const auto mana_option{m_mana_list.getOptions().at(i)};
+            res += mana::ManaBag::ManaToSymbols(mana_option);
         }
         return res;
     }
@@ -110,12 +110,12 @@ namespace dandan::abilities
         {
             const auto &option =
                 m_mana_list.getOptions()[context.chosen_mode_index.value()];
-            return std::make_unique<effects::AddManaEffect>(option->getMana(),
+            return std::make_unique<effects::AddManaEffect>(option,
                                                             effect_context);
         }
 
         return std::make_unique<effects::AddManaEffect>(
-            m_mana_list.getOptions()[0]->getMana(), effect_context);
+            m_mana_list.getOptions()[0], effect_context);
     }
 
     [[nodiscard]] bool ManaAbility::canActivate(

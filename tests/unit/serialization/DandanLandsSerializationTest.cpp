@@ -1,29 +1,70 @@
+
+#include "dandan/core/CardTypes.h"
 #ifdef DANDAN_SERIALIZE
 #include "DeserializeTest.h"
 #include "LandDefinitions.h"
 #include "common.h"
+#include "dandan/core/Card.h"
 #include "dandan/dandan.h"
-#include "gtest/gtest.h"
-#include <string>
+#include <algorithm>
+#include <gtest/gtest.h>
+#include <iterator>
+#include <memory>
 #include <vector>
 
-static const std::vector<const dandan::Card *> &getCards()
+static std::vector<dandan::Card> getCards()
 {
-    static const std::vector<const dandan::Card *> cards = {
-        new LAND(Island, Island, Basic),
-        new LAND(Remote_Isle, None, None),
-        new LAND(Lonely_Sandbar, None, None),
-        new LAND(Halimar_Depths, None, None),
-        new LAND(Shivan_Reef, None, None),
-        new LAND(Temple_of_Epiphany, None, None),
-        new LAND(Izzet_Boilerworks, None, None),
-        new LAND(Svyelunite_Temple, None, None)};
-    return cards;
-};
+    auto cards = std::vector<dandan::Card>{};
 
-INSTANTIATE_TEST_SUITE_P(
-    LandTests, DeserializeTest, testing::ValuesIn(getCards()),
-    [](const ::testing::TestParamInfo<const dandan::Card *> &info)
-    { return CardParamName(info.param->getData().name); });
+    static auto card_data = []
+    {
+        std::vector<std::unique_ptr<dandan::CardData>> card_data;
+
+        card_data.push_back(create_land_data(
+            "Island", dandan::core::SuperType::Basic,
+            dandan::core::SubType::Island, Island_Abilities()));
+
+        card_data.push_back(create_land_data(
+            "Remote Isle", dandan::core::SuperType::None,
+            dandan::core::SubType::None, Remote_Isle_Abilities()));
+
+        card_data.push_back(create_land_data(
+            "Lonely Sandbar", dandan::core::SuperType::None,
+            dandan::core::SubType::None, Lonely_Sandbar_Abilities()));
+
+        card_data.push_back(create_land_data(
+            "Halimar Depths", dandan::core::SuperType::None,
+            dandan::core::SubType::None, Halimar_Depths_Abilities()));
+
+        card_data.push_back(create_land_data(
+            "Shivan Reef", dandan::core::SuperType::None,
+            dandan::core::SubType::None, Shivan_Reef_Abilities()));
+
+        card_data.push_back(create_land_data(
+            "Temple of Epiphany", dandan::core::SuperType::None,
+            dandan::core::SubType::None, Temple_of_Epiphany_Abilities()));
+
+        card_data.push_back(create_land_data(
+            "Izzet Boilerworks", dandan::core::SuperType::None,
+            dandan::core::SubType::None, Izzet_Boilerworks_Abilities()));
+
+        card_data.push_back(create_land_data(
+            "Svyelunite Temple", dandan::core::SuperType::None,
+            dandan::core::SubType::None, Svyelunite_Temple_Abilities()));
+
+        return card_data;
+    }();
+
+    std::transform(card_data.begin(), card_data.end(),
+                   std::back_inserter(cards), [](const auto &data)
+                   { return dandan::core::Card{data.get()}; });
+
+    return cards;
+}
+
+INSTANTIATE_TEST_SUITE_P(LandTests, DeserializeTest,
+                         testing::ValuesIn(getCards()),
+                         [](const testing::TestParamInfo<dandan::Card> &info)
+                         { return CardParamName(info.param.getData().name); });
 
 #endif

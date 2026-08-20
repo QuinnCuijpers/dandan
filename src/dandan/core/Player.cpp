@@ -4,16 +4,17 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/core/Game.h"
+#include "dandan/mana/ManaBag.h"
 #include "dandan/mana/Manapool.h"
 
 namespace
 {
     using namespace dandan;
 
-    mana::ManaMap getMaxManaForLand(const core::Card &land,
+    mana::ManaBag getMaxManaForLand(const core::Card &land,
                                     const core::Game &game)
     {
-        mana::ManaMap max_mana_for_land{};
+        mana::ManaBag max_mana_for_land{};
         for (const auto &ability : land.getCurrentAbilities())
         {
             if (ability.type() == abilities::AbilityType::Type::Mana)
@@ -24,10 +25,9 @@ namespace
                 for (const auto &option :
                      mana_ability->getManaList()->getOptions())
                 {
-                    if (mana::MoreManaThan(option->getMana(),
-                                           max_mana_for_land))
+                    if (option.total() > max_mana_for_land.total())
                     {
-                        max_mana_for_land = option->getMana();
+                        max_mana_for_land = option;
                     }
                 }
             }
@@ -42,10 +42,9 @@ namespace
 
                 for (const auto &option : mana_list->getOptions())
                 {
-                    if (mana::MoreManaThan(option->getMana(),
-                                           max_mana_for_land))
+                    if (option.total() > max_mana_for_land.total())
                     {
-                        max_mana_for_land = option->getMana();
+                        max_mana_for_land = option;
                     }
                 }
             }
@@ -57,6 +56,12 @@ namespace
 
 namespace dandan::core
 {
+    Player::Player(std::string name)
+        : m_player_id(PlayerID::generate()), m_name(std::move(name))
+    {
+        std::cout << "Constructed player with name " << m_name << '\n';
+    }
+
     void Player::drawCard(Game &game)
     {
         auto &library{game.library()};
@@ -95,14 +100,17 @@ namespace dandan::core
 
     bool Player::canActivateSomething(Game &game) const
     {
+        auto proxy_mana_pool{mana::Manapool{}};
         auto available_mana{getAvailableMana(game)};
+        proxy_mana_pool.add(available_mana);
+
         for (const auto &card_id : m_hand.getCards())
         {
-            auto *card{game.getCardByID(card_id)};
+            const auto *card{game.getCardByID(card_id)};
             if (card->getData().type == Type::Instant)
             {
-                const auto *card_cost{card->getData().mana_cost.get()};
-                if (available_mana.canPay(*card_cost))
+                const auto card_cost{card->getData().mana_cost};
+                if (proxy_mana_pool.canPay(card_cost))
                 {
                     return true;
                 }
@@ -125,13 +133,10 @@ namespace dandan::core
         return false;
     }
 
-    mana::Manapool Player::getAvailableMana(const core::Game &game) const
+    mana::ManaBag Player::getAvailableMana(const core::Game &game) const
     {
-        mana::Manapool available_mana{};
-        for (const auto &[type, amount] : m_mana_pool.getMana())
-        {
-            available_mana.addMana(type, amount);
-        }
+        mana::ManaBag available_mana{};
+        available_mana = available_mana.add(m_mana_pool.view());
 
         for (const auto &land_id : m_battlefield.getLands())
         {
@@ -141,11 +146,8 @@ namespace dandan::core
                 continue;
             }
 
-            auto max_mana_for_land{getMaxManaForLand(*land, game)};
-            for (const auto &[type, amount] : max_mana_for_land)
-            {
-                available_mana.addMana(type, amount);
-            }
+            const auto max_mana_for_land{getMaxManaForLand(*land, game)};
+            available_mana = available_mana.add(max_mana_for_land);
         }
         std::cout << "Available mana found in canActivateSomething for player "
                      "with id "
