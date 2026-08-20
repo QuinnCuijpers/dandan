@@ -1,48 +1,20 @@
 #ifndef DANDAN_TESTS_COMMON_H
 #define DANDAN_TESTS_COMMON_H
 
-#include "dandan/mana/ManaPip.h"
+#include "CreatureDefinitions.h"
+#include "dandan/core/CardData.h"
+#include "dandan/core/CardTypes.h"
+#include "dandan/dandan.h"
+#include "dandan/mana/ManaBag.h"
+#include "dandan/mana/ManaPrice.h"
+#include "dandan/mana/ManaType.h"
 #include <algorithm>
 #include <gtest/gtest.h>
+#include <memory>
 #include <string>
-
-#define CREATURE(name)                                                         \
-    dandan::core::Card                                                         \
-    {                                                                          \
-        new dandan::CardData                                                   \
-        {                                                                      \
-            formatCardName(#name),                                             \
-                std::make_unique<dandan::mana::BlueMana>(2),                   \
-                dandan::core::Type::Creature, {dandan::core::SubType::Fish},   \
-                dandan::core::SuperType::None, name##_Abilities(),             \
-                dandan::core::Stats{4, 1}, dandan::core::ColorWord::Blue       \
-        }                                                                      \
-    }
-
-#define LAND(name, subtype, supertype)                                         \
-    dandan::Card                                                               \
-    {                                                                          \
-        new dandan::CardData                                                   \
-        {                                                                      \
-            formatCardName(#name),                                             \
-                std::make_unique<dandan::mana::GenericMana>(0),                \
-                dandan::core::Type::Land, {dandan::core::SubType::subtype},    \
-                dandan::core::SuperType::supertype, name##_Abilities(),        \
-                std::nullopt, dandan::core::ColorWord::Colorless               \
-        }                                                                      \
-    }
-
-#define SPELL(name, cost, type)                                                \
-    dandan::Card                                                               \
-    {                                                                          \
-        new dandan::CardData                                                   \
-        {                                                                      \
-            formatCardName(#name), cost, dandan::core::Type::type,             \
-                {dandan::core::SubType::None}, dandan::core::SuperType::None,  \
-                name##_Abilities(), std::nullopt,                              \
-                dandan::core::ColorWord::Blue                                  \
-        }                                                                      \
-    }
+#include <string_view>
+#include <utility>
+#include <vector>
 
 inline std::string CardParamName(const std::string_view raw_name)
 {
@@ -73,4 +45,50 @@ inline std::string formatCardName(std::string_view name)
     return result;
 }
 
+inline std::unique_ptr<dandan::CardData> create_spell_data(
+    std::string_view name, dandan::ManaPrice cost, dandan::core::Type type,
+    std::vector<std::unique_ptr<dandan::IAbility>> abilities)
+{
+
+    return std::make_unique<dandan::CardData>(
+        dandan::core::CardData{formatCardName(name),
+                               std::move(cost),
+                               type,
+                               {dandan::core::SubType::None},
+                               dandan::core::SuperType::None,
+                               std::move(abilities),
+                               std::nullopt,
+                               dandan::core::ColorWord::Blue});
+}
+
+inline std::unique_ptr<dandan::CardData> create_creature_data(
+    std::string_view name)
+{
+    return std::make_unique<dandan::CardData>(
+        dandan::core::CardData{formatCardName(name),
+                               dandan::mana::ManaPrice{dandan::mana::ManaBag{
+                                   {dandan::mana::ManaType::BLUE, 2}}},
+                               dandan::core::Type::Creature,
+                               {dandan::core::SubType::Fish},
+                               dandan::core::SuperType::None,
+                               Dandan_Abilities(),
+                               dandan::core::Stats{4, 1},
+                               dandan::core::ColorWord::Blue});
+}
+
+inline std::unique_ptr<dandan::CardData> create_land_data(
+    std::string_view name, dandan::core::SuperType supertype,
+    dandan::core::SubType subtype,
+    std::vector<std::unique_ptr<dandan::IAbility>> abilities)
+{
+    return std::make_unique<dandan::CardData>(
+        dandan::core::CardData{formatCardName(name),
+                               dandan::mana::ManaPrice{},
+                               dandan::core::Type::Land,
+                               {subtype},
+                               supertype,
+                               std::move(abilities),
+                               std::nullopt,
+                               dandan::core::ColorWord::Colorless});
+}
 #endif
