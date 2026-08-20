@@ -45,8 +45,7 @@ target_link_libraries(
           DandanEvents
           DandanCosts
           DandanConditions
-          DandanTriggers
-          DandanMana)
+          DandanTriggers)
 
 if(DANDAN_BUILD_SERIALIZE)
   target_link_libraries(DandanLib PRIVATE DandanSerialize

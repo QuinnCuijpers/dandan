@@ -1,99 +1,13 @@
-#ifndef DANDAN_MANA_H
-#define DANDAN_MANA_H
+#ifndef DANDAN_MANAPOOL_H
+#define DANDAN_MANAPOOL_H
 
-#include "dandan/mana/ManaType.h"
+#include "dandan/mana/ManaBag.h"
+#include "dandan/mana/ManaPrice.h"
 #include <cassert>
 #include <iostream>
-#include <map>
-#include <string>
 
 namespace dandan::mana
 {
-
-    using ManaMap = std::map<ManaType, int>;
-
-    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
-    inline bool MoreManaThan(const ManaMap &first_map,
-                             const ManaMap &second_map)
-    {
-        int a_count{};
-        for (const auto &[type, amount] : first_map)
-        {
-            a_count += amount;
-        }
-        int b_count{};
-        for (const auto &[type, amount] : second_map)
-        {
-            b_count += amount;
-        }
-
-        return a_count > b_count;
-    }
-    // NOLINTEND(bugprone-easily-swappable-parameters)
-
-    [[maybe_unused]]
-    static std::string ManaToSymbols(const ManaMap &mana_map)
-    {
-        if (mana_map.empty())
-        {
-            return "(0)";
-        }
-
-        std::string symbols{};
-        std::string generic_part{};
-        for (const auto &[mana_type, amount] : mana_map)
-        {
-            std::string symbol{};
-            switch (mana_type)
-            {
-            case ManaType::COLORLESS:
-                symbol = "C";
-                break;
-            case ManaType::WHITE:
-                symbol = "W";
-                break;
-            case ManaType::BLUE:
-                symbol = "U";
-                break;
-            case ManaType::BLACK:
-                symbol = "B";
-                break;
-            case ManaType::RED:
-                symbol = "R";
-                break;
-            case ManaType::GREEN:
-                symbol = "G";
-                break;
-            case ManaType::GENERIC:
-                generic_part = "(" + std::to_string(amount) + ")";
-                continue;
-            default:
-                symbol = "?";
-                break;
-            }
-            for (int i = 0; i < amount; ++i)
-            {
-                symbols += symbol;
-            }
-        }
-
-        if (symbols.empty())
-        {
-            return generic_part;
-        }
-        if (generic_part == "(0)")
-        {
-            return symbols;
-        }
-        return generic_part + symbols;
-    }
-
-    inline std::ostream &operator<<(std::ostream &ostream,
-                                    const ManaMap &mana_map)
-    {
-        ostream << ManaToSymbols(mana_map);
-        return ostream;
-    }
 
     /** @brief A class representing a manapool in the game.
      * @class Manapool
@@ -112,83 +26,53 @@ namespace dandan::mana
          * @param type The type of mana to add.
          * @param amount The amount of mana to add.
          */
-        virtual void addMana(ManaType type, int amount)
+        void add(const ManaBag &mana)
         {
-            m_manaMap[type] += amount;
+            m_manapool = m_manapool.add(mana);
         }
 
-        /** Retrieves the underlying mana map mutably.
-         * @return A reference to the mana map.
-         */
-        [[nodiscard]] virtual ManaMap &getMana()
+        [[nodiscard]] ManaBag view() const
         {
-            return m_manaMap;
+            return m_manapool;
         }
-
-        /** Retrieves the underlying mana map.
-         * @return A const reference to the mana map.
-         */
-        [[nodiscard]] virtual const ManaMap &getMana() const
-        {
-            return m_manaMap;
-        };
 
         /** Checks if the mana can cover the cost passed in.
-         * @param cost The cost to check.
-         * @return True if the mana can pay the cost, false otherwise.
+         * @param price The price to check.
+         * @return True if the mana can pay the price, false otherwise.
          */
-        [[nodiscard]] bool canPay(const Manapool &cost) const
+        [[nodiscard]] bool canPay(const ManaPrice &price) const
         {
-            int generic_cost = cost.getMana().at(ManaType::GENERIC);
-            int available_generic{};
-            for (const auto &[type, amount] : cost.getMana())
+            if (!m_manapool.contains(price.specific()))
             {
-                if (type == ManaType::GENERIC)
-                {
-                    continue;
-                }
-                if (m_manaMap.at(type) < amount)
-                {
-                    return false;
-                }
-                available_generic += m_manaMap.at(type) - amount;
+                return false;
             }
-            return available_generic >= generic_cost;
+            return m_manapool.total() >= price.totalRequired();
         }
 
         /** Pays the cost of the mana passed in.
          * @param cost The cost to pay.
          */
-        void pay(const Manapool &cost)
-        {
-            std::cout << "Paying cost: " << cost << '\n';
-            int generic_cost = cost.getMana().at(ManaType::GENERIC);
 
-            // TODO: generic mana is now paid by draining colors in order, which
-            // is not how it works in MTG. Fix this by allowing the caller to
-            // specify how to pay generic mana
-            for (const auto &[type, amount] : cost.getMana())
+        bool pay(const ManaPrice &price)
+        {
+            if (!canPay(price))
             {
-                if (type == ManaType::GENERIC)
-                {
-                    continue;
-                }
-                m_manaMap[type] -= amount;
-                if (m_manaMap[type] > 0)
-                {
-                    m_manaMap[type] -= std::min(m_manaMap[type], generic_cost);
-                }
+                return false;
             }
+
+            ManaBag remaining = m_manapool.subtract(price.specific());
+
+            remaining = remaining.subtractAny(price.generic());
+
+            m_manapool = remaining;
+            return true;
         }
 
         /** Empties the mana pool.
          */
         void empty()
         {
-            for (auto &[type, amount] : m_manaMap)
-            {
-                amount = 0;
-            }
+            m_manapool = ManaBag{};
         }
 
         /** Outputs the mana to an output stream.
@@ -199,17 +83,12 @@ namespace dandan::mana
         friend std::ostream &operator<<(std::ostream &ostream,
                                         const Manapool &mana)
         {
-            ostream << ManaToSymbols(mana.getMana());
+            ostream << ManaBag::ManaToSymbols(mana.view());
             return ostream;
         }
 
     private:
-        ManaMap m_manaMap{
-            {ManaType::COLORLESS, 0}, {ManaType::WHITE, 0},
-            {ManaType::BLUE, 0},      {ManaType::BLACK, 0},
-            {ManaType::RED, 0},       {ManaType::GREEN, 0},
-            {ManaType::GENERIC, 0},
-        };
+        ManaBag m_manapool{};
     };
 } // namespace dandan::mana
 

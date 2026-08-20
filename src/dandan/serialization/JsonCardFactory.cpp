@@ -1,13 +1,14 @@
 #include "dandan/serialization/JsonCardFactory.h"
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
+#include "dandan/mana/ManaPrice.h"
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
-#include "dandan/mana/Manapool.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonManaFactory.h"
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization
@@ -29,7 +30,7 @@ namespace dandan::serialization
 
         json["name"] = card->name;
         json["cost"] =
-            JsonFactory<mana::Manapool>::create_json(card->mana_cost.get());
+            JsonFactory<mana::ManaPrice>::create_json(&card->mana_cost);
         json["type"] = card->type;
 
         if (card->color != core::ColorWord::Colorless)
@@ -67,13 +68,14 @@ namespace dandan::serialization
 
         auto name = json.at("name").get<std::string>();
         auto cost =
-            JsonFactory<mana::Manapool>::create_product(json.at("cost"));
+            JsonFactory<mana::ManaPrice>::create_product(json.at("cost"));
         auto type = json.at("type").get<core::Type>();
 
         auto subtypes = std::vector<core::SubType>{};
         if (json.contains("subtypes"))
         {
-            subtypes = json["subtypes"];
+            subtypes =
+                json["subtypes"].get<std::vector<dandan::core::SubType>>();
         }
 
         auto supertype = core::SuperType::None;
@@ -108,7 +110,7 @@ namespace dandan::serialization
         }
 
         return std::make_unique<core::CardData>(
-            core::CardData{name, std::move(cost), type, subtypes, supertype,
+            core::CardData{name, cost, type, subtypes, supertype,
                            std::move(abilities), stats, color});
     }
 } // namespace dandan::serialization

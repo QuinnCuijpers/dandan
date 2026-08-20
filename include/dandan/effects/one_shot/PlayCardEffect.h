@@ -46,10 +46,13 @@ namespace dandan::effects
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{
                 game.getPlayer(game.priorityManager().getPlayerWithPriority())};
-            const auto *mana_cost = m_card.getData().mana_cost.get();
-            if (prio_player.manaPool().canPay(*mana_cost))
+            const auto mana_cost = m_card.getData().mana_cost;
+            std::cout << "generic_mana: " << mana_cost.generic() << '\n';
+            std::cout << "specific_mana: " << mana_cost.specific() << '\n';
+            std::cout << "mana_pool: " << prio_player.manaPool() << '\n';
+            if (prio_player.manaPool().canPay(mana_cost))
             {
-                prio_player.manaPool().pay(*mana_cost);
+                prio_player.manaPool().pay(mana_cost);
             }
             else
             {

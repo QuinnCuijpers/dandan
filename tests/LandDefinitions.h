@@ -4,8 +4,10 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/costs/AndCost.h"
 #include "dandan/dandan.h"
-#include "dandan/mana/AndMana.h"
-#include "dandan/mana/ManaPip.h"
+#include "dandan/mana/ManaBag.h"
+#include "dandan/mana/ManaList.h"
+#include "dandan/mana/ManaPrice.h"
+#include "dandan/mana/ManaType.h"
 #include <memory>
 #include <vector>
 
@@ -30,8 +32,9 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
 
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.push_back(std::make_unique<dandan::ManaAbility>(
-        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
+    abilities.push_back(
+        std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}}));
 
     abilities.push_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Replacement,
@@ -40,7 +43,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
     abilities.push_back(std::make_unique<dandan::ActivatedAbility>(
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ManaCost>(
-                std::make_unique<dandan::mana::GenericMana>(2))),
+                dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 2})),
         std::make_unique<dandan::DrawEffectDefinition>()));
 
     return abilities;
@@ -50,8 +53,9 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
+    abilities.emplace_back(
+        std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Replacement,
@@ -59,8 +63,8 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
 
     abilities.emplace_back(std::make_unique<dandan::ActivatedAbility>(
         std::make_unique<dandan::CyclingCost>(
-            std::make_unique<dandan::ManaCost>(
-                std::make_unique<dandan::mana::BlueMana>())),
+            std::make_unique<dandan::ManaCost>(dandan::mana::ManaPrice{
+                dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}})),
         std::make_unique<dandan::DrawEffectDefinition>()));
 
     return abilities;
@@ -70,8 +74,9 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::mana::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
+    abilities.emplace_back(
+        std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}}));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Replacement,
@@ -90,11 +95,13 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Shivan_Reef_Abilities()
 
     abilities.emplace_back(
         std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
-            std::make_unique<dandan::mana::ColorlessMana>()}));
+            dandan::mana::ManaBag{{dandan::mana::ManaType::COLORLESS, 1}}}));
 
-    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Manapool>>{}};
-    mana_list.emplace_back(std::make_unique<dandan::mana::BlueMana>());
-    mana_list.emplace_back(std::make_unique<dandan::mana::RedMana>());
+    auto mana_list{std::vector<dandan::mana::ManaBag>{}};
+    mana_list.emplace_back(
+        dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}});
+    mana_list.emplace_back(
+        dandan::mana::ManaBag{{dandan::mana::ManaType::RED, 1}});
 
     abilities.emplace_back(std::make_unique<dandan::WithDamage>(
         std::make_unique<dandan::ManaAbility>(
@@ -107,9 +114,11 @@ Temple_of_Epiphany_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    auto mana_list{std::vector<std::unique_ptr<dandan::mana::Manapool>>{}};
-    mana_list.emplace_back(std::make_unique<dandan::mana::BlueMana>());
-    mana_list.emplace_back(std::make_unique<dandan::mana::RedMana>());
+    auto mana_list{std::vector<dandan::mana::ManaBag>{}};
+    mana_list.emplace_back(
+        dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}});
+    mana_list.emplace_back(
+        dandan::mana::ManaBag{{dandan::mana::ManaType::RED, 1}});
 
     abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
         dandan::ManaList{std::move(mana_list)}));
@@ -130,10 +139,11 @@ Izzet_Boilerworks_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::ManaList{std::make_unique<dandan::mana::AndMana>(
-            std::make_unique<dandan::mana::BlueMana>(),
-            std::make_unique<dandan::mana::RedMana>())}));
+    abilities.emplace_back(
+        std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1},
+                                  {dandan::mana::ManaType::RED, 1}},
+        }));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Replacement,
@@ -155,14 +165,16 @@ Svyelunite_Temple_Abilities()
         dandan::abilities::StaticAbility::Type::Replacement,
         std::make_unique<dandan::EntersTappedEffect>()));
 
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::ManaList{std::make_unique<dandan::mana::BlueMana>()}));
+    abilities.emplace_back(
+        std::make_unique<dandan::ManaAbility>(dandan::ManaList{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}}));
 
     abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
         std::make_unique<dandan::costs::AndCost>(
             std::make_unique<dandan::costs::TapCost>(),
             std::make_unique<dandan::costs::SelfSacrificeCost>()),
-        dandan::ManaList{std::make_unique<dandan::mana::BlueMana>(2)}));
+        dandan::ManaList{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 2}}}));
 
     return abilities;
 }

@@ -1,8 +1,7 @@
 #ifndef DANDAN_MANALIST_H
 #define DANDAN_MANALIST_H
 
-#include "Manapool.h"
-#include <memory>
+#include "dandan/mana/ManaBag.h"
 #include <vector>
 
 namespace dandan::mana
@@ -16,21 +15,20 @@ namespace dandan::mana
         /** Constructs a ManaList instance with the specified mana option.
          * @param mana The mana option to add.
          */
-        explicit ManaList(std::unique_ptr<Manapool> mana);
+        explicit ManaList(ManaBag mana);
 
         /** Constructs a ManaList instance with the specified mana options.
          * @param options The mana options to add.
          */
-        explicit ManaList(std::vector<std::unique_ptr<Manapool>> options);
+        explicit ManaList(std::vector<ManaBag> options);
 
         /** Returns the list of mana options.
          * @returns The list of mana options.
          */
-        [[nodiscard]] const std::vector<std::unique_ptr<Manapool>> &getOptions()
-            const;
+        [[nodiscard]] const std::vector<ManaBag> &getOptions() const;
 
     private:
-        std::vector<std::unique_ptr<Manapool>> m_options;
+        std::vector<ManaBag> m_options;
     };
 } // namespace dandan::mana
 

@@ -1,7 +1,8 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/mana/ManaBag.h"
 #include "dandan/mana/ManaList.h"
-#include "dandan/mana/ManaPip.h"
+#include "dandan/mana/ManaType.h"
 #include <memory>
 #include <unordered_map>
 
@@ -18,24 +19,28 @@ namespace
 
         map.emplace(dandan::core::SubType::Plains,
                     std::make_unique<dandan::abilities::ManaAbility>(
-                        dandan::mana::ManaList{
-                            std::make_unique<dandan::mana::WhiteMana>(1)}));
+                        dandan::mana::ManaList{dandan::mana::ManaBag{
+                            {dandan::mana::ManaType::WHITE, 1}}}));
+
         map.emplace(dandan::core::SubType::Island,
                     std::make_unique<dandan::abilities::ManaAbility>(
-                        dandan::mana::ManaList{
-                            std::make_unique<dandan::mana::BlueMana>(1)}));
+                        dandan::mana::ManaList{dandan::mana::ManaBag{
+                            {dandan::mana::ManaType::BLUE, 1}}}));
+
         map.emplace(dandan::core::SubType::Swamp,
                     std::make_unique<dandan::abilities::ManaAbility>(
-                        dandan::mana::ManaList{
-                            std::make_unique<dandan::mana::BlackMana>(1)}));
+                        dandan::mana::ManaList{dandan::mana::ManaBag{
+                            {dandan::mana::ManaType::BLACK, 1}}}));
+
         map.emplace(dandan::core::SubType::Mountain,
                     std::make_unique<dandan::abilities::ManaAbility>(
-                        dandan::mana::ManaList{
-                            std::make_unique<dandan::mana::RedMana>(1)}));
+                        dandan::mana::ManaList{dandan::mana::ManaBag{
+                            {dandan::mana::ManaType::BLACK, 1}}}));
+
         map.emplace(dandan::core::SubType::Forest,
                     std::make_unique<dandan::abilities::ManaAbility>(
-                        dandan::mana::ManaList{
-                            std::make_unique<dandan::mana::GreenMana>(1)}));
+                        dandan::mana::ManaList{dandan::mana::ManaBag{
+                            {dandan::mana::ManaType::BLACK, 1}}}));
 
         return map;
     }
