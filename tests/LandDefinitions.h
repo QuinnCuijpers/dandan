@@ -139,10 +139,11 @@ Izzet_Boilerworks_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
-    abilities.emplace_back(std::make_unique<dandan::ManaAbility>(
-        dandan::mana::ManaList{std::vector{
-            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}},
-            dandan::mana::ManaBag{{dandan::mana::ManaType::RED, 1}}}}));
+    abilities.emplace_back(
+        std::make_unique<dandan::ManaAbility>(dandan::mana::ManaList{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1},
+                                  {dandan::mana::ManaType::RED, 1}},
+        }));
 
     abilities.emplace_back(std::make_unique<dandan::StaticAbility>(
         dandan::abilities::StaticAbility::Type::Replacement,
