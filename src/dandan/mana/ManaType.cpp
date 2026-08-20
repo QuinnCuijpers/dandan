@@ -1,5 +1,6 @@
 #include "dandan/mana/ManaType.h"
 #include <stdexcept>
+#include <string>
 
 namespace dandan::mana
 {
