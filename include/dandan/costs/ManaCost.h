@@ -26,7 +26,7 @@ namespace dandan::costs
         /** Gets the mana requirement.
          * @return A pointer to the mana requirement.
          */
-        [[nodiscard]] mana::ManaPrice getMana() const;
+        [[nodiscard]] const mana::ManaPrice &getMana() const;
 
         [[nodiscard]] bool canPay(const core::Card &source,
                                   const core::Player &player) const override;

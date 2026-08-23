@@ -52,7 +52,7 @@ namespace dandan::costs
         return res;
     }
 
-    [[nodiscard]] mana::ManaPrice ManaCost::getMana() const
+    [[nodiscard]] const mana::ManaPrice &ManaCost::getMana() const
     {
         return m_mana;
     }

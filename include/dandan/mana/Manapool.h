@@ -31,7 +31,7 @@ namespace dandan::mana
             m_manapool = m_manapool.add(mana);
         }
 
-        [[nodiscard]] ManaBag view() const
+        [[nodiscard]] const ManaBag &view() const
         {
             return m_manapool;
         }
