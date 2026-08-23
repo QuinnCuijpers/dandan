@@ -23,7 +23,7 @@ namespace
                     dynamic_cast<const abilities::ManaAbility *>(
                         &ability.definition());
                 for (const auto &option :
-                     mana_ability->getManaList()->getOptions())
+                     mana_ability->getManaList().getOptions())
                 {
                     if (option.total() > max_mana_for_land.total())
                     {
@@ -38,9 +38,9 @@ namespace
                         &ability.definition());
                 const auto *mana_ability{
                     basic_ability->getManaAbility(game, ability.getContext())};
-                const auto *mana_list{mana_ability->getManaList()};
+                const auto mana_list{mana_ability->getManaList()};
 
-                for (const auto &option : mana_list->getOptions())
+                for (const auto &option : mana_list.getOptions())
                 {
                     if (option.total() > max_mana_for_land.total())
                     {

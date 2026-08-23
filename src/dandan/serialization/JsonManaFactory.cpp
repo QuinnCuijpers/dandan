@@ -11,11 +11,11 @@
 namespace dandan::serialization
 {
     nlohmann::json JsonFactory<dandan::mana::ManaList>::create_json(
-        const dandan::mana::ManaList *mana)
+        const dandan::mana::ManaList &mana)
     {
         nlohmann::json json = nlohmann::json::array();
         std::transform(
-            mana->getOptions().begin(), mana->getOptions().end(),
+            mana.getOptions().begin(), mana.getOptions().end(),
             std::back_inserter(json),
             [](const auto &option)
             {
@@ -24,8 +24,8 @@ namespace dandan::serialization
         return json;
     }
 
-    std::unique_ptr<dandan::mana::ManaList> JsonFactory<
-        dandan::mana::ManaList>::create_product(const nlohmann::json &json)
+    dandan::mana::ManaList JsonFactory<dandan::mana::ManaList>::create_product(
+        const nlohmann::json &json)
     {
         std::vector<mana::ManaBag> options{};
         std::transform(
@@ -35,7 +35,7 @@ namespace dandan::serialization
                 return JsonFactory<dandan::mana::ManaBag>::create_product(
                     option_json);
             });
-        return std::make_unique<dandan::mana::ManaList>(std::move(options));
+        return dandan::mana::ManaList(std::move(options));
     }
 
     nlohmann::json JsonFactory<dandan::mana::ManaPrice>::create_json(
