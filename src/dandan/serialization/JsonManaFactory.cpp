@@ -1,7 +1,7 @@
-#include "dandan/serialization/JsonManaFactory.h"
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/ManaPrice.h"
 #include "dandan/mana/ManaType.h"
+#include "dandan/serialization/JsonFactory.h"
 #include <cstddef>
 #include <string>
 #ifdef DANDAN_SERIALIZE

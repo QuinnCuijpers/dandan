@@ -1,6 +1,6 @@
-#include "dandan/serialization/JsonEffectOneShotFactory.h"
 #include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
+#include "dandan/serialization/JsonFactory.h"
 #include <optional>
 #include <vector>
 #ifdef DANDAN_SERIALIZE
