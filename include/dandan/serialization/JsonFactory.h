@@ -35,6 +35,11 @@ namespace dandan::serialization
     public:
         static nlohmann::json create_json(const T *obj)
         {
+            if (obj == nullptr)
+            {
+                throw std::invalid_argument(
+                    "JsonFactory<T>::create_json: obj must not be null");
+            }
             auto json = nlohmann::json::object();
             const auto &registration{
                 JsonTypeRegistry<T>::instance().serializerFor(*obj)};
