@@ -3,7 +3,7 @@
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
-#include "dandan/serialization/JsonManaFactory.h"
+#include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
 namespace
