@@ -6,7 +6,7 @@
 #include <memory>
 
 #ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonManaFactory.h"
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
 namespace
@@ -32,13 +32,12 @@ namespace
             },
             [](const nlohmann::json &json)
             {
-                std::unique_ptr<ManaList> mana_list{
-                    JsonFactory<ManaList>::create_product(
-                        json.at("mana_list"))};
+                auto mana_list{JsonFactory<ManaList>::create_product(
+                    json.at("mana_list"))};
                 std::unique_ptr<ICost> cost{
                     JsonFactory<ICost>::create_product(json.at("cost"))};
                 return std::make_unique<ManaAbility>(std::move(cost),
-                                                     std::move(*mana_list));
+                                                     std::move(mana_list));
             });
         return true;
     }();
@@ -74,7 +73,7 @@ namespace dandan::abilities
         res += m_cost->display();
         res += "Add ";
 
-        assert(!getManaList()->getOptions().empty() &&
+        assert(!getManaList().getOptions().empty() &&
                "Mana List was empty when trying to display ManaAbility");
         const auto mana{m_mana_list.getOptions().at(0)};
         res += mana::ManaBag::ManaToSymbols(mana);
@@ -88,9 +87,9 @@ namespace dandan::abilities
         return res;
     }
 
-    [[nodiscard]] const mana::ManaList *ManaAbility::getManaList() const
+    [[nodiscard]] const mana::ManaList &ManaAbility::getManaList() const
     {
-        return &m_mana_list;
+        return m_mana_list;
     }
 
     [[nodiscard]] const costs::ICost *ManaAbility::getCost() const

@@ -38,7 +38,7 @@ namespace dandan::abilities
         /** Get the mana produced by the ability
          * @return The mana produced by the ability
          */
-        [[nodiscard]] const mana::ManaList *getManaList() const;
+        [[nodiscard]] const mana::ManaList &getManaList() const;
 
         /** Get the cost of the ability
          * @return The cost of the ability
