@@ -27,7 +27,7 @@
                 "milledCardName"
               ],
               "amount": {
-                "type": "conditionalNumber",
+                "type": "ConditionalNumber",
                 "data": {
                   "ifNumber": 2,
                   "elseNumber": 1,

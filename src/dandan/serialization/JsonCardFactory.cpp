@@ -1,4 +1,3 @@
-#include "dandan/serialization/JsonCardFactory.h"
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/mana/ManaPrice.h"
@@ -8,7 +7,6 @@
 #include "dandan/core/CardData.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include "dandan/serialization/JsonFactory.h"
-#include "dandan/serialization/JsonManaFactory.h"
 #include <nlohmann/json.hpp>
 
 namespace dandan::serialization

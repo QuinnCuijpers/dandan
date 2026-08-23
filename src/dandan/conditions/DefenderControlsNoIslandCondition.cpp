@@ -9,6 +9,40 @@
 #include <variant>
 #include <vector>
 
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonEnums.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace
+{
+    using namespace dandan::conditions;
+    using namespace dandan::serialization;
+
+    const auto registered = []
+    {
+        ConditionRegistry::instance()
+            .registerType<DefenderControlsNoBasicCondition>(
+                "DefenderControlsNoBasicCondition",
+                [](const ICondition *condition)
+                {
+                    auto json = nlohmann::json::object();
+                    const auto *defender_controls{
+                        dynamic_cast<const DefenderControlsNoBasicCondition *>(
+                            condition)};
+                    json["type"] = defender_controls->type();
+                    return json;
+                },
+                [](const nlohmann::json &json)
+                {
+                    auto type = json.at("type").get<dandan::core::SubType>();
+                    return std::make_unique<DefenderControlsNoBasicCondition>(
+                        type);
+                });
+        return true;
+    }();
+} // namespace
+#endif
+
 namespace dandan::conditions
 {
     DefenderControlsNoBasicCondition::DefenderControlsNoBasicCondition(

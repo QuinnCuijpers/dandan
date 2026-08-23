@@ -30,7 +30,9 @@
                     "type": "BounceLandEffect"
                 },
                 "trigger": {
-                    "data": {},
+                    "data": {
+                        "tapped": false
+                    },
                     "type": "SelfETBTrigger"
                 }
             },

@@ -67,5 +67,15 @@ namespace dandan::core
 
 } // namespace dandan::core
 
+namespace dandan::abilities
+{
+    NLOHMANN_JSON_SERIALIZE_ENUM( // NOLINT
+        StaticAbility::Type,
+        {{StaticAbility::Type::CharacteristicDefining,
+          "CharacteristicDefining"},
+         {StaticAbility::Type::Prevention, "Prevention"},
+         {StaticAbility::Type::Replacement, "Replacement"}});
+}
+
 #endif // DANDAN_SERIALIZE
 #endif // DANDAN_JSON_ENUMS_H

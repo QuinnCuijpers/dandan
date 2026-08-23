@@ -1,21 +1,36 @@
 #include "dandan/serialization/JsonFactory.h"
 #ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
-#include <stdexcept>
 
 namespace dandan::serialization
 {
     template <typename T>
-    std::unique_ptr<T> JsonFactory<T>::create_product(
-        [[maybe_unused]] const nlohmann::json &json)
+    std::unique_ptr<T> create_product(const nlohmann::json &json)
     {
-        throw std::logic_error("JsonFactory not implemented for this type");
+        const auto &type = json.at("type").get<std::string>();
+        return JsonTypeRegistry<T>::instance().deserializerFor(type)(
+            json.at("data"));
     }
 
-    template <typename T>
-    nlohmann::json JsonFactory<T>::create_json([[maybe_unused]] const T *obj)
+    template <typename T> nlohmann::json create_json(const T *obj)
     {
-        throw std::logic_error("JsonFactory not implemented for this type");
+        auto json = nlohmann::json::object();
+        const auto &registration{
+            JsonTypeRegistry<T>::instance().serializerFor(*obj)};
+
+        auto data = registration.serializer(obj);
+
+        if (registration.representation == JsonRepresentation::INLINE)
+        {
+            return data;
+        }
+
+        json["type"] = registration.name;
+        json["data"] = data;
+
+        return json;
     }
+
 } // namespace dandan::serialization
 #endif // DANDAN_SERIALIZE

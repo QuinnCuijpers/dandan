@@ -3,6 +3,63 @@
 #include "dandan/effects/one_shot/EffectList.h"
 #include <iostream>
 
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+
+namespace
+{
+
+    using namespace dandan::abilities;
+    using namespace dandan::serialization;
+    using namespace dandan::effects;
+
+    const auto registered = []
+    {
+        AbilityRegistry::instance().registerType<SpellAbility>(
+            "SpellAbility",
+            [](const IAbility *ability)
+            {
+                auto json = nlohmann::json::object();
+                const auto *spell_ability{
+                    dynamic_cast<const SpellAbility *>(ability)};
+                auto effect_list = nlohmann::json::array();
+                std::transform(
+                    spell_ability->effects().begin(),
+                    spell_ability->effects().end(),
+                    std::back_inserter(effect_list),
+                    [](const auto &effect)
+                    {
+                        return JsonFactory<IOneShotEffectDefinition>::
+                            create_json(effect.get());
+                    });
+
+                json["effect_list"] = effect_list;
+                return json;
+            },
+            [](const nlohmann::json &json)
+            {
+                std::vector<std::unique_ptr<IOneShotEffectDefinition>>
+                    effect_list;
+                std::transform(
+                    json.at("effect_list").begin(),
+                    json.at("effect_list").end(),
+                    std::back_inserter(effect_list),
+                    [](const auto &effect_json)
+                    {
+                        return JsonFactory<IOneShotEffectDefinition>::
+                            create_product(effect_json);
+                    });
+                return std::make_unique<SpellAbility>(std::move(effect_list));
+            });
+
+        return true;
+    }();
+} // namespace
+#endif
+
 namespace dandan::abilities
 {
 

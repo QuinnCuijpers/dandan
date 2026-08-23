@@ -1,8 +1,51 @@
 #include "dandan/abilities/ActivatedAbility.h"
+#include "dandan/abilities/IAbility.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <iostream>
 #include <memory>
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace
+{
+    using namespace dandan::abilities;
+    using namespace dandan::serialization;
+    using namespace dandan::costs;
+    using namespace dandan::effects;
+
+    const auto registered = []
+    {
+        AbilityRegistry::instance().registerType<ActivatedAbility>(
+            "ActivatedAbility",
+            [](const IAbility *ability)
+            {
+                auto json = nlohmann::json::object();
+                const auto *activated{
+                    dynamic_cast<const ActivatedAbility *>(ability)};
+                json["cost"] =
+                    JsonFactory<ICost>::create_json(activated->getCost());
+                json["effect"] =
+                    JsonFactory<IOneShotEffectDefinition>::create_json(
+                        activated->getEffect());
+                return json;
+            },
+            [](const nlohmann::json &json)
+            {
+                auto cost{JsonFactory<ICost>::create_product(json.at("cost"))};
+
+                auto effect{
+                    JsonFactory<IOneShotEffectDefinition>::create_product(
+                        json.at("effect"))};
+                return std::make_unique<ActivatedAbility>(std::move(cost),
+                                                          std::move(effect));
+            });
+        return true;
+    }();
+} // namespace
+#endif
 
 namespace dandan::abilities
 {

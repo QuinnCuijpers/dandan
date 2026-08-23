@@ -1,6 +1,41 @@
+#include "dandan/conditions/ICondition.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
+#include "dandan/core/CardTypes.h"
 #include "dandan/core/Game.h"
 #include <algorithm>
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace
+{
+    using namespace dandan::conditions;
+    using namespace dandan::serialization;
+
+    const auto registered = []
+    {
+        ConditionRegistry::instance()
+            .registerType<SelfControlsNoBasicCondition>(
+                "SelfControlsNoBasicCondition",
+                [](const ICondition *condition)
+                {
+                    auto json = nlohmann::json::object();
+                    const auto *self_controls{
+                        dynamic_cast<const SelfControlsNoBasicCondition *>(
+                            condition)};
+                    json["type"] = self_controls->type();
+                    return json;
+                },
+                [](const nlohmann::json &json)
+                {
+                    auto type = json.at("type").get<dandan::core::SubType>();
+                    return std::make_unique<SelfControlsNoBasicCondition>(type);
+                });
+        return true;
+    }();
+} // namespace
+#endif
 
 namespace dandan::conditions
 {
@@ -56,6 +91,12 @@ namespace dandan::conditions
         const auto &battlefield{self_player.battlefield()};
         return std::all_of(battlefield.getLands().begin(),
                            battlefield.getLands().end(), no_basic_filter);
+    }
+
+    [[nodiscard]] std::unique_ptr<ICondition> SelfControlsNoBasicCondition::
+        clone() const
+    {
+        return std::make_unique<SelfControlsNoBasicCondition>(m_basic_type);
     }
 
     // NOLINTBEGIN(bugprone-easily-swappable-parameters)

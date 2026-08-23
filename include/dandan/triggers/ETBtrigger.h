@@ -46,8 +46,6 @@ namespace dandan::triggers
 
     using SelfETBTrigger = ETBTrigger<true>;
 
-    extern template class ETBTrigger<true>;
-    extern template class ETBTrigger<false>;
 } // namespace dandan::triggers
 
 #endif

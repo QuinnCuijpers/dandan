@@ -1,4 +1,35 @@
 #include "dandan/numbers/GraveyardCount.h"
+#include <string>
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace
+{
+    using namespace dandan::numbers;
+    using namespace dandan::serialization;
+
+    const auto registered = []
+    {
+        NumberRegistry::instance().registerType<GraveyardCount>(
+            "GraveyardCount",
+            [](const INumber *number)
+            {
+                auto json = nlohmann::json::object();
+                const auto *graveyard_count{
+                    dynamic_cast<const GraveyardCount *>(number)};
+                json["card_name"] = graveyard_count->getName();
+                return json;
+            },
+            [](const nlohmann::json &json)
+            {
+                std::string name = json.at("card_name").get<std::string>();
+                return std::make_unique<GraveyardCount>(name);
+            });
+        return true;
+    }();
+} // namespace
+#endif
 
 namespace dandan::numbers
 {

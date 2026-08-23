@@ -25,10 +25,7 @@ namespace dandan::conditions
             const core::Game &game,
             std::optional<effects::EffectContext> context) const override;
 
-        [[nodiscard]] std::unique_ptr<ICondition> clone() const override
-        {
-            return std::make_unique<SelfControlsNoBasicCondition>(m_basic_type);
-        }
+        [[nodiscard]] std::unique_ptr<ICondition> clone() const override;
 
         // NOLINTBEGIN(bugprone-easily-swappable-parameters)
         void replaceBasicWord(core::SubType from,

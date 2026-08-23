@@ -6,6 +6,44 @@
 #include <memory>
 #include <string>
 
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace
+{
+
+    using namespace dandan::serialization;
+    using namespace dandan::effects;
+    using namespace dandan::abilities;
+    using namespace dandan::core;
+
+    const auto registered = []
+    {
+        OneShotEffectRegistry::instance()
+            .registerType<ChooseCardNameAndMillEffectDefinition>(
+                "ChooseCardNameAndMillEffect",
+                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
+                {
+                    auto json = nlohmann::json::object();
+                    const auto *choose_name_and_mill = dynamic_cast<
+                        const ChooseCardNameAndMillEffectDefinition *>(effect);
+                    json["amount"] = choose_name_and_mill->getAmount();
+                    return json;
+                },
+                [](const nlohmann::json &data,
+                   const std::vector<TargetSpec> &target_specs,
+                   [[maybe_unused]] ExpireTime expiry)
+                {
+                    return std::make_unique<
+                        ChooseCardNameAndMillEffectDefinition>(
+                        data.at("amount").get<int>(),
+                        TargetRequirement{target_specs});
+                });
+        return true;
+    }();
+} // namespace
+#endif
+
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> ChooseCardNameAndMillEffect::apply_impl(

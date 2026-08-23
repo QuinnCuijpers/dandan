@@ -1,7 +1,5 @@
-#include "dandan/effects/one_shot/MemoryLapseEffect.h"
-#include "dandan/core/Game.h"
-#include "dandan/events/IEvent.h"
-#include <memory>
+#include "dandan/effects/one_shot/SpinToTopEffect.h"
+#include "dandan/core/TargetRequirement.h"
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonTypeRegistry.h"
@@ -18,8 +16,8 @@ namespace
     const auto registered = []
     {
         OneShotEffectRegistry::instance()
-            .registerType<MemoryLapseEffectDefinition>(
-                "MemoryLapseEffect",
+            .registerType<SpinToTopEffectDefinition>(
+                "SpinToTopEffect",
                 []([[maybe_unused]] const IOneShotEffectDefinition *effect)
                 {
                     auto json = nlohmann::json::object();
@@ -29,7 +27,7 @@ namespace
                    const std::vector<TargetSpec> &target_specs,
                    [[maybe_unused]] ExpireTime expiry)
                 {
-                    return std::make_unique<MemoryLapseEffectDefinition>(
+                    return std::make_unique<SpinToTopEffectDefinition>(
                         TargetRequirement{target_specs});
                 });
         return true;
@@ -39,23 +37,29 @@ namespace
 
 namespace dandan::effects
 {
-    std::unique_ptr<events::IEvent> MemoryLapseEffect::apply_impl(
+    SpinToTopEffect::SpinToTopEffect(core::Target target, EffectContext context)
+        : IOneShotEffect(std::move(context)), m_target(std::move(target))
+    {
+    }
+
+    [[nodiscard]] std::unique_ptr<IOneShotEffect> SpinToTopEffect::copy() const
+    {
+        return std::make_unique<SpinToTopEffect>(m_target, getEffectContext());
+    }
+
+    std::unique_ptr<events::IEvent> SpinToTopEffect::apply_impl(
         core::Game &game) const
     {
         if (!std::holds_alternative<core::CardID>(m_target))
         {
             throw std::runtime_error(
-                "MemoryLapseEffect target is not a CardID");
+                "Spin to top effect target is not a card ID");
         }
-        auto card_id{std::get<core::CardID>(m_target)};
-        auto *card{game.getCardByID(card_id)};
-        auto &controller{game.getPlayer(card->getControllerID())};
-
-        if (card->canBeCountered())
-        {
-            game.moveCardFromZone(controller, *card);
-            game.moveCardToZone(*card, controller, m_target_zone);
-        }
+        auto permanent{std::get<core::CardID>(m_target)};
+        auto *card{game.getCardByID(permanent)};
+        game.moveCardFromZone(game.activePlayer(), *card);
+        game.library().addCardTop(*card);
         return nullptr;
     }
+
 } // namespace dandan::effects

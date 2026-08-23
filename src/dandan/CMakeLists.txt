@@ -40,12 +40,7 @@ endif()
 target_link_libraries(
   DandanLib
   PRIVATE DandanCore
-          DandanAbilities
-          DandanEffects
-          DandanEvents
-          DandanCosts
-          DandanConditions
-          DandanTriggers)
+          DandanEvents)
 
 if(DANDAN_BUILD_SERIALIZE)
   target_link_libraries(DandanLib PRIVATE DandanSerialize
