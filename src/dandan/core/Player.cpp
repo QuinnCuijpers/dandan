@@ -6,6 +6,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/Manapool.h"
+#include <algorithm>
 
 namespace
 {
@@ -22,14 +23,13 @@ namespace
                 const auto *mana_ability =
                     dynamic_cast<const abilities::ManaAbility *>(
                         &ability.definition());
-                for (const auto &option :
-                     mana_ability->getManaList().getOptions())
-                {
-                    if (option.total() > max_mana_for_land.total())
-                    {
-                        max_mana_for_land = option;
-                    }
-                }
+                const auto &options{mana_ability->getManaList().getOptions()};
+                auto max_it = std::max_element(
+                    options.begin(), options.end(),
+                    [](const auto &option_a, const auto &option_b)
+                    { return option_a.total() > option_b.total(); });
+
+                max_mana_for_land = *max_it;
             }
             else if (ability.type() == abilities::AbilityType::Type::BasicLand)
             {

@@ -1,6 +1,7 @@
 #include "SpellDefinitions.h"
 #include "common.h"
 #include "dandan/abilities/IAbility.h"
+#include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/CardTypes.h"
@@ -16,6 +17,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <gtest/gtest.h>
+#include <iterator>
 #include <memory>
 #include <optional>
 #include <sstream>
@@ -407,12 +409,11 @@ TEST(DandanLibTest, ManaAbilities)
         dandan::core::SubType::None, Svyelunite_Temple_Abilities()));
 
     std::vector<dandan::Card> lands{};
-
     lands.reserve(land_data.size());
-    for (auto &data : land_data)
-    {
-        lands.emplace_back(data.get());
-    }
+
+    std::transform(land_data.begin(), land_data.end(),
+                   std::back_inserter(lands), [](const auto &data)
+                   { return dandan::core::Card{data.get()}; });
 
     std::unordered_map<std::string, bool> requires_option{
         {"Island", false},
