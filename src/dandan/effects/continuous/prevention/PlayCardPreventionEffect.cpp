@@ -9,7 +9,7 @@ namespace dandan::effects
         const core::IAction &action, const core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
     {
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         if (const auto *play_card_action =
                 dynamic_cast<const core::PlayCardAction *>(&action))

@@ -46,7 +46,7 @@ namespace dandan::core
                               core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         auto current_subscribers = std::vector<CardID>{};
         for (const auto &[card_id, abilities] : m_subscribers)

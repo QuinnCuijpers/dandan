@@ -61,7 +61,7 @@ namespace dandan::conditions
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         auto basic{m_type};
         auto text_replacements{context->text_replacements};

@@ -1,7 +1,6 @@
 #ifndef DANDAN_MODAL_EFFECT_H
 #define DANDAN_MODAL_EFFECT_H
 
-#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <algorithm>

@@ -48,7 +48,7 @@ namespace dandan::conditions
         std::optional<effects::EffectContext> context) const
     {
 
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         assert(context.has_value() &&
                "Effect with Matches Read Links Condition tried checking "

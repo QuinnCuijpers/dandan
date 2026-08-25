@@ -65,7 +65,7 @@ namespace dandan::core
 
     void Player::drawCard(core::ExecutionContext exec_ctx)
     {
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
         auto &library{exec_ctx.state.get().library()};
         if (library.getCards().empty())
         {
@@ -107,7 +107,7 @@ namespace dandan::core
         auto available_mana{getAvailableMana(exec_ctx)};
         proxy_mana_pool.add(available_mana);
 
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         for (const auto &card_id : m_hand.getCards())
         {
@@ -144,7 +144,7 @@ namespace dandan::core
         mana::ManaBag available_mana{};
         available_mana = available_mana.add(m_mana_pool.view());
 
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
         for (const auto &land_id : m_battlefield.getLands())
         {
             const auto *land{card_registry[land_id]};

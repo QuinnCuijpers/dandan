@@ -34,7 +34,7 @@ namespace dandan::core
                                       int count)
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         auto res{std::vector<CardID>{}};
         for (int i = 0; i < count && !m_cards.empty(); ++i)

@@ -2,7 +2,6 @@
 #define DANDAN_CHANGECHARACTERISTICS_H
 
 #include "dandan/core/Card.h"
-#include "dandan/core/CardCharacteristics.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
@@ -59,7 +58,7 @@ namespace dandan::effects
             const core::ExecutionContext exec_ctx,
             EffectContext context) const override
         {
-            const auto &card_registry{exec_ctx.cards.get()};
+            auto &card_registry{exec_ctx.cards.get()};
             const auto *card{card_registry[context.card_id.value()]};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};

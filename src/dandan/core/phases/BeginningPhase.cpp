@@ -40,7 +40,7 @@ namespace dandan::core
     void BeginningPhase::handleUntapStep()
     {
         auto &game{context().state.get()};
-        const auto &card_registry{context().cards.get()};
+        auto &card_registry{context().cards.get()};
 
         DLOGI << "Handling untap step\n";
 

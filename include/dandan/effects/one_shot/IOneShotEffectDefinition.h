@@ -1,7 +1,6 @@
 #ifndef DANDAN_IONESHOTEFFECTDEFINITION_H
 #define DANDAN_IONESHOTEFFECTDEFINITION_H
 
-#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
@@ -11,6 +10,12 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+namespace dandan::core
+{
+    struct ExecutionContext;
+}
+
 namespace dandan::effects
 {
     using links = std::vector<std::string>;

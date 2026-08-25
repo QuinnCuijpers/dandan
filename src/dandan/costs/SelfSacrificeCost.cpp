@@ -47,7 +47,7 @@ namespace dandan::costs
                                 abilities::AbilityContext context) const
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         auto &player = game.getPlayer(context.controller_id);
         auto *card = card_registry[context.source_card_id];

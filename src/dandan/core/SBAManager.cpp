@@ -16,7 +16,7 @@ namespace dandan::core
     void SBAManager::checkSBAs(ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         // 704.5a If a player has 0 or less life, that player loses the game.
         for (const auto &player : game.getPlayers())

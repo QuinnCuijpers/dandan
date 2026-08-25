@@ -16,7 +16,7 @@ namespace dandan::core
     void Stack::resolveNext(core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         if (m_stack.empty())
         {

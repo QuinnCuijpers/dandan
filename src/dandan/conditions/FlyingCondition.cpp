@@ -34,7 +34,7 @@ namespace dandan::conditions
         std::optional<effects::EffectContext> context) const
     {
 
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         const auto *card{card_registry[context->card_id.value()]};
         const auto &current_abilities{card->getCurrentAbilities()};

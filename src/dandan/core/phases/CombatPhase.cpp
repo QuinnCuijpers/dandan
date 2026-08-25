@@ -51,7 +51,7 @@ namespace dandan::core
     void CombatPhase::handleDeclareAttackersStep()
     {
         auto &game{context().state.get()};
-        const auto &card_registry{context().cards.get()};
+        auto &card_registry{context().cards.get()};
 
         game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),
                                                    context());
@@ -133,7 +133,7 @@ namespace dandan::core
     void CombatPhase::handleDeclareBlockersStep()
     {
         auto &game{context().state.get()};
-        const auto &card_registry{context().cards.get()};
+        auto &card_registry{context().cards.get()};
 
         std::cout << "Declare blockers step\n";
         game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),

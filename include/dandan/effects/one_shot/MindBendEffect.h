@@ -67,7 +67,7 @@ namespace dandan::effects
             [[maybe_unused]] const core::ExecutionContext exec_ctx,
             [[maybe_unused]] EffectContext context) const override
         {
-            const auto &card_registry{exec_ctx.cards.get()};
+            auto &card_registry{exec_ctx.cards.get()};
             const auto *card{card_registry[context.card_id.value()]};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};

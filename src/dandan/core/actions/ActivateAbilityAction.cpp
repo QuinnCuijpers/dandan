@@ -20,7 +20,7 @@ namespace dandan::core
         createEffect(core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         if (const auto *mana_ability =
                 dynamic_cast<const abilities::ManaAbility *>(m_ability))

@@ -12,7 +12,7 @@ namespace dandan::core
     void EndingPhase::handleNextStep()
     {
         auto &game{context().state.get()};
-        const auto &card_registry{context().cards.get()};
+        auto &card_registry{context().cards.get()};
 
         switch (m_step)
         {

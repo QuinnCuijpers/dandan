@@ -71,7 +71,7 @@ namespace dandan::costs
                           abilities::AbilityContext context) const
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         m_inner_cost->pay(exec_ctx, context);
         auto player_id{context.controller_id};
