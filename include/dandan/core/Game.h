@@ -351,14 +351,10 @@ namespace dandan::core
             for (const auto &card_id : card_ids)
             {
                 const auto *card = m_card_registry[card_id];
-                if (card != nullptr)
-                {
-                    std::cout << card->getData().name << "("
-                              << "CardID: " << card->getID().getID() << ", ";
-                    std::cout
-                        << "#Abilities: " << card->getCurrentAbilities().size()
-                        << ") ";
-                }
+                std::cout << card->getData().name << "("
+                          << "CardID: " << card->getID().getID() << ", ";
+                std::cout << "#Abilities: "
+                          << card->getCurrentAbilities().size() << ") ";
             }
             std::cout << "]\n";
         }
