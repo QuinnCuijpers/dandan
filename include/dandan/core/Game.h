@@ -7,7 +7,9 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/CardRegistry.h"
 #include "dandan/core/Constants.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Exile.h"
 #include "dandan/core/Graveyard.h"
 #include "dandan/core/Library.h"
@@ -23,12 +25,8 @@
 #include "dandan/core/phases/IPhase.h"
 #include "engine/EventManager.h"
 #include "engine/ReplacementManager.h"
-#include <algorithm>
-#include <filesystem>
 #include <istream>
-#include <iterator>
 #include <memory>
-#include <unordered_map>
 #include <vector>
 
 namespace dandan::core
@@ -44,7 +42,7 @@ namespace dandan::core
 
     public:
 #ifdef DANDAN_SERIALIZE
-        Game();
+        explicit Game(const std::filesystem::path &path);
 #endif
 
         /** Constructs a game with the given input stream.
@@ -58,16 +56,6 @@ namespace dandan::core
          * @return The constructed game instance.
          */
         static Game withCards(std::vector<Card> cards, bool shuffle = true);
-
-        [[nodiscard]] std::vector<CardID> cards() const
-        {
-            std::vector<CardID> card_ids;
-            card_ids.reserve(m_cards.size());
-            std::transform(m_cards.begin(), m_cards.end(),
-                           std::back_inserter(card_ids),
-                           [](const auto &card) { return card.getID(); });
-            return card_ids;
-        }
 
         /** Gets a player from the game accosiated with the given ID immutably.
          * @param player_id The ID of the player to get.
@@ -281,6 +269,16 @@ namespace dandan::core
             return m_condition_manager;
         }
 
+        CardRegistry &cardRegistry()
+        {
+            return m_card_registry;
+        }
+
+        std::vector<CardID> cards() const
+        {
+            return m_card_registry.card_ids();
+        }
+
         void addEndOfTurnEffect(std::unique_ptr<effects::IOneShotEffect> effect)
         {
             std::cout << "added end of turn effect: " << typeid(effect).name()
@@ -293,7 +291,9 @@ namespace dandan::core
             for (const auto &effect : m_end_of_turn_effects)
             {
                 std::cout << "Applying end of turn effect\n";
-                effect->apply(*this);
+                // TODO: handle end of turn events
+                static_cast<void>(
+                    effect->apply(ExecutionContext{*this, m_card_registry}));
             }
             m_end_of_turn_effects.clear();
         }
@@ -350,7 +350,7 @@ namespace dandan::core
             std::cout << "[";
             for (const auto &card_id : card_ids)
             {
-                const auto *card = getCardByID(card_id);
+                const auto *card = m_card_registry[card_id];
                 if (card != nullptr)
                 {
                     std::cout << card->getData().name << "("
@@ -371,10 +371,12 @@ namespace dandan::core
          */
         void passTurn()
         {
-            changePhase(std::make_unique<EndingPhase>(*this));
+            changePhase(std::make_unique<EndingPhase>(
+                ExecutionContext{*this, m_card_registry}));
             m_active_player_index = 1 - m_active_player_index;
             m_first_turn = false;
-            changePhase(std::make_unique<BeginningPhase>(*this));
+            changePhase(std::make_unique<BeginningPhase>(
+                ExecutionContext{*this, m_card_registry}));
         }
 
         /** Handles the current phase and transitions to the next phase.
@@ -395,35 +397,9 @@ namespace dandan::core
          */
         [[nodiscard]] bool isActionPrevented(const IAction &action)
         {
-            return m_prevention_manager.isPrevented(action, *this);
+            return m_prevention_manager.isPrevented(action,
+                                                    {*this, m_card_registry});
         }
-
-        /** Gets a card by its ID immutably.
-         * @param card_id The ID of the card to get.
-         * @return A pointer to the card if found, throws otherwise.
-         */
-        [[nodiscard]] const Card *getCardByID(CardID card_id) const;
-
-        /** Gets a card by int id immutably.
-         * @param card_id The ID of the card to get.
-         * @return A pointer to the card if found, throws otherwise.
-         */
-        [[nodiscard]] const Card *getCardByID(int card_id) const
-        {
-            return getCardByID(CardID::fromInt(card_id));
-        }
-
-        /** Gets a card by int mutably.
-         * @param card_id The ID of the card to get.
-         * @return A pointer to the card if found, throws otherwise.
-         */
-        [[nodiscard]] Card *getCardByID(CardID card_id);
-
-        /** Gets a card by int id mutably.
-         * @param card_id The ID of the card to get.
-         * @return A pointer to the card if found, throws otherwise.
-         */
-        [[nodiscard]] Card *getCardByID(int card_id);
 
         /** Clears the card from its current zone.
          * @param player The player whose card is to be cleared.
@@ -436,7 +412,7 @@ namespace dandan::core
         /** Quits the game for the specified player.
          * @param player The player who is quitting the game.
          */
-        void quit(const Player &player);
+        void quit(const Player &player) const;
 
         std::vector<core::Target> getValidTargets(
             core::TargetType type,
@@ -460,17 +436,14 @@ namespace dandan::core
         ConditionManager m_condition_manager;
         SBAManager m_sba_manager;
 
+        CardRegistry m_card_registry;
+
         std::vector<std::unique_ptr<effects::IOneShotEffect>>
             m_end_of_turn_effects;
 
         std::unique_ptr<IPhase> m_phase;
         std::istream *m_input{&std::cin};
-        // stable container for all cards in the game
-        std::deque<Card> m_cards;
-        // map from card ID to pointer to card in m_cards for O(1) access to
-        // cards by ID
-        std::unordered_map<CardID, Card *> m_card_map;
-        std::filesystem::path m_card_data_path{DANDAN_DECKLIST};
+
         bool m_first_turn{true};
         Graveyard m_graveyard;
 
@@ -478,8 +451,6 @@ namespace dandan::core
         explicit Game(std::vector<Card> cards, bool shuffle = true);
 
         void GameSetup(bool shuffle = true);
-
-        void loadCards(const std::filesystem::path &path);
 
         std::vector<Target> getValidCreatures(
             Controller controller = Controller::Any) const;
