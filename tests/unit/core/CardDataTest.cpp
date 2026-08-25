@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #ifdef DANDAN_SERIALIZE
+#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
 
 TEST(CardDataTest, NonExistantFile)

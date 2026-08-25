@@ -7,6 +7,7 @@
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Constants.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Keyword.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
@@ -38,6 +39,7 @@ TEST(DandanLibTest, GameSetup)
     dandan::core::PlayerID::reset();
     auto test_cards{createTestCards(TEST_DECK_SIZE)};
     auto game{dandan::Game::withCards(std::move(test_cards))};
+    const auto &card_registry{game.cardRegistry()};
 
     auto &active_player = game.activePlayer();
 
@@ -45,20 +47,20 @@ TEST(DandanLibTest, GameSetup)
     std::transform(
         active_player.hand().getCards().begin(),
         active_player.hand().getCards().end(), std::back_inserter(card_names),
-        [&game](const auto &card)
-        { return std::string(game.getCardByID(card)->getData().name); });
+        [&card_registry](const auto &card)
+        { return std::string(card_registry[card]->getData().name); });
 
     for (int i{}; i < STARTING_HAND_SIZE; ++i)
     {
         auto card_id = active_player.hand().getCards().front();
-        auto *card = game.getCardByID(card_id);
+        auto *card = card_registry[card_id];
         active_player.playCard(*card);
     }
 
     std::vector<std::string> battlefield_card_names{};
 
-    auto getCardname = [&game](const auto &card)
-    { return std::string(game.getCardByID(card)->getData().name); };
+    auto getCardname = [&card_registry](const auto &card)
+    { return std::string(card_registry[card]->getData().name); };
 
     for (const auto &[type, cards] : active_player.battlefield().permanents())
     {
@@ -307,11 +309,12 @@ TEST(DandanLibTest, CombatTest)
     dandan_cards.insert(dandan_cards.end(), island_cards.begin(),
                         island_cards.end());
     dandan::core::Game game{dandan::Game::withCards(std::move(dandan_cards))};
+    const auto &card_registry{game.cardRegistry()};
 
     // find the first dandan in both players hands
-    auto find_dandan = [&game](const auto &card_id)
+    auto find_dandan = [&card_registry](const auto &card_id)
     {
-        const auto *card = game.getCardByID(card_id);
+        const auto *card = card_registry[card_id];
         return card != nullptr && card->getData().name == "Dandan";
     };
     auto attacker_it{std::find_if(game.activePlayer().hand().getCards().begin(),
@@ -354,8 +357,8 @@ TEST(DandanLibTest, CombatTest)
     EXPECT_EQ(game.activePlayer().battlefield().getCreatures().size(), 0);
     EXPECT_EQ(game.nonActivePlayer().battlefield().getCreatures().size(), 0);
 
-    const auto *attacking_creature{game.getCardByID(attacker_id)};
-    const auto *blocking_creature{game.getCardByID(defender_id)};
+    const auto *attacking_creature{card_registry[attacker_id]};
+    const auto *blocking_creature{card_registry[defender_id]};
 
     // both creatures should have died in combat
     EXPECT_EQ(game.graveyard().getCards().size(), 2);
@@ -433,12 +436,13 @@ TEST(DandanLibTest, ManaAbilities)
     lands.insert(lands.end(), padded.begin(), padded.end());
 
     auto game{dandan::Game::withCards(std::move(lands), false)};
+    const auto &card_registry{game.cardRegistry()};
 
     for (auto &player : game.getPlayers())
     {
         for (const auto &land : player.hand().getCards())
         {
-            auto *card{game.getCardByID(land)};
+            auto *card{card_registry[land]};
             // Adds a copy of the land in hand to the battlefield
             player.playCard(*card);
             game.moveCardFromZone(player, *card);
@@ -450,7 +454,7 @@ TEST(DandanLibTest, ManaAbilities)
     // starting player
     for (const auto &permanent : game.activePlayer().battlefield().getLands())
     {
-        auto *card{game.getCardByID(permanent)};
+        auto *card{card_registry[permanent]};
         stream << "activate " << card->getID().getID() << '\n';
         if (requires_option[std::string(card->getData().name)])
         {
@@ -464,7 +468,7 @@ TEST(DandanLibTest, ManaAbilities)
     for (const auto &permanent :
          game.nonActivePlayer().battlefield().getLands())
     {
-        auto *card{game.getCardByID(permanent)};
+        auto *card{card_registry[permanent]};
         stream << "activate " << card->getID().getID() << '\n';
         if (requires_option[std::string(card->getData().name)])
         {
@@ -605,8 +609,8 @@ TEST(DandanLibTest, DieFromNoLife)
 
     auto test_cards{createTestCards(TEST_DECK_SIZE)};
     dandan::core::Game game{dandan::Game::withCards(std::move(test_cards))};
-
-    game.activePlayer().takeDamage(game.activePlayer().getLifeTotal(), game);
+    dandan::core::ExecutionContext ctx{game, game.cardRegistry()};
+    game.activePlayer().takeDamage(game.activePlayer().getLifeTotal(), ctx);
     game.run();
 
     EXPECT_TRUE(game.activePlayer().lost());
@@ -648,6 +652,7 @@ TEST(DandanLibTest, BrainstormTest)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
 
     std::stringstream stream{};
 
@@ -682,8 +687,8 @@ TEST(DandanLibTest, BrainstormTest)
     game.setIstream(stream);
     game.run();
 
-    auto *card_1{game.getCardByID(card_1_id)};
-    auto *card_2{game.getCardByID(card_2_id)};
+    auto *card_1{card_registry[card_1_id]};
+    auto *card_2{card_registry[card_2_id]};
 
     EXPECT_EQ(card_1->getZone(), dandan::core::Zone::BATTLEFIELD);
     EXPECT_EQ(card_1->getControllerID(), game.activePlayer().getID());
@@ -731,6 +736,8 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
 
+    const auto &card_registry{game.cardRegistry()};
+
     std::stringstream stream{};
 
     auto svyenulite_id_1{game.activePlayer().hand().getCards()[0]};
@@ -739,18 +746,18 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     auto accumulated_knowledge_id_1{
         *std::find_if(game.activePlayer().hand().getCards().begin(),
                       game.activePlayer().hand().getCards().end(),
-                      [&game](const auto &card_id)
+                      [&card_registry](const auto &card_id)
                       {
-                          const auto *card = game.getCardByID(card_id);
+                          const auto *card = card_registry[card_id];
                           return card != nullptr && card->getData().name ==
                                                         "Accumulated Knowledge";
                       })};
     auto accumulated_knowledge_id_2{
         *std::find_if(game.nonActivePlayer().hand().getCards().begin(),
                       game.nonActivePlayer().hand().getCards().end(),
-                      [&game](const auto &card_id)
+                      [&card_registry](const auto &card_id)
                       {
-                          const auto *card = game.getCardByID(card_id);
+                          const auto *card = card_registry[card_id];
                           return card != nullptr && card->getData().name ==
                                                         "Accumulated Knowledge";
                       })};
@@ -794,8 +801,8 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     EXPECT_EQ(game.nonActivePlayer().hand().getCards().size(),
               STARTING_HAND_SIZE);
 
-    auto *svyenulite_1{game.getCardByID(svyenulite_id_1.getID())};
-    auto *svyenulite_2{game.getCardByID(svyenulite_id_2.getID())};
+    auto *svyenulite_1{card_registry[svyenulite_id_1.getID()]};
+    auto *svyenulite_2{card_registry[svyenulite_id_2.getID()]};
 
     EXPECT_EQ(svyenulite_1->getZone(), dandan::core::Zone::GRAVEYARD);
     EXPECT_EQ(svyenulite_2->getZone(), dandan::core::Zone::GRAVEYARD);
@@ -803,9 +810,9 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     std::cout << accumulated_knowledge_id_1.getID() << '\n';
     std::cout << accumulated_knowledge_id_2.getID() << '\n';
     auto *accumulated_knowledge_1{
-        game.getCardByID(accumulated_knowledge_id_1.getID())};
+        card_registry[accumulated_knowledge_id_1.getID()]};
     auto *accumulated_knowledge_2{
-        game.getCardByID(accumulated_knowledge_id_2.getID())};
+        card_registry[accumulated_knowledge_id_2.getID()]};
 
     EXPECT_EQ(accumulated_knowledge_1->getZone(),
               dandan::core::Zone::GRAVEYARD);
@@ -855,6 +862,8 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
 
+    const auto &card_registry{game.cardRegistry()};
+
     std::stringstream stream{};
 
     auto svyenulite_id_1{game.activePlayer().hand().getCards()[0]};
@@ -866,9 +875,9 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     auto diminishing_returns_id{
         *std::find_if(game.activePlayer().hand().getCards().begin(),
                       game.activePlayer().hand().getCards().end(),
-                      [&game](const auto &card_id)
+                      [&card_registry](const auto &card_id)
                       {
-                          const auto *card = game.getCardByID(card_id);
+                          const auto *card = card_registry[card_id];
                           return card != nullptr &&
                                  card->getData().name == "Diminishing Returns";
                       })};
@@ -902,12 +911,12 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     game.setIstream(stream);
     game.run();
 
-    auto *svyenulite_1{game.getCardByID(svyenulite_id_1.getID())};
-    auto *svyenulite_2{game.getCardByID(svyenulite_id_2.getID())};
-    auto *discard_card_1{game.getCardByID(discard_1.getID())};
-    auto *discard_card_2{game.getCardByID(discard_2.getID())};
+    auto *svyenulite_1{card_registry[svyenulite_id_1.getID()]};
+    auto *svyenulite_2{card_registry[svyenulite_id_2.getID()]};
+    auto *discard_card_1{card_registry[discard_1.getID()]};
+    auto *discard_card_2{card_registry[discard_2.getID()]};
     auto *diminishing_returns_card{
-        game.getCardByID(diminishing_returns_id.getID())};
+        card_registry[diminishing_returns_id.getID()]};
 
     EXPECT_FALSE(svyenulite_1->getZone() == dandan::core::Zone::BATTLEFIELD ||
                  svyenulite_1->getZone() == dandan::core::Zone::GRAVEYARD);
@@ -964,6 +973,8 @@ TEST(DandanLibTest, MysticalTutorTest)
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
 
+    const auto &card_registry{game.cardRegistry()};
+
     static const dandan::core::CardID CHOSEN_CARD_ID{
         game.library().getCards().back()};
 
@@ -974,9 +985,9 @@ TEST(DandanLibTest, MysticalTutorTest)
     auto mystical_tutor_id{*std::find_if(
         game.activePlayer().hand().getCards().begin(),
         game.activePlayer().hand().getCards().end(),
-        [&game](const auto &card_id)
+        [&card_registry](const auto &card_id)
         {
-            const auto *card = game.getCardByID(card_id);
+            const auto *card = card_registry[card_id];
             return card != nullptr && card->getData().name == "Mystical Tutor";
         })};
 
@@ -1050,6 +1061,7 @@ TEST(DandanLibTest, DandanMindBendTest)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
@@ -1089,7 +1101,7 @@ TEST(DandanLibTest, DandanMindBendTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{game.getCardByID(dandan_1_1)};
+    auto *dandan{card_registry[dandan_1_1]};
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::GRAVEYARD);
 }
 
@@ -1144,6 +1156,8 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
+
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
@@ -1182,8 +1196,8 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{game.getCardByID(dandan_2)};
-    auto *unsub{game.getCardByID(unsub_1)};
+    auto *dandan{card_registry[dandan_2]};
+    auto *unsub{card_registry[unsub_1]};
     auto back_card_id{game.activePlayer().hand().getCards().back()};
 
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::HAND);
@@ -1243,6 +1257,7 @@ TEST(DandanLibTest, MemoryLapseTest)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
@@ -1284,8 +1299,8 @@ TEST(DandanLibTest, MemoryLapseTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{game.getCardByID(dandan_2)};
-    auto *memory{game.getCardByID(memory_1)};
+    auto *dandan{card_registry[dandan_2]};
+    auto *memory{card_registry[memory_1]};
     auto back_card_id{game.activePlayer().hand().getCards().back()};
 
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::HAND);
@@ -1331,6 +1346,7 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
@@ -1376,14 +1392,14 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
     game.setIstream(stream);
     game.run();
 
-    auto *crystal{game.getCardByID(crystal_1_1)};
+    auto *crystal{card_registry[crystal_1_1]};
     EXPECT_EQ(crystal->getZone(), dandan::core::Zone::GRAVEYARD);
 
     for (auto &player : game.getPlayers())
     {
         for (auto card : player.battlefield().getLands())
         {
-            auto *cardp{game.getCardByID(card)};
+            auto *cardp{card_registry[card]};
             EXPECT_EQ(cardp->getCurrentSubTypes(),
                       std::vector{dandan::core::SubType::Island});
         }
@@ -1446,6 +1462,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
@@ -1483,13 +1500,13 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     stream << "activate " << island_1_2 << '\n';
     stream << "play " << dance_1_1 << '\n';
     stream << "0\n";    // choose dandan as target
-    stream << "quit\n"; // quit immediately such that dance of the skywise is
-                        // still applied
+    stream << "quit\n"; // quit immediately such that dance of the skywise
+                        // is still applied
 
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{game.getCardByID(dandan_1_1)};
+    auto *dandan{card_registry[dandan_1_1]};
     auto expected_subtypes{std::vector{dandan::core::SubType::Dragon,
                                        dandan::core::SubType::Illusion}};
 
@@ -1558,6 +1575,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
@@ -1603,7 +1621,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{game.getCardByID(dandan_1_1)};
+    auto *dandan{card_registry[dandan_1_1]};
     auto expected_subtypes{std::vector{dandan::core::SubType::Fish}};
 
     EXPECT_EQ(dandan->getColor(), dandan::core::ColorWord::Blue);
@@ -1683,6 +1701,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+    const auto &card_registry{game.cardRegistry()};
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
@@ -1756,7 +1775,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{game.getCardByID(dandan_1_1)};
+    auto *dandan{card_registry[dandan_1_1]};
 
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::BATTLEFIELD);
 }
@@ -1798,7 +1817,8 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 //         dandan::core::Stats{4, 1}, dandan::core::ColorWord::Blue}};
 //
 //     auto dance_data{dandan::core::CardData{
-//         "Dance of the Skywise", std::make_unique<dandan::mana::BlueMana>(2),
+//         "Dance of the Skywise",
+//         std::make_unique<dandan::mana::BlueMana>(2),
 //         dandan::core::Type::Instant, dandan::core::SubType::None,
 //         dandan::core::SuperType::None,
 //         std::move(dance_abilities)}};
@@ -1806,14 +1826,16 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 //     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
 //     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
 //     auto dance_cards{createTestCards(NUM_DANCE, &dance_data)};
-//     auto mind_bend_cards{createTestCards(NUM_MIND_BEND, &mind_bend_data)};
+//     auto mind_bend_cards{createTestCards(NUM_MIND_BEND,
+//     &mind_bend_data)};
 //
 //     cards.insert(cards.end(), dandan_cards.begin(), dandan_cards.end());
 //     cards.insert(cards.end(), mind_bend_cards.begin(),
-//     mind_bend_cards.end()); cards.insert(cards.end(), dance_cards.begin(),
-//     dance_cards.end());
+//     mind_bend_cards.end()); cards.insert(cards.end(),
+//     dance_cards.begin(), dance_cards.end());
 //
-//     // cards are dealt one at a time to each player starting with the first
+//     // cards are dealt one at a time to each player starting with the
+//     first
 //     // player
 //     dandan::core::Game game{dandan::Game::withCards(std::move(cards),
 //     false)}; std::stringstream stream{};
@@ -1830,14 +1852,16 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 //     auto mind_bend_1_1{
 //         game.activePlayer()
 //             .hand()
-//             .getCards()[5] // NOLINT(cppcoreguidelines-avoid-magic-numbers,
+//             .getCards()[5] //
+//             NOLINT(cppcoreguidelines-avoid-magic-numbers,
 //                            // readability-magic-numbers)
 //             .getID()};
 //
 //     auto dance_2_1{
 //         game.nonActivePlayer()
 //             .hand()
-//             .getCards()[6] // NOLINT(cppcoreguidelines-avoid-magic-numbers,
+//             .getCards()[6] //
+//             NOLINT(cppcoreguidelines-avoid-magic-numbers,
 //                            // readability-magic-numbers)
 //             .getID()};
 //
@@ -1868,7 +1892,8 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 //     stream << "activate " << island_1_3 << '\n';
 //
 //     stream << "play " << mind_bend_1_1 << '\n';
-//     stream << 3 << '\n'; // index 3 of targets for mind bend to target dandan
+//     stream << 3 << '\n'; // index 3 of targets for mind bend to target
+//     dandan
 //
 //     // cast dance in response
 //     stream << "activate " << island_2_1 << '\n';
@@ -1888,7 +1913,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 //     game.setIstream(stream);
 //     game.run();
 //
-//     auto *dandan{game.getCardByID(dandan_1_1)};
+//     auto *dandan{card_registry(dandan_1_1)};
 //
 //     for (const auto &ability : dandan->getCurrentAbilities())
 //     {
