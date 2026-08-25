@@ -1,5 +1,6 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/ManaList.h"
 #include "dandan/mana/ManaType.h"
@@ -67,11 +68,10 @@ namespace dandan::abilities
     }
 
     [[nodiscard]] bool BasicLandAbility::canActivate(
-        [[maybe_unused]] core::Game &game,
-        [[maybe_unused]] const AbilityContext &context) const
+        core::ExecutionContext exec_ctx, const AbilityContext &context) const
     {
         auto res{false};
-        auto *card{game.getCardByID(context.source_card_id)};
+        auto *card{(exec_ctx.cards.get())[context.source_card_id]};
         for (auto subtype : card->getCurrentSubTypes())
         {
             switch (subtype)
@@ -83,7 +83,7 @@ namespace dandan::abilities
             case core::SubType::Plains:
             case core::SubType::Swamp:
                 res = res || m_basic_land_ability_map.at(subtype)->canActivate(
-                                 game, context);
+                                 exec_ctx, context);
             case core::SubType::None:
             case core::SubType::Fish:
             case core::SubType::Illusion:
@@ -102,18 +102,23 @@ namespace dandan::abilities
     }
 
     std::unique_ptr<effects::IOneShotEffect> BasicLandAbility::createEffect(
-        core::Game &game, AbilityContext context) const
+        core::ExecutionContext exec_ctx, AbilityContext context) const
     {
-        const auto *cardp = game.getCardByID(context.source_card_id);
+        const auto &card_registry{exec_ctx.cards.get()};
+
+        const auto *cardp = card_registry[context.source_card_id];
         assert(cardp->getCurrentSubTypes().size() == 1);
         auto type{cardp->getCurrentSubTypes()[0]};
-        return m_basic_land_ability_map.at(type)->createEffect(game, context);
+        return m_basic_land_ability_map.at(type)->createEffect(exec_ctx,
+                                                               context);
     }
 
     const ManaAbility *BasicLandAbility::getManaAbility(
-        const core::Game &game, const AbilityContext &context) const
+        core::ExecutionContext exec_ctx, const AbilityContext &context) const
     {
-        const auto *card{game.getCardByID(context.source_card_id)};
+        const auto &card_registry{exec_ctx.cards.get()};
+
+        const auto *card{card_registry[context.source_card_id]};
         assert(card->getCurrentSubTypes().size() == 1);
         auto type{card->getCurrentSubTypes()[0]};
         return m_basic_land_ability_map.at(type).get();

@@ -2,6 +2,7 @@
 #define DANDAN_ACTIVATED_ABILITY_H
 
 #include "IAbility.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
@@ -38,7 +39,8 @@ namespace dandan::abilities
         [[nodiscard]] size_t optionsAmount() const override;
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const override;
+            core::ExecutionContext exec_ctx,
+            AbilityContext context) const override;
 
         /** Get the cost of the ability
          * @return The cost of the ability
@@ -52,7 +54,8 @@ namespace dandan::abilities
             const;
 
         [[nodiscard]] bool canActivate(
-            core::Game &game, const AbilityContext &context) const override;
+            core::ExecutionContext exec_ctx,
+            const AbilityContext &context) const override;
 
     private:
         std::unique_ptr<costs::ICost> m_cost;

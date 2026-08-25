@@ -41,8 +41,8 @@ namespace dandan::abilities
         [[nodiscard]] bool appliesTo(const events::IEvent &event,
                                      abilities::AbilityContext context) const;
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const override;
+        [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::ExecutionContext exec_ctx, AbilityContext context) const override;
 
     private:
         int m_damage{1};

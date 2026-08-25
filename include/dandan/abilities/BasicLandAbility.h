@@ -4,7 +4,7 @@
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/abilities/IAbility.h"
 #include "dandan/abilities/ManaAbility.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/ExecutionContext.h"
 #include <memory>
 #include <unordered_map>
 
@@ -28,7 +28,7 @@ namespace dandan::abilities
             [[maybe_unused]] size_t index) const override;
 
         [[nodiscard]] bool canActivate(
-            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
             [[maybe_unused]] const AbilityContext &context) const override;
 
         /** @brief Get the number of options for the ability
@@ -37,9 +37,10 @@ namespace dandan::abilities
         [[nodiscard]] size_t optionsAmount() const override;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const override;
+            core::ExecutionContext exec_ctx,
+            AbilityContext context) const override;
 
-        const ManaAbility *getManaAbility(const core::Game &game,
+        const ManaAbility *getManaAbility(core::ExecutionContext exec_ctx,
                                           const AbilityContext &context) const;
 
     private:

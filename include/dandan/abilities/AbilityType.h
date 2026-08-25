@@ -1,11 +1,12 @@
 #ifndef DANDAN_ABILITYTYPE_H
 #define DANDAN_ABILITYTYPE_H
 
-#include "dandan/abilities/IAbility.h"
 #include <cstdint>
 
 namespace dandan::abilities
 {
+    class IAbility;
+
     class AbilityType
     {
     public:

@@ -89,10 +89,10 @@ namespace dandan::abilities
      */
     [[nodiscard]] std::unique_ptr<effects::IOneShotEffect>
     StateTriggeredAbility::createEffect(
-        [[maybe_unused]] core::Game &game,
+        core::ExecutionContext exec_ctx,
         [[maybe_unused]] AbilityContext context) const
     {
-        return m_effect->bind(game,
+        return m_effect->bind(exec_ctx,
                               effects::EffectContext(context.source_card_id,
                                                      context.controller_id));
     }

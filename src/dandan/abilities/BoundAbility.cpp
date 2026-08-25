@@ -1,5 +1,6 @@
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/AbilityContext.h"
+#include "dandan/abilities/IAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 
@@ -37,12 +38,12 @@ namespace dandan::abilities
     }
 
     [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> BoundAbility::
-        createEffect(core::Game &game) const
+        createEffect(core::ExecutionContext exec_ctx) const
     {
         AbilityContext context{m_source_card->getID(),
                                m_source_card->getControllerID(),
                                m_chosen_mode_index};
-        auto effect{m_definition->createEffect(game, context)};
+        auto effect{m_definition->createEffect(exec_ctx, context)};
         return effect;
     }
 

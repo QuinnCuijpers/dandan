@@ -84,12 +84,12 @@ namespace dandan::abilities
     }
 
     std::unique_ptr<effects::IOneShotEffect> ActivatedAbility::createEffect(
-        [[maybe_unused]] core::Game &game,
+        [[maybe_unused]] core::ExecutionContext exec_ctx,
         [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving Activated ability\n";
-        m_cost->pay(game, context);
-        return m_effect->bind(game,
+        m_cost->pay(exec_ctx, context);
+        return m_effect->bind(exec_ctx,
                               effects::EffectContext(context.controller_id));
     }
     [[nodiscard]] const costs::ICost *ActivatedAbility::getCost() const
@@ -103,11 +103,14 @@ namespace dandan::abilities
         return m_effect.get();
     }
     [[nodiscard]] bool ActivatedAbility::canActivate(
-        core::Game &game, const AbilityContext &context) const
+        core::ExecutionContext exec_ctx, const AbilityContext &context) const
     {
+        const auto &card_registry{exec_ctx.cards.get()};
+        auto &game{exec_ctx.state.get()};
+
         if (m_cost)
         {
-            auto *source_card = game.getCardByID(context.source_card_id);
+            auto *source_card = card_registry[context.source_card_id];
             return m_cost->canPay(
                 *source_card, game.getPlayer(source_card->getControllerID()));
         }

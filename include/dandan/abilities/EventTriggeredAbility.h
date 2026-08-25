@@ -2,6 +2,7 @@
 #define DANDAN_EVENTTRIGGEREDABILITY_H
 
 #include "IAbility.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/triggers/ITrigger.h"
@@ -51,8 +52,9 @@ namespace dandan::abilities
         [[nodiscard]] const dandan::effects::IOneShotEffectDefinition *
         getEffect() const;
 
-        std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const override;
+        [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
+            core::ExecutionContext exec_ctx,
+            AbilityContext context) const override;
 
     private:
         std::unique_ptr<dandan::triggers::ITrigger> m_trigger;
