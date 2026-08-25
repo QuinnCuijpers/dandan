@@ -44,14 +44,17 @@ namespace dandan::conditions
     }
 
     [[nodiscard]] bool MatchesReadLinksCondition::isSatisfied(
-        const core::Game &game,
+        const core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
     {
+
+        const auto &card_registry{exec_ctx.cards.get()};
+
         assert(context.has_value() &&
                "Effect with Matches Read Links Condition tried checking "
                "without a context and thus no source card");
         auto card_id{context->card_id.value()};
-        const auto *card{game.getCardByID(card_id)};
+        const auto *card{card_registry[card_id]};
         auto links{card->linkMap()};
         std::cout << m_first << '\n';
         std::cout << m_second << '\n';

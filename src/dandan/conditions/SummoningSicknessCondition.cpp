@@ -1,5 +1,5 @@
 #include "dandan/conditions/SummoningSicknessCondition.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/Card.h"
 #include <optional>
 
 namespace dandan::conditions
@@ -11,10 +11,13 @@ namespace dandan::conditions
     }
 
     bool SummoningSicknessCondition::isSatisfied(
-        const core::Game &game,
+        const core::ExecutionContext exec_ctx,
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
-        const auto *card = game.getCardByID(m_card_id);
+
+        const auto &card_registry{exec_ctx.cards.get()};
+
+        const auto *card = card_registry[m_card_id];
         std::cout << "Checking summoning sickness condition for card "
                   << card->getData().name
                   << " (CardID: " << card->getID().getID() << ")\n";

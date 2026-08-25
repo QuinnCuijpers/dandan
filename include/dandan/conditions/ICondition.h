@@ -1,6 +1,7 @@
 #ifndef DANDAN_ICONDITION_H
 #define DANDAN_ICONDITION_H
 
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/EffectContext.h"
 #include <memory>
 #include <optional>
@@ -32,7 +33,7 @@ namespace dandan::conditions
          * @returns true if the condition is satisfied, false otherwise.
          */
         [[nodiscard]] virtual bool isSatisfied(
-            const core::Game &game,
+            core::ExecutionContext exec_ctx,
             std::optional<effects::EffectContext> context =
                 std::nullopt) const = 0;
 
