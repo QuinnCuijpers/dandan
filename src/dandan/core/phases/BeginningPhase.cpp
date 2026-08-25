@@ -18,7 +18,8 @@
 // called the “summoning sickness” rule.
 namespace dandan::core
 {
-    BeginningPhase::BeginningPhase(Game &game) : IPhase(game) {};
+    BeginningPhase::BeginningPhase(ExecutionContext exec_ctx)
+        : IPhase(exec_ctx) {};
 
     std::unique_ptr<IPhase> BeginningPhase::handle()
     {
@@ -38,21 +39,24 @@ namespace dandan::core
 
     void BeginningPhase::handleUntapStep()
     {
+        auto &game{context().state.get()};
+        const auto &card_registry{context().cards.get()};
+
         DLOGI << "Handling untap step\n";
 
         // untap all permanents for active player, and update summoning sickness
         // for creatures
-        for (auto &[type, cards] :
-             game().activePlayer().battlefield().permanents())
+        for (const auto &[type, cards] :
+             game.activePlayer().battlefield().permanents())
         {
-            for (auto &card : cards)
+            for (const auto &card : cards)
             {
-                auto *cardp{game().getCardByID(card)};
-                effects::EffectContext context{};
-                auto effect{
-                    std::make_unique<effects::UntapEffect>(*cardp, context)};
+                auto *cardp{card_registry[card]};
+                effects::EffectContext effect_context{};
+                auto effect{std::make_unique<effects::UntapEffect>(
+                    *cardp, effect_context)};
                 // TODO: throw generated events onto a queue
-                effect->apply(game());
+                static_cast<void>(effect->apply(context()));
 
                 if (type == Type::Creature)
                 {
@@ -60,13 +64,15 @@ namespace dandan::core
                 }
             }
         }
-        game().activePlayer().setPlayedLandThisTurn(false);
-        game().render();
+        game.activePlayer().setPlayedLandThisTurn(false);
+        game.render();
         m_step = Step::Upkeep;
     }
 
     void BeginningPhase::handleNextStep()
     {
+        auto &game{context().state.get()};
+
         switch (m_step)
         {
         case Step::Untap:
@@ -74,17 +80,17 @@ namespace dandan::core
             break;
         case Step::Upkeep:
             DLOGI << "Handling upkeep step\n";
-            game().priorityManager().setPriorityToPlayer(
-                game().activePlayer().getID(), game());
-            game().render();
+            game.priorityManager().setPriorityToPlayer(
+                game.activePlayer().getID(), context());
+            game.render();
             m_step = Step::Draw;
             break;
         case Step::Draw:
         {
             DLOGI << "Handling draw step\n";
             auto draw_action = std::make_unique<core::CardDrawAction>(
-                game().activePlayer().getID());
-            if (game().isActionPrevented(*draw_action))
+                game.activePlayer().getID());
+            if (game.isActionPrevented(*draw_action))
             {
                 DLOGI << "Draw prevented\n";
             }
@@ -92,15 +98,15 @@ namespace dandan::core
             {
                 // TODO: cast draweffect to game instead of handling in the
                 // createEffect of the action
-                auto draw_effect{draw_action->createEffect(game())};
+                auto draw_effect{draw_action->createEffect(context())};
                 const auto &final_effect{
-                    game().replacementManager().applyReplacementEffects(
-                        *draw_effect, game())};
-                final_effect->apply(game());
+                    game.replacementManager().applyReplacementEffects(
+                        *draw_effect, context())};
+                static_cast<void>(final_effect->apply(context()));
             }
-            game().priorityManager().setPriorityToPlayer(
-                game().activePlayer().getID(), game());
-            game().render();
+            game.priorityManager().setPriorityToPlayer(
+                game.activePlayer().getID(), context());
+            game.render();
             m_step = Step::Done;
             break;
         }

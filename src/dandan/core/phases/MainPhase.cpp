@@ -8,37 +8,39 @@
 namespace dandan::core
 {
 
-    MainPhase::MainPhase(Game &game, bool pre_combat)
-        : IPhase(game), m_pre_combat_main_phase(pre_combat)
+    MainPhase::MainPhase(ExecutionContext exec_ctx, bool pre_combat)
+        : IPhase(exec_ctx), m_pre_combat_main_phase(pre_combat)
     {
         if (!m_pre_combat_main_phase)
         {
-            m_next_phase = std::make_unique<EndingPhase>(game);
+            m_next_phase = std::make_unique<EndingPhase>(context());
         }
         else
         {
-            m_next_phase = std::make_unique<CombatPhase>(game);
+            m_next_phase = std::make_unique<CombatPhase>(context());
         }
     }
 
     [[nodiscard]] std::unique_ptr<IPhase> MainPhase::handle()
     {
+        auto &game{context().state.get()};
+
         std::cout << "Handling " << name() << '\n';
-        game().priorityManager().setPriorityToPlayer(
-            game().activePlayer().getID(), game());
+        game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),
+                                                   context());
         while (true)
         {
-            game().render();
+            game.render();
             std::cout << "What do you want to do? (play [card index], activate "
                          "[card index], pass, next "
                          "or quit) ";
             std::string input;
-            std::getline(game().istream(), input);
+            std::getline(game.istream(), input);
             if (input == "pass")
             {
                 std::cout << "Passing turn\n";
-                game().priorityManager().passPriority(game());
-                m_next_phase = std::make_unique<EndingPhase>(game());
+                game.priorityManager().passPriority(context());
+                m_next_phase = std::make_unique<EndingPhase>(context());
                 break;
             }
             if (input == "quit")
@@ -50,27 +52,27 @@ namespace dandan::core
             {
                 if (m_pre_combat_main_phase)
                 {
-                    m_next_phase = std::make_unique<CombatPhase>(game());
+                    m_next_phase = std::make_unique<CombatPhase>(context());
                 }
                 else
                 {
                     std::cout << "you can't go back to combat phase\n";
                 }
-                game().priorityManager().passPriority(game());
+                game.priorityManager().passPriority(context());
                 break;
             }
             if (input.rfind("play ", 0) == 0)
             {
-                game().handlePlay(input);
-                game().priorityManager().setPriorityToPlayer(
-                    game().activePlayer().getID(), game());
+                game.handlePlay(input);
+                game.priorityManager().setPriorityToPlayer(
+                    game.activePlayer().getID(), context());
                 continue;
             }
             if (input.rfind("activate ", 0) == 0)
             {
-                game().handleActivate(input);
-                game().priorityManager().setPriorityToPlayer(
-                    game().activePlayer().getID(), game());
+                game.handleActivate(input);
+                game.priorityManager().setPriorityToPlayer(
+                    game.activePlayer().getID(), context());
                 continue;
             }
             // TODO: improve error handling for invalid input

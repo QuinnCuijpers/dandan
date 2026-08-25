@@ -23,7 +23,7 @@ namespace dandan::core
          * @param pre_combat Whether this is a pre-combat main phase. Defaults
          * to true.
          */
-        explicit MainPhase(Game &game, bool pre_combat = true);
+        explicit MainPhase(ExecutionContext exec_ctx, bool pre_combat = true);
 
         /** Constructor
          * @param game The game instance.

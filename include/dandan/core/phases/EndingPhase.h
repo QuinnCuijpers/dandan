@@ -39,7 +39,7 @@ namespace dandan::core
          * Constructor
          * @param game The game instance.
          */
-        explicit EndingPhase(Game &game);
+        explicit EndingPhase(ExecutionContext exec_ctx);
 
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;
 

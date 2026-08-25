@@ -1,6 +1,7 @@
 #ifndef DANDAN_IPHASE_H
 #define DANDAN_IPHASE_H
 
+#include "dandan/core/ExecutionContext.h"
 #include <memory>
 #include <ostream>
 #include <string>
@@ -19,9 +20,10 @@ namespace dandan::core
         /** Constructor
          * @param game The game instance.
          */
-        explicit IPhase(Game &game) : m_game(game)
+        explicit IPhase(ExecutionContext &exec_ctx) : m_ctx(exec_ctx)
         {
         }
+
         IPhase(const IPhase &) = delete;
         IPhase(IPhase &&) = delete;
         IPhase &operator=(const IPhase &) = delete;
@@ -39,20 +41,12 @@ namespace dandan::core
          */
         [[nodiscard]] virtual std::string name() const = 0;
 
-        /** Returns the game instance mutable
-         * @return The game instance
+        /** Returns the execution context for the phase
+         * @return The execution context
          */
-        [[nodiscard]] Game &game()
+        [[nodiscard]] const ExecutionContext &context() const
         {
-            return m_game;
-        }
-
-        /** Returns the game instance const
-         * @return The game instance
-         */
-        [[nodiscard]] const Game &game() const
-        {
-            return m_game;
+            return m_ctx;
         }
 
         /** Outputs the phase name to the stream
@@ -68,7 +62,7 @@ namespace dandan::core
         }
 
     private:
-        Game &m_game;
+        ExecutionContext &m_ctx;
     };
 } // namespace dandan::core
 

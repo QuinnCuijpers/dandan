@@ -9,8 +9,9 @@
 
 namespace dandan::core
 {
-    CombatPhase::CombatPhase(Game &game)
-        : IPhase(game), m_next_phase(std::make_unique<MainPhase>(game, false))
+    CombatPhase::CombatPhase(ExecutionContext exec_ctx)
+        : IPhase(exec_ctx),
+          m_next_phase(std::make_unique<MainPhase>(exec_ctx, false))
     {
     }
 
@@ -49,22 +50,25 @@ namespace dandan::core
 
     void CombatPhase::handleDeclareAttackersStep()
     {
-        game().priorityManager().setPriorityToPlayer(
-            game().activePlayer().getID(), game());
+        auto &game{context().state.get()};
+        const auto &card_registry{context().cards.get()};
+
+        game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),
+                                                   context());
         std::cout << "Declare attackers step\n";
 
         // ask the player to choose attacking creatures
         while (true)
         {
-            game().render();
+            game.render();
             auto viable_attackers{std::vector<Card *>()};
             for (const auto &creature_id :
-                 game().activePlayer().battlefield().getCreatures())
+                 game.activePlayer().battlefield().getCreatures())
             {
-                auto *creature{game().getCardByID(creature_id)};
+                auto *creature{card_registry[creature_id]};
                 const auto &attack_action{
                     std::make_unique<core::AttackAction>(*creature)};
-                if (!game().isActionPrevented(*attack_action))
+                if (!game.isActionPrevented(*attack_action))
                 {
                     std::cout << "Creature " << creature->getData().name
                               << " (CardID: " << creature->getID().getID()
@@ -94,7 +98,7 @@ namespace dandan::core
             std::cout << "Which creature would you like to attack with (or "
                          "none to move to the next step): ";
             std::string input{};
-            std::getline(game().istream(), input);
+            std::getline(game.istream(), input);
 
             if (input == "none")
             {
@@ -112,15 +116,15 @@ namespace dandan::core
             auto attack_action{std::make_unique<core::AttackAction>(
                 *viable_attackers[card_index])};
 
-            auto effect{attack_action->createEffect(game())};
+            auto effect{attack_action->createEffect(context())};
             const auto &final_effect{
-                game().replacementManager().applyReplacementEffects(*effect,
-                                                                    game())};
+                game.replacementManager().applyReplacementEffects(*effect,
+                                                                  context())};
 
-            auto event{final_effect->apply(game())};
+            auto event{final_effect->apply(context())};
             if (event != nullptr)
             {
-                game().eventManager().notify(*event, game());
+                game.eventManager().notify(*event, context());
             }
         }
 
@@ -128,9 +132,12 @@ namespace dandan::core
     }
     void CombatPhase::handleDeclareBlockersStep()
     {
+        auto &game{context().state.get()};
+        const auto &card_registry{context().cards.get()};
+
         std::cout << "Declare blockers step\n";
-        game().priorityManager().setPriorityToPlayer(
-            game().activePlayer().getID(), game());
+        game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),
+                                                   context());
         if (m_attackers.empty())
         {
             std::cout
@@ -138,12 +145,12 @@ namespace dandan::core
             m_step = Step::CombatDamage;
             return;
         }
-        auto *blocking_player{&game().nonActivePlayer()};
-        game().render();
+        auto *blocking_player{&game.nonActivePlayer()};
+        game.render();
         for (const auto &creature_id :
              blocking_player->battlefield().getCreatures())
         {
-            auto *creature{game().getCardByID(creature_id)};
+            auto *creature{card_registry[creature_id]};
             if (creature->getTapped() || creature->isBlocking())
             {
                 continue;
@@ -152,14 +159,14 @@ namespace dandan::core
                       << creature->getData().name
                       << " (or none to not block with it): ";
             std::string input{};
-            std::getline(game().istream(), input);
+            std::getline(game.istream(), input);
             if (input == "none")
             {
                 continue;
             }
             // for now let this be a card ID instead of index
             int card_id{std::stoi(input)};
-            auto *attacking_creature{game().getCardByID(card_id)};
+            auto *attacking_creature{card_registry[card_id]};
             if (attacking_creature == nullptr ||
                 !attacking_creature->isAttacking())
             {
@@ -175,12 +182,14 @@ namespace dandan::core
 
     void CombatPhase::handleNextStep()
     {
+        auto &game{context().state.get()};
+
         switch (m_step)
         {
         case Step::BeginningOfCombat:
             std::cout << "Beginning of combat step\n";
-            game().priorityManager().setPriorityToPlayer(
-                game().activePlayer().getID(), game());
+            game.priorityManager().setPriorityToPlayer(
+                game.activePlayer().getID(), context());
             m_step = Step::DeclareAttackers;
             break;
         // TODO:
@@ -201,8 +210,8 @@ namespace dandan::core
                 {
                     std::cout << "Dealing damage to opponent from "
                               << creature->getData().name << '\n';
-                    game().nonActivePlayer().takeDamage(creature->getPower(),
-                                                        game());
+                    game.nonActivePlayer().takeDamage(creature->getPower(),
+                                                      context());
                 }
                 else
                 {
@@ -215,17 +224,17 @@ namespace dandan::core
                                   << " from blocking creature "
                                   << blocking_creature->getID().getID() << '\n';
                         creature->takeDamage(blocking_creature->getPower(),
-                                             game());
+                                             context());
                         blocking_creature->takeDamage(creature->getPower(),
-                                                      game());
+                                                      context());
                     }
                 }
             }
             m_step = Step::EndOfCombat;
             break;
         case Step::EndOfCombat:
-            game().priorityManager().setPriorityToPlayer(
-                game().activePlayer().getID(), game());
+            game.priorityManager().setPriorityToPlayer(
+                game.activePlayer().getID(), context());
             std::cout << "End of combat step\n";
             m_step = Step::Done;
             break;

@@ -46,7 +46,7 @@ namespace dandan::core
          * Constructor
          * @param game The game instance.
          */
-        explicit BeginningPhase(Game &game);
+        explicit BeginningPhase(ExecutionContext exec_ctx);
 
         std::unique_ptr<IPhase> handle() override;
 
@@ -55,7 +55,7 @@ namespace dandan::core
     private:
         Step m_step{Step::Untap};
         std::unique_ptr<IPhase> m_next_phase{
-            std::make_unique<MainPhase>(game())};
+            std::make_unique<MainPhase>(context())};
 
         void handleNextStep();
         void handleUntapStep();
