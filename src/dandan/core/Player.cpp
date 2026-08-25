@@ -3,6 +3,7 @@
 #include "dandan/abilities/ActivatedAbility.h"
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Game.h"
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/Manapool.h"
@@ -13,7 +14,7 @@ namespace
     using namespace dandan;
 
     mana::ManaBag getMaxManaForLand(const core::Card &land,
-                                    const core::Game &game)
+                                    const core::ExecutionContext exec_ctx)
     {
         mana::ManaBag max_mana_for_land{};
         for (const auto &ability : land.getCurrentAbilities())
@@ -36,8 +37,8 @@ namespace
                 const auto *basic_ability =
                     dynamic_cast<const abilities::BasicLandAbility *>(
                         &ability.definition());
-                const auto *mana_ability{
-                    basic_ability->getManaAbility(game, ability.getContext())};
+                const auto *mana_ability{basic_ability->getManaAbility(
+                    exec_ctx, ability.getContext())};
                 const auto mana_list{mana_ability->getManaList()};
 
                 for (const auto &option : mana_list.getOptions())
@@ -62,9 +63,10 @@ namespace dandan::core
         std::cout << "Constructed player with name " << m_name << '\n';
     }
 
-    void Player::drawCard(Game &game)
+    void Player::drawCard(core::ExecutionContext exec_ctx)
     {
-        auto &library{game.library()};
+        const auto &card_registry{exec_ctx.cards.get()};
+        auto &library{exec_ctx.state.get().library()};
         if (library.getCards().empty())
         {
             std::cout << "library is empty, cannot draw card\n";
@@ -72,7 +74,7 @@ namespace dandan::core
             return;
         }
         auto card_id = library.draw();
-        auto *card{game.getCardByID(card_id)};
+        auto *card{card_registry[card_id]};
         card->setControllerID(m_player_id);
         m_hand.addCard(*card);
     }
@@ -84,29 +86,32 @@ namespace dandan::core
         m_battlefield.addCard(card);
     }
 
-    void Player::discardCard(const Card &card, Game &game)
+    void Player::discardCard(const Card &card, ExecutionContext exec_ctx)
     {
         std::cout << "Player is discarding card " << card.getData().name
                   << '\n';
-        m_hand.discardCard(card.getID(), game);
+        m_hand.discardCard(card.getID(), exec_ctx);
     }
 
-    void Player::sacrificeCard(Card &card, Game &game)
+    // TODO: this only requires a zone manager
+    void Player::sacrificeCard(Card &card, core::ExecutionContext exec_ctx)
     {
         std::cout << "Player is sacrificing card with ID "
                   << card.getID().getID() << '\n';
-        m_battlefield.sacrificeCard(card, game);
+        m_battlefield.sacrificeCard(card, exec_ctx);
     }
 
-    bool Player::canActivateSomething(Game &game) const
+    bool Player::canActivateSomething(ExecutionContext exec_ctx) const
     {
         auto proxy_mana_pool{mana::Manapool{}};
-        auto available_mana{getAvailableMana(game)};
+        auto available_mana{getAvailableMana(exec_ctx)};
         proxy_mana_pool.add(available_mana);
+
+        const auto &card_registry{exec_ctx.cards.get()};
 
         for (const auto &card_id : m_hand.getCards())
         {
-            const auto *card{game.getCardByID(card_id)};
+            const auto *card{card_registry[card_id]};
             if (card->getData().type == Type::Instant)
             {
                 const auto card_cost{card->getData().mana_cost};
@@ -122,7 +127,7 @@ namespace dandan::core
                     const auto *activated_ability =
                         dynamic_cast<const abilities::ActivatedAbility *>(
                             &ability.definition());
-                    if (activated_ability->canActivate(game,
+                    if (activated_ability->canActivate(exec_ctx,
                                                        ability.getContext()))
                     {
                         return true;
@@ -133,20 +138,22 @@ namespace dandan::core
         return false;
     }
 
-    mana::ManaBag Player::getAvailableMana(const core::Game &game) const
+    mana::ManaBag Player::getAvailableMana(
+        const core::ExecutionContext exec_ctx) const
     {
         mana::ManaBag available_mana{};
         available_mana = available_mana.add(m_mana_pool.view());
 
+        const auto &card_registry{exec_ctx.cards.get()};
         for (const auto &land_id : m_battlefield.getLands())
         {
-            const auto *land{game.getCardByID(land_id)};
+            const auto *land{card_registry[land_id]};
             if (land->getTapped())
             {
                 continue;
             }
 
-            const auto max_mana_for_land{getMaxManaForLand(*land, game)};
+            const auto max_mana_for_land{getMaxManaForLand(*land, exec_ctx)};
             available_mana = available_mana.add(max_mana_for_land);
         }
         std::cout << "Available mana found in canActivateSomething for player "

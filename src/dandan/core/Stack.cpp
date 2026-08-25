@@ -13,8 +13,11 @@
 
 namespace dandan::core
 {
-    void Stack::resolveNext(core::Game &game)
+    void Stack::resolveNext(core::ExecutionContext exec_ctx)
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         if (m_stack.empty())
         {
             return;
@@ -28,10 +31,10 @@ namespace dandan::core
 
         auto effect{std::visit(
             utils::overloaded{
-                [&game, &resolvingSpell](
+                [&resolvingSpell, &card_registry, &exec_ctx](
                     CardID card_id) -> std::unique_ptr<effects::IOneShotEffect>
                 {
-                    auto *card{game.getCardByID(card_id)};
+                    auto *card{card_registry[card_id]};
                     if (card->getData().type == Type::Instant ||
                         card->getData().type == Type::Sorcery)
                     {
@@ -54,30 +57,31 @@ namespace dandan::core
                         abilities::AbilityContext context{
                             card->getID(), card->getControllerID()};
 
-                        auto effect{spell_ability->createEffect(game, context)};
+                        auto effect{
+                            spell_ability->createEffect(exec_ctx, context)};
                         return effect;
                     }
                     effects::EffectContext context{card->getControllerID()};
                     return std::make_unique<effects::ETBEffect>(
-                        *game.getCardByID(card->getID()), context);
+                        *card_registry[card->getID()], context);
                 },
-                [&game, this](const abilities::BoundAbility &ability)
+                [this, &exec_ctx](const abilities::BoundAbility &ability)
                     -> std::unique_ptr<effects::IOneShotEffect>
                 {
                     m_stack.pop_back();
-                    return ability.createEffect(game);
+                    return ability.createEffect(exec_ctx);
                 }},
             object)};
 
         if (effect)
         {
             auto final_effect{game.replacementManager().applyReplacementEffects(
-                *effect, game)};
-            auto event{final_effect->apply(game)};
+                *effect, exec_ctx)};
+            auto event{final_effect->apply(exec_ctx)};
             if (event)
             {
                 std::cout << "Notifying event\n";
-                game.eventManager().notify(*event, game);
+                game.eventManager().notify(*event, exec_ctx);
             }
         }
 
@@ -89,9 +93,9 @@ namespace dandan::core
             auto &new_object{m_stack.back()};
             std::cout << "Played spell, so now it gets removed\n";
             std::visit(
-                utils::overloaded{[&game](CardID card_id)
+                utils::overloaded{[&game, &card_registry](CardID card_id)
                                   {
-                                      auto *card{game.getCardByID(card_id)};
+                                      auto *card{card_registry[card_id]};
                                       game.moveCardFromZone(game.activePlayer(),
                                                             *card);
                                       game.graveyard().addCard(*card);

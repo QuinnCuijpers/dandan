@@ -7,28 +7,32 @@
 
 namespace dandan::core
 {
-    void PriorityManager::passPriority(core::Game &game)
+    void PriorityManager::passPriority(core::ExecutionContext exec_ctx)
     {
+        auto &game{exec_ctx.state.get()};
+
         auto next{game.getNextPlayerID(m_current_player_with_priority)};
         if (!game.stack().isEmpty() && next == m_last_acted_player)
         {
-            game.stack().resolveNext(game);
+            game.stack().resolveNext(exec_ctx);
         }
         m_current_player_with_priority = next;
-        setPriorityToPlayer(next, game);
+        setPriorityToPlayer(next, exec_ctx);
     }
 
     void PriorityManager::setPriorityToPlayer(PlayerID player_id,
-                                              core::Game &game)
+                                              core::ExecutionContext exec_ctx)
     {
-        SBAManager::checkSBAs(game);
+        auto &game{exec_ctx.state.get()};
+
+        SBAManager::checkSBAs(exec_ctx);
         m_current_player_with_priority = player_id;
         if (m_last_acted_player == PlayerID::getInvalidID())
         {
             m_last_acted_player = m_current_player_with_priority;
         }
         auto &player{game.getPlayer(player_id)};
-        bool canActivateSomething{player.canActivateSomething(game)};
+        bool canActivateSomething{player.canActivateSomething(exec_ctx)};
 
         // If the stack is empty and we cant activate anything into
         // sorcery speed mode
@@ -48,7 +52,7 @@ namespace dandan::core
         }
 
         // TODO: move to correct place
-        while (player.canActivateSomething(game))
+        while (player.canActivateSomething(exec_ctx))
         {
             // game.render();
             std::cout << "checking priotity actions from player "
@@ -61,7 +65,7 @@ namespace dandan::core
             if (input == "pass")
             {
                 std::cout << "Passing priority\n";
-                passPriority(game);
+                passPriority(exec_ctx);
                 return;
             }
             if (input == "quit")
@@ -91,6 +95,6 @@ namespace dandan::core
         }
         std::cout << "Passsing priority as player " << player.getName()
                   << " has no more priority actions available\n";
-        passPriority(game);
+        passPriority(exec_ctx);
     }
 } // namespace dandan::core

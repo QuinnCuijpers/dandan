@@ -1,6 +1,7 @@
 #include "dandan/core/Game.h"
 #include "dandan/conditions/PlayedLandCondition.h"
 #include "dandan/conditions/StartingPlayerCondition.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Player.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
@@ -15,14 +16,9 @@
 #include <deque>
 #include <memory>
 #include <random>
-#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
-
-#ifdef DANDAN_SERIALIZE
-#include <fstream>
-#endif
 
 namespace
 {
@@ -46,58 +42,13 @@ namespace
 
 namespace dandan::core
 {
-#ifdef DANDAN_SERIALIZE
-    void Game::loadCards(const std::filesystem::path &path)
-    {
-        std::ifstream file{path};
-        while (file)
-        {
-            std::string line;
-            std::getline(file, line);
-            if (!line.empty())
-            {
-                std::stringstream stream{line};
-                std::string name;
-                int amount{};
-                stream >> amount;
-                stream.ignore(1, ' '); // Ignore the space after the amount
-                std::getline(stream, name);
-                std::cout << "Adding " << amount << " copies of " << name
-                          << " to the library.\n";
-                for (int i = 0; i < amount; ++i)
-                {
-                    m_cards.emplace_back(name);
-                }
-            }
-        }
-    }
-#endif
 
     void Game::GameSetup(bool shuffle)
     {
-#ifdef DANDAN_SERIALIZE
-        if (m_cards.empty())
+        for (auto *card : m_card_registry.cards())
         {
-            loadCards(m_card_data_path);
-        }
-#endif
-
-        for (auto &card : m_cards)
-        {
-            auto bound_abilities{std::vector<abilities::BoundAbility>{}};
-            for (const auto &ability : card.getData().abilities)
-            {
-                auto *definition{ability.get()};
-                auto bound{abilities::BoundAbility{*definition, &card}};
-                bound_abilities.push_back(bound);
-            }
-            card.setBoundAbilities(std::move(bound_abilities));
-        }
-
-        for (auto &card : m_cards)
-        {
-            m_card_map.emplace(card.getID(), &card);
-            m_library.addCardBottom(card);
+            std::cout << "adding Card id: " << card->getID() << '\n';
+            m_library.addCardBottom(*card);
         }
 
         if (shuffle)
@@ -130,18 +81,20 @@ namespace dandan::core
 
         for (int i{}; i < STARTING_HAND_SIZE; ++i)
         {
-            activePlayer().drawCard(*this);
-            nonActivePlayer().drawCard(*this);
+            activePlayer().drawCard({*this, m_card_registry});
+            nonActivePlayer().drawCard({*this, m_card_registry});
         }
         // TODO: Implement mulligan rules
         DLOGI << "Game constructed\n";
 
         DLOGI << "Changing phase to beginning phase\n";
-        changePhase(std::make_unique<BeginningPhase>((*this)));
+        changePhase(std::make_unique<BeginningPhase>(
+            (ExecutionContext{*this, m_card_registry})));
     }
 #ifdef DANDAN_SERIALIZE
-    Game::Game()
+    Game::Game(const std::filesystem::path &path)
     {
+        m_card_registry.load_cards(path);
         GameSetup();
     }
 #endif
@@ -149,8 +102,9 @@ namespace dandan::core
     Game::Game(std::vector<Card> cards, bool shuffle)
     {
         auto moved_cards{std::move(cards)};
-        m_cards = std::deque<Card>{moved_cards.begin(), moved_cards.end()};
-        DLOGI << "Game constructed with explicit cards\n";
+        m_card_registry.setCards(
+            std::deque<Card>{moved_cards.begin(), moved_cards.end()});
+        std::cout << "Game constructed with explicit cards\n";
         GameSetup(shuffle);
     }
 
@@ -179,7 +133,8 @@ namespace dandan::core
                 m_first_turn = false;
                 m_active_player_index =
                     (m_active_player_index + 1) % AMOUNT_PLAYERS;
-                changePhase(std::make_unique<BeginningPhase>(*this));
+                changePhase(std::make_unique<BeginningPhase>(
+                    ExecutionContext{*this, m_card_registry}));
             }
         }
         catch (const std::runtime_error &e)
@@ -191,35 +146,6 @@ namespace dandan::core
             }
             std::cout << "Game ended: " << e.what() << '\n';
         }
-    }
-
-    const Card *Game::getCardByID(CardID card_id) const
-    {
-        auto iter = m_card_map.find(card_id);
-        if (iter == m_card_map.end())
-        {
-            throw std::runtime_error("Card with ID " +
-                                     std::to_string(card_id.getID()) +
-                                     " doesn't exist in the game");
-        }
-        return iter->second;
-    }
-
-    Card *Game::getCardByID(CardID card_id)
-    {
-        auto iter = m_card_map.find(card_id);
-        if (iter == m_card_map.end())
-        {
-            throw std::runtime_error("Card with ID " +
-                                     std::to_string(card_id.getID()) +
-                                     " doesn't exist in the game");
-        }
-        return iter->second;
-    }
-
-    Card *Game::getCardByID(int card_id)
-    {
-        return getCardByID(CardID::fromInt(card_id));
     }
 
     void Game::moveCardFromZone(Player &player, const Card &card)
@@ -338,29 +264,28 @@ namespace dandan::core
         for (const auto &object : stack_objects)
         {
             std::visit(
-                utils::overloaded{[this](const CardID &card_id)
-                                  {
-                                      const auto *card = getCardByID(card_id);
-                                      std::cout << card->getData().name
-                                                << " (Card)\n";
-                                  },
-                                  [](const abilities::BoundAbility &ability)
-                                  {
-                                      std::cout
-                                          << ability.definition().display()
-                                          << " (Ability)\n";
-                                  }},
+                utils::overloaded{
+                    [this](const CardID &card_id)
+                    {
+                        const auto *card = m_card_registry[card_id];
+                        std::cout << card->getData().name << " (Card)\n";
+                    },
+                    [](const abilities::BoundAbility &ability)
+                    {
+                        std::cout << ability.definition().display()
+                                  << " (Ability)\n";
+                    }},
                 object);
         }
         std::cout << "\n";
     }
 
-    void Game::quit(const Player &player)
+    void Game::quit(const Player &player) const
     {
         // Implementation for quitting the game
         // for now we only support 2 players so we can just end the game
         auto winner_id{getNextPlayerID(player.getID())};
-        auto &winner{getPlayer(winner_id)};
+        const auto &winner{getPlayer(winner_id)};
         std::cout << "Player " << winner.getName() << " wins the game!\n";
         std::cout << "Quitting the game...\n";
         std::exit(0);
@@ -435,6 +360,7 @@ namespace dandan::core
     void Game::handlePlay(const std::string &input)
     {
 
+        ExecutionContext exec_ctx{*this, m_card_registry};
         int card_id = std::stoi(input.substr(std::size("play ") - 1));
 
         auto action =
@@ -446,23 +372,23 @@ namespace dandan::core
             return;
         }
 
-        auto effect{action->createEffect(*this)};
+        auto effect{action->createEffect(exec_ctx)};
         const auto &final_effect{
-            replacementManager().applyReplacementEffects(*effect, *this)};
+            replacementManager().applyReplacementEffects(*effect, exec_ctx)};
 
-        auto event{final_effect->apply(*this)};
+        auto event{final_effect->apply({*this, m_card_registry})};
         if (event)
         {
-            eventManager().notify(*event, *this);
+            eventManager().notify(*event, exec_ctx);
         }
     }
 
     void Game::handleActivate(const std::string &input)
     {
+        ExecutionContext exec_ctx{*this, m_card_registry};
         int card_id = std::stoi(input.substr(std::size("activate ") - 1));
 
-        // does not move the card out of the previous zone
-        auto *cardp{getCardByID(card_id)};
+        const auto *cardp{m_card_registry[card_id]};
 
         if (cardp->getZone() != Zone::BATTLEFIELD &&
             cardp->getZone() != Zone::HAND)
@@ -485,7 +411,7 @@ namespace dandan::core
         for (const auto &ability : cardp->getCurrentAbilities())
         {
             const auto &underlying_ability{ability.definition()};
-            if (!underlying_ability.canActivate(*this, base_ability_context))
+            if (!underlying_ability.canActivate(exec_ctx, base_ability_context))
             {
                 ++ability_index;
                 continue;
@@ -561,7 +487,7 @@ namespace dandan::core
             return;
         }
 
-        auto effect{action->createEffect(*this)};
+        auto effect{action->createEffect(exec_ctx)};
         if (!effect)
         {
             std::cout << "No effect created for ability activation\n";
@@ -569,12 +495,12 @@ namespace dandan::core
         }
         std::cout << "Created effect for ability activation\n";
         const auto &final_effect{
-            replacementManager().applyReplacementEffects(*effect, *this)};
+            replacementManager().applyReplacementEffects(*effect, exec_ctx)};
 
-        auto event{final_effect->apply(*this)};
+        auto event{final_effect->apply(exec_ctx)};
         if (event)
         {
-            eventManager().notify(*event, *this);
+            eventManager().notify(*event, exec_ctx);
         }
     }
 

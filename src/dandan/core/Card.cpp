@@ -62,10 +62,13 @@ namespace dandan::core
         }
     }
 
-    void Card::destroy([[maybe_unused]] Game &game) const
+    void Card::destroy([[maybe_unused]] ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         std::cout << "Destroying card " << getData().name << '\n';
-        auto *card{game.getCardByID(getID())};
+        auto *card{card_registry[getID()]};
         auto &player{game.getPlayer(card->getControllerID())};
         game.moveCardFromZone(player, *card);
         // remove from managers
@@ -77,8 +80,10 @@ namespace dandan::core
     }
 
     void Card::setCharacteristics(const CardCharacteristics &character,
-                                  Game &game)
+                                  ExecutionContext exec_ctx)
     {
+        auto &game{exec_ctx.state.get()};
+
         std::cout << "Setting characteristics of cardID: " << m_card_id << '\n';
         m_characteristics = character;
         if (character.loses_all_abilities)

@@ -1,9 +1,7 @@
 #ifndef DANDAN_CARD_H
 #define DANDAN_CARD_H
 
-#include "CardData.h"
 #include "dandan/abilities/BoundAbility.h"
-#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardCharacteristics.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/ColorWord.h"
@@ -22,8 +20,14 @@
 #include <string_view>
 #endif
 
+namespace dandan::abilities
+{
+    class IAbility;
+}
+
 namespace dandan::core
 {
+    struct CardData;
 
     /** @brief A class representing a card instance in the game.
      * @class Card
@@ -232,7 +236,7 @@ namespace dandan::core
         }
 
         void setCharacteristics(const CardCharacteristics &character,
-                                Game &game);
+                                ExecutionContext exec_ctx);
 
         void setPrevCharacteristics(CardCharacteristics character)
         {
@@ -244,7 +248,7 @@ namespace dandan::core
          * @param damage The damage to take.
          * @param game The game instance.
          */
-        void takeDamage(int damage, [[maybe_unused]] Game &game)
+        void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx)
         {
             m_marked_damage += damage;
         }
@@ -262,7 +266,7 @@ namespace dandan::core
         /** Destroy the card.
          * @param game The game instance.
          */
-        void destroy(Game &game) const;
+        void destroy(ExecutionContext exec_ctx) const;
 
         // TODO: check this thoroughly
         /** Reset the state of the card.

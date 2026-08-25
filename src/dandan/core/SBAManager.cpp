@@ -13,8 +13,11 @@ namespace dandan::core
 {
     // TODO: these should all be pushed onto an effect bus, but for now just
     // resolve them immediately inline
-    void SBAManager::checkSBAs(Game &game)
+    void SBAManager::checkSBAs(ExecutionContext exec_ctx)
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         // 704.5a If a player has 0 or less life, that player loses the game.
         for (const auto &player : game.getPlayers())
         {
@@ -27,8 +30,8 @@ namespace dandan::core
                     player.getID(), context)};
                 auto final_effect{
                     game.replacementManager().applyReplacementEffects(
-                        *lose_effect, game)};
-                final_effect->apply(game);
+                        *lose_effect, exec_ctx)};
+                static_cast<void>(final_effect->apply(exec_ctx));
             }
         }
 
@@ -47,8 +50,8 @@ namespace dandan::core
                     player.getID(), context)};
                 auto final_effect{
                     game.replacementManager().applyReplacementEffects(
-                        *lose_effect, game)};
-                final_effect->apply(game);
+                        *lose_effect, exec_ctx)};
+                static_cast<void>(final_effect->apply(exec_ctx));
             }
         }
 
@@ -61,7 +64,7 @@ namespace dandan::core
         {
             for (const auto &card_id : player.battlefield().getCreatures())
             {
-                auto *card{game.getCardByID(card_id)};
+                auto *card{card_registry[card_id]};
                 if (card->getToughness() > 0 &&
                     card->getDamageMarked() >= card->getToughness())
                 {
@@ -75,8 +78,8 @@ namespace dandan::core
                                                                  context)};
                     auto final_effect{
                         game.replacementManager().applyReplacementEffects(
-                            *destroy_effect, game)};
-                    final_effect->apply(game);
+                            *destroy_effect, exec_ctx)};
+                    static_cast<void>(final_effect->apply(exec_ctx));
                 }
             }
         }
@@ -100,13 +103,14 @@ namespace dandan::core
                     std::cout << "Triggering state triggered ability on card "
                               << card_id.getID() << '\n';
                     PlayerID controller_id{
-                        game.getCardByID(card_id)->getControllerID()};
+                        card_registry[card_id]->getControllerID()};
                     abilities::AbilityContext context{card_id, controller_id};
                     auto final_effect{
                         game.replacementManager().applyReplacementEffects(
-                            *triggered_record.bound_ability->createEffect(game),
-                            game)};
-                    final_effect->apply(game);
+                            *triggered_record.bound_ability->createEffect(
+                                exec_ctx),
+                            exec_ctx)};
+                    static_cast<void>(final_effect->apply(exec_ctx));
                 }
             }
         }

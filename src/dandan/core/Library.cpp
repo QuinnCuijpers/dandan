@@ -30,15 +30,19 @@ namespace dandan::core
         return drawn_cards;
     }
 
-    std::vector<CardID> Library::mill(core::Game &game, int count)
+    std::vector<CardID> Library::mill(core::ExecutionContext exec_ctx,
+                                      int count)
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         auto res{std::vector<CardID>{}};
         for (int i = 0; i < count && !m_cards.empty(); ++i)
         {
             CardID milled_card = m_cards.front();
             res.push_back(milled_card);
             m_cards.pop_front();
-            game.graveyard().addCard(*game.getCardByID(milled_card));
+            game.graveyard().addCard(*card_registry[milled_card]);
         }
         return res;
     }

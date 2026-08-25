@@ -3,12 +3,13 @@
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/Game.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/continuous/prevention/IPreventionEffect.h"
 #include "dandan/utils/overloadVisitor.h"
 #include <algorithm>
+#include <cassert>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <variant>
@@ -67,15 +68,16 @@ namespace
     // should be fixed at some point
     bool isPreventedByPreventionList(const PreventionList &list,
                                      const dandan::core::IAction &action,
-                                     dandan::core::Game &game)
+                                     dandan::core::ExecutionContext exec_ctx)
     {
+
         for (const auto &prevention : list)
         {
             auto prevented{std::visit(
                 dandan::utils::overloaded{
                     [&](const std::unique_ptr<
                         dandan::effects::IPreventionEffect> &prevention_effect)
-                    { return prevention_effect->prevents(action, game); },
+                    { return prevention_effect->prevents(action, exec_ctx); },
                     [&](const abilities::BoundAbility *ability)
                     {
                         if (const auto *static_ability =
@@ -90,8 +92,8 @@ namespace
                             {
                                 effects::EffectContext context{
                                     ability->getContext()};
-                                return prevention_effect->prevents(action, game,
-                                                                   context);
+                                return prevention_effect->prevents(
+                                    action, exec_ctx, context);
                             }
                         }
                         // should be unreachable as only prevention effects are
@@ -287,11 +289,12 @@ namespace dandan::core
                m_player_preventions.size();
     }
 
-    bool PreventionManager::isPrevented(const IAction &action, Game &game) const
+    bool PreventionManager::isPrevented(const IAction &action,
+                                        ExecutionContext exec_ctx) const
     {
 
         std::cout << "Checking global-scoped preventions\n";
-        if (isPreventedByPreventionList(m_global_preventions, action, game))
+        if (isPreventedByPreventionList(m_global_preventions, action, exec_ctx))
         {
             return true;
         }
@@ -305,7 +308,8 @@ namespace dandan::core
             const auto player_id = std::get<PlayerID>(actor);
             if (const auto player_it = m_player_preventions.find(player_id);
                 player_it != m_player_preventions.end() &&
-                isPreventedByPreventionList(player_it->second, action, game))
+                isPreventedByPreventionList(player_it->second, action,
+                                            exec_ctx))
             {
                 return true;
             }
@@ -317,7 +321,7 @@ namespace dandan::core
             const auto card_id = std::get<CardID>(actor);
             if (const auto card_it = m_card_preventions.find(card_id);
                 card_it != m_card_preventions.end() &&
-                isPreventedByPreventionList(card_it->second, action, game))
+                isPreventedByPreventionList(card_it->second, action, exec_ctx))
             {
                 return true;
             }

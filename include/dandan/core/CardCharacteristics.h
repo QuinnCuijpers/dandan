@@ -1,11 +1,14 @@
 #ifndef DANDAN_CARDCHARACTERISTICS_H
 #define DANDAN_CARDCHARACTERISTICS_H
 
-#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
 #include <vector>
 
+namespace dandan::abilities
+{
+    class IAbility;
+}
 namespace dandan::core
 {
     struct CardCharacteristics

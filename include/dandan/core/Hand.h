@@ -90,7 +90,7 @@ namespace dandan::core
          * @param card_id The ID of the card to discard.
          * @param game The game instance.
          */
-        void discardCard(CardID card_id, Game &game);
+        void discardCard(CardID card_id, ExecutionContext exec_ctx);
 
     private:
         std::vector<CardID> m_cards;
