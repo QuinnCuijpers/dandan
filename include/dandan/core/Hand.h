@@ -2,6 +2,7 @@
 #define DANDAN_HAND_H
 
 #include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include <algorithm>
 #include <vector>

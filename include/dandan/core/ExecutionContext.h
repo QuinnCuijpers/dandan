@@ -7,7 +7,7 @@
 namespace dandan::core
 {
     class Game;
-}
+} // namespace dandan::core
 
 namespace dandan::core
 {

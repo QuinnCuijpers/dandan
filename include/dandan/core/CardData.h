@@ -1,12 +1,12 @@
 #ifndef DANDAN_CARD_DATA_H
 #define DANDAN_CARD_DATA_H
 
+#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
+#include "dandan/core/Stats.h"
 #include "dandan/mana/ManaPrice.h"
-
 #include <iostream>
-#include <memory>
 #include <optional>
 #include <string>
 
@@ -15,26 +15,8 @@
 #include <string_view>
 #endif
 
-namespace dandan::abilities
-{
-    class IAbility;
-}
-
 namespace dandan::core
 {
-
-    /** @brief A struct to hold the stats (power and toughness) of a creature
-     * card.
-     * @struct Stats
-     */
-    struct Stats
-    {
-        /// The power of the creature. Defaults to 0.
-        int power{0};
-        /// The toughness of the creature, defaults to 1 as creatures with 0
-        /// toughness are immediately put into the graveyard.
-        int toughness{1};
-    };
 
     /** @brief A class to hold the static data for a card.
      * @class CardData

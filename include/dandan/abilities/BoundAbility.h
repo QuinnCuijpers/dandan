@@ -6,15 +6,19 @@
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/TextReplacement.h"
-#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <optional>
 #include <vector>
 
 namespace dandan::core
 {
     class Card;
-}
+    struct ExecutionContext;
+} // namespace dandan::core
 
+namespace dandan::effects
+{
+    class IOneShotEffect;
+}
 namespace dandan::abilities
 {
     class IAbility;
