@@ -1,5 +1,6 @@
 #include "dandan/core/CardRegistry.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/CardID.h"
 #include "dandan/utils/log.h"
 #include <fstream>
 #include <vector>
@@ -36,7 +37,7 @@ namespace dandan::core
                         bound_abilities.push_back(bound);
                     }
                     card.setBoundAbilities(std::move(bound_abilities));
-                    m_card_lookup[card.getID()] = card;
+                    m_card_lookup.insert_or_assign(card.getID(), card);
                 }
             }
         }
@@ -53,13 +54,13 @@ namespace dandan::core
 #endif
     }
 
-    std::vector<Card *> CardRegistry::cards() const
+    std::vector<CardID> CardRegistry::card_ids() const
     {
-        std::vector<Card *> cards;
+        std::vector<CardID> cards;
         cards.reserve(m_card_lookup.size());
         std::transform(m_card_lookup.begin(), m_card_lookup.end(),
                        std::back_inserter(cards),
-                       [](const auto &iter) { return &iter.second; });
+                       [](const auto &iter) { return iter.first; });
         std::cout << "Cards size when calling cards(): " << cards.size()
                   << '\n';
         return cards;
@@ -72,7 +73,7 @@ namespace dandan::core
 
         for (const auto &card : cards)
         {
-            m_card_lookup[card.getID()] = card;
+            m_card_lookup.insert_or_assign(card.getID(), card);
         }
     }
 
@@ -82,6 +83,16 @@ namespace dandan::core
     }
 
     Card &CardRegistry::operator[](int card_id)
+    {
+        return m_card_lookup.at(CardID::fromInt(card_id));
+    }
+
+    const Card &CardRegistry::operator[](CardID card_id) const
+    {
+        return m_card_lookup.at(card_id);
+    }
+
+    const Card &CardRegistry::operator[](int card_id) const
     {
         return m_card_lookup.at(CardID::fromInt(card_id));
     }

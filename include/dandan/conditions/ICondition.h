@@ -28,8 +28,8 @@ namespace dandan::conditions
         virtual ~ICondition() = default;
 
         /**
-         * @param game The game for which to check whether the condition is
-         * satisfied.
+         * @param exec_ctx The execution context for which to check whether the
+         * condition is satisfied.
          * @returns true if the condition is satisfied, false otherwise.
          */
         [[nodiscard]] virtual bool isSatisfied(

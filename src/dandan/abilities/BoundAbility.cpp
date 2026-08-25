@@ -42,7 +42,7 @@ namespace dandan::abilities
     {
         AbilityContext context{m_source_card->getID(),
                                m_source_card->getControllerID(),
-                               m_chosen_mode_index};
+                               m_chosen_mode_index, m_text_replacement};
         auto effect{m_definition->createEffect(exec_ctx, context)};
         return effect;
     }

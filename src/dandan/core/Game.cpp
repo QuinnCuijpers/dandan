@@ -102,8 +102,7 @@ namespace dandan::core
     Game::Game(std::vector<Card> cards, bool shuffle)
     {
         auto moved_cards{std::move(cards)};
-        m_card_registry.setCards(
-            std::deque<Card>{moved_cards.begin(), moved_cards.end()});
+        m_card_registry.setCards(moved_cards);
         std::cout << "Game constructed with explicit cards\n";
         GameSetup(shuffle);
     }

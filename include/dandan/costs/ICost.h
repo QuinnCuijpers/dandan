@@ -38,7 +38,8 @@ namespace dandan::costs
                                           const core::Player &player) const = 0;
 
         /** Pays the cost by mutating the game state.
-         * @param game The game instance to mutate when paying the cost.
+         * @param exec_ctx The execution context containing the game to mutate
+         * when paying the cost.
          * @param context The ability context.
          */
         virtual void pay(

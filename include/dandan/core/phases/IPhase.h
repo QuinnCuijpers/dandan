@@ -20,7 +20,7 @@ namespace dandan::core
         /** Constructor
          * @param game The game instance.
          */
-        explicit IPhase(ExecutionContext &exec_ctx) : m_ctx(exec_ctx)
+        explicit IPhase(ExecutionContext exec_ctx) : m_ctx(exec_ctx)
         {
         }
 
@@ -62,7 +62,7 @@ namespace dandan::core
         }
 
     private:
-        ExecutionContext &m_ctx;
+        ExecutionContext m_ctx;
     };
 } // namespace dandan::core
 
