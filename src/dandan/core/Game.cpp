@@ -45,8 +45,9 @@ namespace dandan::core
 
     void Game::GameSetup(bool shuffle)
     {
-        for (auto *card : m_card_registry.cards())
+        for (auto card_id : m_card_registry.card_ids())
         {
+            auto *card = m_card_registry[card_id];
             std::cout << "adding Card id: " << card->getID() << '\n';
             m_library.addCardBottom(*card);
         }
