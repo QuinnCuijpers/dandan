@@ -29,7 +29,7 @@ namespace dandan::core
          * @param event The event to notify subscribers of.
          * @param game The game instance.
          */
-        void notify(const events::IEvent &event, core::Game &game) const;
+        void notify(const events::IEvent &event, core::ExecutionContext exec_ctx) const;
 
         /** Gets the number of subscribers.
          * @return The number of subscribers.
