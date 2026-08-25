@@ -1,8 +1,8 @@
 #ifndef DANDAN_CARDREGISTRY_H
 #define DANDAN_CARDREGISTRY_H
 
+#include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
-#include <deque>
 #include <filesystem>
 #include <optional>
 #include <unordered_map>
@@ -10,7 +10,6 @@
 
 namespace dandan::core
 {
-    class Card;
 
     class CardRegistry
     {
@@ -26,15 +25,14 @@ namespace dandan::core
 
         std::vector<Card *> cards() const;
 
-        void setCards(std::deque<Card> cards);
+        void setCards(const std::vector<Card> &cards);
 
-        Card *operator[](CardID card_id) const;
+        Card &operator[](CardID card_id);
 
-        Card *operator[](int card_id) const;
+        Card &operator[](int card_id);
 
     private:
-        std::deque<Card> m_cards;
-        std::unordered_map<CardID, Card *> m_card_lookup;
+        std::unordered_map<CardID, Card> m_card_lookup;
         std::optional<std::filesystem::path> m_decklist_path;
     };
 } // namespace dandan::core
