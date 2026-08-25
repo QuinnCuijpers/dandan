@@ -28,6 +28,7 @@ namespace dandan::core
                 for (int i = 0; i < amount; ++i)
                 {
                     auto card{Card{name}};
+                    m_card_lookup.insert_or_assign(card.getID(), card);
                     auto bound_abilities{
                         std::vector<abilities::BoundAbility>{}};
                     for (const auto &ability : card.getData().abilities)
@@ -37,7 +38,6 @@ namespace dandan::core
                         bound_abilities.push_back(bound);
                     }
                     card.setBoundAbilities(std::move(bound_abilities));
-                    m_card_lookup.insert_or_assign(card.getID(), card);
                 }
             }
         }
@@ -66,35 +66,42 @@ namespace dandan::core
         return cards;
     }
 
-    void CardRegistry::setCards(const std::vector<Card> &cards)
+    void CardRegistry::setCards(std::vector<Card> cards)
     {
 
         m_card_lookup.clear();
 
-        for (const auto &card : cards)
+        for (auto &card : cards)
         {
             m_card_lookup.insert_or_assign(card.getID(), card);
+            auto bound_abilities{std::vector<abilities::BoundAbility>{}};
+            for (const auto &ability : card.getData().abilities)
+            {
+                auto *definition{ability.get()};
+                auto bound{abilities::BoundAbility{*definition, &card}};
+                bound_abilities.push_back(bound);
+            }
+            card.setBoundAbilities(std::move(bound_abilities));
         }
     }
 
-    Card &CardRegistry::operator[](CardID card_id)
+    Card *CardRegistry::operator[](CardID card_id)
     {
-        return m_card_lookup.at(card_id);
+        return &m_card_lookup.at(card_id);
     }
 
-    Card &CardRegistry::operator[](int card_id)
+    Card *CardRegistry::operator[](int card_id)
     {
-        return m_card_lookup.at(CardID::fromInt(card_id));
+        return &m_card_lookup.at(CardID::fromInt(card_id));
     }
 
-    const Card &CardRegistry::operator[](CardID card_id) const
+    const Card *CardRegistry::operator[](CardID card_id) const
     {
-        return m_card_lookup.at(card_id);
+        return &m_card_lookup.at(card_id);
     }
 
-    const Card &CardRegistry::operator[](int card_id) const
+    const Card *CardRegistry::operator[](int card_id) const
     {
-        return m_card_lookup.at(CardID::fromInt(card_id));
+        return &m_card_lookup.at(CardID::fromInt(card_id));
     }
-
 } // namespace dandan::core
