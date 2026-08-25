@@ -105,12 +105,12 @@ namespace dandan::abilities
     [[nodiscard]] bool ActivatedAbility::canActivate(
         core::ExecutionContext exec_ctx, const AbilityContext &context) const
     {
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
         auto &game{exec_ctx.state.get()};
 
         if (m_cost)
         {
-            auto *source_card = card_registry[context.source_card_id];
+            const auto *source_card = card_registry[context.source_card_id];
             return m_cost->canPay(
                 *source_card, game.getPlayer(source_card->getControllerID()));
         }
