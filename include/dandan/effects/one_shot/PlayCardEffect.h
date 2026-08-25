@@ -40,13 +40,16 @@ namespace dandan::effects
             return std::make_unique<PlayCardEffect>(m_card, getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            [[maybe_unused]] core::Game &game) const override
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            [[maybe_unused]] core::ExecutionContext exec_ctx) const override
         {
+            auto &game{exec_ctx.state.get()};
+            const auto &card_registry{exec_ctx.cards.get()};
+
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{
                 game.getPlayer(game.priorityManager().getPlayerWithPriority())};
-            const auto mana_cost = m_card.getData().mana_cost;
+            auto mana_cost = m_card.getData().mana_cost;
             std::cout << "generic_mana: " << mana_cost.generic() << '\n';
             std::cout << "specific_mana: " << mana_cost.specific() << '\n';
             std::cout << "mana_pool: " << prio_player.manaPool() << '\n';
@@ -60,7 +63,7 @@ namespace dandan::effects
                                          std::string{m_card.getData().name});
             }
 
-            auto *cardp = game.getCardByID(m_card.getID());
+            auto *cardp = card_registry[m_card.getID()];
             if (cardp->getData().type == core::Type::Instant ||
                 cardp->getData().type == core::Type::Sorcery)
             {

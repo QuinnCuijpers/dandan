@@ -43,8 +43,11 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> ChangeLandTypeEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         // FIXME: technically it should be able to call any land type, but we
         // only have basic land types in dandan
 
@@ -75,7 +78,7 @@ namespace dandan::effects
 
         for (const auto &card_id : game.cards())
         {
-            auto *card{game.getCardByID(card_id)};
+            auto *card{card_registry[card_id]};
 
             auto subtypes{card->getCurrentSubTypes()};
             std::ignore = std::any_of(subtypes.begin(), subtypes.end(),

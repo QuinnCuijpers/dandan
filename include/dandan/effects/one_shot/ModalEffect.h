@@ -1,6 +1,7 @@
 #ifndef DANDAN_MODAL_EFFECT_H
 #define DANDAN_MODAL_EFFECT_H
 
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <algorithm>
@@ -33,7 +34,8 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            const core::Game &game, EffectContext context) const override;
+            core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override

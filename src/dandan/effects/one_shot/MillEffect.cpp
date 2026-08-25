@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/MillEffect.h"
+#include "dandan/core/Game.h"
 #include "dandan/utils/convertToWords.h"
 
 #ifdef DANDAN_SERIALIZE
@@ -41,18 +42,21 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> MillEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         auto context{getEffectContext()};
-        auto milled_cards{game.library().mill(game, m_amount)};
+        auto milled_cards{game.library().mill(exec_ctx, m_amount)};
         if (context.card_id.has_value())
         {
             auto card_id{context.card_id.value()};
-            auto *card{game.getCardByID(card_id)};
             if (milled_cards.size() == 1)
             {
+                auto *card{card_registry[card_id]};
                 auto milled_id{milled_cards[0]};
-                const auto &name{game.getCardByID(milled_id)->getData().name};
+                const auto &name{card_registry[milled_id]->getData().name};
                 card->remember("milledCardName", name);
             }
         }

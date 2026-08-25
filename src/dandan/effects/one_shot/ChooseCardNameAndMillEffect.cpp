@@ -47,10 +47,13 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> ChooseCardNameAndMillEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
 
-        auto *card{game.getCardByID(m_source)};
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
+        auto *card{card_registry[m_source]};
         auto player_id = std::get<core::PlayerID>(m_target);
         std::cout << "Choose a card name, then "
                   << game.getPlayer(player_id).getName() << " mills a card.\n";
@@ -63,7 +66,7 @@ namespace dandan::effects
 
         auto mill_effect{std::make_unique<MillEffect>(m_amount, player_id,
                                                       getEffectContext())};
-        auto mill_event{mill_effect->apply_impl(game)};
+        auto mill_event{mill_effect->apply_impl(exec_ctx)};
         return mill_event;
     }
 } // namespace dandan::effects

@@ -1,6 +1,7 @@
 #ifndef DANDAN_EFFECT_LIST_H
 #define DANDAN_EFFECT_LIST_H
 
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Game.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -52,16 +53,17 @@ namespace dandan::effects
         }
 
         // TODO: impl an event bus instead of pushing the last event
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override
         {
             std::unique_ptr<events::IEvent> last_event{};
             for (const auto &effect : m_effects)
             {
                 auto replaced_sub_effect{
-                    game.replacementManager().applyReplacementEffects(*effect,
-                                                                      game)};
-                last_event = replaced_sub_effect->apply(game);
+                    exec_ctx.state.get()
+                        .replacementManager()
+                        .applyReplacementEffects(*effect, exec_ctx)};
+                last_event = replaced_sub_effect->apply(exec_ctx);
             }
             return last_event;
         }

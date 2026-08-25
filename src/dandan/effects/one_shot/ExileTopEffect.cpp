@@ -41,8 +41,11 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> ExileTopEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         for (int i = 0; i < m_amount; ++i)
         {
             if (game.library().getCards().empty())
@@ -50,7 +53,7 @@ namespace dandan::effects
                 break;
             }
             auto card_id{game.library().getCards().front()};
-            auto *card{game.getCardByID(card_id)};
+            auto *card{card_registry[card_id]};
             game.moveCardFromZone(game.activePlayer(), *card);
             game.exile().addCard(*card);
         }

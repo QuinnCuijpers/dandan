@@ -46,8 +46,10 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> PutCardOnTopEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+
         std::cout << "Applying put card on top effect\n";
 
         auto &player = game.getPlayer(m_playerID);
@@ -79,7 +81,7 @@ namespace dandan::effects
         {
             auto put_effect{std::make_unique<PutCardOnTopEffect>(
                 1, m_playerID, getEffectContext())};
-            put_effect->apply(game);
+            static_cast<void>(put_effect->apply(exec_ctx));
         }
 
         return nullptr;

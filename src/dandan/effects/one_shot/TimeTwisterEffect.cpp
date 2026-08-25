@@ -39,8 +39,11 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> TimeTwisterEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         for (auto &player : game.getPlayers())
         {
             auto hand_card_ids{std::vector<core::CardID>{}};
@@ -50,7 +53,7 @@ namespace dandan::effects
 
             for (auto card_id : hand_card_ids)
             {
-                auto *card{game.getCardByID(card_id)};
+                auto *card{card_registry[card_id]};
                 std::cout << "Moving card " << card->getData().name
                           << " with ID " << card_id.getID()
                           << " and zone: " << card->getZone()
@@ -68,7 +71,7 @@ namespace dandan::effects
 
         for (auto card_id : graveyard_ids)
         {
-            auto *card{game.getCardByID(card_id)};
+            auto *card{card_registry[card_id]};
             assert(card->getZone() == core::Zone::GRAVEYARD);
             game.moveCardFromZone(game.activePlayer(), *card);
             game.library().addCardBottom(*card);

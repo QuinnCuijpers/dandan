@@ -1,6 +1,7 @@
 #ifndef DANDAN_IONESHOTEFFECTDEFINITION_H
 #define DANDAN_IONESHOTEFFECTDEFINITION_H
 
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
@@ -34,7 +35,7 @@ namespace dandan::effects
         virtual ~IOneShotEffectDefinition() = default;
 
         [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> bind(
-            const core::Game &game, EffectContext context) const = 0;
+            core::ExecutionContext exec_ctx, EffectContext context) const = 0;
 
         [[nodiscard]] virtual std::string display() const
         {

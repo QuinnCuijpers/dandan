@@ -8,9 +8,12 @@
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> ETBEffect::apply_impl(
-        [[maybe_unused]] core::Game &game) const
+        [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
-        auto *card{game.getCardByID(m_card.getID())};
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
+        auto *card{card_registry[m_card.getID()]};
 
         game.moveCardFromZone(game.getPlayer(card->getControllerID()), m_card);
         std::cout << "Applying ETBEffect\n";

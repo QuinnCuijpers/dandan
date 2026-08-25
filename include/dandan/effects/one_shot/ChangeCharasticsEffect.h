@@ -1,8 +1,8 @@
 #ifndef DANDAN_CHANGECHARACTERISTICS_H
 #define DANDAN_CHANGECHARACTERISTICS_H
 
+#include "dandan/core/Card.h"
 #include "dandan/core/CardCharacteristics.h"
-#include "dandan/core/Game.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
@@ -31,8 +31,8 @@ namespace dandan::effects
                 m_target, m_card_characteristics, getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            [[maybe_unused]] core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            [[maybe_unused]] core::ExecutionContext exec_ctx) const override;
 
     private:
         core::Target m_target;
@@ -56,9 +56,11 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            const core::Game &game, EffectContext context) const override
+            const core::ExecutionContext exec_ctx,
+            EffectContext context) const override
         {
-            const auto *card{game.getCardByID(context.card_id.value())};
+            const auto &card_registry{exec_ctx.cards.get()};
+            const auto *card{card_registry[context.card_id.value()]};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             context.expires = expires();

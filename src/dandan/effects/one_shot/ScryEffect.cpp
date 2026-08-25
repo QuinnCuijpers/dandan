@@ -42,13 +42,16 @@ namespace dandan::effects
 {
 
     std::unique_ptr<events::IEvent> ScryEffect::apply_impl(
-        [[maybe_unused]] core::Game &game) const
+        [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         auto cards = game.library().draw(m_scry_amount);
         std::cout << "Scryed cards: [ ";
         for (const auto &card : cards)
         {
-            auto *cardp{game.getCardByID(card)};
+            auto *cardp{card_registry[card]};
             std::cout << cardp->getData().name << " ,";
         }
         std::cout << " ]\n";

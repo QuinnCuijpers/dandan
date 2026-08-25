@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/SpinToTopEffect.h"
+#include "dandan/core/Game.h"
 #include "dandan/core/TargetRequirement.h"
 
 #ifdef DANDAN_SERIALIZE
@@ -48,15 +49,18 @@ namespace dandan::effects
     }
 
     std::unique_ptr<events::IEvent> SpinToTopEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         if (!std::holds_alternative<core::CardID>(m_target))
         {
             throw std::runtime_error(
                 "Spin to top effect target is not a card ID");
         }
         auto permanent{std::get<core::CardID>(m_target)};
-        auto *card{game.getCardByID(permanent)};
+        auto *card{card_registry[permanent]};
         game.moveCardFromZone(game.activePlayer(), *card);
         game.library().addCardTop(*card);
         return nullptr;

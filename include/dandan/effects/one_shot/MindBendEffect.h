@@ -3,13 +3,14 @@
 
 #include <utility>
 
-#include "dandan/core/Game.h"
+#include "dandan/core/Card.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/core/TextReplacement.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
+
 namespace dandan::effects
 {
     class MindBendEffect : public IOneShotEffect
@@ -44,8 +45,8 @@ namespace dandan::effects
                    "type with another.";
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         core::Target m_target;
@@ -63,10 +64,11 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] const core::ExecutionContext exec_ctx,
             [[maybe_unused]] EffectContext context) const override
         {
-            const auto *card{game.getCardByID(context.card_id.value())};
+            const auto &card_registry{exec_ctx.cards.get()};
+            const auto *card{card_registry[context.card_id.value()]};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             context.expires = expires();

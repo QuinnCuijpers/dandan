@@ -1,10 +1,10 @@
 #ifndef DANDAN_ADDMANAEFFECT_H
 #define DANDAN_ADDMANAEFFECT_H
 
-#include "dandan/core/Game.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/events/IEvent.h"
+#include "dandan/mana/ManaBag.h"
 #include <memory>
 #include <utility>
 namespace dandan::effects
@@ -30,8 +30,8 @@ namespace dandan::effects
             return std::make_unique<AddManaEffect>(m_mana, getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
         [[nodiscard]] const mana::ManaBag &getMana() const
         {

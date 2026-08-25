@@ -1,6 +1,7 @@
 #include "dandan/effects/one_shot/MindBendEffect.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
+#include "dandan/core/Game.h"
 #include "dandan/core/TextReplacement.h"
 #include "dandan/utils/overloadVisitor.h"
 #include "dandan/utils/stringToBasicLandType.h"
@@ -47,8 +48,11 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> MindBendEffect::apply_impl(
-        [[maybe_unused]] core::Game &game) const
+        [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         auto target{m_target};
 
         if (std::get_if<core::Permanent>(&target) == nullptr)
@@ -58,7 +62,7 @@ namespace dandan::effects
         }
 
         auto permanent{std::get<core::Permanent>(target)};
-        auto *card{game.getCardByID(permanent)};
+        auto *card{card_registry[permanent]};
 
         if (m_replace_with.has_value() && m_to_replace.has_value())
         {

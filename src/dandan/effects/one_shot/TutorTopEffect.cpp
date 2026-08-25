@@ -58,16 +58,20 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> TutorTopEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
         // get all cards matching the filter types
-        auto included = [&game](const core::CardID &card_id,
-                                const std::vector<core::Type> &filter_types)
+        auto included =
+            [&card_registry](const core::CardID &card_id,
+                             const std::vector<core::Type> &filter_types)
         {
             return std::any_of(filter_types.begin(), filter_types.end(),
-                               [&card_id, &game](const auto &type)
+                               [&card_id, &card_registry](const auto &type)
                                {
-                                   const auto *card = game.getCardByID(card_id);
+                                   const auto *card = card_registry[card_id];
                                    return card->getData().type == type;
                                });
         };
@@ -87,7 +91,7 @@ namespace dandan::effects
         int chosen_card_id = std::stoi(input);
 
         // remove card from lib and shuffle
-        const auto *card = game.getCardByID(chosen_card_id);
+        const auto *card = card_registry[chosen_card_id];
         game.moveCardFromZone(game.activePlayer(), *card);
         game.library().shuffle();
 

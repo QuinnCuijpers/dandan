@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include "dandan/core/Game.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
@@ -21,8 +21,8 @@ namespace dandan::effects
         {
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
@@ -57,7 +57,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
             EffectContext context) const override
         {
             return std::make_unique<DrawEffect>(m_amount->clone(), context);
