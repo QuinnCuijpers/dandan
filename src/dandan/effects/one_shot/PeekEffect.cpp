@@ -47,7 +47,7 @@ namespace dandan::effects
     void printPeekedCards(const std::vector<core::CardID> &card_ids,
                           core::ExecutionContext exec_ctx)
     {
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
         std::cout << "Peeked cards: [ ";
         for (size_t i{}; i < card_ids.size(); ++i)
         {

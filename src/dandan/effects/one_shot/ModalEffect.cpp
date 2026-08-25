@@ -60,7 +60,7 @@ namespace dandan::effects
     std::unique_ptr<IOneShotEffect> ModalEffectDefinition::bind(
         const core::ExecutionContext exec_ctx, EffectContext context) const
     {
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         const auto *card{card_registry[context.card_id.value()]};
         std::cout << "Binding modal effect for card " << card->getData().name

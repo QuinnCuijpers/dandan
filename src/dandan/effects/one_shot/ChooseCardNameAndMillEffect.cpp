@@ -51,7 +51,7 @@ namespace dandan::effects
     {
 
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         auto *card{card_registry[m_source]};
         auto player_id = std::get<core::PlayerID>(m_target);

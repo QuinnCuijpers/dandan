@@ -49,7 +49,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         auto valid_type = [this, &card_registry](const core::CardID card_id)
         {

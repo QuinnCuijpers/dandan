@@ -41,7 +41,7 @@ namespace dandan::effects
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         std::cout << "Applying BounceLandEffect\n";
         std::cout << "what land index to bounce? ";
@@ -54,5 +54,13 @@ namespace dandan::effects
         game.eventManager().unsubscribe(*card);
         game.activePlayer().hand().addCard(*card);
         return nullptr;
+    }
+
+    [[nodiscard]] std::unique_ptr<IOneShotEffect> BounceLandEffectDefinition::
+        bind([[maybe_unused]] const core::ExecutionContext exec_ctx,
+             EffectContext context) const
+    {
+        return std::make_unique<BounceLandEffect>(context.player_id.value(),
+                                                  context);
     }
 } // namespace dandan::effects

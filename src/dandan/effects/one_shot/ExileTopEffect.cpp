@@ -44,7 +44,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        const auto &card_registry{exec_ctx.cards.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
         for (int i = 0; i < m_amount; ++i)
         {

@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/DestroyEffect.h"
+#include "dandan/core/ExecutionContext.h"
 
 namespace dandan::effects
 {
