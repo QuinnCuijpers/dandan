@@ -30,7 +30,7 @@ namespace dandan::costs
          */
         [[nodiscard]] std::vector<ICost *> getCosts() const;
 
-        void pay(core::Game &game,
+        void pay(core::ExecutionContext exec_ctx,
                  abilities::AbilityContext context) const override;
 
         [[nodiscard]] bool canPay(const core::Card &source,

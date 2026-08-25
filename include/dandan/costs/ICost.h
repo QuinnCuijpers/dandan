@@ -42,7 +42,7 @@ namespace dandan::costs
          * @param context The ability context.
          */
         virtual void pay(
-            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
             [[maybe_unused]] abilities::AbilityContext context) const = 0;
     };
 } // namespace dandan::costs

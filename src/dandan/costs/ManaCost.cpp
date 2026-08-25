@@ -64,9 +64,11 @@ namespace dandan::costs
         return player.manaPool().canPay(m_mana);
     }
 
-    void ManaCost::pay([[maybe_unused]] core::Game &game,
+    void ManaCost::pay([[maybe_unused]] core::ExecutionContext exec_ctx,
                        [[maybe_unused]] abilities::AbilityContext context) const
     {
+        auto &game{exec_ctx.state.get()};
+
         auto &player = game.getPlayer(context.controller_id);
         player.manaPool().pay(m_mana);
     }

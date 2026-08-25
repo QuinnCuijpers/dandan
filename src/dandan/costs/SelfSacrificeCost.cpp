@@ -43,12 +43,15 @@ namespace dandan::costs
         return source.getControllerID().id() == player.getID().id();
     }
 
-    void SelfSacrificeCost::pay(core::Game &game,
+    void SelfSacrificeCost::pay(core::ExecutionContext exec_ctx,
                                 abilities::AbilityContext context) const
     {
-        [[maybe_unused]] auto &player = game.getPlayer(context.controller_id);
-        auto *card = game.getCardByID(context.source_card_id);
-        player.sacrificeCard(*card, game);
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
+        auto &player = game.getPlayer(context.controller_id);
+        auto *card = card_registry[context.source_card_id];
+        player.sacrificeCard(*card, exec_ctx);
     }
 
 } // namespace dandan::costs

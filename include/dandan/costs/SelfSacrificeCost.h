@@ -22,7 +22,7 @@ namespace dandan::costs
         [[nodiscard]] bool canPay(const core::Card &source,
                                   const core::Player &player) const override;
 
-        void pay(core::Game &game,
+        void pay(core::ExecutionContext exec_ctx,
                  abilities::AbilityContext context) const override;
     };
 } // namespace dandan::costs
