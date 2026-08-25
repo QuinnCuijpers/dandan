@@ -18,9 +18,12 @@ namespace dandan::core
     }
 
     std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect(
-        core::Game &game)
+        core::ExecutionContext exec_ctx)
     {
-        auto *card{game.getCardByID(m_card_id)};
+        auto &game{exec_ctx.state.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
+
+        auto *card{card_registry[m_card_id]};
 
         // TODO: flashback will break this, but for now itll be fine
         if (card->getZone() != Zone::HAND)
@@ -30,8 +33,8 @@ namespace dandan::core
                 zoneToString(card->getZone()));
         }
 
-        if (card->getControllerID().id() !=
-            game.priorityManager().getPlayerWithPriority().id())
+        if (card->getControllerID() !=
+            game.priorityManager().getPlayerWithPriority())
         {
             throw std::runtime_error(
                 "Only player with priority can play cards, card is controlled "
