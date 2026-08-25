@@ -97,8 +97,8 @@ namespace dandan::serialization
         }
 
     private:
-        std::unordered_map<std::type_index, JsonRegistration> m_serializer_map;
-        std::unordered_map<std::string, Deserializer> m_deserializer_map;
+        std::unordered_map<std::type_index, JsonRegistration> m_serializer_map{};
+        std::unordered_map<std::string, Deserializer> m_deserializer_map{};
 
         JsonTypeRegistry() = default;
     };
