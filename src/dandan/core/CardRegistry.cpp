@@ -5,6 +5,22 @@
 #include <fstream>
 #include <vector>
 
+namespace
+{
+    using namespace dandan;
+    void bind_abilities(core::Card &card)
+    {
+        auto bound_abilities{std::vector<abilities::BoundAbility>{}};
+        for (const auto &ability : card.getData().abilities)
+        {
+            auto *definition{ability.get()};
+            auto bound{abilities::BoundAbility{*definition, &card}};
+            bound_abilities.push_back(bound);
+        }
+        card.setBoundAbilities(std::move(bound_abilities));
+    }
+} // namespace
+
 namespace dandan::core
 {
 #ifdef DANDAN_SERIALIZE
@@ -28,16 +44,13 @@ namespace dandan::core
                 for (int i = 0; i < amount; ++i)
                 {
                     auto card{Card{name}};
-                    m_card_lookup.insert_or_assign(card.getID(), card);
-                    auto bound_abilities{
-                        std::vector<abilities::BoundAbility>{}};
-                    for (const auto &ability : card.getData().abilities)
+                    auto [iter, inserted] =
+                        m_card_lookup.insert_or_assign(card.getID(), card);
+                    if (inserted)
                     {
-                        auto *definition{ability.get()};
-                        auto bound{abilities::BoundAbility{*definition, &card}};
-                        bound_abilities.push_back(bound);
+                        auto &inserted_card = iter->second;
+                        bind_abilities(inserted_card);
                     }
-                    card.setBoundAbilities(std::move(bound_abilities));
                 }
             }
         }
@@ -73,15 +86,13 @@ namespace dandan::core
 
         for (auto &card : cards)
         {
-            m_card_lookup.insert_or_assign(card.getID(), card);
-            auto bound_abilities{std::vector<abilities::BoundAbility>{}};
-            for (const auto &ability : card.getData().abilities)
+            auto [iter, inserted] =
+                m_card_lookup.insert_or_assign(card.getID(), card);
+            if (inserted)
             {
-                auto *definition{ability.get()};
-                auto bound{abilities::BoundAbility{*definition, &card}};
-                bound_abilities.push_back(bound);
+                auto &inserted_card = iter->second;
+                bind_abilities(inserted_card);
             }
-            card.setBoundAbilities(std::move(bound_abilities));
         }
     }
 
