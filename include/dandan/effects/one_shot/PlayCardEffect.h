@@ -41,7 +41,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
-            [[maybe_unused]] core::ExecutionContext exec_ctx) const override
+            core::ExecutionContext exec_ctx) const override
         {
             auto &game{exec_ctx.state.get()};
             auto &card_registry{exec_ctx.cards.get()};

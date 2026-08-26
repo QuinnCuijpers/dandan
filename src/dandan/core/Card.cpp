@@ -61,7 +61,7 @@ namespace dandan::core
         }
     }
 
-    void Card::destroy([[maybe_unused]] ExecutionContext exec_ctx) const
+    void Card::destroy(ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
@@ -258,9 +258,6 @@ namespace dandan::core
     {
         return m_prev_characteristics;
     }
-
-    void setCharacteristics(const CardCharacteristics &character,
-                            ExecutionContext exec_ctx);
 
     void Card::setPrevCharacteristics(CardCharacteristics character)
     {
