@@ -33,8 +33,8 @@ namespace dandan::effects
             return std::make_unique<ScryEffect>(m_scry_amount, m_player,
                                                 getEffectContext());
         }
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
         [[nodiscard]] int getScryAmount() const
         {
@@ -55,7 +55,7 @@ namespace dandan::effects
         {
         }
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] const core::ExecutionContext exec_ctx,
             EffectContext context) const override
         {
             return std::make_unique<ScryEffect>(

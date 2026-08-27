@@ -14,7 +14,7 @@ namespace dandan::numbers
         [[nodiscard]] int getValue() const;
 
         [[nodiscard]] int getValue(
-            core::Game &game, effects::EffectContext context) const override;
+            core::ExecutionContext exec_ctx, effects::EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<INumber> clone() const override;
 

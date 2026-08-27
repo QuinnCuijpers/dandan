@@ -1,7 +1,7 @@
 #ifndef DANDAN_INUMBER_H
 #define DANDAN_INUMBER_H
 
-#include "dandan/core/Game.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/EffectContext.h"
 
 namespace dandan::numbers
@@ -17,7 +17,8 @@ namespace dandan::numbers
         virtual ~INumber() = default;
 
         [[nodiscard]] virtual int getValue(
-            core::Game &game, effects::EffectContext context) const = 0;
+            core::ExecutionContext exec_ctx,
+            effects::EffectContext context) const = 0;
 
         [[nodiscard]] virtual std::unique_ptr<INumber> clone() const = 0;
     };

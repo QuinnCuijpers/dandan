@@ -13,7 +13,7 @@ namespace dandan::core
     }
 
     std::unique_ptr<effects::IOneShotEffect> AttackAction::createEffect(
-        [[maybe_unused]] core::Game &game)
+        [[maybe_unused]] core::ExecutionContext exec_ctx)
     {
         std::cout << "Executing attack action\n";
         effects::EffectContext context{m_creature.getID()};

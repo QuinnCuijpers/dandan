@@ -16,7 +16,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] bool prevents(const core::IAction &action,
-                                    const core::Game &game,
+                                    core::ExecutionContext exec_ctx,
                                     std::optional<effects::EffectContext>
                                         context = std::nullopt) const override;
 

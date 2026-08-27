@@ -163,25 +163,26 @@ namespace dandan::core
         /** Draws a card from the library.
          * @param game The game instance.
          */
-        void drawCard(Game &game);
+        void drawCard(ExecutionContext exec_ctx);
 
         void playCard(Card &card);
 
-        void discardCard(const Card &card, Game &game);
+        void discardCard(const Card &card, ExecutionContext exec_ctx);
 
-        void sacrificeCard(Card &card, Game &game);
+        void sacrificeCard(Card &card, ExecutionContext exec_ctx);
 
         /** Takes damage
          * @param damage The amount of damage to take.
          * @param game The game instance.
          */
-        void takeDamage(int damage, [[maybe_unused]] Game &game)
+        void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx)
         {
             // TODO: add took damage event
             m_life_total -= damage;
         }
 
-        bool canActivateSomething(Game &game) const;
+        [[nodiscard]] bool canActivateSomething(
+            ExecutionContext exec_ctx) const;
 
     private:
         PlayerID m_player_id;
@@ -196,7 +197,7 @@ namespace dandan::core
         bool m_lost_game{false};
 
         [[nodiscard]] mana::ManaBag getAvailableMana(
-            const core::Game &game) const;
+            core::ExecutionContext exec_ctx) const;
     };
 } // namespace dandan::core
 

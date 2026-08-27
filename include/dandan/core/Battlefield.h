@@ -59,7 +59,7 @@ namespace dandan::core
          */
         void removeCard(const Card &card);
 
-        void sacrificeCard(Card &card, core::Game &game);
+        void sacrificeCard(Card &card, core::ExecutionContext exec_ctx);
 
     private:
         PermanentMap m_permanents{{Type::Land, {}},        {Type::Creature, {}},

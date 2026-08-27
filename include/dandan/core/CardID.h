@@ -59,6 +59,11 @@ namespace dandan::core
             return m_id != other.m_id;
         }
 
+        bool operator<(const CardID &other) const
+        {
+            return m_id < other.m_id;
+        }
+
         /** Gets the integer ID of the card.
          * @return The integer ID of the card.
          */

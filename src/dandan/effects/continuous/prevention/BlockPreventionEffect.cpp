@@ -43,7 +43,7 @@ namespace
 namespace dandan::effects
 {
     bool BlockPreventionEffect::prevents(
-        const core::IAction &action, const core::Game &game,
+        const core::IAction &action, const core::ExecutionContext exec_ctx,
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
         if ([[maybe_unused]] const auto *block_action =
@@ -55,7 +55,7 @@ namespace dandan::effects
             EffectContext block_context{blocker};
 
             std::cout << "Checking block prevention effect condition\n";
-            if (getCondition()->isSatisfied(game, block_context))
+            if (getCondition()->isSatisfied(exec_ctx, block_context))
             {
                 return true;
             }

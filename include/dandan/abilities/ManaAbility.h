@@ -2,7 +2,7 @@
 #define DANDAN_MANAABILITY_H
 
 #include "IAbility.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/costs/ICost.h"
 #include "dandan/costs/TapCost.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
@@ -46,10 +46,12 @@ namespace dandan::abilities
         [[nodiscard]] const costs::ICost *getCost() const;
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const override;
+            core::ExecutionContext exec_ctx,
+            AbilityContext context) const override;
 
         [[nodiscard]] bool canActivate(
-            core::Game &game, const AbilityContext &context) const override;
+            core::ExecutionContext exec_ctx,
+            const AbilityContext &context) const override;
 
         [[nodiscard]] size_t optionsAmount() const override;
 

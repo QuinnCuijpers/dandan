@@ -1,4 +1,6 @@
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/core/ExecutionContext.h"
+#include "dandan/core/Game.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/AddManaEffect.h"
 #include "dandan/mana/ManaBag.h"
@@ -99,12 +101,12 @@ namespace dandan::abilities
     }
 
     std::unique_ptr<effects::IOneShotEffect> ManaAbility::createEffect(
-        [[maybe_unused]] core::Game &game,
+        [[maybe_unused]] core::ExecutionContext exec_ctx,
         [[maybe_unused]] AbilityContext context) const
     {
         effects::EffectContext effect_context{context.source_card_id,
                                               context.controller_id};
-        m_cost->pay(game, context);
+        m_cost->pay(exec_ctx, context);
         if (context.chosen_mode_index.has_value())
         {
             const auto &option =
@@ -118,13 +120,13 @@ namespace dandan::abilities
     }
 
     [[nodiscard]] bool ManaAbility::canActivate(
-        core::Game &game, const AbilityContext &context) const
+        core::ExecutionContext exec_ctx, const AbilityContext &context) const
     {
         if (m_cost)
         {
-            auto *source{game.getCardByID(context.source_card_id)};
-            return m_cost->canPay(*source,
-                                  game.getPlayer(source->getControllerID()));
+            auto *source{(exec_ctx.cards.get())[context.source_card_id]};
+            return m_cost->canPay(*source, exec_ctx.state.get().getPlayer(
+                                               source->getControllerID()));
         }
         return true;
     }

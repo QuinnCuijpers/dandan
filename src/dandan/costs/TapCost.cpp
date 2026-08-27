@@ -45,9 +45,12 @@ namespace dandan::costs
                source.getZone() == core::Zone::BATTLEFIELD;
     }
 
-    void TapCost::pay(core::Game &game, abilities::AbilityContext context) const
+    void TapCost::pay(core::ExecutionContext exec_ctx,
+                      abilities::AbilityContext context) const
     {
-        auto *card = game.getCardByID(context.source_card_id);
+        auto &card_registry{exec_ctx.cards.get()};
+
+        auto *card = card_registry[context.source_card_id];
         card->setTapped(true);
     }
 

@@ -10,6 +10,12 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+namespace dandan::core
+{
+    struct ExecutionContext;
+}
+
 namespace dandan::effects
 {
     using links = std::vector<std::string>;
@@ -34,7 +40,7 @@ namespace dandan::effects
         virtual ~IOneShotEffectDefinition() = default;
 
         [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> bind(
-            const core::Game &game, EffectContext context) const = 0;
+            core::ExecutionContext exec_ctx, EffectContext context) const = 0;
 
         [[nodiscard]] virtual std::string display() const
         {

@@ -47,8 +47,10 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> OptionalDrawEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+
         if (m_each_player)
         {
             auto starting_player_id{game.activePlayer().getID()};
@@ -67,8 +69,8 @@ namespace dandan::effects
 
                 auto def{dandan::effects::DrawEffectDefinition(draw_amount)};
                 auto context{EffectContext{player.getID()}};
-                auto effect{def.bind(game, context)};
-                effect->apply(game);
+                auto effect{def.bind(exec_ctx, context)};
+                static_cast<void>(effect->apply(exec_ctx));
 
                 current_player_id = game.getNextPlayerID(current_player_id);
                 if (current_player_id == starting_player_id)
@@ -79,7 +81,7 @@ namespace dandan::effects
         }
         else
         {
-            game.activePlayer().drawCard(game);
+            game.activePlayer().drawCard(exec_ctx);
         }
         return nullptr;
     }

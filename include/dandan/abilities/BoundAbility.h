@@ -3,7 +3,6 @@
 
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/abilities/AbilityType.h"
-#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/TextReplacement.h"
@@ -13,10 +12,17 @@
 namespace dandan::core
 {
     class Card;
-}
+    struct ExecutionContext;
+} // namespace dandan::core
 
+namespace dandan::effects
+{
+    class IOneShotEffect;
+}
 namespace dandan::abilities
 {
+    class IAbility;
+
     /** @brief An ability that is bound to a specific source card and player.
      * @class BoundAbility
      */
@@ -56,7 +62,7 @@ namespace dandan::abilities
          * @return The created effect instance.
          */
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game) const;
+            core::ExecutionContext exec_ctx) const;
 
         void addTextReplacement(core::TextReplacement text_replacement);
 

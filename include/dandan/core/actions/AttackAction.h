@@ -26,7 +26,7 @@ namespace dandan::core
         [[nodiscard]] ActionActor getActor() const override;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            [[maybe_unused]] core::Game &game) override;
+            [[maybe_unused]] core::ExecutionContext exec_ctx) override;
 
     private:
         Card &m_creature;

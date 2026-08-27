@@ -64,8 +64,10 @@ namespace dandan::core
             vec.erase(iter);
         }
     }
-    void Battlefield::sacrificeCard(Card &card, core::Game &game)
+    void Battlefield::sacrificeCard(Card &card, core::ExecutionContext exec_ctx)
     {
+        auto &game{exec_ctx.state.get()};
+
         removeCard(card);
         game.graveyard().addCard(card);
     }

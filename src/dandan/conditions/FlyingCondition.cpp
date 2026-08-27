@@ -30,10 +30,13 @@ namespace
 namespace dandan::conditions
 {
     bool FlyingCondition::isSatisfied(
-        const core::Game &game,
+        const core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
     {
-        const auto *card{game.getCardByID(context->card_id.value())};
+
+        auto &card_registry{exec_ctx.cards.get()};
+
+        const auto *card{card_registry[context->card_id.value()]};
         const auto &current_abilities{card->getCurrentAbilities()};
         return std::any_of(
             current_abilities.begin(), current_abilities.end(),

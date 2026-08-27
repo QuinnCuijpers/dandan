@@ -19,8 +19,9 @@ namespace dandan::numbers
         ConditionalNumber(int if_, int else_,
                           std::unique_ptr<conditions::ICondition> condition);
 
-        int getValue(core::Game &game,
-                     effects::EffectContext context) const override;
+        [[nodiscard]] int getValue(
+            core::ExecutionContext exec_ctx,
+            effects::EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<INumber> clone() const override;
 

@@ -2,6 +2,7 @@
 #define IABILITY_H
 
 #include "dandan/abilities/AbilityContext.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 #include <stdexcept>
@@ -64,7 +65,8 @@ namespace dandan::abilities
          * @return The effect created by the ability
          */
         [[nodiscard]] virtual std::unique_ptr<effects::IOneShotEffect>
-        createEffect(core::Game &game, AbilityContext context) const = 0;
+        createEffect(core::ExecutionContext exec_ctx,
+                     AbilityContext context) const = 0;
 
         /** Determine if the ability can be activated
          * @param game The game object to check for activation conditions
@@ -73,7 +75,7 @@ namespace dandan::abilities
          * The default implementation returns false.
          */
         [[nodiscard]] virtual bool canActivate(
-            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
             [[maybe_unused]] const AbilityContext &context) const
         {
             return false;

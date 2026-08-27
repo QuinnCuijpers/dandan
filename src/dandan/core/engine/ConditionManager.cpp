@@ -1,5 +1,6 @@
 #include "dandan/core/engine/ConditionManager.h"
 #include "dandan/abilities/StateTriggeredAbility.h"
+#include "dandan/core/ExecutionContext.h"
 #include <algorithm>
 #include <iostream>
 
@@ -47,8 +48,9 @@ namespace dandan::core
         m_trigger_records.erase(card_id);
     }
 
-    void ConditionManager::checkConditions(const Game &game)
+    void ConditionManager::checkConditions(const ExecutionContext exec_ctx)
     {
+
         for (auto &[card_id, triggered_records] : m_trigger_records)
         {
             for (auto &triggered_record : triggered_records)
@@ -64,7 +66,7 @@ namespace dandan::core
                     effects::EffectContext effect_context{context};
                     bool currently_satisfied =
                         triggered_ability->condition()->isSatisfied(
-                            game, effect_context);
+                            exec_ctx, effect_context);
 
                     if (currently_satisfied && !triggered_record.satisfied)
                     {

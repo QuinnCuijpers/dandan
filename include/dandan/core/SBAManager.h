@@ -1,6 +1,7 @@
 #ifndef DANDAN_SBAMANAGER_H
 #define DANDAN_SBAMANAGER_H
 
+#include "dandan/core/ExecutionContext.h"
 namespace dandan::core
 {
 
@@ -15,7 +16,7 @@ namespace dandan::core
         /** Checks for state-based actions and handles them.
          * @param game The game instance to check for state-based actions in.
          */
-        static void checkSBAs(Game &game);
+        static void checkSBAs(ExecutionContext exec_ctx);
     };
 } // namespace dandan::core
 

@@ -12,7 +12,7 @@ namespace dandan::core
         BlockAction(CardID blocker, CardID attacker);
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            [[maybe_unused]] core::Game &game) override;
+            [[maybe_unused]] core::ExecutionContext exec_ctx) override;
 
         [[nodiscard]] CardID getAttacker() const;
 

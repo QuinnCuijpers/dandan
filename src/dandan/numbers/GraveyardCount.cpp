@@ -1,4 +1,5 @@
 #include "dandan/numbers/GraveyardCount.h"
+#include "dandan/core/Game.h"
 #include <string>
 
 #ifdef DANDAN_SERIALIZE
@@ -43,13 +44,17 @@ namespace dandan::numbers
     }
 
     [[nodiscard]] int GraveyardCount::getValue(
-        core::Game &game, [[maybe_unused]] effects::EffectContext context) const
+        core::ExecutionContext exec_ctx,
+        [[maybe_unused]] effects::EffectContext context) const
     {
+        auto &game{exec_ctx.state.get()};
+        auto &card_registry{exec_ctx.cards.get()};
+
         auto count{std::count_if(game.graveyard().getCards().begin(),
                                  game.graveyard().getCards().end(),
-                                 [this, &game](const auto &card_id)
+                                 [this, &card_registry](const auto &card_id)
                                  {
-                                     auto card{game.getCardByID(card_id)};
+                                     auto card{card_registry[card_id]};
                                      return card->getData().name == m_name;
                                  })};
         return static_cast<int>(count);

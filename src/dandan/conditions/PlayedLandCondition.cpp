@@ -5,9 +5,11 @@
 namespace dandan::conditions
 {
     bool PlayedLandCondition::isSatisfied(
-        const core::Game &game,
+        const core::ExecutionContext exec_ctx,
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
+        auto &game{exec_ctx.state.get()};
+
         return game.activePlayer().playedLandThisTurn();
     }
 

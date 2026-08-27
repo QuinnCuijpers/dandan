@@ -25,7 +25,7 @@ namespace dandan::core
                               abilities::AbilityContext context);
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game) override;
+            core::ExecutionContext exec_ctx) override;
 
     private:
         const abilities::IAbility *m_ability;

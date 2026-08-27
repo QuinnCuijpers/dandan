@@ -1,8 +1,8 @@
 #ifndef CHOOSECARDNAMEANDMILLEFFECT_H
 #define CHOOSECARDNAMEANDMILLEFFECT_H
 
+#include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/Game.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
@@ -31,8 +31,8 @@ namespace dandan::effects
                 m_amount, m_source, m_target, getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         int m_amount;
@@ -57,10 +57,11 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] const core::ExecutionContext exec_ctx,
             [[maybe_unused]] EffectContext context) const override
         {
-            const auto *source_card{game.getCardByID(context.card_id.value())};
+            const auto card_registry{exec_ctx.cards.get()};
+            const auto *source_card{card_registry[context.card_id.value()]};
 
             auto choices{source_card->getTargetChoices(*this)};
             auto choice{choices.at(0)};

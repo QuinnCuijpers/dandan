@@ -43,8 +43,11 @@ namespace dandan::core
     }
 
     void EventManager::notify(const events::IEvent &event,
-                              core::Game &game) const
+                              core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        auto &card_registry{exec_ctx.cards.get()};
+
         auto current_subscribers = std::vector<CardID>{};
         for (const auto &[card_id, abilities] : m_subscribers)
         {
@@ -73,7 +76,7 @@ namespace dandan::core
                                                            ability_context))
                     {
                         std::cout << "Triggered ability put on stack\n";
-                        auto *card{game.getCardByID(card_id)};
+                        auto *card{card_registry[card_id]};
                         game.stack().push(abilities::BoundAbility{
                             *event_triggered_ability, card,
                             ability_context.chosen_mode_index,

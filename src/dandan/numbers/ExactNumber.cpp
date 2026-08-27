@@ -44,7 +44,7 @@ namespace dandan::numbers
     }
 
     [[nodiscard]] int ExactNumber::getValue(
-        [[maybe_unused]] core::Game &game,
+        [[maybe_unused]] core::ExecutionContext exec_ctx,
         [[maybe_unused]] effects::EffectContext context) const
     {
         return m_value;

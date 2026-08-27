@@ -43,7 +43,7 @@ namespace dandan::core
         /** Resolves the next object in the stack and pops it from the stack.
          * @param game The game instance.
          */
-        void resolveNext(core::Game &game);
+        void resolveNext(core::ExecutionContext exec_ctx);
 
         /** Gets the stack objects immutably.
          * @return A const reference to the vector of stack objects.

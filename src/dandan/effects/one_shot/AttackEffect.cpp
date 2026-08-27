@@ -5,8 +5,10 @@
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> AttackEffect::apply_impl(
-        [[maybe_unused]] core::Game &game) const
+        [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+
         std::cout << "Applying attack effect\n";
         if (auto *combat_phase{
                 dynamic_cast<core::CombatPhase *>(game.phase().get())};

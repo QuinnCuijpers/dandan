@@ -71,7 +71,7 @@ namespace dandan::abilities
     }
 
     std::unique_ptr<effects::IOneShotEffect> SpellAbility::createEffect(
-        [[maybe_unused]] core::Game &game,
+        [[maybe_unused]] core::ExecutionContext exec_ctx,
         [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Creating spell effect with size: " << effects().size()
@@ -90,7 +90,7 @@ namespace dandan::abilities
                                               context.controller_id};
         for (const auto &effect_def : effects())
         {
-            auto effect{effect_def->bind(game, effect_context)};
+            auto effect{effect_def->bind(exec_ctx, effect_context)};
             bound_effects.push_back(std::move(effect));
         }
         return std::make_unique<effects::EffectList>(std::move(bound_effects),

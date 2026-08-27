@@ -65,7 +65,7 @@ namespace dandan::core
          * @return True if the action is prevented by a prevention effect, false
          * otherwise.
          */
-        [[nodiscard]] bool isPrevented(const IAction &action, Game &game) const;
+        [[nodiscard]] bool isPrevented(const IAction &action, ExecutionContext exec_ctx) const;
 
     private:
         using PreventionEffect =

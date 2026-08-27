@@ -1,6 +1,7 @@
 #ifndef DANDAN_I_EFFECT_H
 #define DANDAN_I_EFFECT_H
 
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
@@ -10,7 +11,7 @@
 namespace dandan::core
 {
     class Game;
-}
+} // namespace dandan::core
 
 namespace dandan::effects
 {
@@ -50,17 +51,18 @@ namespace dandan::effects
         /**
          * apply the Effect to the game state by mutating it.
          * also updates the condition manager
-         * @param game the game to apply the effect to
+         * @param exec_ctx the context to apply the effect to
          * @return an event to notify that the effect happened
          */
-        std::unique_ptr<events::IEvent> apply(core::Game &game) const;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply(
+            core::ExecutionContext exec_ctx) const;
 
         /** @brief Apply the effect specific implementation.
          * @param game The game instance.
          * @return The event to notify that the effect happened.
          */
-        virtual std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const = 0;
+        [[nodiscard]] virtual std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const = 0;
 
         [[nodiscard]] virtual EffectContext getEffectContext() const
         {

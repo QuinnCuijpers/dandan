@@ -1,9 +1,7 @@
 #ifndef DANDAN_PLAY_CARD_PREVENTION_EFFECT_H
 #define DANDAN_PLAY_CARD_PREVENTION_EFFECT_H
 
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
-#include "dandan/core/Game.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/continuous/prevention/IPreventionEffect.h"
 #include <memory>
@@ -30,7 +28,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] bool prevents(const core::IAction &action,
-                                    const core::Game &game,
+                                    core::ExecutionContext exec_ctx,
                                     std::optional<effects::EffectContext>
                                         context = std::nullopt) const override;
 

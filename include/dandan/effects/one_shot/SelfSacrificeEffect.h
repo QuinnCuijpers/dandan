@@ -1,7 +1,6 @@
 #ifndef DANDAN_SELFSACRIFICEEFFECT_H
 #define DANDAN_SELFSACRIFICEEFFECT_H
 
-#include "dandan/core/Game.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
@@ -23,8 +22,8 @@ namespace dandan::effects
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            [[maybe_unused]] core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            [[maybe_unused]] core::ExecutionContext exec_ctx) const override;
 
     private:
         core::CardID m_card_id;
@@ -34,7 +33,7 @@ namespace dandan::effects
     {
     public:
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] const core::ExecutionContext exec_ctx,
             [[maybe_unused]] EffectContext context) const override
         {
             return std::make_unique<SelfSacrificeEffect>(

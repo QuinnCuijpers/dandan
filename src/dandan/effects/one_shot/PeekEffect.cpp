@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/PeekEffect.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Game.h"
 #include <iostream>
 #include <string>
@@ -19,7 +20,7 @@ namespace
     {
         OneShotEffectRegistry::instance().registerType<PeekEffectDefinition>(
             "PeekEffect",
-            []([[maybe_unused]] const IOneShotEffectDefinition *effect)
+            [](const IOneShotEffectDefinition *effect)
             {
                 auto json = nlohmann::json::object();
                 const auto *peek_effect =
@@ -43,33 +44,36 @@ namespace
 namespace dandan::effects
 {
 
-    void printPeekedCards(const std::vector<core::CardID> &cards,
-                          const core::Game &game)
+    void printPeekedCards(const std::vector<core::CardID> &card_ids,
+                          core::ExecutionContext exec_ctx)
     {
+        auto &card_registry{exec_ctx.cards.get()};
         std::cout << "Peeked cards: [ ";
-        for (size_t i{}; i < cards.size(); ++i)
+        for (size_t i{}; i < card_ids.size(); ++i)
         {
-            const auto *cardp{game.getCardByID(cards[i])};
+            const auto card_id{card_ids[i]};
+            const auto *cardp{card_registry[card_id]};
             std::cout << i << ": " << cardp->getData().name << ", ";
         }
         std::cout << " ]\n";
     }
 
     std::unique_ptr<events::IEvent> PeekEffect::apply_impl(
-        [[maybe_unused]] core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game = exec_ctx.state.get();
         std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount
                   << " cards of the library\n";
         // moves cards out of deck
         auto cards{game.library().draw(m_peek_amount)};
-        printPeekedCards(cards, game);
+        printPeekedCards(cards, exec_ctx);
 
         std::cout << "Which card to put back on top next?\n";
         std::cout << " The last card chosen will be on top\n";
 
         for (int i{}; i < m_peek_amount; ++i)
         {
-            printPeekedCards(cards, game);
+            printPeekedCards(cards, exec_ctx);
             std::cout << "Choose card (0 - " << cards.size() - 1 << "): ";
             std::string choice{};
             std::getline(game.istream(), choice);

@@ -43,8 +43,8 @@ namespace dandan::effects
          * @param game The game state to apply the effect to.
          * @return The event generated from applying the effect.
          */
-        std::unique_ptr<events::IEvent> apply_impl(
-            [[maybe_unused]] core::Game &game) const override;
+        [[nodiscard]] [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            [[maybe_unused]] core::ExecutionContext exec_ctx) const override;
 
     private:
         core::Card &m_card;

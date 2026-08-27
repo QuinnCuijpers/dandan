@@ -35,7 +35,7 @@ namespace dandan::core
          * @return The modified effect.
          */
         std::unique_ptr<effects::IOneShotEffect> applyReplacementEffects(
-            effects::IOneShotEffect &effect, Game &game) const;
+            effects::IOneShotEffect &effect, ExecutionContext exec_ctx) const;
 
     private:
         std::vector<abilities::BoundAbility *> m_replacement_effects;

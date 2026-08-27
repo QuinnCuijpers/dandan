@@ -118,15 +118,18 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> ChangeCharacteristicsEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        auto &card_registry{exec_ctx.cards.get()};
+
         if (!std::holds_alternative<core::Permanent>(m_target))
         {
             throw std::runtime_error(
                 "Target for ChangeCharacteristicsEffect was not a Permanent");
         }
         auto permanent_id{std::get<core::Permanent>(m_target)};
-        auto *card{game.getCardByID(permanent_id)};
+        auto *card{card_registry[permanent_id]};
 
         const auto &old_abilities{card->getCurrentAbilities()};
         auto old_characteristics{card->getCharacteristics()};
@@ -136,7 +139,7 @@ namespace dandan::effects
                 &ability.definition());
         }
 
-        card->setCharacteristics(m_card_characteristics, game);
+        card->setCharacteristics(m_card_characteristics, exec_ctx);
         card->setPrevCharacteristics(old_characteristics);
 
         if (auto expiry = getEffectContext().expires;

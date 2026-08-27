@@ -2,6 +2,7 @@
 #define IABILITYDECORATOR_H
 
 #include "IAbility.h"
+#include "dandan/core/ExecutionContext.h"
 #include <memory>
 
 namespace dandan::abilities
@@ -34,9 +35,10 @@ namespace dandan::abilities
         }
 
         [[nodiscard]] bool canActivate(
-            core::Game &game, const AbilityContext &context) const override
+            core::ExecutionContext exec_ctx,
+            const AbilityContext &context) const override
         {
-            return m_ability->canActivate(game, context);
+            return m_ability->canActivate(exec_ctx, context);
         }
 
         [[nodiscard]] size_t optionsAmount() const override

@@ -5,8 +5,6 @@
 #include "dandan/abilities/KeyWords.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/conditions/MatchesReadLinksCondition.h"
-#include "dandan/core/CardCharacteristics.h"
-#include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
 #include "dandan/core/TargetRequirement.h"

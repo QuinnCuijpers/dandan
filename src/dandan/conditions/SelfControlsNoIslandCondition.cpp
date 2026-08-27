@@ -52,9 +52,12 @@ namespace dandan::conditions
     }
 
     bool SelfControlsNoBasicCondition::isSatisfied(
-        [[maybe_unused]] const core::Game &game,
+        core::ExecutionContext exec_ctx,
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
+        auto &game{exec_ctx.state.get()};
+        auto &card_registry{exec_ctx.cards.get()};
+
         assert(context.has_value());
         auto basic{m_basic_type};
         auto text_replacements{context->text_replacements};
@@ -77,7 +80,7 @@ namespace dandan::conditions
         }
         auto no_basic_filter = [&](const core::CardID &card_id)
         {
-            const auto *card = game.getCardByID(card_id);
+            const auto *card = card_registry[card_id];
             auto subtypes = card->getCurrentSubTypes();
             return card->getData().type == core::Type::Land &&
                    std::all_of(subtypes.begin(), subtypes.end(),

@@ -16,7 +16,7 @@ namespace dandan::core
     }
 
     std::unique_ptr<effects::IOneShotEffect> CardDrawAction::createEffect(
-        [[maybe_unused]] core::Game &game)
+        [[maybe_unused]] core::ExecutionContext exec_ctx)
     {
         DLOGI << "Executing card draw action\n";
         auto context{effects::EffectContext{m_player}};

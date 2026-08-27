@@ -44,7 +44,7 @@ namespace
 namespace dandan::effects
 {
     bool AttackPreventionEffect::prevents(
-        const core::IAction &action, const core::Game &game,
+        const core::IAction &action, const core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
     {
         if ([[maybe_unused]] const auto *attack_action =
@@ -52,7 +52,7 @@ namespace dandan::effects
         {
 
             std::cout << "Checking attack prevention effect condition\n";
-            if (getCondition()->isSatisfied(game, context))
+            if (getCondition()->isSatisfied(exec_ctx, context))
             {
                 // TODO: give conditions display
                 //  std::cout << "Attack prevention with condition "

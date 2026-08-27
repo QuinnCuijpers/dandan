@@ -72,15 +72,16 @@ namespace dandan::numbers
     {
     }
 
-    int ConditionalNumber::getValue(core::Game &game,
+    int ConditionalNumber::getValue(core::ExecutionContext exec_ctx,
                                     effects::EffectContext context) const
     {
-        if (m_condition->isSatisfied(game, context))
+
+        if (m_condition->isSatisfied(exec_ctx, context))
         {
-            return m_if_number->getValue(game, context);
+            return m_if_number->getValue(exec_ctx, context);
         }
 
-        return m_else_number->getValue(game, context);
+        return m_else_number->getValue(exec_ctx, context);
     }
 
     [[nodiscard]] std::unique_ptr<INumber> ConditionalNumber::clone() const

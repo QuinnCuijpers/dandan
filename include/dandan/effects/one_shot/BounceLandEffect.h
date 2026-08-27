@@ -30,8 +30,8 @@ namespace dandan::effects
                                                       getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         core::PlayerID m_player_id;
@@ -47,12 +47,8 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
-            EffectContext context) const override
-        {
-            return std::make_unique<BounceLandEffect>(context.player_id.value(),
-                                                      context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
     };
 } // namespace dandan::effects
 
