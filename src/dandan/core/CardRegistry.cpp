@@ -3,6 +3,8 @@
 #include "dandan/core/CardID.h"
 #include "dandan/utils/log.h"
 #include <fstream>
+#include <sstream>
+#include <string>
 #include <vector>
 
 namespace
