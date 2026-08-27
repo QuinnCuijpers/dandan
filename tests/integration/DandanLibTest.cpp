@@ -15,6 +15,7 @@
 #include "dandan/dandan.h"
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstddef>
 #include <cstdlib>
 #include <gtest/gtest.h>
@@ -1691,17 +1692,21 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
-    auto dance_cards{createTestCards(NUM_DANCE, &mind_bend_data)};
     auto crystal_cards{createTestCards(NUM_CRYSTAL, &crystal_data)};
+    auto dance_cards{createTestCards(NUM_DANCE, &mind_bend_data)};
 
     cards.insert(cards.end(), dandan_cards.begin(), dandan_cards.end());
     cards.insert(cards.end(), crystal_cards.begin(), crystal_cards.end());
     cards.insert(cards.end(), dance_cards.begin(), dance_cards.end());
 
+    assert(cards.size() == NUM_DANCE + NUM_CRYSTAL + NUM_DANDANS + NUM_ISLANDS);
+
     // cards are dealt one at a time to each player starting with the first
     // player
     dandan::core::Game game{dandan::Game::withCards(std::move(cards), false)};
+
     auto &card_registry{game.cardRegistry()};
+
     std::stringstream stream{};
 
     auto island_1_1{game.activePlayer().hand().getCards()[0].getID()};
