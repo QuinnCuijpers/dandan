@@ -1,7 +1,6 @@
 #ifndef DANDAN_CARD_DATA_H
 #define DANDAN_CARD_DATA_H
 
-#include "dandan/abilities/IAbility.h"
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Stats.h"
@@ -14,6 +13,11 @@
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
 #endif
+
+namespace dandan::abilities
+{
+    class IAbility;
+}
 
 namespace dandan::core
 {
