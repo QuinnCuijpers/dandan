@@ -124,13 +124,13 @@ namespace dandan::core
         {
             while (true)
             {
-                while (m_phase != nullptr)
+                while (m_game_state.phase() != nullptr)
                 {
                     render();
-                    handlePhase();
+                    m_game_state.handlePhase();
                 }
                 DLOGI << "Passing turn\n";
-                m_first_turn = false;
+                m_game_state m_first_turn = false;
                 m_active_player_index =
                     (m_active_player_index + 1) % AMOUNT_PLAYERS;
                 changePhase(std::make_unique<BeginningPhase>(
@@ -145,58 +145,6 @@ namespace dandan::core
                 return;
             }
             std::cout << "Game ended: " << e.what() << '\n';
-        }
-    }
-
-    void Game::moveCardFromZone(Player &player, const Card &card)
-    {
-        std::cout << "Removing " << card.getID().getID()
-                  << " from zone: " << card.getZone() << '\n';
-        switch (card.getZone())
-        {
-        case Zone::HAND:
-            player.hand().removeCard(card);
-            break;
-        case Zone::LIBRARY:
-            library().removeCard(card);
-            break;
-        case Zone::BATTLEFIELD:
-            player.battlefield().removeCard(card);
-            break;
-        case Zone::GRAVEYARD:
-            graveyard().removeCard(card);
-            break;
-        case Zone::EXILE:
-        case Zone::STACK:
-            // while it is called a stack and it does have FILO properties cards
-            // can be removed at any level
-            stack().removeObject(card.getID());
-            break;
-        }
-    }
-
-    void Game::moveCardToZone(Card &card, Player &player, Zone zone)
-    {
-        switch (zone)
-        {
-        case Zone::LIBRARY:
-            m_library.addCardTop(card);
-            break;
-        case Zone::HAND:
-            player.hand().addCard(card);
-            break;
-        case Zone::BATTLEFIELD:
-            player.battlefield().addCard(card);
-            break;
-        case Zone::GRAVEYARD:
-            m_graveyard.addCard(card);
-            break;
-        case Zone::EXILE:
-            m_exile.addCard(card);
-            break;
-        case Zone::STACK:
-            m_stack.push(card.getID());
-            break;
         }
     }
 
