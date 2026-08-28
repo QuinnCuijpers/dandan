@@ -1,5 +1,4 @@
 #include "dandan/effects/one_shot/ModalEffect.h"
-#include "dandan/core/Game.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/serialization/JsonFactory.h"
 
@@ -59,12 +58,14 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<IOneShotEffect> ModalEffectDefinition::bind(
-        const core::Game &game, EffectContext context) const
+        const core::ExecutionContext exec_ctx, EffectContext context) const
     {
-        const auto *card{game.getCardByID(context.card_id.value())};
+        auto &card_registry{exec_ctx.cards.get()};
+
+        const auto *card{card_registry[context.card_id.value()]};
         std::cout << "Binding modal effect for card " << card->getData().name
                   << '\n';
         auto modal_choice{card->getModalChoice(*this)};
-        return m_options.at(modal_choice)->bind(game, context);
+        return m_options.at(modal_choice)->bind(exec_ctx, context);
     }
 } // namespace dandan::effects

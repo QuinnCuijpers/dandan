@@ -118,11 +118,11 @@ namespace dandan::abilities
         return m_effect.get();
     }
     std::unique_ptr<effects::IOneShotEffect> EventTriggeredAbility::
-        createEffect([[maybe_unused]] core::Game &game,
+        createEffect([[maybe_unused]] core::ExecutionContext exec_ctx,
                      [[maybe_unused]] AbilityContext context) const
     {
         std::cout << "Resolving triggered ability\n";
-        return m_effect->bind(game,
+        return m_effect->bind(exec_ctx,
                               effects::EffectContext(context.controller_id));
     }
 

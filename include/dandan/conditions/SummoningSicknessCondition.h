@@ -21,7 +21,7 @@ namespace dandan::conditions
         explicit SummoningSicknessCondition(core::CardID card_id);
 
         [[nodiscard]] bool isSatisfied(
-            const core::Game &game,
+            core::ExecutionContext exec_ctx,
             std::optional<effects::EffectContext> context =
                 std::nullopt) const override;
 

@@ -93,12 +93,14 @@ namespace dandan::abilities
     }
 
     std::unique_ptr<effects::IOneShotEffect> WithDamage::createEffect(
-        core::Game &game, AbilityContext context) const
+        core::ExecutionContext exec_ctx, AbilityContext context) const
     {
+        auto &game{exec_ctx.state.get()};
+
         std::cout << "Resolving WithDamage decorator\n";
         auto player_id{context.controller_id};
         auto &player{game.getPlayer(player_id)};
-        player.takeDamage(m_damage, game);
-        return m_ability->createEffect(game, context);
+        player.takeDamage(m_damage, exec_ctx);
+        return m_ability->createEffect(exec_ctx, context);
     }
 } // namespace dandan::abilities

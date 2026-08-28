@@ -67,14 +67,17 @@ namespace dandan::costs
         return m_inner_cost->canPay(source, player);
     }
 
-    void CyclingCost::pay(core::Game &game,
+    void CyclingCost::pay(core::ExecutionContext exec_ctx,
                           abilities::AbilityContext context) const
     {
-        m_inner_cost->pay(game, context);
+        auto &game{exec_ctx.state.get()};
+        auto &card_registry{exec_ctx.cards.get()};
+
+        m_inner_cost->pay(exec_ctx, context);
         auto player_id{context.controller_id};
         auto &player{game.getPlayer(player_id)};
-        auto *card{game.getCardByID(context.source_card_id)};
-        player.discardCard(*card, game);
+        auto *card{card_registry[context.source_card_id]};
+        player.discardCard(*card, exec_ctx);
     }
 
 } // namespace dandan::costs

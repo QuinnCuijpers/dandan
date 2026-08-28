@@ -26,8 +26,8 @@ namespace dandan::effects
                                                        getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         const std::array<core::Type, 4> m_types{
@@ -47,7 +47,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] const core::ExecutionContext exec_ctx,
             EffectContext context) const override
         {
             auto player_id{context.player_id.value()};

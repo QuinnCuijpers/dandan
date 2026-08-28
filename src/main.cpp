@@ -1,3 +1,4 @@
+#include "dandan/core/Constants.h"
 #include "dandan/dandan.h"
 #include "dandan/utils/log.h"
 
@@ -16,8 +17,7 @@ int main()
 #endif
 
 #ifdef DANDAN_SERIALIZE
-    // check_card_serialize();
-    auto game = dandan::Game{};
+    auto game = dandan::Game{dandan::core::DANDAN_DECKLIST};
     game.run();
 #endif
     std::cout << "Hello, Dandan!\n";

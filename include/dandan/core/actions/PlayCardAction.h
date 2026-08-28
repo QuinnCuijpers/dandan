@@ -29,7 +29,7 @@ namespace dandan::core
         [[nodiscard]] CardID getCardID() const;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game) override;
+            core::ExecutionContext exec_ctx) override;
 
     private:
         CardID m_card_id;

@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "IOneShotEffect.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 namespace dandan::effects
@@ -34,8 +35,8 @@ namespace dandan::effects
                                                 getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         int m_peek_amount{3};
@@ -51,7 +52,7 @@ namespace dandan::effects
         {
         }
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] core::ExecutionContext exex_ctx,
             EffectContext context) const override
         {
             return std::make_unique<PeekEffect>(

@@ -8,17 +8,89 @@
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
 #include "dandan/events/IEvent.h"
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
 // TODO: add doc explaining how this is different from ETBEffect
 namespace dandan::effects
 {
+
+    namespace impl
+    {
+        void choose_targets(core::Card *cardp,
+                            effects::IOneShotEffectDefinition &effect,
+                            core::Game &game)
+        {
+
+            auto choices = std::vector<core::Target>{};
+            if (const auto *targets = effect.getTargetRequirement())
+            {
+                for (const auto &target_types : targets->getTargetTypes())
+                {
+                    {
+                        auto valid_targets = std::vector<core::Target>{};
+                        for (const auto &target_type : target_types.types)
+                        {
+                            auto new_valid_targets = game.getValidTargets(
+                                target_type, target_types.controller);
+
+                            valid_targets.insert(valid_targets.end(),
+                                                 new_valid_targets.begin(),
+                                                 new_valid_targets.end());
+                        }
+
+                        if (valid_targets.empty())
+                        {
+                            throw std::runtime_error(
+                                "No valid targets for this effect");
+                        }
+
+                        for (size_t i = 0; i < valid_targets.size(); ++i)
+                        {
+                            std::cout << i << ": " << valid_targets[i] << '\n';
+                        }
+                        std::cout << "Choose a target (0-"
+                                  << valid_targets.size() - 1 << "): ";
+                        std::string target_input;
+                        std::getline(game.istream(), target_input);
+                        int target_choice = std::stoi(target_input);
+                        auto target{valid_targets.at(target_choice)};
+                        choices.push_back(target);
+                    }
+                    cardp->addTargetChoices(effect, choices);
+                }
+            }
+        }
+
+        IOneShotEffectDefinition *choose_mode(
+            core::Card *cardp, const ModalEffectDefinition &modal_effect,
+            core::Game &game)
+        {
+            std::cout << modal_effect.display();
+            std::cout << "Choose an option (0-"
+                      << modal_effect.getOptions().size() - 1 << "): ";
+            std::string input;
+            std::getline(game.istream(), input);
+            int choice = std::stoi(input);
+            if (choice < 0 ||
+                choice >= static_cast<int>(modal_effect.getOptions().size()))
+            {
+                throw std::runtime_error("Invalid choice for modal effect");
+            }
+            cardp->addModalChoice(modal_effect, choice);
+
+            auto *chosen_effect{modal_effect.getOptions()[choice].get()};
+            return chosen_effect;
+        }
+    } // namespace impl
+
     /** @brief Represents the effect of playing a card.
      * @class PlayCardEffect
      *
@@ -40,13 +112,16 @@ namespace dandan::effects
             return std::make_unique<PlayCardEffect>(m_card, getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            [[maybe_unused]] core::Game &game) const override
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override
         {
+            auto &game{exec_ctx.state.get()};
+            auto &card_registry{exec_ctx.cards.get()};
+
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{
                 game.getPlayer(game.priorityManager().getPlayerWithPriority())};
-            const auto mana_cost = m_card.getData().mana_cost;
+            auto mana_cost = m_card.getData().mana_cost;
             std::cout << "generic_mana: " << mana_cost.generic() << '\n';
             std::cout << "specific_mana: " << mana_cost.specific() << '\n';
             std::cout << "mana_pool: " << prio_player.manaPool() << '\n';
@@ -60,7 +135,7 @@ namespace dandan::effects
                                          std::string{m_card.getData().name});
             }
 
-            auto *cardp = game.getCardByID(m_card.getID());
+            auto *cardp = card_registry[m_card.getID()];
             if (cardp->getData().type == core::Type::Instant ||
                 cardp->getData().type == core::Type::Sorcery)
             {
@@ -89,115 +164,16 @@ namespace dandan::effects
                                 effect.get()))
                     // choose mode
                     {
-                        std::cout << modal_effect->display();
-                        std::cout << "Choose an option (0-"
-                                  << modal_effect->getOptions().size() - 1
-                                  << "): ";
-                        std::string input;
-                        std::getline(game.istream(), input);
-                        int choice = std::stoi(input);
-                        if (choice < 0 ||
-                            choice >= static_cast<int>(
-                                          modal_effect->getOptions().size()))
-                        {
-                            throw std::runtime_error(
-                                "Invalid choice for modal effect");
-                        }
-                        cardp->addModalChoice(*modal_effect, choice);
-
-                        auto *chosen_effect{
-                            modal_effect->getOptions()[choice].get()};
-
+                        auto *chosen_effect =
+                            impl::choose_mode(cardp, *modal_effect, game);
                         std::cout
                             << "Chosen effect: " << chosen_effect->display()
                             << '\n';
-                        if (const auto *targets =
-                                chosen_effect->getTargetRequirement())
-                        {
-                            auto choices = std::vector<core::Target>{};
-                            for (const auto &target_types :
-                                 targets->getTargetTypes())
-                            {
-                                auto valid_targets =
-                                    std::vector<core::Target>{};
-                                for (const auto &target_type :
-                                     target_types.types)
-                                {
-                                    auto new_valid_targets =
-                                        game.getValidTargets(
-                                            target_type,
-                                            target_types.controller);
-
-                                    valid_targets.insert(
-                                        valid_targets.end(),
-                                        new_valid_targets.begin(),
-                                        new_valid_targets.end());
-                                }
-
-                                if (valid_targets.empty())
-                                {
-                                    std::cout
-                                        << "No valid targets for this effect\n";
-                                    return nullptr;
-                                }
-
-                                for (size_t i = 0; i < valid_targets.size();
-                                     ++i)
-                                {
-                                    std::cout << i << ": " << valid_targets[i]
-                                              << '\n';
-                                }
-                                std::cout << "Choose a target (0-"
-                                          << valid_targets.size() - 1 << "): ";
-                                std::string target_input;
-                                std::getline(game.istream(), target_input);
-                                int target_choice = std::stoi(target_input);
-                                auto target{valid_targets.at(target_choice)};
-                                choices.push_back(target);
-                            }
-                            cardp->addTargetChoices(*chosen_effect, choices);
-                        }
+                        impl::choose_targets(cardp, *chosen_effect, game);
                     }
-
-                    if (const auto *targets = effect->getTargetRequirement())
+                    else
                     {
-                        auto choices = std::vector<core::Target>{};
-                        for (const auto &target_type :
-                             targets->getTargetTypes())
-                        {
-                            auto valid_targets = std::vector<core::Target>{};
-                            for (const auto &type : target_type.types)
-                            {
-                                auto new_valid_targets = game.getValidTargets(
-                                    type, target_type.controller);
-
-                                valid_targets.insert(valid_targets.end(),
-                                                     new_valid_targets.begin(),
-                                                     new_valid_targets.end());
-                            }
-
-                            if (valid_targets.empty())
-                            {
-                                std::cout
-                                    << "No valid targets for this effect\n";
-                                return nullptr;
-                            }
-
-                            for (size_t i = 0; i < valid_targets.size(); ++i)
-                            {
-                                std::cout << i << ": " << valid_targets[i]
-                                          << '\n';
-                            }
-
-                            std::cout << "Choose a target (0-"
-                                      << valid_targets.size() - 1 << "): ";
-                            std::string target_input;
-                            std::getline(game.istream(), target_input);
-                            int target_choice = std::stoi(target_input);
-                            auto target{valid_targets.at(target_choice)};
-                            choices.push_back(target);
-                        }
-                        cardp->addTargetChoices(*effect, choices);
+                        impl::choose_targets(cardp, *effect, game);
                     }
                 }
             }
@@ -212,7 +188,5 @@ namespace dandan::effects
     private:
         core::Card &m_card;
     };
-
 } // namespace dandan::effects
-
 #endif

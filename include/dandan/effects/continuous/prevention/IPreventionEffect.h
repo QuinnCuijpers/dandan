@@ -42,7 +42,7 @@ namespace dandan::effects
          * otherwise.
          */
         [[nodiscard]] virtual bool prevents(
-            const core::IAction &action, const core::Game &game,
+            const core::IAction &action, core::ExecutionContext exec_ctx,
             std::optional<effects::EffectContext> context =
                 std::nullopt) const = 0;
 

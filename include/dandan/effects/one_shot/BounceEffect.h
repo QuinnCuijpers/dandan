@@ -5,11 +5,13 @@
 #include <stdexcept>
 #include <utility>
 
-#include "dandan/core/Game.h"
+#include "dandan/core/Card.h"
+#include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
+
 namespace dandan::effects
 {
     class BounceEffect : public IOneShotEffect
@@ -31,8 +33,8 @@ namespace dandan::effects
             return "Return target spell or creature to its owner's hand.";
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         core::Target m_target;
@@ -48,8 +50,8 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
-            [[maybe_unused]] EffectContext context) const override
+            const core::ExecutionContext exec_ctx,
+            EffectContext context) const override
         {
             if (!context.card_id.has_value())
             {
@@ -57,8 +59,9 @@ namespace dandan::effects
                     "tried binding a Bounce Effect without a source card");
             }
 
+            auto &card_registry{exec_ctx.cards.get()};
             auto source{context.card_id.value()};
-            const auto *card{game.getCardByID(source)};
+            const auto *card{card_registry[source]};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             return std::make_unique<BounceEffect>(choice, context);

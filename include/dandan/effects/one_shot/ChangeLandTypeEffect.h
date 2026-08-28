@@ -33,8 +33,8 @@ namespace dandan::effects
             return std::make_unique<ChangeLandTypeEffect>(getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         std::optional<core::SubType> m_basic_land_1;
@@ -45,7 +45,7 @@ namespace dandan::effects
     {
     public:
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] const core::ExecutionContext exec_ctx,
             [[maybe_unused]] EffectContext context) const override
         {
             return std::make_unique<ChangeLandTypeEffect>(context);

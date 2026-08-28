@@ -1,6 +1,7 @@
 #ifndef DANDAN_LOSE_GAME_EFFECT_H
 #define DANDAN_LOSE_GAME_EFFECT_H
 
+#include <iostream>
 #include <utility>
 
 #include "dandan/core/Game.h"
@@ -27,9 +28,10 @@ namespace dandan::effects
         {
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override
         {
+            const auto &game{exec_ctx.state.get()};
             const auto &player = game.getPlayer(m_player);
             std::cout << player.getName() << " has lost the game!" << '\n';
             game.quit(player);

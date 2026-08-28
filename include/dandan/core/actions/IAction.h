@@ -30,7 +30,7 @@ namespace dandan::core
          * @return A unique pointer to the created effect.
          */
         virtual std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game) = 0;
+            core::ExecutionContext exec_ctx) = 0;
 
         /** Gets the actor performing the action.
          * @return The action actor. Defaults to monostate, which represents a

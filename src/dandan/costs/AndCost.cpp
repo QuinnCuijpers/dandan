@@ -72,10 +72,11 @@ namespace dandan::costs
         return {m_first.get(), m_second.get()};
     }
 
-    void AndCost::pay(core::Game &game, abilities::AbilityContext context) const
+    void AndCost::pay(core::ExecutionContext exec_ctx,
+                      abilities::AbilityContext context) const
     {
-        m_first->pay(game, context);
-        m_second->pay(game, context);
+        m_first->pay(exec_ctx, context);
+        m_second->pay(exec_ctx, context);
     }
 
     [[nodiscard]] bool AndCost::canPay(const core::Card &source,

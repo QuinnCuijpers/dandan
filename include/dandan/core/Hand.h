@@ -2,6 +2,7 @@
 #define DANDAN_HAND_H
 
 #include "dandan/core/Card.h"
+#include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include <algorithm>
 #include <vector>
@@ -90,7 +91,7 @@ namespace dandan::core
          * @param card_id The ID of the card to discard.
          * @param game The game instance.
          */
-        void discardCard(CardID card_id, Game &game);
+        void discardCard(CardID card_id, ExecutionContext exec_ctx);
 
     private:
         std::vector<CardID> m_cards;

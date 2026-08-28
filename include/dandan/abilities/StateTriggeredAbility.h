@@ -4,6 +4,7 @@
 
 #include "dandan/abilities/IAbility.h"
 #include "dandan/conditions/ICondition.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <memory>
 namespace dandan::abilities
@@ -31,7 +32,7 @@ namespace dandan::abilities
          * @return The created effect instance.
          */
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
-            [[maybe_unused]] core::Game &game,
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
             [[maybe_unused]] AbilityContext context) const override;
 
         /** Get the condition for the ability as a const pointer

@@ -62,7 +62,7 @@ namespace dandan::core
         /** @brief Update the conditions for all tracked abilities.
          * @param game The game instance.
          */
-        void checkConditions(const Game &game);
+        void checkConditions(ExecutionContext exec_ctx);
 
         std::size_t size() const;
 

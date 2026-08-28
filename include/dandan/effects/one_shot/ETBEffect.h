@@ -33,8 +33,8 @@ namespace dandan::effects
             return cloned_effect;
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
         /** Set whether the ETB should be tapped or untapped
          * @param tapped boolean representing whether or not the ETB should be

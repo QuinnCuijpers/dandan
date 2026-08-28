@@ -28,7 +28,7 @@ namespace dandan::core
         [[nodiscard]] ActionActor getActor() const override;
 
         std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game) override;
+            core::ExecutionContext exec_ctx) override;
 
     private:
         PlayerID m_player;

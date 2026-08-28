@@ -46,12 +46,14 @@ namespace
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> ShowAndTellEffect::apply_impl(
-        core::Game &game) const
+        core::ExecutionContext exec_ctx) const
     {
+        auto &game{exec_ctx.state.get()};
+        auto &card_registry{exec_ctx.cards.get()};
 
-        auto valid_type = [&game, this](const core::CardID card_id)
+        auto valid_type = [this, &card_registry](const core::CardID card_id)
         {
-            auto *card{game.getCardByID(card_id)};
+            auto *card{card_registry[card_id]};
             const auto *fit{std::find(m_types.begin(), m_types.end(),
                                       card->getData().type)};
             return (fit != m_types.end());
@@ -77,7 +79,7 @@ namespace dandan::effects
 
         auto card_id{core::CardID::fromInt(std::stoi(input))};
 
-        auto *card{game.getCardByID(card_id)};
+        auto *card{card_registry[card_id]};
         player.playCard(*card);
 
         return nullptr;

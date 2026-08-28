@@ -1,4 +1,5 @@
 #include "dandan/core/Target.h"
+#include "dandan/abilities/IAbility.h"
 #include "dandan/utils/overloadVisitor.h"
 #include <ostream>
 

@@ -1,7 +1,6 @@
 #ifndef DANDAN_TAPCOST_H
 #define DANDAN_TAPCOST_H
 
-#include "dandan/core/Game.h"
 #include "dandan/costs/ICost.h"
 
 namespace dandan::costs
@@ -23,7 +22,7 @@ namespace dandan::costs
         [[nodiscard]] bool canPay(const core::Card &source,
                                   const core::Player &player) const override;
 
-        void pay(core::Game &game,
+        void pay(core::ExecutionContext exec_ctx,
                  abilities::AbilityContext context) const override;
     };
 } // namespace dandan::costs

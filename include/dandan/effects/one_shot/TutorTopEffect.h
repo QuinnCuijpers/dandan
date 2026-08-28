@@ -25,8 +25,8 @@ namespace dandan::effects
                                                     getEffectContext());
         }
 
-        std::unique_ptr<events::IEvent> apply_impl(
-            core::Game &game) const override;
+        [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         std::vector<core::Type> m_filter_types;
@@ -43,7 +43,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::Game &game,
+            [[maybe_unused]] const core::ExecutionContext exec_ctx,
             EffectContext context) const override
         {
             return std::make_unique<TutorTopEffect>(

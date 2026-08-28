@@ -2,7 +2,7 @@
 #define REPLACEMENTABILITY_H
 
 #include "IAbility.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/continuous/IContinuousEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <cstdint>
@@ -51,7 +51,8 @@ namespace dandan::abilities
         [[nodiscard]] const effects::IContinuousEffect *getEffect() const;
 
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::Game &game, AbilityContext context) const override;
+            core::ExecutionContext exec_ctx,
+            AbilityContext context) const override;
 
     private:
         Type m_type{};

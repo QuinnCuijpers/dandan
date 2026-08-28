@@ -1,7 +1,6 @@
 #ifndef DANDAN_DRAW_PREVENTION_EFFECT_H
 #define DANDAN_DRAW_PREVENTION_EFFECT_H
 
-#include "dandan/abilities/AbilityContext.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/continuous/prevention/IPreventionEffect.h"
@@ -28,7 +27,7 @@ namespace dandan::effects
         }
 
         [[nodiscard]] bool prevents(const core::IAction &action,
-                                    const core::Game &game,
+                                    core::ExecutionContext exec_ctx,
                                     std::optional<effects::EffectContext>
                                         context = std::nullopt) const override;
 

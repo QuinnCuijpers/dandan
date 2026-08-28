@@ -58,7 +58,7 @@ namespace dandan::core
 
     std::unique_ptr<effects::IOneShotEffect> ReplacementManager::
         applyReplacementEffects(effects::IOneShotEffect &effect,
-                                [[maybe_unused]] Game &game) const
+                                [[maybe_unused]] ExecutionContext exec_ctx) const
     {
         effects::IOneShotEffect *current_effect{&effect};
         for (const auto *ability : m_replacement_effects)

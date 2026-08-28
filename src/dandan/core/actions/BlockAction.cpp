@@ -9,7 +9,7 @@ namespace dandan::core
     // NOLINTEND(bugprone-easily-swappable-parameters)
 
     std::unique_ptr<effects::IOneShotEffect> BlockAction::createEffect(
-        [[maybe_unused]] core::Game &game)
+        [[maybe_unused]] core::ExecutionContext exec_ctx)
     {
         throw std::runtime_error("Creating block effect not yet implemented");
     }

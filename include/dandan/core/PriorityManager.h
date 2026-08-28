@@ -1,6 +1,7 @@
 #ifndef DANDAN_PRIORITY_MANAGER_H
 #define DANDAN_PRIORITY_MANAGER_H
 
+#include "dandan/core/ExecutionContext.h"
 #include "dandan/core/PlayerID.h"
 namespace dandan::core
 {
@@ -57,18 +58,18 @@ namespace dandan::core
         /** Sets the priority to the active player.
          * @param game The game object to get the active player from.
          */
-        void setPriorityToPlayer(PlayerID player_id, Game &game);
+        void setPriorityToPlayer(PlayerID player_id, ExecutionContext exec_ctx);
 
         /** Passes priority to the next player in turn order.
          * @param game The game object to get the next player from.
          */
-        void passPriority(Game &game);
+        void passPriority(ExecutionContext exec_ctx);
 
     private:
         PlayerID m_current_player_with_priority;
         PlayerID m_last_acted_player{PlayerID::getInvalidID()};
 
-        void handleStack(core::Game &game);
+        void handleStack(core::ExecutionContext exec_ctx);
     };
 
 } // namespace dandan::core
