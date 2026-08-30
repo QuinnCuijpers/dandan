@@ -10,6 +10,8 @@ target_sources(
           EventManager.cpp
           Stack.cpp
           Game.cpp
+          GameState.cpp
+          Exile.cpp
           phases/BeginningPhase.cpp
           phases/MainPhase.cpp
           phases/EndingPhase.cpp
