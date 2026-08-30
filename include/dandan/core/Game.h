@@ -2,16 +2,13 @@
 #define DANDAN_GAME_H
 
 #include "Player.h"
-#include "Target.h"
 #include "dandan/core/Card.h"
-#include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/CardRegistry.h"
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/core/GameState.h"
 #include "dandan/core/PriorityManager.h"
 #include "dandan/core/SBAManager.h"
-#include "dandan/core/TargetRequirement.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/engine/ConditionManager.h"
 #include "dandan/core/engine/PreventionManager.h"
@@ -167,49 +164,6 @@ namespace dandan::core
          */
         void run();
 
-        /** Prints the names and IDs of the specified cards.
-         * @param card_ids The IDs of the cards to print.
-         */
-        void printCards(const std::vector<CardID> &card_ids) const
-        {
-            std::cout << "[";
-            for (const auto &card_id : card_ids)
-            {
-                const auto *card = m_card_registry[card_id];
-                std::cout << card->getData().name << "("
-                          << "CardID: " << card->getID().getID() << ", ";
-                std::cout << "#Abilities: "
-                          << card->getCurrentAbilities().size() << ") ";
-            }
-            std::cout << "]\n";
-        }
-
-        /** Renders the game state.
-         */
-        void render() const;
-
-        /** Checks if an action is prevented.
-         * @param action The action to check.
-         * @return True if the action is prevented, false otherwise.
-         */
-        [[nodiscard]] bool isActionPrevented(const IAction &action)
-        {
-            return m_prevention_manager.isPrevented(action,
-                                                    execution_context());
-        }
-
-        /** Quits the game for the specified player.
-         * @param player The player who is quitting the game.
-         */
-        void quit(const Player &player) const;
-
-        std::vector<core::Target> getValidTargets(
-            core::TargetType type,
-            Controller controller = Controller::Any) const;
-
-        void handlePlay(const std::string &input);
-        void handleActivate(const std::string &input);
-
     private:
         GameState m_game_state;
 
@@ -227,11 +181,6 @@ namespace dandan::core
         explicit Game(std::vector<Card> cards, bool shuffle = true);
 
         void GameSetup(bool shuffle = true);
-
-        std::vector<Target> getValidCreatures(
-            Controller controller = Controller::Any) const;
-
-        static void clearScreen();
     };
 } // namespace dandan::core
 

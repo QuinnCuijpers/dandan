@@ -1,12 +1,14 @@
 #ifndef DANDAN_GAMESTATE_H
 #define DANDAN_GAMESTATE_H
 
+#include "dandan/core/CardRegistry.h"
 #include "dandan/core/Constants.h"
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/core/Exile.h"
 #include "dandan/core/Graveyard.h"
 #include "dandan/core/Library.h"
 #include "dandan/core/Player.h"
+#include "dandan/core/PlayerID.h"
 #include "dandan/core/Stack.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
@@ -19,6 +21,17 @@ namespace dandan::core
     {
     public:
         GameState() = default;
+
+        void determineStartingPlayer()
+        {
+            // Randomize whom is starting player
+            std::random_device rand;
+            std::mt19937 gen(rand());
+            std::uniform_int_distribution<> dist(0, AMOUNT_PLAYERS - 1);
+
+            int starting_player_index = dist(gen);
+            m_active_player_index = starting_player_index;
+        }
 
         /** Gets a player from the game accosiated with the given ID immutably.
          * @param player_id The ID of the player to get.
@@ -71,6 +84,11 @@ namespace dandan::core
             return m_players.at(m_active_player_index);
         }
 
+        [[nodiscard]] PlayerID activePlayerID() const
+        {
+            return PlayerID::fromInt(m_active_player_index);
+        }
+
         /** Gets the non-active player immutably.
          * @return A const reference to the non-active player.
          */
@@ -96,10 +114,19 @@ namespace dandan::core
             return m_players.at((player_id.id() + 1) % AMOUNT_PLAYERS).getID();
         }
 
+        [[nodiscard]] std::vector<core::Target> getValidTargets(
+            core::ExecutionContext exec_ctx, core::TargetType type,
+            Controller controller = Controller::Any) const;
+
         /** Gets the library mutably.
          * @return A reference to the library.
          */
         [[nodiscard]] Library &library()
+        {
+            return m_library;
+        }
+
+        [[nodiscard]] const Library &library() const
         {
             return m_library;
         }
@@ -160,6 +187,16 @@ namespace dandan::core
 
         void moveCardToZone(Card &card, Player &player, Zone zone);
 
+        static void handlePlay(const std::string &input,
+                               ExecutionContext exec_ctx);
+        static void handleActivate(const std::string &input,
+                                   ExecutionContext exec_ctx);
+
+        /** Quits the game for the specified player.
+         * @param player The player who is quitting the game.
+         */
+        void quit(const Player &player) const;
+
         void addEndOfTurnEffect(std::unique_ptr<effects::IOneShotEffect> effect)
         {
             std::cout << "added end of turn effect: " << typeid(effect).name()
@@ -167,7 +204,7 @@ namespace dandan::core
             m_end_of_turn_effects.push_back(std::move(effect));
         }
 
-        void applyEndOfTurnEffects(ExecutionContext &exec_ctx)
+        void applyEndOfTurnEffects(const ExecutionContext &exec_ctx)
         {
             for (const auto &effect : m_end_of_turn_effects)
             {
@@ -180,7 +217,7 @@ namespace dandan::core
 
         /** Passes the turn to the next player.
          */
-        void passTurn(ExecutionContext &exec_ctx)
+        void passTurn(const ExecutionContext &exec_ctx)
         {
             changePhase(std::make_unique<EndingPhase>(exec_ctx));
             m_active_player_index = 1 - m_active_player_index;
@@ -223,6 +260,28 @@ namespace dandan::core
         {
             return m_phase;
         }
+        /** Prints the names and IDs of the specified cards.
+         * @param card_ids The IDs of the cards to print.
+         */
+        void printCards(const std::vector<CardID> &card_ids,
+                        const CardRegistry &card_registry) const
+        {
+            std::cout << "[";
+            for (const auto &card_id : card_ids)
+            {
+                const auto *card = card_registry[card_id];
+                std::cout << card->getData().name << "("
+                          << "CardID: " << card->getID().getID() << ", ";
+                std::cout << "#Abilities: "
+                          << card->getCurrentAbilities().size() << ") ";
+            }
+            std::cout << "]\n";
+        }
+        static void clearScreen();
+
+        /** Renders the game state.
+         */
+        void render(const CardRegistry &card_registry) const;
 
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{
@@ -239,6 +298,10 @@ namespace dandan::core
         bool m_first_turn{true};
         std::vector<std::unique_ptr<effects::IOneShotEffect>>
             m_end_of_turn_effects;
+
+        [[nodiscard]] std::vector<Target> getValidCreatures(
+            ExecutionContext exec_ctx,
+            Controller controller = Controller::Any) const;
     };
 } // namespace dandan::core
 
