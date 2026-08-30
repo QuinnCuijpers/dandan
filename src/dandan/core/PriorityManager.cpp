@@ -1,7 +1,7 @@
 #include "dandan/core/PriorityManager.h"
-#include "dandan/core/Game.h"
-#include "dandan/core/Player.h"
+#include "dandan/core/GameState.h"
 #include "dandan/core/PlayerID.h"
+#include "dandan/core/SBAManager.h"
 #include <stdexcept>
 #include <string>
 
@@ -24,6 +24,7 @@ namespace dandan::core
                                               core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
+        auto &istream{exec_ctx.input.get()};
 
         SBAManager::checkSBAs(exec_ctx);
         m_current_player_with_priority = player_id;
@@ -61,7 +62,7 @@ namespace dandan::core
                          "[card index], pass "
                          "or quit) ";
             std::string input;
-            std::getline(game.istream(), input);
+            std::getline(istream, input);
             if (input == "pass")
             {
                 std::cout << "Passing priority\n";
@@ -76,7 +77,7 @@ namespace dandan::core
             if (input.rfind("play ", 0) == 0)
             {
                 m_last_acted_player = m_current_player_with_priority;
-                game.handlePlay(input);
+                dandan::core::GameState::handlePlay(input, exec_ctx);
                 continue;
             }
             if (input.rfind("activate ", 0) == 0)
@@ -86,7 +87,7 @@ namespace dandan::core
                     << "handling activate for player: "
                     << game.getPlayer(m_current_player_with_priority).getName()
                     << '\n';
-                game.handleActivate(input);
+                dandan::core::GameState::handleActivate(input, exec_ctx);
                 continue;
             }
             throw std::runtime_error(std::string("Unhandled input ") + input +

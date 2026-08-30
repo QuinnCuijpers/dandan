@@ -1,5 +1,4 @@
 #include "dandan/core/actions/PlayCardAction.h"
-#include "dandan/core/Game.h"
 #include "dandan/core/Zone.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
@@ -22,6 +21,11 @@ namespace dandan::core
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &prevention_manager{exec_ctx.prevention_manager.get()};
+        auto &priority_manager{exec_ctx.priority_manager.get()};
+        auto &replacement_manager{exec_ctx.replacement_manager.get()};
+        auto &event_manager{exec_ctx.event_manager.get()};
+        auto &condition_manager{exec_ctx.condition_manager.get()};
 
         auto *card{card_registry[m_card_id]};
 
@@ -33,8 +37,7 @@ namespace dandan::core
                 zoneToString(card->getZone()));
         }
 
-        if (card->getControllerID() !=
-            game.priorityManager().getPlayerWithPriority())
+        if (card->getControllerID() != priority_manager.getPlayerWithPriority())
         {
             throw std::runtime_error(
                 "Only player with priority can play cards, card is controlled "
@@ -49,13 +52,13 @@ namespace dandan::core
 
         for (auto &ability : card->getCurrentAbilities())
         {
-            game.eventManager().subscribe(ability);
+            event_manager.subscribe(ability);
 
-            game.replacementManager().subscribe(ability);
+            replacement_manager.subscribe(ability);
 
-            game.preventionManager().subscribe(ability);
+            prevention_manager.subscribe(ability);
 
-            game.conditionManager().addStateTriggeredAbility(&ability);
+            condition_manager.addStateTriggeredAbility(&ability);
         }
 
         effects::EffectContext context{card->getControllerID()};

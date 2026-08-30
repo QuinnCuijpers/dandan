@@ -1,6 +1,6 @@
 #include "dandan/effects/one_shot/ShowAndTellEffect.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/events/IEvent.h"
 #include <algorithm>
@@ -50,6 +50,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input.get()};
 
         auto valid_type = [this, &card_registry](const core::CardID card_id)
         {
@@ -65,13 +66,13 @@ namespace dandan::effects
         std::copy_if(hand.begin(), hand.end(),
                      std::back_inserter(available_options), valid_type);
 
-        game.printCards(available_options);
+        game.printCards(available_options, card_registry);
         std::cout << "You may put an artifact, creature, enchantment, or land "
                      "card from your hand onto the battlefield.\n";
         std::cout << "Which card would you like to put onto the battlefield "
                      "[cardID || -1 for none]: ";
         std::string input{};
-        std::getline(game.istream(), input);
+        std::getline(istream, input);
         if (input == "-1")
         {
             return nullptr;

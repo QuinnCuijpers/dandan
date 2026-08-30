@@ -1,5 +1,6 @@
 #include "dandan/effects/one_shot/BounceLandEffect.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
+#include "dandan/core/engine/EventManager.h"
 #include <iostream>
 #include <string>
 
@@ -42,16 +43,18 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input.get()};
+        auto &event_manager{exec_ctx.event_manager.get()};
 
         std::cout << "Applying BounceLandEffect\n";
         std::cout << "what land index to bounce? ";
         std::string input;
-        std::getline(game.istream(), input);
+        std::getline(istream, input);
         int land_index{std::stoi(input)};
         std::cout << "Bouncing land at index " << land_index << "\n";
         auto land{game.activePlayer().battlefield().getLand(land_index)};
         auto *card{card_registry[land.getID()]};
-        game.eventManager().unsubscribe(*card);
+        event_manager.unsubscribe(*card);
         game.activePlayer().hand().addCard(*card);
         return nullptr;
     }

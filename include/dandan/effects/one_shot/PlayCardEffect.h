@@ -3,7 +3,9 @@
 
 #include "dandan/abilities/SpellAbility.h"
 #include "dandan/core/Card.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/ExecutionContext.h"
+#include "dandan/core/GameState.h"
+#include "dandan/core/PriorityManager.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/effects/EffectContext.h"
@@ -26,8 +28,10 @@ namespace dandan::effects
     {
         void choose_targets(core::Card *cardp,
                             effects::IOneShotEffectDefinition &effect,
-                            core::Game &game)
+                            core::ExecutionContext exec_ctx)
         {
+            auto &game{exec_ctx.state.get()};
+            auto &istream{exec_ctx.input.get()};
 
             auto choices = std::vector<core::Target>{};
             if (const auto *targets = effect.getTargetRequirement())
@@ -39,7 +43,7 @@ namespace dandan::effects
                         for (const auto &target_type : target_types.types)
                         {
                             auto new_valid_targets = game.getValidTargets(
-                                target_type, target_types.controller);
+                                exec_ctx, target_type, target_types.controller);
 
                             valid_targets.insert(valid_targets.end(),
                                                  new_valid_targets.begin(),
@@ -59,7 +63,7 @@ namespace dandan::effects
                         std::cout << "Choose a target (0-"
                                   << valid_targets.size() - 1 << "): ";
                         std::string target_input;
-                        std::getline(game.istream(), target_input);
+                        std::getline(istream, target_input);
                         int target_choice = std::stoi(target_input);
                         auto target{valid_targets.at(target_choice)};
                         choices.push_back(target);
@@ -71,13 +75,15 @@ namespace dandan::effects
 
         IOneShotEffectDefinition *choose_mode(
             core::Card *cardp, const ModalEffectDefinition &modal_effect,
-            core::Game &game)
+            core::ExecutionContext exec_ctx)
         {
+            auto &istream{exec_ctx.input.get()};
+
             std::cout << modal_effect.display();
             std::cout << "Choose an option (0-"
                       << modal_effect.getOptions().size() - 1 << "): ";
             std::string input;
-            std::getline(game.istream(), input);
+            std::getline(istream, input);
             int choice = std::stoi(input);
             if (choice < 0 ||
                 choice >= static_cast<int>(modal_effect.getOptions().size()))
@@ -117,10 +123,11 @@ namespace dandan::effects
         {
             auto &game{exec_ctx.state.get()};
             auto &card_registry{exec_ctx.cards.get()};
+            auto &priority_manager{exec_ctx.priority_manager.get()};
 
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{
-                game.getPlayer(game.priorityManager().getPlayerWithPriority())};
+                game.getPlayer(priority_manager.getPlayerWithPriority())};
             auto mana_cost = m_card.getData().mana_cost;
             std::cout << "generic_mana: " << mana_cost.generic() << '\n';
             std::cout << "specific_mana: " << mana_cost.specific() << '\n';
@@ -165,15 +172,15 @@ namespace dandan::effects
                     // choose mode
                     {
                         auto *chosen_effect =
-                            impl::choose_mode(cardp, *modal_effect, game);
+                            impl::choose_mode(cardp, *modal_effect, exec_ctx);
                         std::cout
                             << "Chosen effect: " << chosen_effect->display()
                             << '\n';
-                        impl::choose_targets(cardp, *chosen_effect, game);
+                        impl::choose_targets(cardp, *chosen_effect, exec_ctx);
                     }
                     else
                     {
-                        impl::choose_targets(cardp, *effect, game);
+                        impl::choose_targets(cardp, *effect, exec_ctx);
                     }
                 }
             }

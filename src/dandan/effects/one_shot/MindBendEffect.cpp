@@ -1,7 +1,7 @@
 #include "dandan/effects/one_shot/MindBendEffect.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/core/TextReplacement.h"
 #include "dandan/utils/overloadVisitor.h"
 #include "dandan/utils/stringToBasicLandType.h"
@@ -52,6 +52,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input.get()};
 
         auto target{m_target};
 
@@ -104,7 +105,7 @@ namespace dandan::effects
         std::cout << display() << '\n';
         std::cout << "color word or basic land type to replace: ";
         std::string to_replace;
-        std::getline(game.istream(), to_replace);
+        std::getline(istream, to_replace);
 
         core::ReplacementType to_replace_var;
 
@@ -129,7 +130,7 @@ namespace dandan::effects
                 {
                     std::cout << "color word to replace with: ";
                     std::string replace_with_color_str;
-                    std::getline(game.istream(), replace_with_color_str);
+                    std::getline(istream, replace_with_color_str);
                     auto replace_with_color{
                         utils::stringToColorWord(replace_with_color_str)};
                     if (replace_with_color == core::ColorWord::Colorless)
@@ -144,7 +145,7 @@ namespace dandan::effects
                 {
                     std::cout << "basic land type to replace with: ";
                     std::string replace_with_basic_str;
-                    std::getline(game.istream(), replace_with_basic_str);
+                    std::getline(istream, replace_with_basic_str);
                     auto replace_with_basic{
                         utils::stringToBasicLandType(replace_with_basic_str)};
                     if (replace_with_basic == core::SubType::None)

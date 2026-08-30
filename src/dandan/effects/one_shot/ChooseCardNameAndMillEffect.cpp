@@ -1,5 +1,5 @@
 #include "dandan/effects/one_shot/ChooseCardNameAndMillEffect.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/effects/one_shot/MillEffect.h"
 #include "dandan/events/IEvent.h"
@@ -52,6 +52,7 @@ namespace dandan::effects
 
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input.get()};
 
         auto *card{card_registry[m_source]};
         auto player_id = std::get<core::PlayerID>(m_target);
@@ -60,7 +61,7 @@ namespace dandan::effects
         std::cout << "Card Name: ";
 
         std::string input{};
-        std::getline(game.istream(), input);
+        std::getline(istream, input);
 
         card->remember("chosenCardName", input);
 

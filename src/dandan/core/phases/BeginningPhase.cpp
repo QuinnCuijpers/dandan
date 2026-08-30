@@ -1,6 +1,5 @@
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/CardTypes.h"
-#include "dandan/core/Game.h"
 #include "dandan/core/actions/CardDrawAction.h"
 #include "dandan/core/phases/IPhase.h"
 #include "dandan/effects/EffectContext.h"
@@ -65,13 +64,17 @@ namespace dandan::core
             }
         }
         game.activePlayer().setPlayedLandThisTurn(false);
-        game.render();
+        game.render(card_registry);
         m_step = Step::Upkeep;
     }
 
     void BeginningPhase::handleNextStep()
     {
         auto &game{context().state.get()};
+        auto &card_registry{context().cards.get()};
+        auto &priority_manager{context().priority_manager.get()};
+        auto &prevention_manager{context().prevention_manager.get()};
+        auto &replacement_manager{context().replacement_manager.get()};
 
         switch (m_step)
         {
@@ -80,9 +83,9 @@ namespace dandan::core
             break;
         case Step::Upkeep:
             DLOGI << "Handling upkeep step\n";
-            game.priorityManager().setPriorityToPlayer(
-                game.activePlayer().getID(), context());
-            game.render();
+            priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                                 context());
+            game.render(card_registry);
             m_step = Step::Draw;
             break;
         case Step::Draw:
@@ -90,7 +93,7 @@ namespace dandan::core
             DLOGI << "Handling draw step\n";
             auto draw_action = std::make_unique<core::CardDrawAction>(
                 game.activePlayer().getID());
-            if (game.isActionPrevented(*draw_action))
+            if (prevention_manager.isPrevented(*draw_action, context()))
             {
                 DLOGI << "Draw prevented\n";
             }
@@ -100,13 +103,13 @@ namespace dandan::core
                 // createEffect of the action
                 auto draw_effect{draw_action->createEffect(context())};
                 const auto &final_effect{
-                    game.replacementManager().applyReplacementEffects(
-                        *draw_effect, context())};
+                    replacement_manager.applyReplacementEffects(*draw_effect,
+                                                                context())};
                 static_cast<void>(final_effect->apply(context()));
             }
-            game.priorityManager().setPriorityToPlayer(
-                game.activePlayer().getID(), context());
-            game.render();
+            priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                                 context());
+            game.render(card_registry);
             m_step = Step::Done;
             break;
         }

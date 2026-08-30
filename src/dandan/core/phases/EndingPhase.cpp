@@ -1,5 +1,6 @@
 #include "dandan/core/phases/EndingPhase.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
+#include "dandan/core/PriorityManager.h"
 #include "dandan/utils/log.h"
 #include <iostream>
 #include <string>
@@ -13,14 +14,16 @@ namespace dandan::core
     {
         auto &game{context().state.get()};
         auto &card_registry{context().cards.get()};
+        auto &priority_manager{context().priority_manager.get()};
+        auto &istream{context().input.get()};
 
         switch (m_step)
         {
         case Step::End:
             std::cout << "Handling end step\n";
-            game.priorityManager().setPriorityToPlayer(
-                game.activePlayer().getID(), context());
-            game.render();
+            priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                                 context());
+            game.render(card_registry);
             m_step = Step::Cleanup;
             break;
         case Step::Cleanup:
@@ -29,7 +32,7 @@ namespace dandan::core
             // seven), they discard enough cards to reduce their hand size to
             // that number. This turn-based action doesn’t use the stack.
             std::cout << "Handling cleanup step\n";
-            game.render();
+            game.render(card_registry);
             if (game.activePlayer().hand().getCards().size() >
                 game.activePlayer().maxHandSize())
             {
@@ -48,7 +51,7 @@ namespace dandan::core
                     try
                     {
                         std::string input;
-                        std::getline(game.istream(), input);
+                        std::getline(istream, input);
                         int card_id = std::stoi(input);
                         const auto *card =
                             card_registry[CardID::fromInt(card_id)];
@@ -70,7 +73,7 @@ namespace dandan::core
             // FIXME: currently we are planning to store the undo effects to
             // apply here, but technically these are effects that should stop
             // applying
-            game.applyEndOfTurnEffects();
+            game.applyEndOfTurnEffects(context());
             m_step = Step::Done;
             break;
         case Step::Done:

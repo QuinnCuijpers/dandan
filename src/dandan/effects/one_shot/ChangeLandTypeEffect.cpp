@@ -1,10 +1,7 @@
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
-#include "dandan/core/Game.h"
 #include "dandan/utils/stringToBasicLandType.h"
-#include <algorithm>
 #include <iostream>
 #include <memory>
-#include <tuple>
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
@@ -47,6 +44,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input.get()};
 
         // FIXME: technically it should be able to call any land type, but we
         // only have basic land types in dandan
@@ -65,18 +63,18 @@ namespace dandan::effects
         {
             std::cout << "First choice (basic land type): ";
             std::string land_type_input;
-            std::getline(game.istream(), land_type_input);
+            std::getline(istream, land_type_input);
             basic_land_1 = utils::stringToBasicLandType(land_type_input);
         }
         if (!m_basic_land_2.has_value())
         {
             std::cout << "Second choice (basic land type): ";
             std::string new_land_type_input;
-            std::getline(game.istream(), new_land_type_input);
+            std::getline(istream, new_land_type_input);
             basic_land_2 = utils::stringToBasicLandType(new_land_type_input);
         }
 
-        for (const auto &card_id : game.cards())
+        for (const auto &card_id : card_registry.card_ids())
         {
             auto *card{card_registry[card_id]};
 
