@@ -38,4 +38,52 @@ namespace dandan::numbers
     };
 } // namespace dandan::numbers
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+
+    using namespace dandan::numbers;
+    using namespace dandan::serialization;
+    using namespace dandan::conditions;
+
+    inline const auto registeredConditionalNumber = []
+    {
+        NumberRegistry::instance().registerType<ConditionalNumber>(
+            "ConditionalNumber",
+            [](const INumber *number)
+            {
+                auto json = nlohmann::json::object();
+                const auto *condition_number{
+                    dynamic_cast<const ConditionalNumber *>(number)};
+                json["ifNumber"] = JsonFactory<INumber>::create_json(
+                    condition_number->getIfNumber());
+                json["elseNumber"] = JsonFactory<INumber>::create_json(
+                    condition_number->getElseNumber());
+                json["condition"] = JsonFactory<ICondition>::create_json(
+                    condition_number->getCondition());
+                return json;
+            },
+            [](const nlohmann::json &data)
+            {
+                auto condition{JsonFactory<ICondition>::create_product(
+                    data.at("condition"))};
+
+                auto if_{
+                    JsonFactory<INumber>::create_product(data.at("ifNumber"))};
+
+                auto else_{JsonFactory<INumber>::create_product(
+                    data.at("elseNumber"))};
+
+                return std::make_unique<ConditionalNumber>(
+                    std::move(if_), std::move(else_), std::move(condition));
+            });
+        return true;
+    }();
+} // namespace
+#endif
+
 #endif

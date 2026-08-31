@@ -32,4 +32,40 @@ namespace dandan::conditions
 
 } // namespace dandan::conditions
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+    using namespace dandan::conditions;
+    using namespace dandan::serialization;
+
+    inline const auto registeredMatchesReadLinksCondition = []
+    {
+        ConditionRegistry::instance().registerType<MatchesReadLinksCondition>(
+            "MatchesReadLinksCondition",
+            [](const ICondition *condition)
+            {
+                auto json = nlohmann::json::object();
+                const auto *matches{
+                    dynamic_cast<const MatchesReadLinksCondition *>(condition)};
+                json["first"] = matches->getfirst();
+                json["second"] = matches->getSecond();
+                return json;
+            },
+            [](const nlohmann::json &json)
+            {
+                auto first = json.at("first").get<std::string>();
+                auto second = json.at("second").get<std::string>();
+                return std::make_unique<MatchesReadLinksCondition>(first,
+                                                                   second);
+            });
+        return true;
+    }();
+} // namespace
+#endif
+
 #endif

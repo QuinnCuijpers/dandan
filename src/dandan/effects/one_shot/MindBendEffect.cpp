@@ -9,42 +9,6 @@
 #include <memory>
 #include <variant>
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-
-    using namespace dandan::serialization;
-    using namespace dandan::effects;
-    using namespace dandan::abilities;
-    using namespace dandan::core;
-    using namespace dandan::numbers;
-
-    const auto registered = []
-    {
-        OneShotEffectRegistry::instance()
-            .registerType<MindBendEffectDefinition>(
-                "MindBendEffect",
-                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
-                {
-                    auto json = nlohmann::json::object();
-                    return json;
-                },
-                []([[maybe_unused]] const nlohmann::json &data,
-                   const std::vector<TargetSpec> &target_specs,
-                   ExpireTime expiry)
-                {
-                    auto effect{std::make_unique<MindBendEffectDefinition>(
-                        TargetRequirement{target_specs})};
-                    effect->addExpireTime(expiry);
-                    return effect;
-                });
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> MindBendEffect::apply_impl(
