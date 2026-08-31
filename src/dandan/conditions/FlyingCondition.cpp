@@ -2,31 +2,6 @@
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/core/Keyword.h"
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-    using namespace dandan::conditions;
-    using namespace dandan::serialization;
-
-    const auto registered = []
-    {
-        ConditionRegistry::instance().registerType<FlyingCondition>(
-            "FlyingCondition",
-            []([[maybe_unused]] const ICondition *condition)
-            {
-                auto json = nlohmann::json::object();
-                return json;
-            },
-            []([[maybe_unused]] const nlohmann::json &json)
-            { return std::make_unique<FlyingCondition>(); });
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::conditions
 {
     bool FlyingCondition::isSatisfied(

@@ -3,47 +3,6 @@
 #include "dandan/effects/one_shot/DrawEffect.h"
 #include <string>
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-
-    using namespace dandan::serialization;
-    using namespace dandan::effects;
-    using namespace dandan::abilities;
-    using namespace dandan::core;
-    using namespace dandan::numbers;
-
-    const auto registered = []
-    {
-        OneShotEffectRegistry::instance()
-            .registerType<OptionalDrawEffectDefinition>(
-                "OptionalDrawEffect",
-                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
-                {
-                    auto json = nlohmann::json::object();
-                    const auto *optionalDrawEffect =
-                        dynamic_cast<const OptionalDrawEffectDefinition *>(
-                            effect);
-                    json["amount"] = optionalDrawEffect->getAmount();
-                    json["each_player"] = optionalDrawEffect->isEachPlayer();
-
-                    return json;
-                },
-                [](const nlohmann::json &data,
-                   [[maybe_unused]] const std::vector<TargetSpec> &target_specs,
-                   [[maybe_unused]] ExpireTime expiry)
-                {
-                    return std::make_unique<OptionalDrawEffectDefinition>(
-                        data.at("amount").get<int>(),
-                        data.at("each_player").get<bool>());
-                });
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> OptionalDrawEffect::apply_impl(

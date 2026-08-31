@@ -3,40 +3,6 @@
 #include "dandan/events/IEvent.h"
 #include <memory>
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-
-    using namespace dandan::serialization;
-    using namespace dandan::effects;
-    using namespace dandan::abilities;
-    using namespace dandan::core;
-    using namespace dandan::numbers;
-
-    const auto registered = []
-    {
-        OneShotEffectRegistry::instance()
-            .registerType<MemoryLapseEffectDefinition>(
-                "MemoryLapseEffect",
-                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
-                {
-                    auto json = nlohmann::json::object();
-                    return json;
-                },
-                []([[maybe_unused]] const nlohmann::json &data,
-                   const std::vector<TargetSpec> &target_specs,
-                   [[maybe_unused]] ExpireTime expiry)
-                {
-                    return std::make_unique<MemoryLapseEffectDefinition>(
-                        TargetRequirement{target_specs});
-                });
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::effects
 {
     std::unique_ptr<events::IEvent> MemoryLapseEffect::apply_impl(

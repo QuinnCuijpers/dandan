@@ -22,4 +22,33 @@ namespace dandan::effects
     };
 } // namespace dandan::effects
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+    using namespace dandan::serialization;
+    using namespace dandan::effects;
+    using namespace dandan::conditions;
+
+    inline const auto registeredEntersTappedEffect = []
+    {
+        ContinuousEffectRegistry::instance().registerType<EntersTappedEffect>(
+            "EntersTappedEffect",
+            []([[maybe_unused]] const dandan::effects::IContinuousEffect
+                   *effect)
+            {
+                auto json = nlohmann::json::object();
+                return json;
+            },
+            []([[maybe_unused]] const nlohmann::json &json)
+            { return std::make_unique<EntersTappedEffect>(); });
+        return true;
+    }();
+} // namespace
+#endif
+
 #endif

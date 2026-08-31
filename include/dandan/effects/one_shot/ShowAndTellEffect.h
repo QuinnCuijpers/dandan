@@ -72,4 +72,40 @@ namespace dandan::effects
     };
 } // namespace dandan::effects
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+
+    using namespace dandan::serialization;
+    using namespace dandan::effects;
+    using namespace dandan::abilities;
+    using namespace dandan::core;
+    using namespace dandan::numbers;
+
+    inline const auto registeredShowAndTellEffect = []
+    {
+        OneShotEffectRegistry::instance()
+            .registerType<ShowAndTellEffectDefinition>(
+                "ShowAndTellEffect",
+                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
+                {
+                    auto json = nlohmann::json::object();
+                    return json;
+                },
+                []([[maybe_unused]] const nlohmann::json &data,
+                   const std::vector<TargetSpec> &target_specs,
+                   [[maybe_unused]] ExpireTime expiry)
+                {
+                    return std::make_unique<ShowAndTellEffectDefinition>(
+                        TargetRequirement{target_specs});
+                });
+        return true;
+    }();
+} // namespace
+#endif
+
 #endif

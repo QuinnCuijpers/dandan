@@ -2,40 +2,6 @@
 #include "dandan/core/Game.h"
 #include "dandan/core/TargetRequirement.h"
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-
-    using namespace dandan::serialization;
-    using namespace dandan::effects;
-    using namespace dandan::abilities;
-    using namespace dandan::core;
-    using namespace dandan::numbers;
-
-    const auto registered = []
-    {
-        OneShotEffectRegistry::instance()
-            .registerType<SpinToTopEffectDefinition>(
-                "SpinToTopEffect",
-                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
-                {
-                    auto json = nlohmann::json::object();
-                    return json;
-                },
-                []([[maybe_unused]] const nlohmann::json &data,
-                   const std::vector<TargetSpec> &target_specs,
-                   [[maybe_unused]] ExpireTime expiry)
-                {
-                    return std::make_unique<SpinToTopEffectDefinition>(
-                        TargetRequirement{target_specs});
-                });
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::effects
 {
     SpinToTopEffect::SpinToTopEffect(core::Target target, EffectContext context)
