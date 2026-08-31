@@ -21,13 +21,14 @@ namespace dandan::core
         auto &condition_manager{exec_ctx.condition_manager.get()};
 
         // 704.5a If a player has 0 or less life, that player loses the game.
-        for (const auto &player : game.getPlayers())
+        for (auto &player : game.getPlayers())
         {
             if (player.getLifeTotal() <= 0)
             {
                 std::cout << player.getName()
                           << " has 0 or less life and loses the game.\n";
                 effects::EffectContext context{};
+                player.setLost();
                 auto lose_effect{std::make_unique<effects::LoseGameEffect>(
                     player.getID(), context)};
                 auto final_effect{replacement_manager.applyReplacementEffects(
@@ -39,7 +40,7 @@ namespace dandan::core
         // 704.5b If a player attempted to draw a card from a library with no
         // cards in it since the last time state-based actions were checked,
         // that player loses the game.
-        for (const auto &player : game.getPlayers())
+        for (auto &player : game.getPlayers())
         {
             if (player.drewCardFromEmptyLibrary())
             {
@@ -47,6 +48,7 @@ namespace dandan::core
                           << " attempted to draw from an empty library and "
                              "loses the game.\n";
                 effects::EffectContext context{};
+                player.setLost();
                 auto lose_effect{std::make_unique<effects::LoseGameEffect>(
                     player.getID(), context)};
                 auto final_effect{replacement_manager.applyReplacementEffects(
