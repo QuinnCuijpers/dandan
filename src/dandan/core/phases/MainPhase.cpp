@@ -1,5 +1,6 @@
 #include "dandan/core/phases/MainPhase.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
+#include "dandan/core/PriorityManager.h"
 #include "dandan/core/phases/CombatPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include <string>
@@ -24,22 +25,25 @@ namespace dandan::core
     [[nodiscard]] std::unique_ptr<IPhase> MainPhase::handle()
     {
         auto &game{context().state.get()};
+        auto &card_registry{context().cards.get()};
+        auto &priority_manager{context().priority_manager.get()};
+        auto &istream{context().input_manager.get().stream()};
 
         std::cout << "Handling " << name() << '\n';
-        game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),
-                                                   context());
+        priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                             context());
         while (true)
         {
-            game.render();
+            game.render(card_registry);
             std::cout << "What do you want to do? (play [card index], activate "
                          "[card index], pass, next "
                          "or quit) ";
             std::string input;
-            std::getline(game.istream(), input);
+            std::getline(istream, input);
             if (input == "pass")
             {
                 std::cout << "Passing turn\n";
-                game.priorityManager().passPriority(context());
+                priority_manager.passPriority(context());
                 m_next_phase = std::make_unique<EndingPhase>(context());
                 break;
             }
@@ -58,26 +62,26 @@ namespace dandan::core
                 {
                     std::cout << "you can't go back to combat phase\n";
                 }
-                game.priorityManager().passPriority(context());
+                priority_manager.passPriority(context());
                 break;
             }
             if (input.rfind("play ", 0) == 0)
             {
-                game.handlePlay(input);
-                game.priorityManager().setPriorityToPlayer(
+                dandan::core::GameState::handlePlay(input, context());
+                priority_manager.setPriorityToPlayer(
                     game.activePlayer().getID(), context());
                 continue;
             }
             if (input.rfind("activate ", 0) == 0)
             {
-                game.handleActivate(input);
-                game.priorityManager().setPriorityToPlayer(
+                dandan::core::GameState::handleActivate(input, context());
+                priority_manager.setPriorityToPlayer(
                     game.activePlayer().getID(), context());
                 continue;
             }
             // TODO: improve error handling for invalid input
             throw std::invalid_argument(
-                "Invalid input: " + (input.empty() ? input : "empty input"));
+                "Invalid input: " + (!input.empty() ? input : "empty input"));
         }
         return std::move(m_next_phase);
     }

@@ -1,5 +1,5 @@
 #include "dandan/effects/one_shot/ScryEffect.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonTypeRegistry.h"
@@ -46,6 +46,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         auto cards = game.library().draw(m_scry_amount);
         std::cout << "Scryed cards: [ ";
@@ -66,7 +67,7 @@ namespace dandan::effects
                 std::cout << "Choose a card index to scry (0 to "
                           << cards.size() - 1 << "): ";
                 std::string input;
-                std::getline(game.istream(), input);
+                std::getline(istream, input);
                 card_index = std::stoi(input);
                 if (card_index < 0 ||
                     card_index >= static_cast<int>(cards.size()))
@@ -83,7 +84,7 @@ namespace dandan::effects
             // ask to put on top or bottom
             std::cout << "Put card on top or bottom? (top/bottom) ";
             std::string input;
-            std::getline(game.istream(), input);
+            std::getline(istream, input);
             if (input == "top")
             {
                 game.library().getCards().push_front(cards[card_index]);

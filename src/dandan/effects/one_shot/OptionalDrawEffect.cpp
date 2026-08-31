@@ -1,5 +1,5 @@
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
 #include <string>
 
@@ -50,6 +50,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         if (m_each_player)
         {
@@ -64,7 +65,7 @@ namespace dandan::effects
                           << m_amount << ")?\n";
 
                 std::string input;
-                std::getline(game.istream(), input);
+                std::getline(istream, input);
                 int draw_amount{std::stoi(input)};
 
                 auto def{dandan::effects::DrawEffectDefinition(draw_amount)};

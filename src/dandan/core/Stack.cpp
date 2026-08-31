@@ -5,7 +5,9 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
+#include "dandan/core/engine/EventManager.h"
+#include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/utils/overloadVisitor.h"
@@ -17,6 +19,8 @@ namespace dandan::core
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &replacement_manager{exec_ctx.replacement_manager.get()};
+        auto &event_manager{exec_ctx.event_manager.get()};
 
         if (m_stack.empty())
         {
@@ -75,13 +79,13 @@ namespace dandan::core
 
         if (effect)
         {
-            auto final_effect{game.replacementManager().applyReplacementEffects(
-                *effect, exec_ctx)};
+            auto final_effect{
+                replacement_manager.applyReplacementEffects(*effect, exec_ctx)};
             auto event{final_effect->apply(exec_ctx)};
             if (event)
             {
                 std::cout << "Notifying event\n";
-                game.eventManager().notify(*event, exec_ctx);
+                event_manager.notify(*event, exec_ctx);
             }
         }
 

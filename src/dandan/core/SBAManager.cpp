@@ -1,7 +1,7 @@
 #include "dandan/core/SBAManager.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/Game.h"
 #include "dandan/core/engine/ConditionManager.h"
+#include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/DestroyEffect.h"
 #include "dandan/effects/one_shot/LoseGameEffect.h"
@@ -17,20 +17,22 @@ namespace dandan::core
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &replacement_manager{exec_ctx.replacement_manager.get()};
+        auto &condition_manager{exec_ctx.condition_manager.get()};
 
         // 704.5a If a player has 0 or less life, that player loses the game.
-        for (const auto &player : game.getPlayers())
+        for (auto &player : game.getPlayers())
         {
             if (player.getLifeTotal() <= 0)
             {
                 std::cout << player.getName()
                           << " has 0 or less life and loses the game.\n";
                 effects::EffectContext context{};
+                player.setLost();
                 auto lose_effect{std::make_unique<effects::LoseGameEffect>(
                     player.getID(), context)};
-                auto final_effect{
-                    game.replacementManager().applyReplacementEffects(
-                        *lose_effect, exec_ctx)};
+                auto final_effect{replacement_manager.applyReplacementEffects(
+                    *lose_effect, exec_ctx)};
                 static_cast<void>(final_effect->apply(exec_ctx));
             }
         }
@@ -38,7 +40,7 @@ namespace dandan::core
         // 704.5b If a player attempted to draw a card from a library with no
         // cards in it since the last time state-based actions were checked,
         // that player loses the game.
-        for (const auto &player : game.getPlayers())
+        for (auto &player : game.getPlayers())
         {
             if (player.drewCardFromEmptyLibrary())
             {
@@ -46,11 +48,11 @@ namespace dandan::core
                           << " attempted to draw from an empty library and "
                              "loses the game.\n";
                 effects::EffectContext context{};
+                player.setLost();
                 auto lose_effect{std::make_unique<effects::LoseGameEffect>(
                     player.getID(), context)};
-                auto final_effect{
-                    game.replacementManager().applyReplacementEffects(
-                        *lose_effect, exec_ctx)};
+                auto final_effect{replacement_manager.applyReplacementEffects(
+                    *lose_effect, exec_ctx)};
                 static_cast<void>(final_effect->apply(exec_ctx));
             }
         }
@@ -77,7 +79,7 @@ namespace dandan::core
                         std::make_unique<effects::DestroyEffect>(*card,
                                                                  context)};
                     auto final_effect{
-                        game.replacementManager().applyReplacementEffects(
+                        replacement_manager.applyReplacementEffects(
                             *destroy_effect, exec_ctx)};
                     static_cast<void>(final_effect->apply(exec_ctx));
                 }
@@ -89,8 +91,7 @@ namespace dandan::core
         // effect that removes trigger records
         std::unordered_map<CardID, std::vector<TriggeredRecord>>
             copied_records{};
-        const auto &current_records{
-            game.conditionManager().getTriggerRecords()};
+        const auto &current_records{condition_manager.getTriggerRecords()};
         std::copy(current_records.begin(), current_records.end(),
                   std::inserter(copied_records, copied_records.begin()));
 
@@ -106,7 +107,7 @@ namespace dandan::core
                         card_registry[card_id]->getControllerID()};
                     abilities::AbilityContext context{card_id, controller_id};
                     auto final_effect{
-                        game.replacementManager().applyReplacementEffects(
+                        replacement_manager.applyReplacementEffects(
                             *triggered_record.bound_ability->createEffect(
                                 exec_ctx),
                             exec_ctx)};

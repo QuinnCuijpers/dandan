@@ -2,7 +2,11 @@
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
+#include "dandan/core/engine/ConditionManager.h"
+#include "dandan/core/engine/EventManager.h"
+#include "dandan/core/engine/PreventionManager.h"
+#include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/utils/log.h"
 #include <vector>
 
@@ -65,16 +69,20 @@ namespace dandan::core
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &event_manager{exec_ctx.event_manager.get()};
+        auto &condition_manager{exec_ctx.condition_manager.get()};
+        auto &replacement_manager{exec_ctx.replacement_manager.get()};
+        auto &prevention_manager{exec_ctx.prevention_manager.get()};
 
         std::cout << "Destroying card " << getData().name << '\n';
         auto *card{card_registry[getID()]};
         auto &player{game.getPlayer(card->getControllerID())};
         game.moveCardFromZone(player, *card);
         // remove from managers
-        game.eventManager().unsubscribe(*card);
-        game.conditionManager().removeCardConditions(card->getID());
-        game.preventionManager().unsubscribe(card->getID());
-        game.replacementManager().unsubscribe(*card);
+        event_manager.unsubscribe(*card);
+        condition_manager.removeCardConditions(card->getID());
+        prevention_manager.unsubscribe(card->getID());
+        replacement_manager.unsubscribe(*card);
         game.graveyard().addCard(*card);
     }
 
@@ -383,7 +391,10 @@ namespace dandan::core
     void Card::setCharacteristics(const CardCharacteristics &character,
                                   ExecutionContext exec_ctx)
     {
-        auto &game{exec_ctx.state.get()};
+        auto &event_manager{exec_ctx.event_manager.get()};
+        auto &replacement_manager{exec_ctx.replacement_manager.get()};
+        auto &prevention_manager{exec_ctx.prevention_manager.get()};
+        auto &condition_manager{exec_ctx.condition_manager.get()};
 
         std::cout << "Setting characteristics of cardID: " << m_card_id << '\n';
         m_characteristics = character;
@@ -392,13 +403,13 @@ namespace dandan::core
             for (const auto &ability : m_current_abilities)
             {
 
-                game.eventManager().unsubscribe(ability);
+                event_manager.unsubscribe(ability);
 
-                game.replacementManager().unsubscribe(ability);
+                replacement_manager.unsubscribe(ability);
 
-                game.preventionManager().unsubscribe(ability);
+                prevention_manager.unsubscribe(ability);
 
-                game.conditionManager().removeStateTriggeredAbility(ability);
+                condition_manager.removeStateTriggeredAbility(ability);
             }
             m_current_abilities.clear();
         }

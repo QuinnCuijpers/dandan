@@ -1,6 +1,6 @@
 #include "dandan/effects/one_shot/PeekEffect.h"
 #include "dandan/core/ExecutionContext.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include <iostream>
 #include <string>
 
@@ -62,6 +62,8 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game = exec_ctx.state.get();
+        auto &istream{exec_ctx.input_manager.get().stream()};
+
         std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount
                   << " cards of the library\n";
         // moves cards out of deck
@@ -76,7 +78,7 @@ namespace dandan::effects
             printPeekedCards(cards, exec_ctx);
             std::cout << "Choose card (0 - " << cards.size() - 1 << "): ";
             std::string choice{};
-            std::getline(game.istream(), choice);
+            std::getline(istream, choice);
             int choice_int{std::stoi(choice)};
             if (choice_int < 0 || choice_int >= static_cast<int>(cards.size()))
             {

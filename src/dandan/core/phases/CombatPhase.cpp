@@ -1,7 +1,5 @@
 #include "dandan/core/phases/CombatPhase.h"
-#include "dandan/core/Game.h"
 #include "dandan/core/actions/AttackAction.h"
-#include "dandan/core/actions/IAction.h"
 #include "dandan/core/phases/MainPhase.h"
 #include <memory>
 #include <string>
@@ -52,15 +50,20 @@ namespace dandan::core
     {
         auto &game{context().state.get()};
         auto &card_registry{context().cards.get()};
+        auto &priority_manager{context().priority_manager.get()};
+        auto &event_manager{context().event_manager.get()};
+        auto &istream{context().input_manager.get().stream()};
+        auto &replacement_manager{context().replacement_manager.get()};
+        auto &prevention_manager{context().prevention_manager.get()};
 
-        game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),
-                                                   context());
+        priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                             context());
         std::cout << "Declare attackers step\n";
 
         // ask the player to choose attacking creatures
         while (true)
         {
-            game.render();
+            game.render(card_registry);
             auto viable_attackers{std::vector<Card *>()};
             for (const auto &creature_id :
                  game.activePlayer().battlefield().getCreatures())
@@ -68,7 +71,7 @@ namespace dandan::core
                 auto *creature{card_registry[creature_id]};
                 const auto &attack_action{
                     std::make_unique<core::AttackAction>(*creature)};
-                if (!game.isActionPrevented(*attack_action))
+                if (!prevention_manager.isPrevented(*attack_action, context()))
                 {
                     std::cout << "Creature " << creature->getData().name
                               << " (CardID: " << creature->getID().getID()
@@ -98,7 +101,7 @@ namespace dandan::core
             std::cout << "Which creature would you like to attack with (or "
                          "none to move to the next step): ";
             std::string input{};
-            std::getline(game.istream(), input);
+            std::getline(istream, input);
 
             if (input == "none")
             {
@@ -118,13 +121,13 @@ namespace dandan::core
 
             auto effect{attack_action->createEffect(context())};
             const auto &final_effect{
-                game.replacementManager().applyReplacementEffects(*effect,
-                                                                  context())};
+                replacement_manager.applyReplacementEffects(*effect,
+                                                            context())};
 
             auto event{final_effect->apply(context())};
             if (event != nullptr)
             {
-                game.eventManager().notify(*event, context());
+                event_manager.notify(*event, context());
             }
         }
 
@@ -134,10 +137,12 @@ namespace dandan::core
     {
         auto &game{context().state.get()};
         auto &card_registry{context().cards.get()};
+        auto &priority_manager{context().priority_manager.get()};
+        auto &istream{context().input_manager.get().stream()};
 
         std::cout << "Declare blockers step\n";
-        game.priorityManager().setPriorityToPlayer(game.activePlayer().getID(),
-                                                   context());
+        priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                             context());
         if (m_attackers.empty())
         {
             std::cout
@@ -146,7 +151,7 @@ namespace dandan::core
             return;
         }
         auto *blocking_player{&game.nonActivePlayer()};
-        game.render();
+        game.render(card_registry);
         for (const auto &creature_id :
              blocking_player->battlefield().getCreatures())
         {
@@ -159,7 +164,7 @@ namespace dandan::core
                       << creature->getData().name
                       << " (or none to not block with it): ";
             std::string input{};
-            std::getline(game.istream(), input);
+            std::getline(istream, input);
             if (input == "none")
             {
                 continue;
@@ -183,13 +188,14 @@ namespace dandan::core
     void CombatPhase::handleNextStep()
     {
         auto &game{context().state.get()};
+        auto &priority_manager{context().priority_manager.get()};
 
         switch (m_step)
         {
         case Step::BeginningOfCombat:
             std::cout << "Beginning of combat step\n";
-            game.priorityManager().setPriorityToPlayer(
-                game.activePlayer().getID(), context());
+            priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                                 context());
             m_step = Step::DeclareAttackers;
             break;
         // TODO:
@@ -233,8 +239,8 @@ namespace dandan::core
             m_step = Step::EndOfCombat;
             break;
         case Step::EndOfCombat:
-            game.priorityManager().setPriorityToPlayer(
-                game.activePlayer().getID(), context());
+            priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
+                                                 context());
             std::cout << "End of combat step\n";
             m_step = Step::Done;
             break;

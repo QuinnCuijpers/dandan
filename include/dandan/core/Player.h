@@ -160,6 +160,11 @@ namespace dandan::core
             return m_lost_game;
         }
 
+        void setLost()
+        {
+            m_lost_game = true;
+        }
+
         /** Draws a card from the library.
          * @param game The game instance.
          */

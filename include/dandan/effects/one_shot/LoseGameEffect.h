@@ -1,13 +1,12 @@
 #ifndef DANDAN_LOSE_GAME_EFFECT_H
 #define DANDAN_LOSE_GAME_EFFECT_H
 
-#include <iostream>
-#include <utility>
-
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include <iostream>
+#include <utility>
 
 namespace dandan::effects
 {
@@ -33,6 +32,7 @@ namespace dandan::effects
         {
             const auto &game{exec_ctx.state.get()};
             const auto &player = game.getPlayer(m_player);
+
             std::cout << player.getName() << " has lost the game!" << '\n';
             game.quit(player);
             return nullptr;

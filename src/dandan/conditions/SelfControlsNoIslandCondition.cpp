@@ -1,7 +1,6 @@
 #include "dandan/conditions/ICondition.h"
 #include "dandan/conditions/SelfControlsNoBasicCondition.h"
 #include "dandan/core/CardTypes.h"
-#include "dandan/core/Game.h"
 #include <algorithm>
 
 #ifdef DANDAN_SERIALIZE

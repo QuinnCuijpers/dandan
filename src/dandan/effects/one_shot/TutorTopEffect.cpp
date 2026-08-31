@@ -1,6 +1,5 @@
 #include "dandan/effects/one_shot/TutorTopEffect.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/Game.h"
 #include <algorithm>
 #include <iterator>
 #include <string>
@@ -62,6 +61,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         // get all cards matching the filter types
         auto included =
@@ -84,10 +84,10 @@ namespace dandan::effects
                      { return included(card, m_filter_types); });
 
         // ask player which cardid they want
-        game.printCards(options);
+        game.printCards(options, card_registry);
         std::cout << "Choose a card to put on top of your library: ";
         std::string input;
-        std::getline(game.istream(), input);
+        std::getline(istream, input);
         int chosen_card_id = std::stoi(input);
 
         // remove card from lib and shuffle

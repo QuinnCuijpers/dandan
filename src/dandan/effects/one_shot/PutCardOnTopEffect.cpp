@@ -1,5 +1,5 @@
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 #include <string>
@@ -49,6 +49,8 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
+        auto &card_registry{exec_ctx.cards.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         std::cout << "Applying put card on top effect\n";
 
@@ -56,7 +58,7 @@ namespace dandan::effects
 
         if (m_amount == 1)
         {
-            game.printCards(player.hand().getCards());
+            game.printCards(player.hand().getCards(), card_registry);
             auto hand_size = player.hand().getCards().size();
             if (hand_size == 0)
             {
@@ -66,7 +68,7 @@ namespace dandan::effects
             std::cout << "Which card index do you want to put on top? (0-"
                       << hand_size - 1 << ")\n";
             std::string input;
-            getline(game.istream(), input);
+            getline(istream, input);
             auto index = std::stoi(input);
 
             // moves card out of hand

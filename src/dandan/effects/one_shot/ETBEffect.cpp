@@ -1,6 +1,7 @@
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/conditions/SummoningSicknessCondition.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
+#include "dandan/core/engine/PreventionManager.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/events/ETBEvent.h"
 #include <memory>
@@ -12,6 +13,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
+        auto &prevention_manager{exec_ctx.prevention_manager.get()};
 
         auto *card{card_registry[m_card.getID()]};
 
@@ -29,8 +31,8 @@ namespace dandan::effects
                 std::make_unique<conditions::SummoningSicknessCondition>(
                     card->getID()))};
 
-        game.preventionManager().subscribe(card->getID(),
-                                           std::move(summoning_sickness));
+        prevention_manager.subscribe(card->getID(),
+                                     std::move(summoning_sickness));
 
         return std::make_unique<events::ETBEvent>(card->getID(),
                                                   card->getControllerID());
