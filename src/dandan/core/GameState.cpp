@@ -36,7 +36,7 @@ namespace dandan::core
     {
         auto &card_registry{exec_ctx.cards.get()};
         auto &prevention_manager{exec_ctx.prevention_manager.get()};
-        auto &istream{exec_ctx.input.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
         auto &event_manager{exec_ctx.event_manager.get()};
         auto &replacement_manager{exec_ctx.replacement_manager.get()};
 
@@ -190,6 +190,7 @@ namespace dandan::core
     {
         // Implementation for quitting the game
         // for now we only support 2 players so we can just end the game
+
         auto winner_id{getNextPlayerID(player.getID())};
         const auto &winner{getPlayer(winner_id)};
 

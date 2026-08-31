@@ -44,7 +44,7 @@ namespace dandan::core
                                               core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
-        auto &istream{exec_ctx.input.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         SBAManager::checkSBAs(exec_ctx);
         m_current_player_with_priority = player_id;

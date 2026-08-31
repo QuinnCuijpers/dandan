@@ -61,7 +61,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
-        auto &istream{exec_ctx.input.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         // get all cards matching the filter types
         auto included =

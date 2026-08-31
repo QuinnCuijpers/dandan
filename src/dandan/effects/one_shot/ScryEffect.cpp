@@ -46,7 +46,7 @@ namespace dandan::effects
     {
         auto &game{exec_ctx.state.get()};
         auto &card_registry{exec_ctx.cards.get()};
-        auto &istream{exec_ctx.input.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         auto cards = game.library().draw(m_scry_amount);
         std::cout << "Scryed cards: [ ";

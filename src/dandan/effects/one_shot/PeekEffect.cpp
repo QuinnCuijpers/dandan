@@ -62,7 +62,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game = exec_ctx.state.get();
-        auto &istream{exec_ctx.input.get()};
+        auto &istream{exec_ctx.input_manager.get().stream()};
 
         std::cout << "Applying PeekEffect: peeking at the top " << m_peek_amount
                   << " cards of the library\n";

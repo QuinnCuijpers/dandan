@@ -52,7 +52,7 @@ namespace dandan::core
         auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
         auto &event_manager{context().event_manager.get()};
-        auto &istream{context().input.get()};
+        auto &istream{context().input_manager.get().stream()};
         auto &replacement_manager{context().replacement_manager.get()};
         auto &prevention_manager{context().prevention_manager.get()};
 
@@ -138,7 +138,7 @@ namespace dandan::core
         auto &game{context().state.get()};
         auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
-        auto &istream{context().input.get()};
+        auto &istream{context().input_manager.get().stream()};
 
         std::cout << "Declare blockers step\n";
         priority_manager.setPriorityToPlayer(game.activePlayer().getID(),

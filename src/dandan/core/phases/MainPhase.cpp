@@ -27,7 +27,7 @@ namespace dandan::core
         auto &game{context().state.get()};
         auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
-        auto &istream{context().input.get()};
+        auto &istream{context().input_manager.get().stream()};
 
         std::cout << "Handling " << name() << '\n';
         priority_manager.setPriorityToPlayer(game.activePlayer().getID(),
@@ -81,7 +81,7 @@ namespace dandan::core
             }
             // TODO: improve error handling for invalid input
             throw std::invalid_argument(
-                "Invalid input: " + (input.empty() ? input : "empty input"));
+                "Invalid input: " + (!input.empty() ? input : "empty input"));
         }
         return std::move(m_next_phase);
     }

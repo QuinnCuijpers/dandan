@@ -31,7 +31,7 @@ namespace dandan::effects
                             core::ExecutionContext exec_ctx)
         {
             auto &game{exec_ctx.state.get()};
-            auto &istream{exec_ctx.input.get()};
+            auto &istream{exec_ctx.input_manager.get().stream()};
 
             auto choices = std::vector<core::Target>{};
             if (const auto *targets = effect.getTargetRequirement())
@@ -77,7 +77,7 @@ namespace dandan::effects
             core::Card *cardp, const ModalEffectDefinition &modal_effect,
             core::ExecutionContext exec_ctx)
         {
-            auto &istream{exec_ctx.input.get()};
+            auto &istream{exec_ctx.input_manager.get().stream()};
 
             std::cout << modal_effect.display();
             std::cout << "Choose an option (0-"
