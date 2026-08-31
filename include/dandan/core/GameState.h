@@ -13,7 +13,11 @@
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
+#include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <array>
+#include <cassert>
+#include <iostream>
+#include <memory>
 
 namespace dandan::core
 {
@@ -188,7 +192,7 @@ namespace dandan::core
 
         void addEndOfTurnEffect(std::unique_ptr<effects::IOneShotEffect> effect)
         {
-            std::cout << "added end of turn effect: " << typeid(effect).name()
+            std::cout << "added end of turn effect: " << typeid(*effect).name()
                       << '\n';
             m_end_of_turn_effects.push_back(std::move(effect));
         }
