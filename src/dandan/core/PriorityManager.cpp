@@ -5,8 +5,28 @@
 #include <stdexcept>
 #include <string>
 
+namespace
+{
+    dandan::core::PlayerID determineStartingPlayer()
+    {
+        // Randomize whom is starting player
+        std::random_device rand;
+        std::mt19937 gen(rand());
+        std::uniform_int_distribution<> dist(0,
+                                             dandan::core::AMOUNT_PLAYERS - 1);
+
+        int starting_player_index = dist(gen);
+        return dandan::core::PlayerID::fromInt(starting_player_index);
+    }
+} // namespace
+
 namespace dandan::core
 {
+    PriorityManager::PriorityManager()
+        : m_current_player_with_priority(determineStartingPlayer())
+    {
+    }
+
     void PriorityManager::passPriority(core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};

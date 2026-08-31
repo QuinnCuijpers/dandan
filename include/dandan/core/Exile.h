@@ -18,6 +18,8 @@ namespace dandan::core
          */
         void addCard(Card &card);
 
+        void removeCard(const Card &card);
+
         /** Gets the list of cards in the exile.
          * @return A constant reference to the vector of card IDs.
          */

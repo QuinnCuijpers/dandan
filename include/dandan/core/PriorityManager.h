@@ -37,6 +37,7 @@ namespace dandan::core
         // the next player in turn order receives priority.
 
     public:
+        PriorityManager();
         /** Constructs a new priority manager with the specified starting
          * player.
          * @param starting_player The player ID of the player who starts with

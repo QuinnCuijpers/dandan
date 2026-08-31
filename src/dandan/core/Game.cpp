@@ -35,8 +35,6 @@ namespace dandan::core
             std::make_unique<effects::PlayCardPreventionEffect>(
                 std::make_unique<conditions::PlayedLandCondition>())};
 
-        m_game_state.determineStartingPlayer();
-
         auto no_draw_starting_player{
             std::make_unique<effects::DrawPreventionEffect>(
                 std::make_unique<conditions::StartingPlayerCondition>())};

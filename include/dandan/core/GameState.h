@@ -22,17 +22,6 @@ namespace dandan::core
     public:
         GameState() = default;
 
-        void determineStartingPlayer()
-        {
-            // Randomize whom is starting player
-            std::random_device rand;
-            std::mt19937 gen(rand());
-            std::uniform_int_distribution<> dist(0, AMOUNT_PLAYERS - 1);
-
-            int starting_player_index = dist(gen);
-            m_active_player_index = starting_player_index;
-        }
-
         /** Gets a player from the game accosiated with the given ID immutably.
          * @param player_id The ID of the player to get.
          * @return A const reference to the player at the specified ID.
