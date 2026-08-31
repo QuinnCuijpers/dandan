@@ -62,7 +62,6 @@ namespace dandan::core
     }
 #ifdef DANDAN_SERIALIZE
     Game::Game(const std::filesystem::path &path)
-        : m_priority_manager(m_game_state.activePlayerID())
     {
         m_card_registry.load_cards(path);
         GameSetup();
@@ -70,7 +69,6 @@ namespace dandan::core
 #endif
 
     Game::Game(std::vector<Card> cards, bool shuffle)
-        : m_priority_manager(m_game_state.activePlayerID())
     {
         auto moved_cards{std::move(cards)};
         m_card_registry.setCards(moved_cards);
@@ -78,9 +76,7 @@ namespace dandan::core
         GameSetup(shuffle);
     }
 
-    Game::Game(std::istream &input, bool shuffle)
-        : m_priority_manager(m_game_state.activePlayerID()),
-          m_input_manager{input}
+    Game::Game(std::istream &input, bool shuffle) : m_input_manager{input}
     {
         GameSetup(shuffle);
     }
