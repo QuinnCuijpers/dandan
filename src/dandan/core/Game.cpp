@@ -111,6 +111,10 @@ namespace dandan::core
                 DLOGI << "Game quit by user\n";
                 return;
             }
+            if (std::string(e.what()) == "Game ended due to a player winning")
+            {
+                DLOGI << "Game ended due to a player winning\n";
+            }
             std::cout << "Game ended: " << e.what() << '\n';
         }
     }

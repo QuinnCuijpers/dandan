@@ -7,6 +7,7 @@
 #include "dandan/core/engine/PreventionManager.h"
 #include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/utils/overloadVisitor.h"
+#include <stdexcept>
 
 namespace
 {
@@ -194,7 +195,7 @@ namespace dandan::core
 
         std::cout << "Player " << winner.getName() << " wins the game!\n";
         std::cout << "Quitting the game...\n";
-        std::exit(0);
+        throw std::runtime_error("Game ended due to a player winning");
     }
 
     std::vector<core::Target> GameState::getValidCreatures(
@@ -215,22 +216,14 @@ namespace dandan::core
         }
         if (controller == Controller::Opponent || controller == Controller::Any)
         {
-
-            while (true)
+            current_player_id = getNextPlayerID(current_player_id);
+            while (current_player_id != starting_player_id)
             {
-                const auto nextPlayer{getNextPlayerID(current_player_id)};
-                const auto &player{getPlayer(nextPlayer)};
-
+                const auto &player{getPlayer(current_player_id)};
                 auto creatures{getCreaturesForPlayer(player)};
-
                 targets.insert(targets.end(), creatures.begin(),
                                creatures.end());
-
                 current_player_id = getNextPlayerID(current_player_id);
-                if (current_player_id == starting_player_id)
-                {
-                    break;
-                }
             }
         }
         return targets;
@@ -322,6 +315,8 @@ namespace dandan::core
             graveyard().removeCard(card);
             break;
         case Zone::EXILE:
+            exile().removeCard(card);
+            break;
         case Zone::STACK:
             // while it is called a stack and it does have FILO properties cards
             // can be removed at any level
