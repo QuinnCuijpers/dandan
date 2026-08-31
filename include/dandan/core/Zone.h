@@ -2,6 +2,7 @@
 #define DANDAN_ZONE_H
 
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 namespace dandan::core
