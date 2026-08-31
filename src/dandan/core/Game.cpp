@@ -79,7 +79,8 @@ namespace dandan::core
     }
 
     Game::Game(std::istream &input, bool shuffle)
-        : m_priority_manager(m_game_state.activePlayerID()), m_input{&input}
+        : m_priority_manager(m_game_state.activePlayerID()),
+          m_input_manager{input}
     {
         GameSetup(shuffle);
     }

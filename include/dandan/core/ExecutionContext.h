@@ -2,8 +2,8 @@
 #define DANDAN_ABILITYEXECUTIONCONTEXT_H
 
 #include "dandan/core/CardRegistry.h"
+#include "dandan/core/engine/InputManager.h"
 #include <functional>
-#include <istream>
 
 namespace dandan::core
 {
@@ -19,7 +19,7 @@ namespace dandan::core
     {
         std::reference_wrapper<core::GameState> state;
         std::reference_wrapper<core::CardRegistry> cards;
-        std::reference_wrapper<std::istream> input;
+        std::reference_wrapper<InputManager> input_manager;
         std::reference_wrapper<EventManager> event_manager;
         std::reference_wrapper<PreventionManager> prevention_manager;
         std::reference_wrapper<ReplacementManager> replacement_manager;

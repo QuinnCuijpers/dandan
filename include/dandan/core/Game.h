@@ -11,6 +11,7 @@
 #include "dandan/core/SBAManager.h"
 #include "dandan/core/actions/IAction.h"
 #include "dandan/core/engine/ConditionManager.h"
+#include "dandan/core/engine/InputManager.h"
 #include "dandan/core/engine/PreventionManager.h"
 #include "dandan/core/phases/IPhase.h"
 #include "engine/EventManager.h"
@@ -136,26 +137,18 @@ namespace dandan::core
             return m_card_registry.card_ids();
         }
 
-        /** Gets the input stream mutably.
-         * @return A reference to the input stream.
-         */
-        [[nodiscard]] std::istream &istream()
-        {
-            return *m_input;
-        }
-
         /** Sets the input stream.
          * @param istream The input stream to set.
          */
         void setIstream(std::istream &istream)
         {
-            m_input = &istream;
+            m_input_manager.setInput(istream);
         }
 
         ExecutionContext execution_context()
         {
             return {
-                m_game_state,       m_card_registry,      *m_input,
+                m_game_state,       m_card_registry,      m_input_manager,
                 m_event_manager,    m_prevention_manager, m_replacement_manager,
                 m_priority_manager, m_condition_manager,  m_sba_manager};
         }
@@ -173,9 +166,8 @@ namespace dandan::core
         PriorityManager m_priority_manager;
         ConditionManager m_condition_manager;
         SBAManager m_sba_manager;
+        InputManager m_input_manager;
         CardRegistry m_card_registry;
-
-        std::istream *m_input{&std::cin};
 
         explicit Game(std::istream &input, bool shuffle = true);
         explicit Game(std::vector<Card> cards, bool shuffle = true);
