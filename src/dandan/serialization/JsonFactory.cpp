@@ -2,6 +2,7 @@
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
+#include <string>
 
 namespace dandan::serialization
 {

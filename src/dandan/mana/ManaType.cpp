@@ -1,40 +1,39 @@
 #include "dandan/mana/ManaType.h"
-#include <stdexcept>
-#include <string>
 
 namespace dandan::mana
 {
 
-    ManaType ManaTypeFromString(std::string_view str)
-    {
-        // TODO: allow any casing
-        if (str == "Colorless")
-        {
-            return ManaType::COLORLESS;
-        }
-        if (str == "White")
-        {
-            return ManaType::WHITE;
-        }
-        if (str == "Blue")
-        {
-            return ManaType::BLUE;
-        }
-        if (str == "Black")
-        {
-            return ManaType::BLACK;
-        }
-        if (str == "Red")
-        {
-            return ManaType::RED;
-        }
-        if (str == "Green")
-        {
-            return ManaType::GREEN;
-        }
+    // ManaType ManaTypeFromString(std::string_view str)
+    // {
+    //     // TODO: allow any casing
+    //     if (str == "Colorless")
+    //     {
+    //         return ManaType::COLORLESS;
+    //     }
+    //     if (str == "White")
+    //     {
+    //         return ManaType::WHITE;
+    //     }
+    //     if (str == "Blue")
+    //     {
+    //         return ManaType::BLUE;
+    //     }
+    //     if (str == "Black")
+    //     {
+    //         return ManaType::BLACK;
+    //     }
+    //     if (str == "Red")
+    //     {
+    //         return ManaType::RED;
+    //     }
+    //     if (str == "Green")
+    //     {
+    //         return ManaType::GREEN;
+    //     }
 
-        throw std::invalid_argument(std::string("Invalid mana type string: ") +
-                                    std::string(str));
-    }
+    //     throw std::invalid_argument(std::string("Invalid mana type string: ")
+    //     +
+    //                                 std::string(str));
+    // }
 
 } // namespace dandan::mana

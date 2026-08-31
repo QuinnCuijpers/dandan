@@ -77,11 +77,6 @@ namespace dandan::core
             return m_players.at(m_active_player_index);
         }
 
-        [[nodiscard]] PlayerID activePlayerID() const
-        {
-            return PlayerID::fromInt(m_active_player_index);
-        }
-
         /** Gets the non-active player immutably.
          * @return A const reference to the non-active player.
          */
