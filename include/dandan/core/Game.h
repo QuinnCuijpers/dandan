@@ -3,7 +3,6 @@
 
 #include "Player.h"
 #include "dandan/core/Card.h"
-#include "dandan/core/CardID.h"
 #include "dandan/core/CardRegistry.h"
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/core/GameState.h"
@@ -46,96 +45,6 @@ namespace dandan::core
          * @return The constructed game instance.
          */
         static Game withCards(std::vector<Card> cards, bool shuffle = true);
-
-        /** Gets the event manager mutably.
-         * @return A reference to the event manager.
-         */
-        [[nodiscard]] EventManager &eventManager()
-        {
-            return m_event_manager;
-        }
-
-        /** Gets the event manager immutably.
-         * @return A const reference to the event manager.
-         */
-        [[nodiscard]] const EventManager &eventManager() const
-        {
-            return m_event_manager;
-        }
-
-        /** Gets the replacement manager mutably.
-         * @return A reference to the replacement manager.
-         */
-        [[nodiscard]] ReplacementManager &replacementManager()
-        {
-            return m_replacement_manager;
-        }
-
-        /** Gets the replacement manager immutably.
-         * @return A const reference to the replacement manager.
-         */
-        [[nodiscard]] const ReplacementManager &replacementManager() const
-        {
-            return m_replacement_manager;
-        }
-
-        /** Gets the prevention manager mutably.
-         * @return A reference to the prevention manager.
-         */
-        [[nodiscard]] PreventionManager &preventionManager()
-        {
-            return m_prevention_manager;
-        }
-
-        /** Gets the prevention manager immutably.
-         * @return A const reference to the prevention manager.
-         */
-        [[nodiscard]] const PreventionManager &preventionManager() const
-        {
-            return m_prevention_manager;
-        }
-
-        /** Gets the priority manager mutably.
-         * @return A reference to the priority manager.
-         */
-        [[nodiscard]] PriorityManager &priorityManager()
-        {
-            return m_priority_manager;
-        }
-
-        /** Gets the priority manager immutably.
-         * @return A const reference to the priority manager.
-         */
-        [[nodiscard]] const PriorityManager &priorityManager() const
-        {
-            return m_priority_manager;
-        }
-
-        /** Gets the condition manager mutably.
-         * @return A reference to the condition manager.
-         */
-        [[nodiscard]] ConditionManager &conditionManager()
-        {
-            return m_condition_manager;
-        }
-
-        /** Gets the condition manager immutably.
-         * @return A const reference to the condition manager.
-         */
-        [[nodiscard]] const ConditionManager &conditionManager() const
-        {
-            return m_condition_manager;
-        }
-
-        CardRegistry &cardRegistry()
-        {
-            return m_card_registry;
-        }
-
-        std::vector<CardID> cards() const
-        {
-            return m_card_registry.card_ids();
-        }
 
         /** Sets the input stream.
          * @param istream The input stream to set.
