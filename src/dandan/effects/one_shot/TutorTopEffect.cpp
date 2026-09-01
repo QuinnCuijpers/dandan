@@ -1,5 +1,6 @@
 #include "dandan/effects/one_shot/TutorTopEffect.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/GameState.h"
 #include <algorithm>
 #include <iterator>
 #include <string>

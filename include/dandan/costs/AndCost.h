@@ -43,8 +43,8 @@ namespace dandan::costs
 } // namespace dandan::costs
 
 #ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
 namespace dandan::serialization::registration
@@ -57,7 +57,7 @@ namespace dandan::serialization::registration
     {
         CostsRegistry::instance().registerType<AndCost>(
             "AndCost",
-            [](const dandan::ICost *cost)
+            [](const ICost *cost)
             {
                 auto json = nlohmann::json::object();
                 const auto *and_cost{dynamic_cast<const AndCost *>(cost)};
@@ -87,7 +87,7 @@ namespace dandan::serialization::registration
             });
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif // DANDAN_ANDCOST_H

@@ -1,5 +1,6 @@
 #include "dandan/core/Battlefield.h"
 #include "dandan/core/Expire.h"
+#include "dandan/core/GameState.h"
 #include "dandan/effects/one_shot/ChangeCharasticsEffect.h"
 #include "dandan/events/IEvent.h"
 #include <memory>

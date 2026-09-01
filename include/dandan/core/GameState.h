@@ -10,6 +10,7 @@
 #include "dandan/core/Player.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Stack.h"
+#include "dandan/core/TargetRequirement.h"
 #include "dandan/core/phases/BeginningPhase.h"
 #include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"

@@ -27,9 +27,7 @@ namespace dandan::costs
     };
 } // namespace dandan::costs
 
-
 #ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
@@ -52,7 +50,7 @@ namespace dandan::serialization::registration
             { return std::make_unique<TapCost>(); });
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif

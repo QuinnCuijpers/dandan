@@ -10,7 +10,6 @@
 #include "dandan/core/Stats.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/Zone.h"
-#include "dandan/effects/one_shot/ModalEffect.h"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -23,10 +22,13 @@ namespace dandan::abilities
 {
     class IAbility;
 } // namespace dandan::abilities
+
 namespace dandan::effects
 {
     class IOneShotEffectDefinition;
-}
+    class ModalEffectDefinition;
+} // namespace dandan::effects
+
 namespace dandan::core
 {
     struct CardCharacteristics

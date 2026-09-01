@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
+#include "dandan/core/GameState.h"
 #include "dandan/utils/stringToBasicLandType.h"
 #include <algorithm>
 #include <iostream>

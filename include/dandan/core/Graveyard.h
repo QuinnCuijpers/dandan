@@ -4,6 +4,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/Zone.h"
+#include <algorithm>
 
 namespace dandan::core
 {
