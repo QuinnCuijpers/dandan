@@ -3,6 +3,7 @@
 
 #include "dandan/conditions/ICondition.h"
 #include "dandan/effects/EffectContext.h"
+#include "dandan/numbers/ExactNumber.h"
 #include "dandan/numbers/INumber.h"
 #include <memory>
 
@@ -38,7 +39,6 @@ namespace dandan::numbers
     };
 } // namespace dandan::numbers
 
-
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonTypeRegistry.h"
@@ -72,18 +72,24 @@ namespace dandan::serialization::registration
                 auto condition{JsonFactory<ICondition>::create_product(
                     data.at("condition"))};
 
-                auto if_{
-                    JsonFactory<INumber>::create_product(data.at("ifNumber"))};
+                auto if_ = data["ifNumber"].is_number()
+                               ? std::make_unique<ExactNumber>(
+                                     data["ifNumber"].get<int>())
+                               : JsonFactory<INumber>::create_product(
+                                     data["ifNumber"]);
 
-                auto else_{JsonFactory<INumber>::create_product(
-                    data.at("elseNumber"))};
+                auto else_ = data["ifNumber"].is_number()
+                                 ? std::make_unique<ExactNumber>(
+                                       data["ifNumber"].get<int>())
+                                 : JsonFactory<INumber>::create_product(
+                                       data["ifNumber"]);
 
                 return std::make_unique<ConditionalNumber>(
                     std::move(if_), std::move(else_), std::move(condition));
             });
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif
