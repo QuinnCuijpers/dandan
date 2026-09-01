@@ -1,6 +1,7 @@
 #ifndef DANDAN_JSON_ENUMS_H
 #define DANDAN_JSON_ENUMS_H
 
+#include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
 #include "dandan/core/Keyword.h"
@@ -66,16 +67,6 @@ namespace dandan::core
     NLOHMANN_JSON_SERIALIZE_ENUM(Keyword, {{Keyword::Flying, "Flying"}})
 
 } // namespace dandan::core
-
-namespace dandan::abilities
-{
-    NLOHMANN_JSON_SERIALIZE_ENUM( // NOLINT
-        StaticAbility::Type,
-        {{StaticAbility::Type::CharacteristicDefining,
-          "CharacteristicDefining"},
-         {StaticAbility::Type::Prevention, "Prevention"},
-         {StaticAbility::Type::Replacement, "Replacement"}});
-}
 
 #endif // DANDAN_SERIALIZE
 #endif // DANDAN_JSON_ENUMS_H

@@ -60,12 +60,20 @@ namespace dandan::abilities
     };
 } // namespace dandan::abilities
 
-
 #ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
+
+namespace dandan::abilities
+{
+    NLOHMANN_JSON_SERIALIZE_ENUM( // NOLINT
+        StaticAbility::Type,
+        {{StaticAbility::Type::CharacteristicDefining,
+          "CharacteristicDefining"},
+         {StaticAbility::Type::Prevention, "Prevention"},
+         {StaticAbility::Type::Replacement, "Replacement"}});
+}
 
 namespace dandan::serialization::registration
 {
@@ -107,7 +115,7 @@ namespace dandan::serialization::registration
 
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif // REPLACEMENTABILITY_H
