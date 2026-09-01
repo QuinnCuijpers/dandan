@@ -44,7 +44,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ManaCost>(
                 dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 2})),
-        std::make_unique<dandan::DrawEffectDefinition>()));
+        std::make_unique<dandan::effects::DrawEffectDefinition>()));
 
     return abilities;
 }
@@ -65,7 +65,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ManaCost>(dandan::mana::ManaPrice{
                 dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}})),
-        std::make_unique<dandan::DrawEffectDefinition>()));
+        std::make_unique<dandan::effects::DrawEffectDefinition>()));
 
     return abilities;
 }

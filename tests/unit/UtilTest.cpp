@@ -1,4 +1,4 @@
-#include "dandan/dandan.h"
+#include "dandan/effects/one_shot/DrawEffect.h"
 #include <gtest/gtest.h>
 #include <memory>
 #include <vector>
@@ -27,7 +27,8 @@ TEST(UtilTest, ConvertToWords)
     {
         int num{nums[i]};
         std::string expected{"Draw " + strings[i] + " cards"};
-        auto draw_effect{std::make_unique<dandan::DrawEffectDefinition>(num)};
+        auto draw_effect{
+            std::make_unique<dandan::effects::DrawEffectDefinition>(num)};
         EXPECT_EQ(draw_effect->display(), expected);
     }
 }
