@@ -2,6 +2,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
 #include "dandan/utils/log.h"
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <string>
