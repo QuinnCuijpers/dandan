@@ -1831,6 +1831,18 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::BATTLEFIELD);
 }
 
+#ifdef DANDAN_SERIALIZE
+TEST(DandanLibTest, startGameFromFile)
+{
+    auto input = std::stringstream{};
+    input << "quit\n";
+
+    auto game = dandan::Game{dandan::core::DANDAN_DECKLIST};
+    game.setIstream(input);
+    game.run();
+}
+#endif
+
 // TEST(DandanLibTest, DanceNoSavesDandanFromMindBend)
 // {
 //     dandan::core::PlayerID::reset();
