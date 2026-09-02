@@ -11,7 +11,7 @@ namespace dandan::serialization
     {
         const auto &type = json.at("type").get<std::string>();
         return JsonTypeRegistry<T>::instance().deserializerFor(type)(
-            json["data"]);
+            json.at("data"));
     }
 
     template <typename T> nlohmann::json create_json(const T *obj)
