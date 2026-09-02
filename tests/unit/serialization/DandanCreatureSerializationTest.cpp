@@ -1,10 +1,9 @@
-#include "dandan/core/Card.h"
 #include <algorithm>
 #include <iterator>
 #include <memory>
 #ifdef DANDAN_SERIALIZE
 #include "DeserializeTest.h"
-#include "common.h"
+#include "common/common.h"
 #include "dandan/dandan.h"
 #include <gtest/gtest.h>
 #include <string>
