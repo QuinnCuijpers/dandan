@@ -3,6 +3,7 @@
 #define DANDAN_ETBTRIGGER_H
 
 #include "ITrigger.h"
+#include "dandan/events/ETBEvent.h"
 #include "dandan/events/IEvent.h"
 #include <optional>
 
@@ -38,7 +39,35 @@ namespace dandan::triggers
 
         [[nodiscard]] bool triggersOn(
             const events::IEvent &other,
-            [[maybe_unused]] abilities::AbilityContext context) const override;
+            [[maybe_unused]] abilities::AbilityContext context) const override
+        {
+
+            const auto *otherETB =
+                dynamic_cast<const events::ETBEvent *>(&other);
+
+            if (otherETB == nullptr)
+            {
+                return false;
+            }
+
+            if constexpr (self_trigger)
+            {
+
+                if (context.source_card_id.getID() !=
+                    otherETB->source().getID())
+                {
+                    return false;
+                }
+            }
+
+            if (m_tapped.has_value() &&
+                otherETB->isTapped() != m_tapped.value())
+            {
+                return false;
+            }
+
+            return true;
+        }
 
     private:
         std::optional<bool> m_tapped;
@@ -98,7 +127,7 @@ namespace dandan::serialization::registration
         registerETBTrigger<true>("SelfETBTrigger");
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif
