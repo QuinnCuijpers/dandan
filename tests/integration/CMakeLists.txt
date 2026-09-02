@@ -1,6 +1,15 @@
 add_executable(DandanLibTest)
 
-target_sources(DandanLibTest PRIVATE DandanLibTest.cpp)
+target_sources(DandanLibTest PRIVATE
+    GameSetupTest.cpp
+    GameRulesTest.cpp
+    CombatTest.cpp
+    LandAbilitiesTest.cpp
+    DrawTest.cpp
+    TutorTest.cpp
+    SpellInteractionTest.cpp
+    ChangeCharacteristicsTest.cpp
+    ManaTest.cpp)
 
 target_sources(DandanLibTest PRIVATE FILE_SET HEADERS BASE_DIRS
                                      ${CMAKE_SOURCE_DIR}/tests)

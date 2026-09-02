@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #ifdef DANDAN_SERIALIZE
-#include "common.h"
-#include "dandan/abilities/StaticAbility.h"
+#include "common/common.h"
 #include "dandan/dandan.h"
 #include <nlohmann/json.hpp>
 #include <string>
