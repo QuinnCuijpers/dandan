@@ -1,4 +1,5 @@
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
+#include "dandan/core/Card.h"
 
 namespace dandan::effects
 {

@@ -2,11 +2,11 @@
 #define DANDAN_SPELL_DEFINITIONS_H
 
 #include "dandan/abilities/IAbility.h"
-#include "dandan/abilities/KeyWords.h"
 #include "dandan/conditions/ICondition.h"
 #include "dandan/conditions/MatchesReadLinksCondition.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
+#include "dandan/core/Keyword.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/one_shot/BounceEffect.h"

@@ -1,7 +1,7 @@
 #include "dandan/abilities/ActivatedAbility.h"
-#include "dandan/abilities/IAbility.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
 #include <iostream>
 #include <memory>
 

@@ -1,6 +1,6 @@
 #include "dandan/effects/one_shot/ModalEffect.h"
+#include "dandan/core/Card.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
-#include "dandan/serialization/JsonFactory.h"
 
 namespace dandan::effects
 {

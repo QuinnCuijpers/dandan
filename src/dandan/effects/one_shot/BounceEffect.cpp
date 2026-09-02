@@ -1,12 +1,8 @@
 #include "dandan/effects/one_shot/BounceEffect.h"
-#include "dandan/core/Expire.h"
-#include "dandan/core/Game.h"
-#include "dandan/core/TargetRequirement.h"
+#include "dandan/core/GameState.h"
 #include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
-#include "nlohmann/json_fwd.hpp"
 #include <stdexcept>
 #include <variant>
-#include <vector>
 
 namespace dandan::effects
 {

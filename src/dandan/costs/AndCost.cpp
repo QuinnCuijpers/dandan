@@ -1,7 +1,4 @@
 #include "dandan/costs/AndCost.h"
-#include "dandan/dandan.h"
-#include "dandan/serialization/JsonFactory.h"
-#include "nlohmann/json_fwd.hpp"
 
 namespace dandan::costs
 {

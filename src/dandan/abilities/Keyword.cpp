@@ -1,3 +1,4 @@
+#include "dandan/core/Keyword.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/conditions/FlyingCondition.h"
 #include "dandan/effects/continuous/prevention/BlockPreventionEffect.h"
