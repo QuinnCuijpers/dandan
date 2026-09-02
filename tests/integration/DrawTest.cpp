@@ -135,24 +135,30 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     auto svyenulite_id_1{game_state.activePlayer().hand().getCards()[0]};
     auto svyenulite_id_2{game_state.nonActivePlayer().hand().getCards()[0]};
 
-    auto accumulated_knowledge_id_1{
-        *std::find_if(game_state.activePlayer().hand().getCards().begin(),
-                      game_state.activePlayer().hand().getCards().end(),
-                      [&card_registry](const auto &card_id)
-                      {
-                          const auto *card = card_registry[card_id];
-                          return card != nullptr && card->getData().name ==
-                                                        "Accumulated Knowledge";
-                      })};
-    auto accumulated_knowledge_id_2{
-        *std::find_if(game_state.nonActivePlayer().hand().getCards().begin(),
-                      game_state.nonActivePlayer().hand().getCards().end(),
-                      [&card_registry](const auto &card_id)
-                      {
-                          const auto *card = card_registry[card_id];
-                          return card != nullptr && card->getData().name ==
-                                                        "Accumulated Knowledge";
-                      })};
+    auto accumulated_knowledge_id_1_it{
+        std::find_if(game_state.activePlayer().hand().getCards().begin(),
+                     game_state.activePlayer().hand().getCards().end(),
+                     [&card_registry](const auto &card_id)
+                     {
+                         const auto *card = card_registry[card_id];
+                         return card != nullptr &&
+                                card->getData().name == "Accumulated Knowledge";
+                     })};
+    auto accumulated_knowledge_id_2_it{
+        std::find_if(game_state.nonActivePlayer().hand().getCards().begin(),
+                     game_state.nonActivePlayer().hand().getCards().end(),
+                     [&card_registry](const auto &card_id)
+                     {
+                         const auto *card = card_registry[card_id];
+                         return card != nullptr &&
+                                card->getData().name == "Accumulated Knowledge";
+                     })};
+
+    ASSERT_NE(accumulated_knowledge_id_1_it, nullptr);
+    ASSERT_NE(accumulated_knowledge_id_2_it, nullptr);
+
+    auto accumulated_knowledge_id_1{*accumulated_knowledge_id_2_it};
+    auto accumulated_knowledge_id_2{*accumulated_knowledge_id_2_it};
 
     // turn 1 player 1
     stream << "play " << svyenulite_id_1.getID() << '\n'; // play island

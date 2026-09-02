@@ -54,6 +54,9 @@ TEST(DandanLibTest, CombatTest)
         game_state.nonActivePlayer().hand().getCards().begin(),
         game_state.nonActivePlayer().hand().getCards().end(), find_dandan)};
 
+    ASSERT_NE(attacker_it, nullptr);
+    ASSERT_NE(defender_it, nullptr);
+
     const auto attacker_id = *attacker_it;
     const auto defender_id = *defender_it;
 

@@ -58,15 +58,19 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     auto discard_1{game_state.nonActivePlayer().hand().getCards()[0]};
     auto discard_2{game_state.nonActivePlayer().hand().getCards()[1]};
 
-    auto diminishing_returns_id{
-        *std::find_if(game_state.activePlayer().hand().getCards().begin(),
-                      game_state.activePlayer().hand().getCards().end(),
-                      [&card_registry](const auto &card_id)
-                      {
-                          const auto *card = card_registry[card_id];
-                          return card != nullptr &&
-                                 card->getData().name == "Diminishing Returns";
-                      })};
+    auto diminishing_returns_id_it{
+        std::find_if(game_state.activePlayer().hand().getCards().begin(),
+                     game_state.activePlayer().hand().getCards().end(),
+                     [&card_registry](const auto &card_id)
+                     {
+                         const auto *card = card_registry[card_id];
+                         return card != nullptr &&
+                                card->getData().name == "Diminishing Returns";
+                     })};
+
+    ASSERT_NE(diminishing_returns_id_it, nullptr);
+
+    auto diminishing_returns_id{*diminishing_returns_id_it};
 
     // turn 1 player 1
     stream << "play " << svyenulite_id_1.getID() << '\n'; // play land

@@ -67,7 +67,8 @@ TEST(DandanLibTest, ManaAbilities)
 
     for (auto &player : game_state.getPlayers())
     {
-        for (const auto &land : player.hand().getCards())
+        auto hand_cards{player.hand().getCards()};
+        for (const auto &land : hand_cards)
         {
             auto *card{card_registry[land]};
             // Adds a copy of the land in hand to the battlefield

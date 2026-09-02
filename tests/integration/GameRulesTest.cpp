@@ -136,7 +136,7 @@ TEST(DandanLibTest, PlayCreatureTest)
 
     std::stringstream stream{};
     const auto &hand_cards = game_state.activePlayer().hand().getCards();
-    for (size_t i{}; i < STARTING_HAND_SIZE - 1; ++i)
+    for (int i{}; i < STARTING_HAND_SIZE - 1; ++i)
     {
         auto card_id = hand_cards[i];
         stream << "play " << card_id.getID() << '\n';

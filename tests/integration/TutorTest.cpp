@@ -46,7 +46,7 @@ TEST(DandanLibTest, MysticalTutorTest)
 
     auto &card_registry{game.execution_context().cards.get()};
 
-    static const dandan::core::CardID CHOSEN_CARD_ID{
+    const dandan::core::CardID CHOSEN_CARD_ID{
         game_state.library().getCards().back()};
 
     std::stringstream stream{};

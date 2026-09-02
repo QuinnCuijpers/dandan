@@ -2,7 +2,6 @@
 #include "common/LandDefinitions.h"
 #include "common/SpellDefinitions.h"
 #include "common/TestCardsCreate.h"
-#include "dandan/dandan.h"
 #include <gtest/gtest.h>
 
 TEST(DandanLibTest, DandanMindBendTest)
@@ -404,7 +403,8 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
     cards.insert(cards.end(), crystal_cards.begin(), crystal_cards.end());
     cards.insert(cards.end(), dance_cards.begin(), dance_cards.end());
 
-    assert(cards.size() == NUM_DANCE + NUM_CRYSTAL + NUM_DANDANS + NUM_ISLANDS);
+    EXPECT_EQ(cards.size(),
+              NUM_DANCE + NUM_CRYSTAL + NUM_DANDANS + NUM_ISLANDS);
 
     // cards are dealt one at a time to each player starting with the first
     // player

@@ -1,6 +1,8 @@
 add_executable(DandanLibTest)
 
 target_sources(DandanLibTest PRIVATE
+    AbilityDisplayTest.cpp
+    AbilityDisplayOptionsTest.cpp
     GameSetupTest.cpp
     GameRulesTest.cpp
     CombatTest.cpp
@@ -15,8 +17,6 @@ target_sources(DandanLibTest PRIVATE FILE_SET HEADERS BASE_DIRS
                                      ${CMAKE_SOURCE_DIR}/tests)
 
 if(DANDAN_BUILD_SERIALIZE)
-  target_sources(DandanLibTest PRIVATE AbilityDisplayTest.cpp
-                                       AbilityDisplayOptionsTest.cpp)
   target_compile_definitions(DandanLibTest PRIVATE DANDAN_SERIALIZE)
   target_link_libraries(DandanLibTest PRIVATE nlohmann_json::nlohmann_json)
 endif()
