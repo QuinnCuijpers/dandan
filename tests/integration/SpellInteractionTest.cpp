@@ -68,7 +68,8 @@ TEST(DandanLibTest, DiminishingReturnsTest)
                                 card->getData().name == "Diminishing Returns";
                      })};
 
-    ASSERT_NE(diminishing_returns_id_it, nullptr);
+    ASSERT_NE(diminishing_returns_id_it,
+              game_state.activePlayer().hand().getCards().end());
 
     auto diminishing_returns_id{*diminishing_returns_id_it};
 

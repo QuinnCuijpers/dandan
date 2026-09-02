@@ -154,10 +154,12 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
                                 card->getData().name == "Accumulated Knowledge";
                      })};
 
-    ASSERT_NE(accumulated_knowledge_id_1_it, nullptr);
-    ASSERT_NE(accumulated_knowledge_id_2_it, nullptr);
+    ASSERT_NE(accumulated_knowledge_id_1_it,
+              game_state.activePlayer().hand().getCards().end());
+    ASSERT_NE(accumulated_knowledge_id_2_it,
+              game_state.nonActivePlayer().hand().getCards().end());
 
-    auto accumulated_knowledge_id_1{*accumulated_knowledge_id_2_it};
+    auto accumulated_knowledge_id_1{*accumulated_knowledge_id_1_it};
     auto accumulated_knowledge_id_2{*accumulated_knowledge_id_2_it};
 
     // turn 1 player 1
