@@ -78,11 +78,11 @@ namespace dandan::serialization::registration
                                : JsonFactory<INumber>::create_product(
                                      data["ifNumber"]);
 
-                auto else_ = data["ifNumber"].is_number()
+                auto else_ = data["elseNumber"].is_number()
                                  ? std::make_unique<ExactNumber>(
-                                       data["ifNumber"].get<int>())
+                                       data["elseNumber"].get<int>())
                                  : JsonFactory<INumber>::create_product(
-                                       data["ifNumber"]);
+                                       data["elseNumber"]);
 
                 return std::make_unique<ConditionalNumber>(
                     std::move(if_), std::move(else_), std::move(condition));

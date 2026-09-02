@@ -5,6 +5,7 @@
 #include "dandan/abilities/EventTriggeredAbility.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/abilities/SpellAbility.h"
+#include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/WithDamage.h"
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
@@ -14,6 +15,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/Game.h"
+#include "dandan/core/Keyword.h"
 #include "dandan/costs/AndCost.h"
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
@@ -61,6 +63,7 @@ namespace dandan
     using core::Card;
     using core::CardData;
     using core::Game;
+    using core::Keyword;
     using core::Stats;
 
     using conditions::DefenderControlsNoBasicCondition;
