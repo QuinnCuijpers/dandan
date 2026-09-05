@@ -5,7 +5,7 @@
 
 #include "dandan/dandan.h"
 #include "gtest/gtest.h"
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 class DeserializeTest : public testing::TestWithParam<dandan::Card>
 {

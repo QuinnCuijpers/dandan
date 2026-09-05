@@ -2,6 +2,7 @@
 #ifdef DANDAN_SERIALIZE
 #include "DeserializeTest.h"
 #include <fstream>
+#include <nlohmann/json.hpp>
 
 void DeserializeTest::SetUp()
 {
