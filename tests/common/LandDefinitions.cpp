@@ -1,5 +1,6 @@
 #include "LandDefinitions.h"
 #include "dandan/abilities/BasicLandAbility.h"
+#include "dandan/dandan.h"
 
 std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
 {
