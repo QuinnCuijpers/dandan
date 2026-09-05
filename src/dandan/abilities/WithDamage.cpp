@@ -7,45 +7,6 @@
 #include <iostream>
 #include <memory>
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonFactory.h"
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-    using namespace dandan::abilities;
-    using namespace dandan::serialization;
-    using namespace dandan::costs;
-    using namespace dandan::mana;
-
-    const auto registered = []
-    {
-        AbilityRegistry::instance().registerType<WithDamage>(
-            "WithDamage",
-            [](const IAbility *ability)
-            {
-                auto json = nlohmann::json::object();
-                const auto *with_damage{
-                    dynamic_cast<const WithDamage *>(ability)};
-                json["damage"] = with_damage->getDamage();
-                json["ability"] = JsonFactory<IAbility>::create_json(
-                    with_damage->getInnerAbility());
-                return json;
-            },
-            [](const nlohmann::json &json)
-            {
-                const int damage{json.at("damage").get<int>()};
-                auto inner_ability =
-                    JsonFactory<IAbility>::create_product(json.at("ability"));
-                return std::make_unique<WithDamage>(std::move(inner_ability),
-                                                    damage);
-            });
-
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::abilities
 {
     WithDamage::WithDamage(std::unique_ptr<IAbility> ability)

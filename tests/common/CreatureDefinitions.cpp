@@ -1,15 +1,7 @@
-#ifndef DANDAN_TEST_CREATUREDEFINITIONS_H
-#define DANDAN_TEST_CREATUREDEFINITIONS_H
-
-#include "dandan/conditions/DefenderControlsNoBasicCondition.h"
-#include "dandan/conditions/SelfControlsNoBasicCondition.h"
-#include "dandan/dandan.h"
+#include "CreatureDefinitions.h"
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
-#include "dandan/effects/one_shot/SelfSacrificeEffect.h"
-#include <memory>
-#include <vector>
 
-inline std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -26,5 +18,3 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Dandan_Abilities()
                 dandan::core::SubType::Island))));
     return abilities;
 }
-
-#endif

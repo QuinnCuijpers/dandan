@@ -1,40 +1,6 @@
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/serialization/JsonFactory.h"
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-    using namespace dandan::serialization;
-    using namespace dandan::costs;
-
-    const auto registered = []
-    {
-        CostsRegistry::instance().registerType<CyclingCost>(
-            "CyclingCost",
-            [](const ICost *cost)
-            {
-                auto json = nlohmann::json::object();
-                const auto *cycle_cost{dynamic_cast<const CyclingCost *>(cost)};
-                const auto *inner_cost = cycle_cost->getInnerCost();
-                json["inner_cost"] =
-                    JsonFactory<ICost>::create_json(inner_cost);
-                return json;
-            },
-            [](const nlohmann::json &json)
-            {
-                const auto &generic_cost_json = json.at("inner_cost");
-                auto generic_cost =
-                    JsonFactory<ICost>::create_product(generic_cost_json);
-                return std::make_unique<CyclingCost>(std::move(generic_cost));
-            });
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::costs
 {
 

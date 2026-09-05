@@ -19,7 +19,9 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 
 endif()
 
-target_link_libraries(DandanUnitTests PRIVATE DandanLib GTest::gtest_main)
+target_link_libraries(DandanUnitTests PRIVATE
+  DandanLib GTest::gtest_main
+  DandanTestCommon)
 
 if(DANDAN_ENABLE_LOGGING)
   target_link_libraries(DandanUnitTests PRIVATE plog::plog)

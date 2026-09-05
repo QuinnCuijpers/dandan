@@ -10,5 +10,6 @@ DandanLib
           BasicLandAbility.cpp
           StateTriggeredAbility.cpp
           AbilityType.cpp
-          BoundAbility.cpp)
+          BoundAbility.cpp
+          Keyword.cpp)
 

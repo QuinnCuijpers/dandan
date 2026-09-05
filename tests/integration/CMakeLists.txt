@@ -1,13 +1,22 @@
 add_executable(DandanLibTest)
 
-target_sources(DandanLibTest PRIVATE DandanLibTest.cpp)
+target_sources(DandanLibTest PRIVATE
+    AbilityDisplayTest.cpp
+    AbilityDisplayOptionsTest.cpp
+    GameSetupTest.cpp
+    GameRulesTest.cpp
+    CombatTest.cpp
+    LandAbilitiesTest.cpp
+    DrawTest.cpp
+    TutorTest.cpp
+    SpellInteractionTest.cpp
+    ChangeCharacteristicsTest.cpp
+    ManaTest.cpp)
 
 target_sources(DandanLibTest PRIVATE FILE_SET HEADERS BASE_DIRS
                                      ${CMAKE_SOURCE_DIR}/tests)
 
 if(DANDAN_BUILD_SERIALIZE)
-  target_sources(DandanLibTest PRIVATE AbilityDisplayTest.cpp
-                                       AbilityDisplayOptionsTest.cpp)
   target_compile_definitions(DandanLibTest PRIVATE DANDAN_SERIALIZE)
   target_link_libraries(DandanLibTest PRIVATE nlohmann_json::nlohmann_json)
 endif()
@@ -26,7 +35,9 @@ elseif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES
 
 endif()
 
-target_link_libraries(DandanLibTest PRIVATE DandanLib GTest::gtest_main)
+target_link_libraries(DandanLibTest PRIVATE
+  DandanLib GTest::gtest_main
+  DandanTestCommon)
 
 if(DANDAN_ENABLE_LOGGING)
   target_link_libraries(DandanLibTest PRIVATE plog::plog)

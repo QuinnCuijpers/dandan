@@ -1,10 +1,8 @@
 
-#include "dandan/core/CardTypes.h"
 #ifdef DANDAN_SERIALIZE
 #include "DeserializeTest.h"
-#include "LandDefinitions.h"
-#include "common.h"
-#include "dandan/core/Card.h"
+#include "common/LandDefinitions.h"
+#include "common/common.h"
 #include "dandan/dandan.h"
 #include <algorithm>
 #include <gtest/gtest.h>

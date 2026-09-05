@@ -1,23 +1,14 @@
-#ifndef DANDAN_TEST_LANDDEFINITIONS_H
-#define DANDAN_TEST_LANDDEFINITIONS_H
-
+#include "LandDefinitions.h"
 #include "dandan/abilities/BasicLandAbility.h"
-#include "dandan/costs/AndCost.h"
 #include "dandan/dandan.h"
-#include "dandan/mana/ManaBag.h"
-#include "dandan/mana/ManaList.h"
-#include "dandan/mana/ManaPrice.h"
-#include "dandan/mana/ManaType.h"
-#include <memory>
-#include <vector>
 
-inline std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Island_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>> Island_TESTS_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Island_TESTS_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -27,7 +18,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Island_TESTS_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
 {
 
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
@@ -44,12 +35,12 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Remote_Isle_Abilities()
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ManaCost>(
                 dandan::mana::ManaPrice{dandan::mana::ManaBag{}, 2})),
-        std::make_unique<dandan::DrawEffectDefinition>()));
+        std::make_unique<dandan::effects::DrawEffectDefinition>()));
 
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -65,12 +56,12 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Lonely_Sandbar_Abilities()
         std::make_unique<dandan::CyclingCost>(
             std::make_unique<dandan::ManaCost>(dandan::mana::ManaPrice{
                 dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}})),
-        std::make_unique<dandan::DrawEffectDefinition>()));
+        std::make_unique<dandan::effects::DrawEffectDefinition>()));
 
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -89,7 +80,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Halimar_Depths_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>> Shivan_Reef_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Shivan_Reef_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -109,8 +100,7 @@ inline std::vector<std::unique_ptr<dandan::IAbility>> Shivan_Reef_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>>
-Temple_of_Epiphany_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Temple_of_Epiphany_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -134,8 +124,7 @@ Temple_of_Epiphany_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>>
-Izzet_Boilerworks_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Izzet_Boilerworks_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -156,8 +145,7 @@ Izzet_Boilerworks_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::IAbility>>
-Svyelunite_Temple_Abilities()
+std::vector<std::unique_ptr<dandan::IAbility>> Svyelunite_Temple_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>()};
 
@@ -178,5 +166,3 @@ Svyelunite_Temple_Abilities()
 
     return abilities;
 }
-
-#endif

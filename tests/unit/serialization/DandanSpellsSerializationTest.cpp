@@ -1,8 +1,6 @@
 #include "DeserializeTest.h"
-#include "SpellDefinitions.h"
-#include "common.h"
-#include "dandan/core/Card.h"
-#include "dandan/core/CardTypes.h"
+#include "common/SpellDefinitions.h"
+#include "common/common.h"
 #include "dandan/dandan.h"
 #include <algorithm>
 #include <array>

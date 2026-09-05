@@ -23,4 +23,36 @@ namespace dandan::numbers
     };
 } // namespace dandan::numbers
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+
+namespace dandan::serialization::registration
+{
+    using namespace dandan::numbers;
+    using namespace dandan::serialization;
+
+    inline const auto registeredExactNumber = []
+    {
+        NumberRegistry::instance().registerType<ExactNumber>(
+            "ExactNumber",
+            [](const INumber *number)
+            {
+                const auto *exact{dynamic_cast<const ExactNumber *>(number)};
+                return nlohmann::json(exact->getValue());
+            },
+            [](const nlohmann::json &json)
+            {
+                int value = json.at("value").get<int>();
+                return std::make_unique<ExactNumber>(value);
+            },
+            JsonRepresentation::INLINE);
+        return true;
+    }();
+
+} // namespace
+#endif
+
 #endif

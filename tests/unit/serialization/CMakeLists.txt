@@ -29,7 +29,7 @@ if(DANDAN_BUILD_SERIALIZE)
 
   target_link_libraries(
     DandanLibSerializationTest PRIVATE DandanLib nlohmann_json::nlohmann_json
-                                       GTest::gtest_main)
+                                       GTest::gtest_main DandanTestCommon)
 
   if(CODE_COVERAGE)
     target_code_coverage(DandanLibSerializationTest AUTO ALL)

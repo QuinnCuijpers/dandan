@@ -8,58 +8,6 @@
 #include <iostream>
 #include <memory>
 
-#ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonTypeRegistry.h"
-#include <nlohmann/json.hpp>
-namespace
-{
-
-    using namespace dandan::serialization;
-    using namespace dandan::effects;
-    using namespace dandan::abilities;
-    using namespace dandan::core;
-    using namespace dandan::numbers;
-
-    const auto registered = []
-    {
-        OneShotEffectRegistry::instance().registerType<DrawEffectDefinition>(
-            "DrawEffect",
-            []([[maybe_unused]] const IOneShotEffectDefinition *effect)
-            {
-                auto json = nlohmann::json::object();
-                const auto *draw_effect =
-                    dynamic_cast<const DrawEffectDefinition *>(effect);
-                auto *number{draw_effect->getNumber().get()};
-                if (const auto *exactNumber =
-                        dynamic_cast<const ExactNumber *>(number))
-                {
-                    json["amount"] = exactNumber->getValue();
-                }
-                else
-                {
-                    json["amount"] = JsonFactory<INumber>::create_json(number);
-                }
-                return json;
-            },
-            [](const nlohmann::json &data,
-               [[maybe_unused]] const std::vector<TargetSpec> &target_specs,
-               [[maybe_unused]] ExpireTime expiry)
-            {
-                const auto &amount_json = data.at("amount");
-                if (amount_json.is_number_integer())
-                {
-                    return std::make_unique<DrawEffectDefinition>(
-                        amount_json.get<int>());
-                }
-                auto amount = JsonFactory<INumber>::create_product(amount_json);
-                return std::make_unique<DrawEffectDefinition>(
-                    std::move(amount));
-            });
-        return true;
-    }();
-} // namespace
-#endif
-
 namespace dandan::effects
 {
 

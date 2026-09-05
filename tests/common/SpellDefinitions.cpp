@@ -1,39 +1,11 @@
-#ifndef DANDAN_SPELL_DEFINITIONS_H
-#define DANDAN_SPELL_DEFINITIONS_H
-
-#include "dandan/abilities/IAbility.h"
-#include "dandan/abilities/KeyWords.h"
-#include "dandan/conditions/ICondition.h"
-#include "dandan/conditions/MatchesReadLinksCondition.h"
-#include "dandan/core/ColorWord.h"
-#include "dandan/core/Expire.h"
-#include "dandan/core/TargetRequirement.h"
+#include "SpellDefinitions.h"
 #include "dandan/dandan.h"
-#include "dandan/effects/one_shot/BounceEffect.h"
-#include "dandan/effects/one_shot/ChangeCharasticsEffect.h"
-#include "dandan/effects/one_shot/ChangeLandTypeEffect.h"
-#include "dandan/effects/one_shot/ChooseCardNameAndMillEffect.h"
-#include "dandan/effects/one_shot/DrawEffect.h"
-#include "dandan/effects/one_shot/ExileTopEffect.h"
-#include "dandan/effects/one_shot/IOneShotEffectDefinition.h"
-#include "dandan/effects/one_shot/MemoryLapseEffect.h"
 #include "dandan/effects/one_shot/MillEffect.h"
-#include "dandan/effects/one_shot/MindBendEffect.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
-#include "dandan/effects/one_shot/OptionalDrawEffect.h"
-#include "dandan/effects/one_shot/PutCardOnTopEffect.h"
-#include "dandan/effects/one_shot/ShowAndTellEffect.h"
-#include "dandan/effects/one_shot/SpinToTopEffect.h"
-#include "dandan/effects/one_shot/TimeTwisterEffect.h"
-#include "dandan/effects/one_shot/TutorTopEffect.h"
-#include "dandan/numbers/ConditionalNumber.h"
-#include "dandan/numbers/GraveyardCount.h"
-#include <memory>
-#include <utility>
-#include <vector>
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
-Brainstorm_Abilities()
+using dandan::effects::ModalEffectDefinition;
+
+std::vector<std::unique_ptr<dandan::abilities::IAbility>> Brainstorm_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
@@ -50,7 +22,7 @@ Brainstorm_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Accumulated_Knowledge_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
@@ -71,7 +43,7 @@ Accumulated_Knowledge_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Diminishing_Returns_Abilities()
 {
     static const int EXILE_AMOUNT = 10;
@@ -97,7 +69,7 @@ Diminishing_Returns_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Mystical_Tutor_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
@@ -115,7 +87,7 @@ Mystical_Tutor_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Vision_Charm_Abilities()
 {
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
@@ -132,8 +104,8 @@ Vision_Charm_Abilities()
     options.emplace_back(
         std::make_unique<dandan::effects::ChangeLandTypeEffectDefinition>());
 
-    auto modal_effect{std::make_unique<dandan::effects::ModalEffectDefinition>(
-        std::move(options))};
+    auto modal_effect{
+        std::make_unique<ModalEffectDefinition>(std::move(options))};
 
     auto spell_effects{std::vector<
         std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
@@ -145,7 +117,7 @@ Vision_Charm_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Crystal_Spray_Abilities()
 {
     auto target_req{dandan::core::TargetRequirement{
@@ -174,8 +146,7 @@ Crystal_Spray_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
-Mind_Bend_Abilities()
+std::vector<std::unique_ptr<dandan::abilities::IAbility>> Mind_Bend_Abilities()
 {
     auto target_req{dandan::core::TargetRequirement{
         std::vector<std::vector<dandan::core::TargetType>>{
@@ -196,7 +167,7 @@ Mind_Bend_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Unsubstantiate_Abilities()
 {
 
@@ -219,7 +190,7 @@ Unsubstantiate_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Memory_Lapse_Abilities()
 {
 
@@ -242,8 +213,7 @@ Memory_Lapse_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
-Predict_Abilities()
+std::vector<std::unique_ptr<dandan::abilities::IAbility>> Predict_Abilities()
 {
 
     auto target_req{dandan::core::TargetRequirement{
@@ -285,7 +255,7 @@ Predict_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Dance_of_the_Skywise_Abilities()
 {
 
@@ -327,7 +297,7 @@ Dance_of_the_Skywise_Abilities()
     return abilities;
 }
 
-inline std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Metamorphose_Abilities()
 {
     auto controller{dandan::core::Controller::Opponent};
@@ -372,4 +342,3 @@ Metamorphose_Abilities()
 
     return abilities;
 }
-#endif

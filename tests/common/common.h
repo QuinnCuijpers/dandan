@@ -16,6 +16,8 @@
 #include <utility>
 #include <vector>
 
+constexpr int TEST_DECK_SIZE{20};
+
 inline std::string CardParamName(const std::string_view raw_name)
 {
     std::string name;

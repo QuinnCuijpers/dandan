@@ -52,4 +52,35 @@ namespace dandan::effects
     };
 } // namespace dandan::effects
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+
+    using namespace dandan::serialization;
+    using namespace dandan::effects;
+    using namespace dandan::core;
+
+    inline const auto registeredBounceLandEffect = []
+    {
+        OneShotEffectRegistry::instance()
+            .registerType<BounceLandEffectDefinition>(
+                "BounceLandEffect",
+                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
+                {
+                    const auto json = nlohmann::json::object();
+                    return json;
+                },
+                []([[maybe_unused]] const nlohmann::json &data,
+                   [[maybe_unused]] const std::vector<TargetSpec> &target_specs,
+                   [[maybe_unused]] ExpireTime expiry)
+                { return std::make_unique<BounceLandEffectDefinition>(); });
+        return true;
+    }();
+} // namespace
+#endif
+
 #endif // DANDAN_BOUNCELANDEFFECT_H

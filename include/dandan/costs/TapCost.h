@@ -27,4 +27,30 @@ namespace dandan::costs
     };
 } // namespace dandan::costs
 
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+    using namespace dandan::conditions;
+    using namespace dandan::serialization;
+    using namespace dandan::costs;
+
+    inline const auto registeredTapCost = []
+    {
+        CostsRegistry::instance().registerType<TapCost>(
+            "TapCost",
+            []([[maybe_unused]] const ICost *cost)
+            {
+                auto json = nlohmann::json::object();
+                return json;
+            },
+            []([[maybe_unused]] const nlohmann::json &json)
+            { return std::make_unique<TapCost>(); });
+        return true;
+    }();
+} // namespace dandan::serialization::registration
+#endif
+
 #endif

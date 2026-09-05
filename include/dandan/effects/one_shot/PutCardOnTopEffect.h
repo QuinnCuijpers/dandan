@@ -89,4 +89,45 @@ namespace dandan::effects
 
 } // namespace dandan::effects
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+
+    using namespace dandan::serialization;
+    using namespace dandan::effects;
+    using namespace dandan::abilities;
+    using namespace dandan::core;
+    using namespace dandan::numbers;
+
+    inline const auto registeredPutCardOnTopEffect = []
+    {
+        OneShotEffectRegistry::instance()
+            .registerType<PutCardOnTopEffectDefinition>(
+                "PutCardOnTopEffect",
+                []([[maybe_unused]] const IOneShotEffectDefinition *effect)
+                {
+                    auto json = nlohmann::json::object();
+                    const auto *put_effect =
+                        dynamic_cast<const PutCardOnTopEffectDefinition *>(
+                            effect);
+                    json["amount"] = put_effect->getAmount();
+
+                    return json;
+                },
+                [](const nlohmann::json &data,
+                   [[maybe_unused]] const std::vector<TargetSpec> &target_specs,
+                   [[maybe_unused]] ExpireTime expiry)
+                {
+                    return std::make_unique<PutCardOnTopEffectDefinition>(
+                        data.at("amount").get<int>());
+                });
+        return true;
+    }();
+} // namespace
+#endif
+
 #endif

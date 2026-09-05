@@ -38,4 +38,40 @@ namespace dandan::conditions
     };
 } // namespace dandan::conditions
 
+
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonFactory.h"
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+namespace dandan::serialization::registration
+{
+    using namespace dandan::conditions;
+    using namespace dandan::serialization;
+
+    inline const auto registeredDefenderControlsNoBasicCondition = []
+    {
+        ConditionRegistry::instance()
+            .registerType<DefenderControlsNoBasicCondition>(
+                "DefenderControlsNoBasicCondition",
+                [](const ICondition *condition)
+                {
+                    auto json = nlohmann::json::object();
+                    const auto *defender_controls{
+                        dynamic_cast<const DefenderControlsNoBasicCondition *>(
+                            condition)};
+                    json["type"] = defender_controls->type();
+                    return json;
+                },
+                [](const nlohmann::json &json)
+                {
+                    auto type = json.at("type").get<dandan::core::SubType>();
+                    return std::make_unique<DefenderControlsNoBasicCondition>(
+                        type);
+                });
+        return true;
+    }();
+} // namespace
+#endif
+
 #endif
