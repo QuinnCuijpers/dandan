@@ -46,6 +46,7 @@ TEST(DandanLibTest, gameSetup)
 #ifdef DANDAN_SERIALIZE
 TEST(DandanLibTest, startGameFromFile)
 {
+    dandan::core::PlayerID::reset();
     auto input = std::stringstream{};
     input << "quit\n";
 
