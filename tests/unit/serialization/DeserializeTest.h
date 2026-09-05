@@ -3,11 +3,11 @@
 
 #ifdef DANDAN_SERIALIZE
 
-#include "dandan/dandan.h"
+#include "dandan/core/Card.h"
 #include "gtest/gtest.h"
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 
-class DeserializeTest : public testing::TestWithParam<dandan::Card>
+class DeserializeTest : public testing::TestWithParam<dandan::core::Card>
 {
 
 public:
