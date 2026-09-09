@@ -1,7 +1,11 @@
 #include "DeserializeTest.h"
 #include "common/SpellDefinitions.h"
 #include "common/common.h"
+#include "dandan/core/CardTypes.h"
 #include "dandan/dandan.h"
+#include "dandan/mana/ManaBag.h"
+#include "dandan/mana/ManaPrice.h"
+#include "dandan/mana/ManaType.h"
 #include <algorithm>
 #include <array>
 #include <gtest/gtest.h>
@@ -94,6 +98,12 @@ static std::vector<dandan::Card> getCards()
             dandan::mana::ManaPrice{
                 dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 1},
             dandan::core::Type::Instant, Metamorphose_Abilities()));
+
+        card_data.push_back(create_spell_data(
+            "Mystic Retrieval",
+            dandan::mana::ManaPrice{
+                dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 3},
+            dandan::core::Type::Sorcery, Mystic_Retrieval_Abilities()));
 
         return card_data;
     }();
