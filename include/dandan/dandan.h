@@ -37,6 +37,7 @@
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PeekEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
+#include "dandan/effects/one_shot/RegrowthEffect.h"
 #include "dandan/effects/one_shot/ScryEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "dandan/effects/one_shot/ShowAndTellEffect.h"
@@ -85,6 +86,7 @@ namespace dandan
     using effects::OptionalDrawEffect;
     using effects::PeekEffect;
     using effects::PutCardOnTopEffect;
+    using effects::RegrowthEffect;
     using effects::ScryEffect;
     using effects::SelfSacrificeEffect;
     using effects::ShowAndTellEffect;
