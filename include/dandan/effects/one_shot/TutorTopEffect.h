@@ -67,9 +67,7 @@ namespace dandan::effects
     };
 } // namespace dandan::effects
 
-
 #ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
@@ -115,7 +113,7 @@ namespace dandan::serialization::registration
                 });
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif
