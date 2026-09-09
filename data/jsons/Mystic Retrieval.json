@@ -1,0 +1,24 @@
+{
+  "abilities": [
+    {
+      "data": {
+        "effect_list": [
+          {
+            "type": "RegrowthEffect",
+            "data": {
+              "filter_types": [
+                "Instant",
+                "Sorcery"
+              ]
+            }
+          }
+        ]
+      },
+      "type": "SpellAbility"
+    }
+  ],
+  "color": "Blue",
+  "name": "Mystic Retrieval",
+  "type": "Sorcery",
+  "cost": "(3)U"
+}
