@@ -342,3 +342,21 @@ Metamorphose_Abilities()
 
     return abilities;
 }
+
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Mystic_Retrieval_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::RegrowthEffectDefinition>(
+            std::vector<dandan::core::Type>{dandan::core::Type::Instant,
+                                            dandan::core::Type::Sorcery}));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}

@@ -38,4 +38,7 @@ Dance_of_the_Skywise_Abilities();
 std::vector<std::unique_ptr<dandan::abilities::IAbility>>
 Metamorphose_Abilities();
 
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Mystic_Retrieval_Abilities();
+
 #endif
