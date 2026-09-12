@@ -1,5 +1,5 @@
-#ifndef DANDAN_PLAYCARDEFFECT_H
-#define DANDAN_PLAYCARDEFFECT_H
+#ifndef DANDAN_CASTEFFECT_H
+#define DANDAN_CASTEFFECT_H
 
 #include "dandan/abilities/SpellAbility.h"
 #include "dandan/core/Card.h"
@@ -102,20 +102,20 @@ namespace dandan::effects
      *
      * @implements IOneShotEffect
      */
-    class PlayCardEffect : public IOneShotEffect
+    class CastEffect : public IOneShotEffect
     {
     public:
         /** Constructor
          *@param card The card that would be played
          */
-        explicit PlayCardEffect(core::Card &card, EffectContext context)
+        explicit CastEffect(core::Card &card, EffectContext context)
             : IOneShotEffect(std::move(context)), m_card{card}
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<PlayCardEffect>(m_card, getEffectContext());
+            return std::make_unique<CastEffect>(m_card, getEffectContext());
         }
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
