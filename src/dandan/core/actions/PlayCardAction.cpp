@@ -1,19 +1,19 @@
 #include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/core/Zone.h"
 #include "dandan/effects/EffectContext.h"
+#include "dandan/effects/one_shot/CastEffect.h"
 #include "dandan/effects/one_shot/ETBEffect.h"
-#include "dandan/effects/one_shot/PlayCardEffect.h"
 
 namespace dandan::core
 {
 
-    PlayCardAction::PlayCardAction(CardID card_id) : m_card_id{card_id}
+    PlayCardAction::PlayCardAction(CastRequest req) : m_cast_request{req}
     {
     }
 
     [[nodiscard]] CardID PlayCardAction::getCardID() const
     {
-        return m_card_id;
+        return m_cast_request.card_id;
     }
 
     std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect(
@@ -27,23 +27,42 @@ namespace dandan::core
         auto &event_manager{exec_ctx.event_manager.get()};
         auto &condition_manager{exec_ctx.condition_manager.get()};
 
-        auto *card{card_registry[m_card_id]};
+        auto *card{card_registry[m_cast_request.card_id]};
 
         // TODO: flashback will break this, but for now itll be fine
-        if (card->getZone() != Zone::HAND)
+        switch (m_cast_request.mode)
         {
-            throw std::runtime_error(
-                "Card must be in hand to be played instead of in " +
-                zoneToString(card->getZone()));
-        }
+        case CastMode::Normal:
+        {
 
-        if (card->getControllerID() != priority_manager.getPlayerWithPriority())
+            if (card->getZone() != Zone::HAND)
+            {
+                throw std::runtime_error(
+                    "Card must be in hand to be played instead of in " +
+                    zoneToString(card->getZone()));
+            }
+            if (card->getControllerID() !=
+                priority_manager.getPlayerWithPriority())
+            {
+                throw std::runtime_error(
+                    "Only player with priority can play cards, card is "
+                    "controlled "
+                    "by "
+                    "player " +
+                    game.getPlayer(card->getControllerID()).getName());
+            }
+            break;
+        }
+        case CastMode::Flashback:
         {
-            throw std::runtime_error(
-                "Only player with priority can play cards, card is controlled "
-                "by "
-                "player " +
-                game.getPlayer(card->getControllerID()).getName());
+            if (card->getZone() != Zone::GRAVEYARD)
+            {
+                throw std::runtime_error("Card must be in graveyard to be "
+                                         "played via flashback instead of in " +
+                                         zoneToString(card->getZone()));
+            }
+            break;
+        }
         }
 
         const auto &data = card->getData();
@@ -72,7 +91,7 @@ namespace dandan::core
         case Type::Creature:
         case Type::Sorcery:
         case Type::Instant:
-            return std::make_unique<effects::PlayCardEffect>(*card, context);
+            return std::make_unique<effects::CastEffect>(*card, context);
 
         default:
             throw std::runtime_error(

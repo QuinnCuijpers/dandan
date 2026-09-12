@@ -165,10 +165,9 @@ namespace dandan::core
         auto &event_manager{exec_ctx.event_manager.get()};
         auto &replacement_manager{exec_ctx.replacement_manager.get()};
 
-        int card_id = std::stoi(input.substr(std::size("play ") - 1));
+        auto req{CastRequest::fromStr(input)};
 
-        auto action =
-            std::make_unique<PlayCardAction>(CardID::fromInt(card_id));
+        auto action = std::make_unique<PlayCardAction>(req);
 
         if (prevention_manager.isPrevented(*action, exec_ctx))
         {
