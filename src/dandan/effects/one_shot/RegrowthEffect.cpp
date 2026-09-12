@@ -39,12 +39,12 @@ namespace dandan::effects
         std::getline(istream, input);
         int chosen_card_id = std::stoi(input);
 
-        // remove card from lib and shuffle
-        auto *card = card_registry[chosen_card_id];
-        game.moveCardFromZone(game.activePlayer(), *card);
+        auto &player{game.getPlayer(m_player_id)};
 
-        // move that card to the top of the library
-        game.activePlayer().hand().addCard(*card);
+        auto *card = card_registry[chosen_card_id];
+        game.moveCardFromZone(player, *card);
+
+        player.hand().addCard(*card);
 
         return nullptr;
     }
