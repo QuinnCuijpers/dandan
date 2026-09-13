@@ -3,6 +3,7 @@
 
 #include "dandan/abilities/SpellAbility.h"
 #include "dandan/core/Card.h"
+#include "dandan/core/CastContext.h"
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/core/GameState.h"
 #include "dandan/core/PriorityManager.h"
@@ -108,14 +109,15 @@ namespace dandan::effects
         /** Constructor
          *@param card The card that would be played
          */
-        explicit CastEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_card{card}
+        explicit CastEffect(core::CastContext cast_ctx, EffectContext context)
+            : IOneShotEffect(std::move(context)),
+              m_cast_ctx(std::move(cast_ctx))
         {
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
         {
-            return std::make_unique<CastEffect>(m_card, getEffectContext());
+            return std::make_unique<CastEffect>(m_cast_ctx, getEffectContext());
         }
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
@@ -125,10 +127,14 @@ namespace dandan::effects
             auto &card_registry{exec_ctx.cards.get()};
             auto &priority_manager{exec_ctx.priority_manager.get()};
 
+            auto *card{card_registry[m_cast_ctx.card_id]};
+
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{
                 game.getPlayer(priority_manager.getPlayerWithPriority())};
-            auto mana_cost = m_card.getData().mana_cost;
+
+            auto mana_cost{m_cast_ctx.cost};
+
             std::cout << "generic_mana: " << mana_cost.generic() << '\n';
             std::cout << "specific_mana: " << mana_cost.specific() << '\n';
             std::cout << "mana_pool: " << prio_player.manaPool() << '\n';
@@ -139,23 +145,22 @@ namespace dandan::effects
             else
             {
                 throw std::runtime_error("Not enough mana to play card " +
-                                         std::string{m_card.getData().name});
+                                         std::string{card->getData().name});
             }
 
-            auto *cardp = card_registry[m_card.getID()];
-            if (cardp->getData().type == core::Type::Instant ||
-                cardp->getData().type == core::Type::Sorcery)
+            if (card->getData().type == core::Type::Instant ||
+                card->getData().type == core::Type::Sorcery)
             {
                 auto spell_ability_it{std::find_if(
-                    cardp->getData().abilities.begin(),
-                    cardp->getData().abilities.end(),
+                    card->getData().abilities.begin(),
+                    card->getData().abilities.end(),
                     [](const auto &ability)
                     {
                         return dynamic_cast<const abilities::SpellAbility *>(
                                    ability.get()) != nullptr;
                     })};
 
-                if (spell_ability_it == cardp->getData().abilities.end())
+                if (spell_ability_it == card->getData().abilities.end())
                 {
                     throw std::runtime_error(
                         "Instant or sorcery card does not have a spell "
@@ -172,28 +177,28 @@ namespace dandan::effects
                     // choose mode
                     {
                         auto *chosen_effect =
-                            impl::choose_mode(cardp, *modal_effect, exec_ctx);
+                            impl::choose_mode(card, *modal_effect, exec_ctx);
                         std::cout
                             << "Chosen effect: " << chosen_effect->display()
                             << '\n';
-                        impl::choose_targets(cardp, *chosen_effect, exec_ctx);
+                        impl::choose_targets(card, *chosen_effect, exec_ctx);
                     }
                     else
                     {
-                        impl::choose_targets(cardp, *effect, exec_ctx);
+                        impl::choose_targets(card, *effect, exec_ctx);
                     }
                 }
             }
 
-            game.moveCardFromZone(game.getPlayer(m_card.getControllerID()),
-                                  m_card);
-            m_card.setZone(core::Zone::STACK);
-            game.stack().push(m_card.getID());
+            game.moveCardFromZone(game.getPlayer(card->getControllerID()),
+                                  *card);
+            card->setZone(core::Zone::STACK);
+            game.stack().push(m_cast_ctx);
             return nullptr;
         }
 
     private:
-        core::Card &m_card;
+        core::CastContext m_cast_ctx;
     };
 } // namespace dandan::effects
 #endif
