@@ -2,9 +2,10 @@
 #include "dandan/abilities/AbilityType.h"
 #include "dandan/abilities/ActivatedAbility.h"
 #include "dandan/abilities/BasicLandAbility.h"
+#include "dandan/abilities/IAbilityDecorator.h"
 #include "dandan/abilities/ManaAbility.h"
 #include "dandan/core/ExecutionContext.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/Manapool.h"
 #include <algorithm>
@@ -21,9 +22,15 @@ namespace
         {
             if (ability.type() == abilities::AbilityType::Type::Mana)
             {
+                const auto *definition = &ability.definition();
+                if (const auto *decorator =
+                        dynamic_cast<const abilities::IAbilityDecorator *>(
+                            definition))
+                {
+                    definition = decorator->getInnerAbility();
+                }
                 const auto *mana_ability =
-                    dynamic_cast<const abilities::ManaAbility *>(
-                        &ability.definition());
+                    dynamic_cast<const abilities::ManaAbility *>(definition);
                 const auto &options{mana_ability->getManaList().getOptions()};
                 auto max_it = std::max_element(
                     options.begin(), options.end(),
