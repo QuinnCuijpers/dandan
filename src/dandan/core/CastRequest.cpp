@@ -13,7 +13,9 @@ namespace dandan::core
 
         std::optional<CastMode> mode{std::nullopt};
 
-        for (size_t pos{}; pos < parts.size(); ++pos)
+        // the first two parts are the "play" keyword and the card id,
+        // any remaining parts are cast-mode keywords
+        for (size_t pos{2}; pos < parts.size(); ++pos)
         {
             mode = CastModeFromStr(parts[pos]);
         }

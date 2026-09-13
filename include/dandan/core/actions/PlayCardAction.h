@@ -20,7 +20,7 @@ namespace dandan::core
 
     inline CastMode CastModeFromStr(const std::string &str)
     {
-        if (str == "Flashback")
+        if (str == "flashback")
         {
             return CastMode::Flashback;
         }
