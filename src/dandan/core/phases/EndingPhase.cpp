@@ -52,6 +52,7 @@ namespace dandan::core
                     {
                         std::string input;
                         std::getline(istream, input);
+                        std::cout << "input recieved: " << input << '\n';
                         int card_id = std::stoi(input);
                         const auto *card =
                             card_registry[CardID::fromInt(card_id)];
@@ -60,6 +61,7 @@ namespace dandan::core
                     catch (const std::exception &e)
                     {
                         std::cout << "Invalid input: " << e.what() << '\n';
+                        throw e;
                     }
                 }
             }
