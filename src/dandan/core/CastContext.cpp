@@ -2,6 +2,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/GameState.h"
 #include "dandan/core/PriorityManager.h"
+#include "dandan/core/actions/PlayCardAction.h"
 
 namespace dandan::core
 {
@@ -14,16 +15,6 @@ namespace dandan::core
 
         auto *card{cards[req.card_id]};
 
-        if (card->getControllerID() != priority_manager.getPlayerWithPriority())
-        {
-            throw std::runtime_error(
-                "Only player with priority can play cards, card is "
-                "controlled "
-                "by "
-                "player " +
-                game.getPlayer(card->getControllerID()).getName());
-        }
-
         auto zone = Zone::HAND;
         auto cost = card->getData().mana_cost;
 
@@ -31,6 +22,17 @@ namespace dandan::core
         {
         case CastMode::Normal:
         {
+            if (card->getControllerID() !=
+                priority_manager.getPlayerWithPriority())
+            {
+                std::cout << "Card_id: " << req.card_id << '\n';
+                throw std::runtime_error(
+                    "Only player with priority can play cards, card is "
+                    "controlled "
+                    "by "
+                    "player " +
+                    game.getPlayer(card->getControllerID()).getName());
+            }
 
             if (card->getZone() != Zone::HAND)
             {
