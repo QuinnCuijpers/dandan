@@ -33,7 +33,9 @@ target_sources(
           PriorityManager.cpp
           Hand.cpp
           Target.cpp
-          CardRegistry.cpp)
+          CardRegistry.cpp
+          CastRequest.cpp
+CastContext.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
   ${CMAKE_SOURCE_DIR}/include)
