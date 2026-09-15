@@ -180,7 +180,7 @@ namespace dandan::effects
                                 effect.get()))
                     // choose mode
                     {
-                        auto *chosen_effect =
+                        const auto *chosen_effect =
                             impl::choose_mode(card, *modal_effect, exec_ctx);
                         std::cout
                             << "Chosen effect: " << chosen_effect->display()
