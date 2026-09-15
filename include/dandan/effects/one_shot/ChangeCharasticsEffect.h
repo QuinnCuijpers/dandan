@@ -125,23 +125,15 @@ namespace dandan::serialization::registration
                         characteristics.base_stats.toughness;
                     characteristics_json["loses_all_abilities"] =
                         characteristics.loses_all_abilities;
-                    characteristics_json["additional_keywords"] =
-                        nlohmann::json::array();
-                    for (const auto *ability :
+
+                    for (const auto &ability :
                          characteristics.additional_abilities)
                     {
-                        if (isFlyingAbility(*ability))
-                        {
-                            characteristics_json["additional_keywords"]
-                                .push_back("Flying");
-                        }
-                        else
-                        {
-                            auto sub_json{
-                                JsonFactory<IAbility>::create_json(ability)};
-                            characteristics_json["additional_abilities"]
-                                .push_back(sub_json);
-                        }
+
+                        auto sub_json{
+                            JsonFactory<IAbility>::create_json(ability.get())};
+                        characteristics_json["additional_abilities"].push_back(
+                            sub_json);
                     }
                     json["characteristics"] = characteristics_json;
                     return json;
@@ -153,37 +145,31 @@ namespace dandan::serialization::registration
                     const auto &characteristics_json =
                         data.at("characteristics");
 
-                    auto color = characteristics_json["color"];
-                    auto subtypes = characteristics_json["subtypes"];
+                    const auto &color = characteristics_json["color"];
+                    const auto &subtypes = characteristics_json["subtypes"];
                     auto base_power = characteristics_json["base_power"];
                     auto base_thoughness =
                         characteristics_json["base_thoughness"];
                     auto stats{Stats{base_power, base_thoughness}};
-                    auto loses_all_abilities =
+                    const auto &loses_all_abilities =
                         characteristics_json["loses_all_abilities"];
 
-                    auto additional_keywords_json =
-                        characteristics_json["additional_keywords"];
+                    auto additional_abilities_json =
+                        characteristics_json["additional_abilities"];
 
-                    auto additional_keywords{std::vector<Keyword>{}};
+                    auto additional_abilities{
+                        std::vector<std::unique_ptr<IAbility>>{}};
 
-                    for (const auto &keyword : additional_keywords_json)
+                    for (const auto &ability_json : additional_abilities_json)
                     {
-                        Keyword keyword_v = keyword;
-                        additional_keywords.push_back(keyword_v);
-                    }
-
-                    auto additional_abilities{std::vector<const IAbility *>{}};
-
-                    for (auto keyword : additional_keywords)
-                    {
-                        const auto *ability = getKeywordAbility(keyword);
-                        additional_abilities.push_back(ability);
+                        auto ability =
+                            JsonFactory<IAbility>::create_product(ability_json);
+                        additional_abilities.emplace_back(std::move(ability));
                     }
 
                     auto card_characteristics{CardCharacteristics{
                         color, subtypes, stats, loses_all_abilities,
-                        additional_abilities}};
+                        std::move(additional_abilities)}};
 
                     auto effect{
                         std::make_unique<ChangeCharacteristicsEffectDefinition>(
