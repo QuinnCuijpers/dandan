@@ -97,4 +97,9 @@ namespace dandan::abilities
         return m_mana_list.getOptions().size();
     }
 
+    [[nodiscard]] std::unique_ptr<IAbility> ManaAbility::clone() const
+    {
+        return std::make_unique<ManaAbility>(m_cost->clone(), m_mana_list);
+    }
+
 } // namespace dandan::abilities

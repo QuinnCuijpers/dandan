@@ -1,6 +1,6 @@
 #include "dandan/conditions/FlyingCondition.h"
 #include "dandan/abilities/BoundAbility.h"
-#include "dandan/core/Keyword.h"
+#include "dandan/abilities/keywords/Keyword.h"
 
 namespace dandan::conditions
 {
@@ -12,11 +12,7 @@ namespace dandan::conditions
         auto &card_registry{exec_ctx.cards.get()};
 
         const auto *card{card_registry[context->card_id.value()]};
-        const auto &current_abilities{card->getCurrentAbilities()};
-        return std::any_of(
-            current_abilities.begin(), current_abilities.end(),
-            [](const abilities::BoundAbility &ability)
-            { return core::isFlyingAbility(ability.definition()); });
+        return card->hasKeyword(abilities::Keyword::Flying);
     }
 
     [[nodiscard]] std::unique_ptr<ICondition> FlyingCondition::clone() const

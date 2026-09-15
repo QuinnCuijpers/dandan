@@ -31,4 +31,9 @@ namespace dandan::abilities
     {
         return m_effect.get();
     }
+
+    [[nodiscard]] std::unique_ptr<IAbility> StaticAbility::clone() const
+    {
+        return std::make_unique<StaticAbility>(m_type, m_effect->cloneContinuous());
+    }
 } // namespace dandan::abilities

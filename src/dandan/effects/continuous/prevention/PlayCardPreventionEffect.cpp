@@ -1,4 +1,5 @@
 #include "dandan/effects/continuous/prevention/PlayCardPreventionEffect.h"
+#include "dandan/core/Card.h"
 #include "dandan/core/actions/PlayCardAction.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/utils/log.h"

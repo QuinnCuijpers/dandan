@@ -2,6 +2,7 @@
 #include "common/LandDefinitions.h"
 #include "common/SpellDefinitions.h"
 #include "common/TestCardsCreate.h"
+#include "dandan/abilities/keywords/Keyword.h"
 #include <gtest/gtest.h>
 
 TEST(DandanLibTest, DandanMindBendTest)
@@ -215,8 +216,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
 
     EXPECT_EQ(dandan->getColor(), dandan::core::ColorWord::Blue);
     EXPECT_EQ(dandan->getCurrentAbilities().size(), 1);
-    EXPECT_TRUE(dandan::core::isFlyingAbility(
-        dandan->getCurrentAbilities()[0].definition()));
+    EXPECT_TRUE(dandan->hasKeyword(dandan::abilities::Keyword::Flying));
     EXPECT_EQ(dandan->getPower(), 4);
     EXPECT_EQ(dandan->getToughness(), 4);
     EXPECT_EQ(dandan->getCurrentSubTypes(), expected_subtypes);
@@ -331,10 +331,8 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
 
     EXPECT_EQ(dandan->getColor(), dandan::core::ColorWord::Blue);
     EXPECT_EQ(dandan->getCurrentAbilities().size(), 2);
-    EXPECT_FALSE(dandan::core::isFlyingAbility(
-        dandan->getCurrentAbilities()[0].definition()));
-    EXPECT_FALSE(dandan::core::isFlyingAbility(
-        dandan->getCurrentAbilities()[1].definition()));
+
+    EXPECT_FALSE(dandan->hasKeyword(dandan::abilities::Keyword::Flying));
     EXPECT_EQ(dandan->getToughness(), 1);
     EXPECT_EQ(dandan->getCurrentSubTypes(), expected_subtypes);
 }

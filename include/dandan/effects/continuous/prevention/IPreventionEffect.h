@@ -52,6 +52,15 @@ namespace dandan::effects
         [[nodiscard]] virtual std::unique_ptr<IPreventionEffect> clone()
             const = 0;
 
+        /** Creates a copy of the underlying continuous effect.
+         * @return A unique pointer to the cloned continuous effect.
+         */
+        [[nodiscard]] std::unique_ptr<IContinuousEffect> cloneContinuous()
+            const override
+        {
+            return clone();
+        }
+
         /** Gets the condition associated with this prevention effect.
          * @return A pointer to the condition associated with this prevention
          * effect.

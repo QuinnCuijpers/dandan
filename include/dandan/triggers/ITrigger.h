@@ -3,6 +3,7 @@
 
 #include "dandan/abilities/AbilityContext.h"
 #include "dandan/events/IEvent.h"
+#include <memory>
 
 namespace dandan::triggers
 {
@@ -28,6 +29,11 @@ namespace dandan::triggers
         [[nodiscard]] virtual bool triggersOn(
             const events::IEvent &other,
             abilities::AbilityContext context) const = 0;
+
+        /** Create a copy of the trigger.
+         * @return The copy of the trigger
+         */
+        [[nodiscard]] virtual std::unique_ptr<ITrigger> clone() const = 0;
     };
 
 } // namespace dandan::triggers

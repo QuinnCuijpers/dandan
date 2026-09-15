@@ -1,6 +1,7 @@
 {
   "abilities": [
     {
+      "type": "SpellAbility",
       "data": {
         "effect_list": [
           {
@@ -13,12 +14,17 @@
             }
           }
         ]
-      },
-      "type": "SpellAbility"
+      }
+    },
+    {
+      "type": "FlashbackAbility",
+      "data": {
+        "cost": "(2)R"
+      }
     }
   ],
   "color": "Blue",
+  "cost": "(3)U",
   "name": "Mystic Retrieval",
-  "type": "Sorcery",
-  "cost": "(3)U"
+  "type": "Sorcery"
 }

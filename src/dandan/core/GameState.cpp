@@ -1,5 +1,7 @@
 #include "dandan/core/GameState.h"
+#include "dandan/core/CastContext.h"
 #include "dandan/core/ExecutionContext.h"
+#include "dandan/core/PriorityManager.h"
 #include "dandan/core/TargetRequirement.h"
 #include "dandan/core/actions/ActivateAbilityAction.h"
 #include "dandan/core/actions/PlayCardAction.h"
@@ -7,6 +9,7 @@
 #include "dandan/core/engine/PreventionManager.h"
 #include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/utils/overloadVisitor.h"
+#include <cassert>
 #include <stdexcept>
 
 namespace
@@ -165,10 +168,9 @@ namespace dandan::core
         auto &event_manager{exec_ctx.event_manager.get()};
         auto &replacement_manager{exec_ctx.replacement_manager.get()};
 
-        int card_id = std::stoi(input.substr(std::size("play ") - 1));
+        auto req{CastRequest::fromStr(input)};
 
-        auto action =
-            std::make_unique<PlayCardAction>(CardID::fromInt(card_id));
+        auto action = std::make_unique<PlayCardAction>(req);
 
         if (prevention_manager.isPrevented(*action, exec_ctx))
         {
@@ -283,9 +285,9 @@ namespace dandan::core
             std::vector<Target> targets{};
             for (const auto &object : stack().getStackObjects())
             {
-                if (std::holds_alternative<CardID>(object))
+                if (std::holds_alternative<CastContext>(object))
                 {
-                    targets.emplace_back(std::get<CardID>(object));
+                    targets.emplace_back(std::get<CastContext>(object).card_id);
                 }
             }
             return targets;
@@ -321,7 +323,7 @@ namespace dandan::core
         case Zone::STACK:
             // while it is called a stack and it does have FILO properties cards
             // can be removed at any level
-            stack().removeObject(card.getID());
+            stack().removeCard(card.getID());
             break;
         }
     }
@@ -346,7 +348,8 @@ namespace dandan::core
             m_exile.addCard(card);
             break;
         case Zone::STACK:
-            m_stack.push(card.getID());
+            assert("Should not be able to move card to stack without going "
+                   "through casting procedure");
             break;
         }
     }
@@ -416,18 +419,17 @@ namespace dandan::core
         for (const auto &object : stack_objects)
         {
             std::visit(
-                utils::overloaded{[&card_registry](const CardID &card_id)
-                                  {
-                                      const auto *card = card_registry[card_id];
-                                      std::cout << card->getData().name
-                                                << " (Card)\n";
-                                  },
-                                  [](const abilities::BoundAbility &ability)
-                                  {
-                                      std::cout
-                                          << ability.definition().display()
-                                          << " (Ability)\n";
-                                  }},
+                utils::overloaded{
+                    [&card_registry](const CastContext &cast_ctx)
+                    {
+                        const auto *card = card_registry[cast_ctx.card_id];
+                        std::cout << card->getData().name << " (Card)\n";
+                    },
+                    [](const abilities::BoundAbility &ability)
+                    {
+                        std::cout << ability.definition().display()
+                                  << " (Ability)\n";
+                    }},
                 object);
         }
         std::cout << "\n";

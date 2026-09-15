@@ -54,4 +54,10 @@ namespace dandan::abilities
                               effects::EffectContext(context.controller_id));
     }
 
+    [[nodiscard]] std::unique_ptr<IAbility> EventTriggeredAbility::clone() const
+    {
+        return std::make_unique<EventTriggeredAbility>(m_trigger->clone(),
+                                                       m_effect->clone());
+    }
+
 } // namespace dandan::abilities

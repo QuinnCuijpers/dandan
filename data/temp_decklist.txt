@@ -18,4 +18,5 @@
 2 Remote Isle
 2 Svyelunite Temple
 2 Temple of Epiphany
+2 Mystic Retrieval
 20 Island

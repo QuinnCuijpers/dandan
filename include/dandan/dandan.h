@@ -8,6 +8,9 @@
 #include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/WithDamage.h"
+#include "dandan/abilities/keywords/FlashbackAbility.h"
+#include "dandan/abilities/keywords/FlyingAbility.h"
+#include "dandan/abilities/keywords/Keyword.h"
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/conditions/FlyingCondition.h"
 #include "dandan/conditions/MatchesReadLinksCondition.h"
@@ -15,7 +18,6 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/Game.h"
-#include "dandan/core/Keyword.h"
 #include "dandan/costs/AndCost.h"
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
@@ -37,6 +39,7 @@
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/effects/one_shot/PeekEffect.h"
 #include "dandan/effects/one_shot/PutCardOnTopEffect.h"
+#include "dandan/effects/one_shot/RegrowthEffect.h"
 #include "dandan/effects/one_shot/ScryEffect.h"
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "dandan/effects/one_shot/ShowAndTellEffect.h"
@@ -53,7 +56,10 @@ namespace dandan
 {
     using abilities::ActivatedAbility;
     using abilities::EventTriggeredAbility;
+    using abilities::FlashbackAbility;
+    using abilities::FlyingAbility;
     using abilities::IAbility;
+    using abilities::Keyword;
     using abilities::ManaAbility;
     using abilities::SpellAbility;
     using abilities::StateTriggeredAbility;
@@ -63,7 +69,6 @@ namespace dandan
     using core::Card;
     using core::CardData;
     using core::Game;
-    using core::Keyword;
     using core::Stats;
 
     using conditions::DefenderControlsNoBasicCondition;
@@ -85,6 +90,7 @@ namespace dandan
     using effects::OptionalDrawEffect;
     using effects::PeekEffect;
     using effects::PutCardOnTopEffect;
+    using effects::RegrowthEffect;
     using effects::ScryEffect;
     using effects::SelfSacrificeEffect;
     using effects::ShowAndTellEffect;

@@ -56,6 +56,8 @@ namespace dandan::abilities
             core::ExecutionContext exec_ctx,
             AbilityContext context) const override;
 
+        [[nodiscard]] std::unique_ptr<IAbility> clone() const override;
+
     private:
         std::unique_ptr<dandan::triggers::ITrigger> m_trigger;
         std::unique_ptr<dandan::effects::IOneShotEffectDefinition> m_effect;

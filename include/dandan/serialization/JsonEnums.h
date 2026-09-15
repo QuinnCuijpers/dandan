@@ -4,9 +4,9 @@
 #include "dandan/core/CardTypes.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/Expire.h"
-#include "dandan/core/Keyword.h"
 #include "nlohmann/detail/macro_scope.hpp"
 #ifdef DANDAN_SERIALIZE
+#include "dandan/abilities/keywords/Keyword.h"
 #include "dandan/core/TargetRequirement.h"
 #include <nlohmann/json.hpp>
 
@@ -63,10 +63,15 @@ namespace dandan::core
                                   {ColorWord::Red, "Red"},
                                   {ColorWord::White, "White"}})
 
+} // namespace dandan::core
+//
+namespace dandan::abilities
+{
+
     // NOLINTNEXTLINE
     NLOHMANN_JSON_SERIALIZE_ENUM(Keyword, {{Keyword::Flying, "Flying"}})
 
-} // namespace dandan::core
+} // namespace dandan::abilities
 
 #endif // DANDAN_SERIALIZE
 #endif // DANDAN_JSON_ENUMS_H

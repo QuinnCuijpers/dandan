@@ -54,6 +54,8 @@ namespace dandan::abilities
             core::ExecutionContext exec_ctx,
             AbilityContext context) const override;
 
+        [[nodiscard]] std::unique_ptr<IAbility> clone() const override;
+
     private:
         Type m_type{};
         std::unique_ptr<effects::IContinuousEffect> m_effect;

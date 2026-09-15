@@ -21,7 +21,8 @@ namespace dandan::abilities
             StaticReplacement,
             StaticPrevention,
             StaticCharacteristicDefining,
-            AbilityDecorator
+            AbilityDecorator,
+            Keyword,
         };
 
         explicit AbilityType(Type type);

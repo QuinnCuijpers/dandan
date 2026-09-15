@@ -1,7 +1,14 @@
 #include "SpellDefinitions.h"
+#include "dandan/abilities/keywords/FlashbackAbility.h"
+#include "dandan/abilities/keywords/FlyingAbility.h"
+#include "dandan/core/ColorWord.h"
 #include "dandan/dandan.h"
 #include "dandan/effects/one_shot/MillEffect.h"
 #include "dandan/effects/one_shot/ModalEffect.h"
+#include "dandan/mana/ManaBag.h"
+#include "dandan/mana/ManaPrice.h"
+#include "dandan/mana/ManaType.h"
+#include <memory>
 
 using dandan::effects::ModalEffectDefinition;
 
@@ -262,11 +269,12 @@ Dance_of_the_Skywise_Abilities()
     auto types{std::vector<dandan::core::TargetType>{
         dandan::core::TargetType::Creature}};
 
-    auto *flying{dandan::abilities::FLYING_ABILITY.get()};
+    auto flying{std::make_unique<dandan::abilities::FlyingAbility>()};
 
-    auto added_abilities{std::vector<const dandan::abilities::IAbility *>{}};
+    auto added_abilities{
+        std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
-    added_abilities.push_back(flying);
+    added_abilities.push_back(std::move(flying));
 
     auto changes{dandan::core::CardCharacteristics{
         dandan::core::ColorWord::Blue,
@@ -339,6 +347,29 @@ Metamorphose_Abilities()
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+
+    return abilities;
+}
+
+std::vector<std::unique_ptr<dandan::abilities::IAbility>>
+Mystic_Retrieval_Abilities()
+{
+    auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
+
+    auto flashback{std::make_unique<dandan::abilities::FlashbackAbility>(
+        dandan::mana::ManaPrice{
+            dandan::mana::ManaBag{{dandan::mana::ManaType::RED, 1}}, 2})};
+
+    auto ability_effects{std::vector<
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+    ability_effects.emplace_back(
+        std::make_unique<dandan::effects::RegrowthEffectDefinition>(
+            std::vector<dandan::core::Type>{dandan::core::Type::Instant,
+                                            dandan::core::Type::Sorcery}));
+
+    abilities.emplace_back(
+        std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
+    abilities.push_back(std::move(flashback));
 
     return abilities;
 }

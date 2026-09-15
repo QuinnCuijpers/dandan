@@ -46,14 +46,35 @@ namespace dandan::core
             auto *card{card_registry[m_context.source_card_id]};
             activated_ability->getCost()->pay(exec_ctx, m_context);
             game.stack().push(
-                abilities::BoundAbility{*activated_ability, card});
+                abilities::BoundAbility{*activated_ability, card,
+                                        m_context.chosen_mode_index,
+                                        m_context.text_replacements});
             return nullptr;
         }
         if (const auto *with_damage =
                 dynamic_cast<const abilities::WithDamage *>(m_ability))
         {
             auto *card{card_registry[m_context.source_card_id]};
-            game.stack().push(abilities::BoundAbility{*with_damage, card});
+
+            // Mana abilities (possibly wrapped in a decorator such as
+            // WithDamage) resolve immediately and never use the stack, so the
+            // mana is available for the very next action.
+            const auto *inner{with_damage->getInnerAbility()};
+            if (dynamic_cast<const abilities::ManaAbility *>(inner) != nullptr ||
+                dynamic_cast<const abilities::BasicLandAbility *>(inner) !=
+                    nullptr)
+            {
+                auto effect{with_damage->createEffect(exec_ctx, m_context)};
+                if (effect)
+                {
+                    return effect;
+                }
+            }
+
+            game.stack().push(
+                abilities::BoundAbility{*with_damage, card,
+                                        m_context.chosen_mode_index,
+                                        m_context.text_replacements});
             return nullptr;
         }
         throw std::runtime_error(

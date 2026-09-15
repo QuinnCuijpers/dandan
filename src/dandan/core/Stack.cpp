@@ -5,6 +5,7 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
+#include "dandan/core/CastContext.h"
 #include "dandan/core/GameState.h"
 #include "dandan/core/engine/EventManager.h"
 #include "dandan/core/engine/ReplacementManager.h"
@@ -15,6 +16,17 @@
 
 namespace dandan::core
 {
+    void Stack::push(const StackObject &object)
+    {
+        std::cout << "Pushing object onto stack\n";
+        m_stack.push_back(object);
+    }
+
+    [[nodiscard]] bool Stack::isEmpty() const
+    {
+        return m_stack.empty();
+    }
+
     void Stack::resolveNext(core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
@@ -35,10 +47,11 @@ namespace dandan::core
 
         auto effect{std::visit(
             utils::overloaded{
-                [&resolvingSpell, &card_registry, &exec_ctx](
-                    CardID card_id) -> std::unique_ptr<effects::IOneShotEffect>
+                [&resolvingSpell, &card_registry,
+                 &exec_ctx](const CastContext &cast_ctx)
+                    -> std::unique_ptr<effects::IOneShotEffect>
                 {
-                    auto *card{card_registry[card_id]};
+                    auto *card{card_registry[cast_ctx.card_id]};
                     if (card->getData().type == Type::Instant ||
                         card->getData().type == Type::Sorcery)
                     {
@@ -97,15 +110,37 @@ namespace dandan::core
             auto &new_object{m_stack.back()};
             std::cout << "Played spell, so now it gets removed\n";
             std::visit(
-                utils::overloaded{[&game, &card_registry](CardID card_id)
-                                  {
-                                      auto *card{card_registry[card_id]};
-                                      game.moveCardFromZone(game.activePlayer(),
-                                                            *card);
-                                      game.graveyard().addCard(*card);
-                                  },
-                                  [](const abilities::BoundAbility &) {}},
+                utils::overloaded{
+                    [this, &game, &card_registry](const CastContext &cast_ctx)
+                    {
+                        auto *card{card_registry[cast_ctx.card_id]};
+                        m_stack.pop_back();
+                        switch (cast_ctx.mode)
+                        {
+
+                        case CastMode::Normal:
+                            game.graveyard().addCard(*card);
+                            break;
+                        case CastMode::Flashback:
+                            game.exile().addCard(*card);
+                            break;
+                        }
+                    },
+                    [](const abilities::BoundAbility &) {}},
                 new_object);
         }
+    }
+
+    [[nodiscard]] const std::vector<StackObject> &Stack::getStackObjects() const
+    {
+        return m_stack;
+    }
+
+    void Stack::removeObject(const StackObject &object)
+    {
+        m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(),
+                                     [&](const StackObject &stack_object)
+                                     { return object == stack_object; }),
+                      m_stack.end());
     }
 } // namespace dandan::core

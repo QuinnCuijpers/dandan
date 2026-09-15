@@ -44,6 +44,8 @@ namespace dandan::abilities
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::ExecutionContext exec_ctx, AbilityContext context) const override;
 
+        [[nodiscard]] std::unique_ptr<IAbility> clone() const override;
+
     private:
         int m_damage{1};
     };

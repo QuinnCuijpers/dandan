@@ -23,6 +23,7 @@ target_sources(
           MemoryLapseEffect.cpp
           ShowAndTellEffect.cpp
           ChooseCardNameAndMillEffect.cpp
+          RegrowthEffect.cpp
           ChangeCharacteristicsEffect.cpp
           SelfSacrificeEffect.cpp
           SpinToTopEffect.cpp)

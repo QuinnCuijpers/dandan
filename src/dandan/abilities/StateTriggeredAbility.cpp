@@ -53,4 +53,11 @@ namespace dandan::abilities
         return m_effect.get();
     }
 
+    [[nodiscard]] std::unique_ptr<IAbility>
+    StateTriggeredAbility::clone() const
+    {
+        return std::make_unique<StateTriggeredAbility>(m_condition->clone(),
+                                                       m_effect->clone());
+    }
+
 } // namespace dandan::abilities

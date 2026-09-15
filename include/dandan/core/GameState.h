@@ -22,6 +22,7 @@
 
 namespace dandan::core
 {
+
     class GameState
     {
     public:

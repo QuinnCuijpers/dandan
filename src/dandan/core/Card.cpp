@@ -414,8 +414,8 @@ namespace dandan::core
             m_current_abilities.clear();
         }
         std::cout << "Size of additional abilities: "
-                  << character.additional_abilities.size() << '\n';
-        for (const auto *ability : character.additional_abilities)
+                  << m_characteristics.additional_abilities.size() << '\n';
+        for (const auto &ability : m_characteristics.additional_abilities)
         {
             std::cout << "Adding ability: \n";
             auto bound{abilities::BoundAbility{*ability, this}};

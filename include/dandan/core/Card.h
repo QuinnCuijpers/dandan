@@ -2,6 +2,9 @@
 #define DANDAN_CARD_H
 
 #include "dandan/abilities/BoundAbility.h"
+#include "dandan/abilities/IAbility.h"
+#include "dandan/abilities/keywords/IKeyWordAbility.h"
+#include "dandan/abilities/keywords/Keyword.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/ColorWord.h"
@@ -10,6 +13,8 @@
 #include "dandan/core/Stats.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/Zone.h"
+#include <algorithm>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -38,7 +43,51 @@ namespace dandan::core
         std::vector<SubType> subtypes;
         Stats base_stats;
         bool loses_all_abilities{};
-        std::vector<const abilities::IAbility *> additional_abilities;
+        std::vector<std::unique_ptr<abilities::IAbility>> additional_abilities;
+
+        CardCharacteristics() = default;
+        ~CardCharacteristics() = default;
+
+        CardCharacteristics(ColorWord color, std::vector<SubType> subtypes,
+                            Stats base_stats, bool loses_all_abilities,
+                            std::vector<std::unique_ptr<abilities::IAbility>>
+                                additional_abilities)
+            : color(color), subtypes(std::move(subtypes)),
+              base_stats(base_stats), loses_all_abilities(loses_all_abilities),
+              additional_abilities(std::move(additional_abilities))
+        {
+        }
+        CardCharacteristics(const CardCharacteristics &other)
+            : color(other.color), subtypes(other.subtypes),
+              base_stats(other.base_stats),
+              loses_all_abilities(other.loses_all_abilities)
+        {
+            for (const auto &ability : other.additional_abilities)
+            {
+                additional_abilities.push_back(ability->clone());
+            }
+        }
+
+        CardCharacteristics &operator=(const CardCharacteristics &other)
+        {
+            if (this != &other)
+            {
+                color = other.color;
+                subtypes = other.subtypes;
+                base_stats = other.base_stats;
+                loses_all_abilities = other.loses_all_abilities;
+                additional_abilities.clear();
+                for (const auto &ability : other.additional_abilities)
+                {
+                    additional_abilities.push_back(ability->clone());
+                }
+            }
+            return *this;
+        }
+
+        CardCharacteristics(CardCharacteristics &&) noexcept = default;
+        CardCharacteristics &operator=(CardCharacteristics &&) noexcept =
+            default;
     };
 
     /** @brief A class representing a card instance in the game.
@@ -61,6 +110,13 @@ namespace dandan::core
          */
         explicit Card(CardData *card_data,
                       PlayerID controller_id = PlayerID::getInvalidID());
+
+        ~Card() = default;
+
+        Card(const Card &other) = default;
+        Card &operator=(const Card &other) = default;
+        Card(Card &&other) noexcept = default;
+        Card &operator=(Card &&other) noexcept = default;
 
         /** Get the ID of the card.
          * @return The ID of the card.
@@ -226,6 +282,38 @@ namespace dandan::core
         std::unordered_map<std::string, Memorable> &linkMap();
 
         const std::unordered_map<std::string, Memorable> &linkMap() const;
+
+        bool hasKeyword(abilities::Keyword key_word) const
+        {
+            return std::any_of(
+                m_current_abilities.begin(), m_current_abilities.end(),
+                [&key_word](const auto &ability)
+                {
+                    if (const auto *keyword =
+                            dynamic_cast<const abilities::IKeyWordAbility *>(
+                                &ability.definition()))
+                    {
+                        if (keyword->keyword() == key_word)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+        }
+
+        template <typename T> const T *getAbility() const
+        {
+            for (const auto &ability : m_current_abilities)
+            {
+                if (auto *result =
+                        dynamic_cast<const T *>(&ability.definition()))
+                {
+                    return result;
+                }
+            }
+            return nullptr;
+        }
 
     private:
         CardID m_card_id;

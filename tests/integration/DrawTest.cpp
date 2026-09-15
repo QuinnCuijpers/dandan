@@ -184,8 +184,6 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     stream << "play " << accumulated_knowledge_id_2.getID() << '\n';
     stream << "pass\n";
 
-    // turn 2 player 2
-    stream << "pass\n";
     // discard down to hand size
     stream << game_state.nonActivePlayer().hand().getCards()[1].getID() << '\n';
     stream << game_state.nonActivePlayer().hand().getCards()[2].getID() << '\n';

@@ -2,6 +2,7 @@
 #define DANDAN_I_COST
 
 #include "dandan/core/Player.h"
+#include <memory>
 #include <stdexcept>
 namespace dandan::costs
 {
@@ -45,6 +46,11 @@ namespace dandan::costs
         virtual void pay(
             [[maybe_unused]] core::ExecutionContext exec_ctx,
             [[maybe_unused]] abilities::AbilityContext context) const = 0;
+
+        /** Create a copy of the cost.
+         * @return The copy of the cost
+         */
+        [[nodiscard]] virtual std::unique_ptr<ICost> clone() const = 0;
     };
 } // namespace dandan::costs
 
