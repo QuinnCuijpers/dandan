@@ -13,6 +13,7 @@
 #include "dandan/core/Stats.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/Zone.h"
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -284,16 +285,21 @@ namespace dandan::core
 
         bool hasKeyword(abilities::Keyword key_word) const
         {
-            for (const auto &ability : m_current_abilities)
-            {
-                if (const auto *keyword =
-                        dynamic_cast<const abilities::IKeyWordAbility *>(
-                            &ability.definition()))
+            return std::any_of(
+                m_current_abilities.begin(), m_current_abilities.end(),
+                [&key_word](const auto &ability)
                 {
-                    return keyword->keyword() == key_word;
-                }
-            }
-            return false;
+                    if (const auto *keyword =
+                            dynamic_cast<const abilities::IKeyWordAbility *>(
+                                &ability.definition()))
+                    {
+                        if (keyword->keyword() == key_word)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
         }
 
         template <typename T> const T *getAbility() const
