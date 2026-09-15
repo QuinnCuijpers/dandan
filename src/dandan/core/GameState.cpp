@@ -348,8 +348,9 @@ namespace dandan::core
             m_exile.addCard(card);
             break;
         case Zone::STACK:
-            assert("Should not be able to move card to stack without going "
-                   "through casting procedure");
+            throw std::runtime_error(
+                "Should not be able to move card to stack without going "
+                "through casting procedure");
             break;
         }
     }

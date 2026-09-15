@@ -114,7 +114,6 @@ namespace dandan::core
                     [this, &game, &card_registry](const CastContext &cast_ctx)
                     {
                         auto *card{card_registry[cast_ctx.card_id]};
-                        m_stack.pop_back();
                         switch (cast_ctx.mode)
                         {
 
@@ -125,6 +124,7 @@ namespace dandan::core
                             game.exile().addCard(*card);
                             break;
                         }
+                        m_stack.pop_back();
                     },
                     [](const abilities::BoundAbility &) {}},
                 new_object);
