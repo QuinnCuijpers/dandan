@@ -463,7 +463,8 @@ TEST(DandanLibTest, MysticRetrievalTest)
 
     auto cards{createTestCards(NUM_ISLANDS, shivan_data.get())};
     auto mystic_retrieval_cards{
-        createTestCards(NUM_MYSTIC_RETRIEVAL, &mystic_retrieval_data)};
+        createTestCards(NUM_MYSTIC_RETRIEVAL, &mystic_retrieval_data),
+    };
 
     cards.insert(cards.end(), mystic_retrieval_cards.begin(),
                  mystic_retrieval_cards.end());
@@ -483,11 +484,10 @@ TEST(DandanLibTest, MysticRetrievalTest)
     auto land_2_2{game_state.nonActivePlayer().hand().getCards()[1].getID()};
     auto land_2_3{game_state.nonActivePlayer().hand().getCards()[2].getID()};
 
-    // Pick two different copies of Mystic Retrieval.
     auto mystic_1{game_state.activePlayer().hand().getCards()[5].getID()};
 
-    // Find another copy in the opponent's hand.
     auto mystic_2{game_state.nonActivePlayer().hand().getCards()[5].getID()};
+    auto mystic_3{game_state.nonActivePlayer().hand().getCards()[6].getID()};
 
     // Turn 1 player 1
     stream << "play " << land_1_1 << '\n';
@@ -521,7 +521,16 @@ TEST(DandanLibTest, MysticRetrievalTest)
     stream << "pass\n";
     stream << mystic_2 << '\n'; // discard the mystic retrival
 
-    // Turn 5 player 1
+    // turn 5 player 1
+    stream << "pass\n";
+    // stream << game_state.activePlayer().hand().getCards().back().getID()
+    //        << '\n';
+
+    // turn 5 player 2
+    stream << "pass\n";
+    stream << mystic_3 << '\n';
+
+    // Turn 6 player 1
 
     // Cast Mystic Retrieval #1 and target the other copy
     // of Mystic Retrieval in the graveyard.
@@ -535,12 +544,14 @@ TEST(DandanLibTest, MysticRetrievalTest)
     stream << "1\n";
 
     stream << "play " << mystic_1 << '\n';
-    stream << "0\n"; // target Mystic Retrieval #2
+    stream << mystic_2 << '\n'; // target Mystic Retrieval #2
 
     // Pass the turn so the opponent gets priority on their next turn.
     stream << "pass\n";
+    // discard mystic 2 again
+    stream << mystic_2 << '\n';
 
-    // Turn 5 player 2
+    // Turn 6 player 2
     //
     // The Mystic Retrieval should now be available
     // to the opponent through flashback.
@@ -552,7 +563,7 @@ TEST(DandanLibTest, MysticRetrievalTest)
     stream << "2\n";
 
     stream << "play " << mystic_1 << " flashback\n";
-    stream << mystic_2 << '\n';
+    stream << mystic_3 << '\n';
 
     stream << "quit\n";
 
@@ -562,8 +573,11 @@ TEST(DandanLibTest, MysticRetrievalTest)
 
     auto *mystic_1_card{card_registry[mystic_1]};
     auto *mystic_2_card{card_registry[mystic_2]};
+    auto *mystic_3_card{card_registry[mystic_3]};
 
     EXPECT_EQ(mystic_1_card->getZone(), dandan::core::Zone::EXILE);
 
-    EXPECT_EQ(mystic_2_card->getZone(), dandan::core::Zone::HAND);
+    EXPECT_EQ(mystic_2_card->getZone(), dandan::core::Zone::GRAVEYARD);
+
+    EXPECT_EQ(mystic_3_card->getZone(), dandan::core::Zone::HAND);
 }
