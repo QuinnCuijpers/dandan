@@ -64,4 +64,9 @@ namespace dandan::abilities
         player.takeDamage(m_damage, exec_ctx);
         return m_ability->createEffect(exec_ctx, context);
     }
+
+    [[nodiscard]] std::unique_ptr<IAbility> WithDamage::clone() const
+    {
+        return std::make_unique<WithDamage>(m_ability->clone(), m_damage);
+    }
 } // namespace dandan::abilities

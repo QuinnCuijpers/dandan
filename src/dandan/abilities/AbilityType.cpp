@@ -7,6 +7,7 @@
 #include "dandan/abilities/SpellAbility.h"
 #include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
+#include "dandan/abilities/keywords/IKeyWordAbility.h"
 #include <stdexcept>
 
 namespace dandan::abilities
@@ -71,6 +72,11 @@ namespace dandan::abilities
         {
             const auto *underlying{wrapped->getInnerAbility()};
             return AbilityType::from(underlying);
+        }
+
+        if (dynamic_cast<const IKeyWordAbility *>(ability) != nullptr)
+        {
+            return AbilityType{Type::Keyword};
         }
 
         throw std::runtime_error("unreachable path in AbilityType::from");

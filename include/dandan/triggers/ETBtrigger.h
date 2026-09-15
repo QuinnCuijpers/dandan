@@ -69,6 +69,13 @@ namespace dandan::triggers
             return true;
         }
 
+        [[nodiscard]] std::unique_ptr<ITrigger> clone() const override
+        {
+            auto clone{std::make_unique<ETBTrigger<self_trigger>>()};
+            clone->m_tapped = m_tapped;
+            return clone;
+        }
+
     private:
         std::optional<bool> m_tapped;
     };

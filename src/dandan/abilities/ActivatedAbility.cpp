@@ -75,4 +75,10 @@ namespace dandan::abilities
         return true;
     }
 
+    [[nodiscard]] std::unique_ptr<IAbility> ActivatedAbility::clone() const
+    {
+        return std::make_unique<ActivatedAbility>(m_cost->clone(),
+                                                  m_effect->clone());
+    }
+
 } // namespace dandan::abilities

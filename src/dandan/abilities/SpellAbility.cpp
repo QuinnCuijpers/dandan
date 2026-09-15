@@ -47,4 +47,16 @@ namespace dandan::abilities
         return m_effects;
     }
 
+    [[nodiscard]] std::unique_ptr<IAbility> SpellAbility::clone() const
+    {
+        auto cloned_effects{std::vector<
+            std::unique_ptr<effects::IOneShotEffectDefinition>>{}};
+        cloned_effects.reserve(m_effects.size());
+        for (const auto &effect : m_effects)
+        {
+            cloned_effects.push_back(effect->clone());
+        }
+        return std::make_unique<SpellAbility>(std::move(cloned_effects));
+    }
+
 } // namespace dandan::abilities
