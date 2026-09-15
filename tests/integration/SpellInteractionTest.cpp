@@ -565,7 +565,7 @@ TEST(DandanLibTest, MysticRetrievalTest)
     stream << "2\n";
 
     stream << "play " << mystic_1 << " flashback\n";
-    stream << "0\n";
+    stream << mystic_2.getID() << '\n';
 
     stream << "quit\n";
 
