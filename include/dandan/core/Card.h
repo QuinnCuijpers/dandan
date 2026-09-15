@@ -2,6 +2,9 @@
 #define DANDAN_CARD_H
 
 #include "dandan/abilities/BoundAbility.h"
+#include "dandan/abilities/IAbility.h"
+#include "dandan/abilities/keywords/IKeyWordAbility.h"
+#include "dandan/abilities/keywords/Keyword.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/ColorWord.h"
@@ -10,6 +13,7 @@
 #include "dandan/core/Stats.h"
 #include "dandan/core/Target.h"
 #include "dandan/core/Zone.h"
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -226,6 +230,33 @@ namespace dandan::core
         std::unordered_map<std::string, Memorable> &linkMap();
 
         const std::unordered_map<std::string, Memorable> &linkMap() const;
+
+        bool hasKeyword(abilities::Keyword key_word) const
+        {
+            for (const auto &ability : m_current_abilities)
+            {
+                if (const auto *keyword =
+                        dynamic_cast<const abilities::IKeyWordAbility *>(
+                            &ability.definition()))
+                {
+                    return keyword->keyword() == key_word;
+                }
+            }
+            return false;
+        }
+
+        template <typename T> const T *getAbility() const
+        {
+            for (const auto &ability : m_current_abilities)
+            {
+                if (auto *result =
+                        dynamic_cast<const T *>(&ability.definition()))
+                {
+                    return result;
+                }
+            }
+            return nullptr;
+        }
 
     private:
         CardID m_card_id;
