@@ -6,8 +6,11 @@
           {
             "data": {
               "characteristics": {
-                "additional_keywords": [
-                  "Flying"
+                "additional_abilities": [
+                  {
+                    "type": "FlyingAbility",
+                    "data": {}
+                  }
                 ],
                 "base_power": 4,
                 "base_thoughness": 4,

@@ -19,8 +19,12 @@
     {
       "type": "FlashbackAbility",
       "data": {
-        "cost": "(2)U"
+        "cost": "(2)R"
       }
     }
-  ]
+  ],
+  "color": "Blue",
+  "cost": "(3)U",
+  "name": "Mystic Retrieval",
+  "type": "Sorcery"
 }
