@@ -1,6 +1,8 @@
 #ifndef DANDAN_CONTINOUS_EFFECT_H
 #define DANDAN_CONTINOUS_EFFECT_H
 
+#include <memory>
+
 namespace dandan::effects
 {
     /** @brief A marker class for continuous effects.
@@ -17,6 +19,12 @@ namespace dandan::effects
         IContinuousEffect &operator=(const IContinuousEffect &) = delete;
         IContinuousEffect &operator=(IContinuousEffect &&) = delete;
         virtual ~IContinuousEffect() = default;
+
+        /** Create a copy of the continuous effect.
+         * @return The copy of the continuous effect
+         */
+        [[nodiscard]] virtual std::unique_ptr<IContinuousEffect>
+        cloneContinuous() const = 0;
     };
 
 } // namespace dandan::effects

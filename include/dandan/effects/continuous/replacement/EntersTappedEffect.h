@@ -3,6 +3,7 @@
 
 #include "IReplacementEffect.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
+#include <memory>
 
 namespace dandan::effects
 {
@@ -19,6 +20,12 @@ namespace dandan::effects
             const effects::IOneShotEffect &effect) const override;
         [[nodiscard]] effects::IOneShotEffect &replace(
             dandan::effects::IOneShotEffect &effect) const override;
+
+        [[nodiscard]] std::unique_ptr<IContinuousEffect> cloneContinuous()
+            const override
+        {
+            return std::make_unique<EntersTappedEffect>();
+        }
     };
 } // namespace dandan::effects
 

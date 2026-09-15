@@ -90,6 +90,11 @@ namespace dandan::abilities
                 "Unimplemented options count for ability " +
                 std::string(typeid(*this).name()));
         }
+
+        /** Create a copy of the ability.
+         * @return The copy of the ability
+         */
+        [[nodiscard]] virtual std::unique_ptr<IAbility> clone() const = 0;
     };
 }; // namespace dandan::abilities
 

@@ -55,6 +55,8 @@ namespace dandan::abilities
 
         [[nodiscard]] size_t optionsAmount() const override;
 
+        [[nodiscard]] std::unique_ptr<IAbility> clone() const override;
+
     private:
         std::unique_ptr<costs::ICost> m_cost{
             std::make_unique<costs::TapCost>()};

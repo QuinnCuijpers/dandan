@@ -36,6 +36,8 @@ namespace dandan::abilities
             std::unique_ptr<effects::IOneShotEffectDefinition>> &
         effects() const;
 
+        [[nodiscard]] std::unique_ptr<IAbility> clone() const override;
+
     private:
         std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>
             m_effects;
