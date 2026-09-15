@@ -63,14 +63,14 @@ TEST(DandanLibTest, ManaAbilities)
 
     auto game{dandan::Game::withCards(std::move(lands), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     for (auto &player : game_state.getPlayers())
     {
         auto hand_cards{player.hand().getCards()};
         for (const auto &land : hand_cards)
         {
-            auto *card{card_registry[land]};
+            auto *card{card_registry.get(land)};
             // Adds a copy of the land in hand to the battlefield
             player.playCard(*card);
             game_state.moveCardFromZone(player, *card);
@@ -83,7 +83,7 @@ TEST(DandanLibTest, ManaAbilities)
     for (const auto &permanent :
          game_state.activePlayer().battlefield().getLands())
     {
-        auto *card{card_registry[permanent]};
+        auto *card{card_registry.get(permanent)};
         stream << "activate " << card->getID().getID() << '\n';
         if (requires_option[std::string(card->getData().name)])
         {
@@ -97,7 +97,7 @@ TEST(DandanLibTest, ManaAbilities)
     for (const auto &permanent :
          game_state.nonActivePlayer().battlefield().getLands())
     {
-        auto *card{card_registry[permanent]};
+        auto *card{card_registry.get(permanent)};
         stream << "activate " << card->getID().getID() << '\n';
         if (requires_option[std::string(card->getData().name)])
         {

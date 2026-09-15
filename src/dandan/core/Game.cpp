@@ -21,7 +21,7 @@ namespace dandan::core
     {
         for (auto card_id : m_card_registry.card_ids())
         {
-            auto *card = m_card_registry[card_id];
+            auto *card = m_card_registry.get(card_id);
             std::cout << "adding Card id: " << card->getID() << '\n';
             m_game_state.library().addCardBottom(*card);
         }

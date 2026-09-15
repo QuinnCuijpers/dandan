@@ -37,12 +37,12 @@ namespace dandan::costs
                           abilities::AbilityContext context) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         m_inner_cost->pay(exec_ctx, context);
         auto player_id{context.controller_id};
         auto &player{game.getPlayer(player_id)};
-        auto *card{card_registry[context.source_card_id]};
+        auto *card{card_registry.get(context.source_card_id)};
         player.discardCard(*card, exec_ctx);
     }
 

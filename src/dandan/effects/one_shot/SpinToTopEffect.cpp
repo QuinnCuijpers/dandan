@@ -18,7 +18,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         if (!std::holds_alternative<core::CardID>(m_target))
         {
@@ -26,7 +26,7 @@ namespace dandan::effects
                 "Spin to top effect target is not a card ID");
         }
         auto permanent{std::get<core::CardID>(m_target)};
-        auto *card{card_registry[permanent]};
+        auto *card{card_registry.get(permanent)};
         game.moveCardFromZone(game.activePlayer(), *card);
         game.library().addCardTop(*card);
         return nullptr;

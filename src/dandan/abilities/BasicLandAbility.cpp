@@ -104,9 +104,9 @@ namespace dandan::abilities
     std::unique_ptr<effects::IOneShotEffect> BasicLandAbility::createEffect(
         core::ExecutionContext exec_ctx, AbilityContext context) const
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
-        const auto *cardp = card_registry[context.source_card_id];
+        const auto *cardp = card_registry.get(context.source_card_id);
         assert(cardp->getCurrentSubTypes().size() == 1);
         auto type{cardp->getCurrentSubTypes()[0]};
         return m_basic_land_ability_map.at(type)->createEffect(exec_ctx,
@@ -116,9 +116,9 @@ namespace dandan::abilities
     const ManaAbility *BasicLandAbility::getManaAbility(
         core::ExecutionContext exec_ctx, const AbilityContext &context) const
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
-        const auto *card{card_registry[context.source_card_id]};
+        const auto *card{card_registry.get(context.source_card_id)};
         assert(card->getCurrentSubTypes().size() == 1);
         auto type{card->getCurrentSubTypes()[0]};
         return m_basic_land_ability_map.at(type).get();

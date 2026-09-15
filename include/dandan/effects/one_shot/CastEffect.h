@@ -124,10 +124,10 @@ namespace dandan::effects
             core::ExecutionContext exec_ctx) const override
         {
             auto &game{exec_ctx.state.get()};
-            auto &card_registry{exec_ctx.cards.get()};
+            const auto &card_registry{exec_ctx.cards.get()};
             auto &priority_manager{exec_ctx.priority_manager.get()};
 
-            auto *card{card_registry[m_cast_ctx.card_id]};
+            auto *card{card_registry.get(m_cast_ctx.card_id)};
 
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{

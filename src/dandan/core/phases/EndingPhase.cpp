@@ -13,7 +13,7 @@ namespace dandan::core
     void EndingPhase::handleNextStep()
     {
         auto &game{context().state.get()};
-        auto &card_registry{context().cards.get()};
+        const auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
         auto &istream{context().input_manager.get().stream()};
 
@@ -55,7 +55,7 @@ namespace dandan::core
                         std::cout << "input recieved: " << input << '\n';
                         int card_id = std::stoi(input);
                         const auto *card =
-                            card_registry[CardID::fromInt(card_id)];
+                            card_registry.get(CardID::fromInt(card_id));
                         game.activePlayer().discardCard(*card, context());
                     }
                     catch (const std::exception &e)

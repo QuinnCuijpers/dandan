@@ -34,7 +34,7 @@ namespace dandan::core
                                       int count)
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         auto res{std::vector<CardID>{}};
         for (int i = 0; i < count && !m_cards.empty(); ++i)
@@ -42,7 +42,7 @@ namespace dandan::core
             CardID milled_card = m_cards.front();
             res.push_back(milled_card);
             m_cards.pop_front();
-            game.graveyard().addCard(*card_registry[milled_card]);
+            game.graveyard().addCard(*card_registry.get(milled_card));
         }
         return res;
     }

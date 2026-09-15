@@ -59,9 +59,9 @@ namespace dandan::effects
                     "tried binding a Bounce Effect without a source card");
             }
 
-            auto &card_registry{exec_ctx.cards.get()};
+            const auto &card_registry{exec_ctx.cards.get()};
             auto source{context.card_id.value()};
-            const auto *card{card_registry[source]};
+            const auto *card{card_registry.get(source)};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             return std::make_unique<BounceEffect>(choice, context);

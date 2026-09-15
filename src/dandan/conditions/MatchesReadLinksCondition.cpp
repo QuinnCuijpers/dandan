@@ -14,13 +14,13 @@ namespace dandan::conditions
         std::optional<effects::EffectContext> context) const
     {
 
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         assert(context.has_value() &&
                "Effect with Matches Read Links Condition tried checking "
                "without a context and thus no source card");
         auto card_id{context->card_id.value()};
-        const auto *card{card_registry[card_id]};
+        const auto *card{card_registry.get(card_id)};
         auto links{card->linkMap()};
         std::cout << m_first << '\n';
         std::cout << m_second << '\n';

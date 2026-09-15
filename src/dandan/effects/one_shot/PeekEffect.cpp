@@ -10,12 +10,12 @@ namespace dandan::effects
     void printPeekedCards(const std::vector<core::CardID> &card_ids,
                           core::ExecutionContext exec_ctx)
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         std::cout << "Peeked cards: [ ";
         for (size_t i{}; i < card_ids.size(); ++i)
         {
             const auto card_id{card_ids[i]};
-            const auto *cardp{card_registry[card_id]};
+            const auto *cardp{card_registry.get(card_id)};
             std::cout << i << ": " << cardp->getData().name << ", ";
         }
         std::cout << " ]\n";

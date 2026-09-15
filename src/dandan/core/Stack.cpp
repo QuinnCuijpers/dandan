@@ -30,7 +30,7 @@ namespace dandan::core
     void Stack::resolveNext(core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &replacement_manager{exec_ctx.replacement_manager.get()};
         auto &event_manager{exec_ctx.event_manager.get()};
 
@@ -51,7 +51,7 @@ namespace dandan::core
                  &exec_ctx](const CastContext &cast_ctx)
                     -> std::unique_ptr<effects::IOneShotEffect>
                 {
-                    auto *card{card_registry[cast_ctx.card_id]};
+                    auto *card{card_registry.get(cast_ctx.card_id)};
                     if (card->getData().type == Type::Instant ||
                         card->getData().type == Type::Sorcery)
                     {
@@ -80,7 +80,7 @@ namespace dandan::core
                     }
                     effects::EffectContext context{card->getControllerID()};
                     return std::make_unique<effects::ETBEffect>(
-                        *card_registry[card->getID()], context);
+                        *card_registry.get(card->getID()), context);
                 },
                 [this, &exec_ctx](const abilities::BoundAbility &ability)
                     -> std::unique_ptr<effects::IOneShotEffect>
@@ -113,7 +113,7 @@ namespace dandan::core
                 utils::overloaded{
                     [this, &game, &card_registry](const CastContext &cast_ctx)
                     {
-                        auto *card{card_registry[cast_ctx.card_id]};
+                        auto *card{card_registry.get(cast_ctx.card_id)};
                         switch (cast_ctx.mode)
                         {
 

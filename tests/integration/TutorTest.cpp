@@ -44,7 +44,7 @@ TEST(DandanLibTest, MysticalTutorTest)
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
 
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     const dandan::core::CardID CHOSEN_CARD_ID{
         game_state.library().getCards().back()};
@@ -58,7 +58,7 @@ TEST(DandanLibTest, MysticalTutorTest)
         game_state.activePlayer().hand().getCards().end(),
         [&card_registry](const auto &card_id)
         {
-            const auto *card = card_registry[card_id];
+            const auto *card = card_registry.get(card_id);
             return card != nullptr && card->getData().name == "Mystical Tutor";
         })};
 

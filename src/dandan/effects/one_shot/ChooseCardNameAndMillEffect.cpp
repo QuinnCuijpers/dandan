@@ -13,10 +13,10 @@ namespace dandan::effects
     {
 
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
 
-        auto *card{card_registry[m_source]};
+        auto *card{card_registry.get(m_source)};
         auto player_id = std::get<core::PlayerID>(m_target);
         std::cout << "Choose a card name, then "
                   << game.getPlayer(player_id).getName() << " mills a card.\n";

@@ -258,7 +258,7 @@ namespace dandan::core
             std::cout << "[";
             for (const auto &card_id : card_ids)
             {
-                const auto *card = card_registry[card_id];
+                const auto *card = card_registry.get(card_id);
                 std::cout << card->getData().name << "("
                           << "CardID: " << card->getID().getID() << ", ";
                 std::cout << "#Abilities: "

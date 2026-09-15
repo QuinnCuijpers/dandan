@@ -15,12 +15,12 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
 
         auto valid_type = [this, &card_registry](const core::CardID card_id)
         {
-            auto *card{card_registry[card_id]};
+            auto *card{card_registry.get(card_id)};
             const auto *fit{std::find(m_types.begin(), m_types.end(),
                                       card->getData().type)};
             return (fit != m_types.end());
@@ -46,7 +46,7 @@ namespace dandan::effects
 
         auto card_id{core::CardID::fromInt(std::stoi(input))};
 
-        auto *card{card_registry[card_id]};
+        auto *card{card_registry.get(card_id)};
         player.playCard(*card);
 
         return nullptr;

@@ -72,7 +72,7 @@ namespace dandan::core
 
     void Player::drawCard(core::ExecutionContext exec_ctx)
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &library{exec_ctx.state.get().library()};
         if (library.getCards().empty())
         {
@@ -81,7 +81,7 @@ namespace dandan::core
             return;
         }
         auto card_id = library.draw();
-        auto *card{card_registry[card_id]};
+        auto *card{card_registry.get(card_id)};
         card->setControllerID(m_player_id);
         m_hand.addCard(*card);
     }
@@ -114,11 +114,11 @@ namespace dandan::core
         auto available_mana{getAvailableMana(exec_ctx)};
         proxy_mana_pool.add(available_mana);
 
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         for (const auto &card_id : m_hand.getCards())
         {
-            const auto *card{card_registry[card_id]};
+            const auto *card{card_registry.get(card_id)};
             if (card->getData().type == Type::Instant)
             {
                 const auto card_cost{card->getData().mana_cost};
@@ -151,10 +151,10 @@ namespace dandan::core
         mana::ManaBag available_mana{};
         available_mana = available_mana.add(m_mana_pool.view());
 
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         for (const auto &land_id : m_battlefield.getLands())
         {
-            const auto *land{card_registry[land_id]};
+            const auto *land{card_registry.get(land_id)};
             if (land->getTapped())
             {
                 continue;

@@ -22,13 +22,13 @@ namespace dandan::core
     std::unique_ptr<effects::IOneShotEffect> PlayCardAction::createEffect(
         core::ExecutionContext exec_ctx)
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &prevention_manager{exec_ctx.prevention_manager.get()};
         auto &replacement_manager{exec_ctx.replacement_manager.get()};
         auto &event_manager{exec_ctx.event_manager.get()};
         auto &condition_manager{exec_ctx.condition_manager.get()};
 
-        auto *card{card_registry[m_cast_request.card_id]};
+        auto *card{card_registry.get(m_cast_request.card_id)};
 
         auto cast = CastContext::resolveCast(m_cast_request, exec_ctx);
 

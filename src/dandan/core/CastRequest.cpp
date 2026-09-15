@@ -20,6 +20,6 @@ namespace dandan::core
             mode = CastModeFromStr(parts[pos]);
         }
 
-        return {card_id, mode};
+        return CastRequest(card_id, mode);
     };
 } // namespace dandan::core

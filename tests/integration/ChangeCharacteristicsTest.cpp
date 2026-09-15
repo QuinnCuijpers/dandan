@@ -57,7 +57,7 @@ TEST(DandanLibTest, DandanMindBendTest)
     // player
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
     std::stringstream stream{};
 
     auto island_1_1{game_state.activePlayer().hand().getCards()[0].getID()};
@@ -98,7 +98,7 @@ TEST(DandanLibTest, DandanMindBendTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{card_registry[dandan_1_1]};
+    auto *dandan{card_registry.get(dandan_1_1)};
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::GRAVEYARD);
 }
 
@@ -159,7 +159,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     // player
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
     auto &replacement_manager{
         game.execution_context().replacement_manager.get()};
     auto &condition_manager{game.execution_context().condition_manager.get()};
@@ -210,7 +210,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{card_registry[dandan_1_1]};
+    auto *dandan{card_registry.get(dandan_1_1)};
     auto expected_subtypes{std::vector{dandan::core::SubType::Dragon,
                                        dandan::core::SubType::Illusion}};
 
@@ -279,7 +279,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
     // player
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
     std::stringstream stream{};
 
     auto island_1_1{game_state.activePlayer().hand().getCards()[0].getID()};
@@ -326,7 +326,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{card_registry[dandan_1_1]};
+    auto *dandan{card_registry.get(dandan_1_1)};
     auto expected_subtypes{std::vector{dandan::core::SubType::Fish}};
 
     EXPECT_EQ(dandan->getColor(), dandan::core::ColorWord::Blue);
@@ -409,7 +409,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
 
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     std::stringstream stream{};
 
@@ -484,7 +484,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{card_registry[dandan_1_1]};
+    auto *dandan{card_registry.get(dandan_1_1)};
 
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::BATTLEFIELD);
 }
@@ -548,7 +548,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
 //     // player
 //     auto game{dandan::Game::withCards(std::move(cards), false)};
 //     auto &game_state{game.execution_context().state.get()};
-//     auto &card_registry{game.execution_context().cards.get()};
+//     const auto &card_registry{game.execution_context().cards.get()};
 //     std::stringstream stream{};
 //
 //     auto island_1_1{game_state.activePlayer().hand().getCards()[0].getID()};

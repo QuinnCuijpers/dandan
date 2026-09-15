@@ -41,7 +41,7 @@ TEST(DandanLibTest, BrainstormTest)
     // player
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     std::stringstream stream{};
 
@@ -78,8 +78,8 @@ TEST(DandanLibTest, BrainstormTest)
     game.setIstream(stream);
     game.run();
 
-    auto *card_1{card_registry[card_1_id]};
-    auto *card_2{card_registry[card_2_id]};
+    auto *card_1{card_registry.get(card_1_id)};
+    auto *card_2{card_registry.get(card_2_id)};
 
     EXPECT_EQ(card_1->getZone(), dandan::core::Zone::BATTLEFIELD);
     EXPECT_EQ(card_1->getControllerID(), game_state.activePlayer().getID());
@@ -128,7 +128,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
 
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     std::stringstream stream{};
 
@@ -140,7 +140,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
                      game_state.activePlayer().hand().getCards().end(),
                      [&card_registry](const auto &card_id)
                      {
-                         const auto *card = card_registry[card_id];
+                         const auto *card = card_registry.get(card_id);
                          return card != nullptr &&
                                 card->getData().name == "Accumulated Knowledge";
                      })};
@@ -149,7 +149,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
                      game_state.nonActivePlayer().hand().getCards().end(),
                      [&card_registry](const auto &card_id)
                      {
-                         const auto *card = card_registry[card_id];
+                         const auto *card = card_registry.get(card_id);
                          return card != nullptr &&
                                 card->getData().name == "Accumulated Knowledge";
                      })};
@@ -199,8 +199,8 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     EXPECT_EQ(game_state.nonActivePlayer().hand().getCards().size(),
               STARTING_HAND_SIZE);
 
-    auto *svyenulite_1{card_registry[svyenulite_id_1.getID()]};
-    auto *svyenulite_2{card_registry[svyenulite_id_2.getID()]};
+    auto *svyenulite_1{card_registry.get(svyenulite_id_1.getID())};
+    auto *svyenulite_2{card_registry.get(svyenulite_id_2.getID())};
 
     EXPECT_EQ(svyenulite_1->getZone(), dandan::core::Zone::GRAVEYARD);
     EXPECT_EQ(svyenulite_2->getZone(), dandan::core::Zone::GRAVEYARD);
@@ -208,9 +208,9 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     std::cout << accumulated_knowledge_id_1.getID() << '\n';
     std::cout << accumulated_knowledge_id_2.getID() << '\n';
     auto *accumulated_knowledge_1{
-        card_registry[accumulated_knowledge_id_1.getID()]};
+        card_registry.get(accumulated_knowledge_id_1.getID())};
     auto *accumulated_knowledge_2{
-        card_registry[accumulated_knowledge_id_2.getID()]};
+        card_registry.get(accumulated_knowledge_id_2.getID())};
 
     EXPECT_EQ(accumulated_knowledge_1->getZone(),
               dandan::core::Zone::GRAVEYARD);

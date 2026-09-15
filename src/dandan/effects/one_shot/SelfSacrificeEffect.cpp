@@ -19,9 +19,9 @@ namespace dandan::effects
     std::unique_ptr<events::IEvent> SelfSacrificeEffect::apply_impl(
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
-        auto *card{card_registry[m_card_id]};
+        auto *card{card_registry.get(m_card_id)};
         card->destroy(exec_ctx);
         return nullptr;
     }
