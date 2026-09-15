@@ -130,8 +130,8 @@ namespace dandan::serialization::registration
                          characteristics.additional_abilities)
                     {
 
-                        auto sub_json{
-                            JsonFactory<IAbility>::create_json(ability.get())};
+                        auto sub_json =
+                            JsonFactory<IAbility>::create_json(ability.get());
                         characteristics_json["additional_abilities"].push_back(
                             sub_json);
                     }
