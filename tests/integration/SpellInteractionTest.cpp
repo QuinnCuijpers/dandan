@@ -487,20 +487,7 @@ TEST(DandanLibTest, MysticRetrievalTest)
     auto mystic_1{game_state.activePlayer().hand().getCards()[5].getID()};
 
     // Find another copy in the opponent's hand.
-    auto mystic_2_it{
-        std::find_if(game_state.nonActivePlayer().hand().getCards().begin(),
-                     game_state.nonActivePlayer().hand().getCards().end(),
-                     [&card_registry](const auto &card_id)
-                     {
-                         const auto *card = card_registry[card_id];
-                         return card != nullptr &&
-                                card->getData().name == "Mystic Retrieval";
-                     })};
-
-    ASSERT_NE(mystic_2_it,
-              game_state.nonActivePlayer().hand().getCards().end());
-
-    auto mystic_2{*mystic_2_it};
+    auto mystic_2{game_state.nonActivePlayer().hand().getCards()[5].getID()};
 
     // Turn 1 player 1
     stream << "play " << land_1_1 << '\n';
@@ -532,7 +519,7 @@ TEST(DandanLibTest, MysticRetrievalTest)
 
     // Turn 4 player 2
     stream << "pass\n";
-    stream << mystic_2.getID() << '\n'; // discard the mystic retrival
+    stream << mystic_2 << '\n'; // discard the mystic retrival
 
     // Turn 5 player 1
 
@@ -565,7 +552,7 @@ TEST(DandanLibTest, MysticRetrievalTest)
     stream << "2\n";
 
     stream << "play " << mystic_1 << " flashback\n";
-    stream << mystic_2.getID() << '\n';
+    stream << mystic_2 << '\n';
 
     stream << "quit\n";
 
