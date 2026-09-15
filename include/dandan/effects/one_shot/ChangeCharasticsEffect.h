@@ -154,11 +154,12 @@ namespace dandan::serialization::registration
                     const auto &loses_all_abilities =
                         characteristics_json["loses_all_abilities"];
 
-                    auto additional_abilities_json =
-                        characteristics_json["additional_abilities"];
+                    auto additional_abilities_json = characteristics_json.value(
+                        "additional_abilities", nlohmann::json::array());
 
                     auto additional_abilities{
-                        std::vector<std::unique_ptr<IAbility>>{}};
+                        std::vector<std::unique_ptr<IAbility>>{},
+                    };
 
                     for (const auto &ability_json : additional_abilities_json)
                     {
