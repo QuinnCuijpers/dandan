@@ -31,8 +31,8 @@ namespace dandan::core
     struct CastRequest
     {
 
-        CastRequest(dandan::core::CardID card_id,
-                    std::optional<CastMode> mode = std::nullopt)
+        explicit CastRequest(dandan::core::CardID card_id,
+                             std::optional<CastMode> mode = std::nullopt)
             : card_id(card_id), mode{mode.value_or(CastMode::Normal)}
         {
         }

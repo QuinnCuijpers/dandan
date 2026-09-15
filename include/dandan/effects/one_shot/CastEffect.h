@@ -28,7 +28,7 @@ namespace dandan::effects
     namespace impl
     {
         void choose_targets(core::Card *cardp,
-                            effects::IOneShotEffectDefinition &effect,
+                            const effects::IOneShotEffectDefinition &effect,
                             core::ExecutionContext exec_ctx)
         {
             auto &game{exec_ctx.state.get()};
@@ -131,7 +131,8 @@ namespace dandan::effects
 
             std::cout << "Applying PlayCardEffect\n";
             auto &prio_player{
-                game.getPlayer(priority_manager.getPlayerWithPriority())};
+                game.getPlayer(priority_manager.getPlayerWithPriority()),
+            };
 
             auto mana_cost{m_cast_ctx.cost};
 
@@ -151,14 +152,17 @@ namespace dandan::effects
             if (card->getData().type == core::Type::Instant ||
                 card->getData().type == core::Type::Sorcery)
             {
-                auto spell_ability_it{std::find_if(
-                    card->getData().abilities.begin(),
-                    card->getData().abilities.end(),
-                    [](const auto &ability)
-                    {
-                        return dynamic_cast<const abilities::SpellAbility *>(
-                                   ability.get()) != nullptr;
-                    })};
+                auto spell_ability_it{
+                    std::find_if(
+                        card->getData().abilities.begin(),
+                        card->getData().abilities.end(),
+                        [](const auto &ability)
+                        {
+                            return dynamic_cast<
+                                       const abilities::SpellAbility *>(
+                                       ability.get()) != nullptr;
+                        }),
+                };
 
                 if (spell_ability_it == card->getData().abilities.end())
                 {

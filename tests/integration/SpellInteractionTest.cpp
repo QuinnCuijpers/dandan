@@ -443,23 +443,25 @@ TEST(DandanLibTest, MysticRetrievalTest)
     static constexpr int NUM_ISLANDS{8};
     static constexpr int NUM_MYSTIC_RETRIEVAL{30};
 
-    auto island_abilities{::Island_TESTS_Abilities()};
     auto mystic_retrieval_abilities{::Mystic_Retrieval_Abilities()};
-    auto shivan_abilities{::Shivan_Reef_Abilities()};
 
     auto shivan_data{
         create_land_data("Shivan Reef", dandan::core::SuperType::None,
-                         dandan::core::SubType::None, Shivan_Reef_Abilities())};
+                         dandan::core::SubType::None, Shivan_Reef_Abilities()),
+    };
 
-    auto mystic_retrieval_data{dandan::core::CardData{
-        "Mystic Retrieval",
-        dandan::mana::ManaPrice{
-            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 3},
-        dandan::core::Type::Sorcery,
-        {dandan::core::SubType::None},
-        dandan::core::SuperType::None,
-        std::move(mystic_retrieval_abilities),
-        std::nullopt}};
+    auto mystic_retrieval_data{
+        dandan::core::CardData{
+            "Mystic Retrieval",
+            dandan::mana::ManaPrice{
+                dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 3},
+            dandan::core::Type::Sorcery,
+            {dandan::core::SubType::None},
+            dandan::core::SuperType::None,
+            std::move(mystic_retrieval_abilities),
+            std::nullopt,
+        },
+    };
 
     auto cards{createTestCards(NUM_ISLANDS, shivan_data.get())};
     auto mystic_retrieval_cards{

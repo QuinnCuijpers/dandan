@@ -22,7 +22,8 @@ namespace dandan::abilities
             return nullptr;
         }
 
-        FlashbackAbility(mana::ManaPrice cost) : m_cost(std::move(cost))
+        explicit FlashbackAbility(mana::ManaPrice cost)
+            : m_cost(std::move(cost))
         {
         }
 
