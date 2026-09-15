@@ -16,7 +16,7 @@ namespace dandan::core
     void SBAManager::checkSBAs(ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &replacement_manager{exec_ctx.replacement_manager.get()};
         auto &condition_manager{exec_ctx.condition_manager.get()};
 
@@ -66,7 +66,7 @@ namespace dandan::core
         {
             for (const auto &card_id : player.battlefield().getCreatures())
             {
-                auto *card{card_registry[card_id]};
+                auto *card{card_registry.get(card_id)};
                 if (card->getToughness() > 0 &&
                     card->getDamageMarked() >= card->getToughness())
                 {
@@ -104,7 +104,7 @@ namespace dandan::core
                     std::cout << "Triggering state triggered ability on card "
                               << card_id.getID() << '\n';
                     PlayerID controller_id{
-                        card_registry[card_id]->getControllerID()};
+                        card_registry.get(card_id)->getControllerID()};
                     abilities::AbilityContext context{card_id, controller_id};
                     auto final_effect{
                         replacement_manager.applyReplacementEffects(

@@ -10,12 +10,12 @@ namespace dandan::effects
         const core::IAction &action, const core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         if (const auto *play_card_action =
                 dynamic_cast<const core::PlayCardAction *>(&action))
         {
-            const auto *card{card_registry[play_card_action->getCardID()]};
+            const auto *card{card_registry.get(play_card_action->getCardID())};
             if (getCondition()->isSatisfied(exec_ctx, context) &&
                 card->getData().type == core::Type::Land)
             {

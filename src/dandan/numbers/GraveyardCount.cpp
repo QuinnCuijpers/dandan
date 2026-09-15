@@ -18,13 +18,13 @@ namespace dandan::numbers
         [[maybe_unused]] effects::EffectContext context) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         auto count{std::count_if(game.graveyard().getCards().begin(),
                                  game.graveyard().getCards().end(),
                                  [this, &card_registry](const auto &card_id)
                                  {
-                                     auto card{card_registry[card_id]};
+                                     auto card{card_registry.get(card_id)};
                                      return card->getData().name == m_name;
                                  })};
         return static_cast<int>(count);

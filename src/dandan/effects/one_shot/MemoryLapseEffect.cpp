@@ -9,7 +9,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         if (!std::holds_alternative<core::CardID>(m_target))
         {
@@ -17,7 +17,7 @@ namespace dandan::effects
                 "MemoryLapseEffect target is not a CardID");
         }
         auto card_id{std::get<core::CardID>(m_target)};
-        auto *card{card_registry[card_id]};
+        auto *card{card_registry.get(card_id)};
         auto &controller{game.getPlayer(card->getControllerID())};
 
         if (card->canBeCountered())

@@ -4,6 +4,7 @@
 #include "dandan/core/CardID.h"
 #include <filesystem>
 #include <map>
+#include <memory>
 #include <optional>
 #include <vector>
 
@@ -26,6 +27,14 @@ namespace dandan::core
 
         void setCards(std::vector<Card> cards);
 
+        Card *get(CardID card_id);
+
+        Card *get(int card_id);
+
+        Card *get(CardID card_id) const;
+
+        Card *get(int card_id) const;
+
         Card *operator[](CardID card_id);
 
         Card *operator[](int card_id);
@@ -35,7 +44,7 @@ namespace dandan::core
         const Card *operator[](int card_id) const;
 
     private:
-        std::map<CardID, Card> m_card_lookup;
+        std::map<CardID, std::unique_ptr<Card>> m_card_lookup;
         std::optional<std::filesystem::path> m_decklist_path;
     };
 } // namespace dandan::core

@@ -8,14 +8,14 @@ namespace dandan::effects
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
 
         auto cards = game.library().draw(m_scry_amount);
         std::cout << "Scryed cards: [ ";
         for (const auto &card : cards)
         {
-            auto *cardp{card_registry[card]};
+            auto *cardp{card_registry.get(card)};
             std::cout << cardp->getData().name << " ,";
         }
         std::cout << " ]\n";

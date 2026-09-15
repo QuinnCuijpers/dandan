@@ -9,9 +9,9 @@ namespace dandan::conditions
         std::optional<effects::EffectContext> context) const
     {
 
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
-        const auto *card{card_registry[context->card_id.value()]};
+        const auto *card{card_registry.get(context->card_id.value())};
         return card->hasKeyword(abilities::Keyword::Flying);
     }
 

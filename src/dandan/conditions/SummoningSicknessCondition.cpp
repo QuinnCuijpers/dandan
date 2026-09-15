@@ -15,9 +15,9 @@ namespace dandan::conditions
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
 
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
-        const auto *card = card_registry[m_card_id];
+        const auto *card = card_registry.get(m_card_id);
         std::cout << "Checking summoning sickness condition for card "
                   << card->getData().name
                   << " (CardID: " << card->getID().getID() << ")\n";

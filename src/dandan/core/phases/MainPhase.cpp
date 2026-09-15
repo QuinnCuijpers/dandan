@@ -25,7 +25,7 @@ namespace dandan::core
     [[nodiscard]] std::unique_ptr<IPhase> MainPhase::handle()
     {
         auto &game{context().state.get()};
-        auto &card_registry{context().cards.get()};
+        const auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
         auto &istream{context().input_manager.get().stream()};
 

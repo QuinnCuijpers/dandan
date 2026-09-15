@@ -68,14 +68,14 @@ namespace dandan::core
     void Card::destroy(ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &event_manager{exec_ctx.event_manager.get()};
         auto &condition_manager{exec_ctx.condition_manager.get()};
         auto &replacement_manager{exec_ctx.replacement_manager.get()};
         auto &prevention_manager{exec_ctx.prevention_manager.get()};
 
         std::cout << "Destroying card " << getData().name << '\n';
-        auto *card{card_registry[getID()]};
+        auto *card{card_registry.get(getID())};
         auto &player{game.getPlayer(card->getControllerID())};
         game.moveCardFromZone(player, *card);
         // remove from managers

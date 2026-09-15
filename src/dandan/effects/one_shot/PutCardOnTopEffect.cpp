@@ -10,7 +10,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
 
         std::cout << "Applying put card on top effect\n";

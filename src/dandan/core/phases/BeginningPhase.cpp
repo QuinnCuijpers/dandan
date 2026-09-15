@@ -39,7 +39,7 @@ namespace dandan::core
     void BeginningPhase::handleUntapStep()
     {
         auto &game{context().state.get()};
-        auto &card_registry{context().cards.get()};
+        const auto &card_registry{context().cards.get()};
 
         DLOGI << "Handling untap step\n";
 
@@ -50,7 +50,7 @@ namespace dandan::core
         {
             for (const auto &card : cards)
             {
-                auto *cardp{card_registry[card]};
+                auto *cardp{card_registry.get(card)};
                 effects::EffectContext effect_context{};
                 auto effect{std::make_unique<effects::UntapEffect>(
                     *cardp, effect_context)};
@@ -71,7 +71,7 @@ namespace dandan::core
     void BeginningPhase::handleNextStep()
     {
         auto &game{context().state.get()};
-        auto &card_registry{context().cards.get()};
+        const auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
         auto &prevention_manager{context().prevention_manager.get()};
         auto &replacement_manager{context().replacement_manager.get()};

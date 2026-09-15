@@ -11,7 +11,7 @@ TEST(DandanLibTest, gameSetup)
     auto game{dandan::Game::withCards(std::move(test_cards))};
     auto &game_state{game.execution_context().state.get()};
 
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     auto &active_player = game_state.activePlayer();
 
@@ -20,19 +20,19 @@ TEST(DandanLibTest, gameSetup)
         active_player.hand().getCards().begin(),
         active_player.hand().getCards().end(), std::back_inserter(card_names),
         [&card_registry](const auto &card)
-        { return std::string(card_registry[card]->getData().name); });
+        { return std::string(card_registry.get(card)->getData().name); });
 
     for (int i{}; i < STARTING_HAND_SIZE; ++i)
     {
         auto card_id = active_player.hand().getCards().front();
-        auto *card = card_registry[card_id];
+        auto *card = card_registry.get(card_id);
         active_player.playCard(*card);
     }
 
     std::vector<std::string> battlefield_card_names{};
 
     auto getCardname = [&card_registry](const auto &card)
-    { return std::string(card_registry[card]->getData().name); };
+    { return std::string(card_registry.get(card)->getData().name); };
 
     for (const auto &[type, cards] : active_player.battlefield().permanents())
     {

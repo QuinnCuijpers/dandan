@@ -8,7 +8,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         auto context{getEffectContext()};
         auto milled_cards{game.library().mill(exec_ctx, m_amount)};
@@ -17,9 +17,9 @@ namespace dandan::effects
             auto card_id{context.card_id.value()};
             if (milled_cards.size() == 1)
             {
-                auto *card{card_registry[card_id]};
+                auto *card{card_registry.get(card_id)};
                 auto milled_id{milled_cards[0]};
-                const auto &name{card_registry[milled_id]->getData().name};
+                const auto &name{card_registry.get(milled_id)->getData().name};
                 card->remember("milledCardName", name);
             }
         }

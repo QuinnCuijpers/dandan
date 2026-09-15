@@ -12,7 +12,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
 
         // get all cards matching the filter types
@@ -23,7 +23,7 @@ namespace dandan::effects
             return std::any_of(filter_types.begin(), filter_types.end(),
                                [&card_id, &card_registry](const auto &type)
                                {
-                                   const auto *card = card_registry[card_id];
+                                   const auto *card = card_registry.get(card_id);
                                    return card->getData().type == type;
                                });
         };
@@ -43,7 +43,7 @@ namespace dandan::effects
         int chosen_card_id = std::stoi(input);
 
         // remove card from lib and shuffle
-        const auto *card = card_registry[chosen_card_id];
+        const auto *card = card_registry.get(chosen_card_id);
         game.moveCardFromZone(game.activePlayer(), *card);
         game.library().shuffle();
 

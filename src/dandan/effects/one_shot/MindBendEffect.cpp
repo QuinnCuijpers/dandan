@@ -15,7 +15,7 @@ namespace dandan::effects
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
 
         auto target{m_target};
@@ -27,7 +27,7 @@ namespace dandan::effects
         }
 
         auto permanent{std::get<core::Permanent>(target)};
-        auto *card{card_registry[permanent]};
+        auto *card{card_registry.get(permanent)};
 
         if (m_replace_with.has_value() && m_to_replace.has_value())
         {

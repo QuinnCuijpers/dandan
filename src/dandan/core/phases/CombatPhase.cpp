@@ -49,7 +49,7 @@ namespace dandan::core
     void CombatPhase::handleDeclareAttackersStep()
     {
         auto &game{context().state.get()};
-        auto &card_registry{context().cards.get()};
+        const auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
         auto &event_manager{context().event_manager.get()};
         auto &istream{context().input_manager.get().stream()};
@@ -68,7 +68,7 @@ namespace dandan::core
             for (const auto &creature_id :
                  game.activePlayer().battlefield().getCreatures())
             {
-                auto *creature{card_registry[creature_id]};
+                auto *creature{card_registry.get(creature_id)};
                 const auto &attack_action{
                     std::make_unique<core::AttackAction>(*creature)};
                 if (!prevention_manager.isPrevented(*attack_action, context()))
@@ -136,7 +136,7 @@ namespace dandan::core
     void CombatPhase::handleDeclareBlockersStep()
     {
         auto &game{context().state.get()};
-        auto &card_registry{context().cards.get()};
+        const auto &card_registry{context().cards.get()};
         auto &priority_manager{context().priority_manager.get()};
         auto &istream{context().input_manager.get().stream()};
 
@@ -155,7 +155,7 @@ namespace dandan::core
         for (const auto &creature_id :
              blocking_player->battlefield().getCreatures())
         {
-            auto *creature{card_registry[creature_id]};
+            auto *creature{card_registry.get(creature_id)};
             if (creature->getTapped() || creature->isBlocking())
             {
                 continue;
@@ -171,7 +171,7 @@ namespace dandan::core
             }
             // for now let this be a card ID instead of index
             int card_id{std::stoi(input)};
-            auto *attacking_creature{card_registry[card_id]};
+            auto *attacking_creature{card_registry.get(card_id)};
             if (attacking_creature == nullptr ||
                 !attacking_creature->isAttacking())
             {

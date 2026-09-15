@@ -13,7 +13,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         if (!std::holds_alternative<core::Permanent>(m_target))
         {
@@ -21,7 +21,7 @@ namespace dandan::effects
                 "Target for ChangeCharacteristicsEffect was not a Permanent");
         }
         auto permanent_id{std::get<core::Permanent>(m_target)};
-        auto *card{card_registry[permanent_id]};
+        auto *card{card_registry.get(permanent_id)};
 
         const auto &old_abilities{card->getCurrentAbilities()};
         auto old_characteristics{card->getCharacteristics()};

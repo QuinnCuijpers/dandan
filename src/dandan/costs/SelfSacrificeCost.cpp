@@ -22,10 +22,10 @@ namespace dandan::costs
                                 abilities::AbilityContext context) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         auto &player = game.getPlayer(context.controller_id);
-        auto *card = card_registry[context.source_card_id];
+        auto *card = card_registry.get(context.source_card_id);
         player.sacrificeCard(*card, exec_ctx);
     }
 

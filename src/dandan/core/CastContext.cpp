@@ -10,11 +10,11 @@ namespace dandan::core
     CastContext CastContext::resolveCast(const CastRequest &req,
                                          ExecutionContext exec_ctx)
     {
-        auto cards = exec_ctx.cards.get();
+        const auto &cards{exec_ctx.cards.get()};
         auto priority_manager = exec_ctx.priority_manager.get();
         auto &game = exec_ctx.state.get();
 
-        auto *card{cards[req.card_id]};
+        auto *card{cards.get(req.card_id)};
 
         auto zone = Zone::HAND;
         auto cost = card->getData().mana_cost;

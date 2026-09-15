@@ -10,7 +10,7 @@ namespace dandan::effects
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
         auto &event_manager{exec_ctx.event_manager.get()};
 
@@ -21,7 +21,7 @@ namespace dandan::effects
         int land_index{std::stoi(input)};
         std::cout << "Bouncing land at index " << land_index << "\n";
         auto land{game.activePlayer().battlefield().getLand(land_index)};
-        auto *card{card_registry[land.getID()]};
+        auto *card{card_registry.get(land.getID())};
         event_manager.unsubscribe(*card);
         game.activePlayer().hand().addCard(*card);
         return nullptr;

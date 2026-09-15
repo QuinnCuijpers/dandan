@@ -27,7 +27,7 @@ namespace dandan::conditions
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         auto basic{m_type};
         auto text_replacements{context->text_replacements};
@@ -52,7 +52,7 @@ namespace dandan::conditions
 
         auto no_basic_filter = [&](const core::CardID &card_id)
         {
-            const auto *card = card_registry[card_id];
+            const auto *card = card_registry.get(card_id);
             auto subtypes = card->getCurrentSubTypes();
             return card->getData().type == core::Type::Land &&
                    std::all_of(subtypes.begin(), subtypes.end(),

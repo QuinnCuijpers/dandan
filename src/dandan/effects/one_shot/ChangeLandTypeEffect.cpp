@@ -12,7 +12,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
 
         // FIXME: technically it should be able to call any land type, but we
@@ -45,7 +45,7 @@ namespace dandan::effects
 
         for (const auto &card_id : card_registry.card_ids())
         {
-            auto *card{card_registry[card_id]};
+            auto *card{card_registry.get(card_id)};
 
             auto subtypes{card->getCurrentSubTypes()};
             std::ignore = std::any_of(subtypes.begin(), subtypes.end(),

@@ -37,7 +37,7 @@ namespace dandan::core
     void GameState::handleActivate(const std::string &input,
                                    ExecutionContext exec_ctx)
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &prevention_manager{exec_ctx.prevention_manager.get()};
         auto &istream{exec_ctx.input_manager.get().stream()};
         auto &event_manager{exec_ctx.event_manager.get()};
@@ -45,7 +45,7 @@ namespace dandan::core
 
         int card_id = std::stoi(input.substr(std::size("activate ") - 1));
 
-        const auto *cardp{card_registry[card_id]};
+        const auto *cardp{card_registry.get(card_id)};
 
         if (cardp->getZone() != Zone::BATTLEFIELD &&
             cardp->getZone() != Zone::HAND)
@@ -423,7 +423,7 @@ namespace dandan::core
                 utils::overloaded{
                     [&card_registry](const CastContext &cast_ctx)
                     {
-                        const auto *card = card_registry[cast_ctx.card_id];
+                        const auto *card = card_registry.get(cast_ctx.card_id);
                         std::cout << card->getData().name << " (Card)\n";
                     },
                     [](const abilities::BoundAbility &ability)

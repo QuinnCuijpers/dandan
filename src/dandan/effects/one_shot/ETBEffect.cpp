@@ -12,10 +12,10 @@ namespace dandan::effects
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
         auto &prevention_manager{exec_ctx.prevention_manager.get()};
 
-        auto *card{card_registry[m_card.getID()]};
+        auto *card{card_registry.get(m_card.getID())};
 
         game.moveCardFromZone(game.getPlayer(card->getControllerID()), m_card);
         std::cout << "Applying ETBEffect\n";

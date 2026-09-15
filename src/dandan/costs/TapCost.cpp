@@ -22,9 +22,9 @@ namespace dandan::costs
     void TapCost::pay(core::ExecutionContext exec_ctx,
                       abilities::AbilityContext context) const
     {
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
-        auto *card = card_registry[context.source_card_id];
+        auto *card = card_registry.get(context.source_card_id);
         card->setTapped(true);
     }
 

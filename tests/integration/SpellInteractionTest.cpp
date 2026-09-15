@@ -53,7 +53,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
 
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     std::stringstream stream{};
 
@@ -68,7 +68,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
                      game_state.activePlayer().hand().getCards().end(),
                      [&card_registry](const auto &card_id)
                      {
-                         const auto *card = card_registry[card_id];
+                         const auto *card = card_registry.get(card_id);
                          return card != nullptr &&
                                 card->getData().name == "Diminishing Returns";
                      })};
@@ -107,12 +107,12 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     game.setIstream(stream);
     game.run();
 
-    auto *svyenulite_1{card_registry[svyenulite_id_1.getID()]};
-    auto *svyenulite_2{card_registry[svyenulite_id_2.getID()]};
-    auto *discard_card_1{card_registry[discard_1.getID()]};
-    auto *discard_card_2{card_registry[discard_2.getID()]};
+    auto *svyenulite_1{card_registry.get(svyenulite_id_1.getID())};
+    auto *svyenulite_2{card_registry.get(svyenulite_id_2.getID())};
+    auto *discard_card_1{card_registry.get(discard_1.getID())};
+    auto *discard_card_2{card_registry.get(discard_2.getID())};
     auto *diminishing_returns_card{
-        card_registry[diminishing_returns_id.getID()]};
+        card_registry.get(diminishing_returns_id.getID())};
 
     EXPECT_FALSE(svyenulite_1->getZone() == dandan::core::Zone::BATTLEFIELD ||
                  svyenulite_1->getZone() == dandan::core::Zone::GRAVEYARD);
@@ -184,7 +184,7 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
     // player
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     std::stringstream stream{};
 
@@ -224,8 +224,8 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{card_registry[dandan_2]};
-    auto *unsub{card_registry[unsub_1]};
+    auto *dandan{card_registry.get(dandan_2)};
+    auto *unsub{card_registry.get(unsub_1)};
     auto back_card_id{game_state.activePlayer().hand().getCards().back()};
 
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::HAND);
@@ -286,7 +286,7 @@ TEST(DandanLibTest, MemoryLapseTest)
     // player
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
     std::stringstream stream{};
 
     auto island_1_1{game_state.activePlayer().hand().getCards()[0].getID()};
@@ -328,8 +328,8 @@ TEST(DandanLibTest, MemoryLapseTest)
     game.setIstream(stream);
     game.run();
 
-    auto *dandan{card_registry[dandan_2]};
-    auto *memory{card_registry[memory_1]};
+    auto *dandan{card_registry.get(dandan_2)};
+    auto *memory{card_registry.get(memory_1)};
     auto back_card_id{game_state.activePlayer().hand().getCards().back()};
 
     EXPECT_EQ(dandan->getZone(), dandan::core::Zone::HAND);
@@ -376,7 +376,7 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
     // player
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
     std::stringstream stream{};
 
     auto island_1_1{game_state.activePlayer().hand().getCards()[0].getID()};
@@ -422,14 +422,14 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
     game.setIstream(stream);
     game.run();
 
-    auto *crystal{card_registry[crystal_1_1]};
+    auto *crystal{card_registry.get(crystal_1_1)};
     EXPECT_EQ(crystal->getZone(), dandan::core::Zone::GRAVEYARD);
 
     for (auto &player : game_state.getPlayers())
     {
         for (auto card : player.battlefield().getLands())
         {
-            auto *cardp{card_registry[card]};
+            auto *cardp{card_registry.get(card)};
             EXPECT_EQ(cardp->getCurrentSubTypes(),
                       std::vector{dandan::core::SubType::Island});
         }
@@ -443,23 +443,25 @@ TEST(DandanLibTest, MysticRetrievalTest)
     static constexpr int NUM_ISLANDS{8};
     static constexpr int NUM_MYSTIC_RETRIEVAL{30};
 
-    auto island_abilities{::Island_TESTS_Abilities()};
     auto mystic_retrieval_abilities{::Mystic_Retrieval_Abilities()};
-    auto shivan_abilities{::Shivan_Reef_Abilities()};
 
     auto shivan_data{
         create_land_data("Shivan Reef", dandan::core::SuperType::None,
-                         dandan::core::SubType::None, Shivan_Reef_Abilities())};
+                         dandan::core::SubType::None, Shivan_Reef_Abilities()),
+    };
 
-    auto mystic_retrieval_data{dandan::core::CardData{
-        "Mystic Retrieval",
-        dandan::mana::ManaPrice{
-            dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 3},
-        dandan::core::Type::Sorcery,
-        {dandan::core::SubType::None},
-        dandan::core::SuperType::None,
-        std::move(mystic_retrieval_abilities),
-        std::nullopt}};
+    auto mystic_retrieval_data{
+        dandan::core::CardData{
+            "Mystic Retrieval",
+            dandan::mana::ManaPrice{
+                dandan::mana::ManaBag{{dandan::mana::ManaType::BLUE, 1}}, 3},
+            dandan::core::Type::Sorcery,
+            {dandan::core::SubType::None},
+            dandan::core::SuperType::None,
+            std::move(mystic_retrieval_abilities),
+            std::nullopt,
+        },
+    };
 
     auto cards{createTestCards(NUM_ISLANDS, shivan_data.get())};
     auto mystic_retrieval_cards{
@@ -471,7 +473,7 @@ TEST(DandanLibTest, MysticRetrievalTest)
 
     auto game{dandan::Game::withCards(std::move(cards), false)};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     std::stringstream stream{};
 
@@ -571,9 +573,9 @@ TEST(DandanLibTest, MysticRetrievalTest)
 
     game.run();
 
-    auto *mystic_1_card{card_registry[mystic_1]};
-    auto *mystic_2_card{card_registry[mystic_2]};
-    auto *mystic_3_card{card_registry[mystic_3]};
+    auto *mystic_1_card{card_registry.get(mystic_1)};
+    auto *mystic_2_card{card_registry.get(mystic_2)};
+    auto *mystic_3_card{card_registry.get(mystic_3)};
 
     EXPECT_EQ(mystic_1_card->getZone(), dandan::core::Zone::EXILE);
 

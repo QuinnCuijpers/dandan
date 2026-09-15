@@ -7,7 +7,7 @@ namespace dandan::effects
         core::ExecutionContext exec_ctx) const
     {
         auto &game{exec_ctx.state.get()};
-        auto &card_registry{exec_ctx.cards.get()};
+        const auto &card_registry{exec_ctx.cards.get()};
 
         for (int i = 0; i < m_amount; ++i)
         {
@@ -16,7 +16,7 @@ namespace dandan::effects
                 break;
             }
             auto card_id{game.library().getCards().front()};
-            auto *card{card_registry[card_id]};
+            auto *card{card_registry.get(card_id)};
             game.moveCardFromZone(game.activePlayer(), *card);
             game.exile().addCard(*card);
         }

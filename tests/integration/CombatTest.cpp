@@ -39,12 +39,12 @@ TEST(DandanLibTest, CombatTest)
                         island_cards.end());
     auto game{dandan::Game::withCards(std::move(dandan_cards))};
     auto &game_state{game.execution_context().state.get()};
-    auto &card_registry{game.execution_context().cards.get()};
+    const auto &card_registry{game.execution_context().cards.get()};
 
     // find the first dandan in both players hands
     auto find_dandan = [&card_registry](const auto &card_id)
     {
-        const auto *card = card_registry[card_id];
+        const auto *card = card_registry.get(card_id);
         return card != nullptr && card->getData().name == "Dandan";
     };
     auto attacker_it{std::find_if(
@@ -92,8 +92,8 @@ TEST(DandanLibTest, CombatTest)
     EXPECT_EQ(game_state.nonActivePlayer().battlefield().getCreatures().size(),
               0);
 
-    const auto *attacking_creature{card_registry[attacker_id]};
-    const auto *blocking_creature{card_registry[defender_id]};
+    const auto *attacking_creature{card_registry.get(attacker_id)};
+    const auto *blocking_creature{card_registry.get(defender_id)};
 
     // both creatures should have died in combat
     EXPECT_EQ(game_state.graveyard().getCards().size(), 2);
