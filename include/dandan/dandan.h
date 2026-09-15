@@ -8,6 +8,8 @@
 #include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/WithDamage.h"
+#include "dandan/abilities/keywords/FlashbackAbility.h"
+#include "dandan/abilities/keywords/FlyingAbility.h"
 #include "dandan/abilities/keywords/Keyword.h"
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/conditions/FlyingCondition.h"
@@ -54,6 +56,8 @@ namespace dandan
 {
     using abilities::ActivatedAbility;
     using abilities::EventTriggeredAbility;
+    using abilities::FlashbackAbility;
+    using abilities::FlyingAbility;
     using abilities::IAbility;
     using abilities::Keyword;
     using abilities::ManaAbility;
