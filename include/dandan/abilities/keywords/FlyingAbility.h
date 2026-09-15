@@ -30,4 +30,33 @@ namespace dandan::abilities
     };
 } // namespace dandan::abilities
 
+#ifdef DANDAN_SERIALIZE
+#include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonTypeRegistry.h"
+#include <nlohmann/json.hpp>
+
+namespace dandan::serialization::registration
+{
+
+    using namespace dandan::abilities;
+    using namespace dandan::serialization;
+    using namespace dandan::effects;
+
+    inline const auto registeredFlyingAbility = []
+    {
+        AbilityRegistry::instance().registerType<FlyingAbility>(
+            "FlyingAbility",
+            []([[maybe_unused]] const IAbility *ability)
+            {
+                auto json = nlohmann::json::object();
+                return json;
+            },
+            []([[maybe_unused]] const nlohmann::json &json)
+            { return std::make_unique<FlyingAbility>(); });
+
+        return true;
+    }();
+} // namespace dandan::serialization::registration
+#endif
+
 #endif // !DANDAN_FLYINGABILITY_H
