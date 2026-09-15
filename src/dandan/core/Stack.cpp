@@ -115,8 +115,16 @@ namespace dandan::core
                     {
                         auto *card{card_registry[cast_ctx.card_id]};
                         m_stack.pop_back();
-                        // TODO: change this to move to the destination zone
-                        game.graveyard().addCard(*card);
+                        switch (cast_ctx.mode)
+                        {
+
+                        case CastMode::Normal:
+                            game.graveyard().addCard(*card);
+                            break;
+                        case CastMode::Flashback:
+                            game.exile().addCard(*card);
+                            break;
+                        }
                     },
                     [](const abilities::BoundAbility &) {}},
                 new_object);

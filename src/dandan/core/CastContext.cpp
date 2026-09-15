@@ -1,4 +1,5 @@
 #include "dandan/core/CastContext.h"
+#include "dandan/abilities/keywords/FlashbackAbility.h"
 #include "dandan/core/Card.h"
 #include "dandan/core/GameState.h"
 #include "dandan/core/PriorityManager.h"
@@ -52,7 +53,16 @@ namespace dandan::core
                                          zoneToString(card->getZone()));
             }
 
-            auto &abilities{card->getCurrentAbilities()};
+            const auto *flash_back{
+                card->getAbility<abilities::FlashbackAbility>()};
+
+            if (flash_back == nullptr)
+            {
+                throw std::runtime_error("Card must have a flashback ability "
+                                         "to cast with flashback");
+            }
+
+            cost = flash_back->getCost();
             // TODO: impl a check for flashback;
             // auto iter = std::find_if(abilities.begin(), abilities.end(),
             //                          []() { return true; });
