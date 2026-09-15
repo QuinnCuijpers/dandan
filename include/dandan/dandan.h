@@ -8,6 +8,7 @@
 #include "dandan/abilities/StateTriggeredAbility.h"
 #include "dandan/abilities/StaticAbility.h"
 #include "dandan/abilities/WithDamage.h"
+#include "dandan/abilities/keywords/Keyword.h"
 #include "dandan/conditions/DefenderControlsNoBasicCondition.h"
 #include "dandan/conditions/FlyingCondition.h"
 #include "dandan/conditions/MatchesReadLinksCondition.h"
@@ -15,7 +16,6 @@
 #include "dandan/core/Card.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/Game.h"
-#include "dandan/core/Keyword.h"
 #include "dandan/costs/AndCost.h"
 #include "dandan/costs/CyclingCost.h"
 #include "dandan/costs/ICost.h"
@@ -55,6 +55,7 @@ namespace dandan
     using abilities::ActivatedAbility;
     using abilities::EventTriggeredAbility;
     using abilities::IAbility;
+    using abilities::Keyword;
     using abilities::ManaAbility;
     using abilities::SpellAbility;
     using abilities::StateTriggeredAbility;
@@ -64,7 +65,6 @@ namespace dandan
     using core::Card;
     using core::CardData;
     using core::Game;
-    using core::Keyword;
     using core::Stats;
 
     using conditions::DefenderControlsNoBasicCondition;
