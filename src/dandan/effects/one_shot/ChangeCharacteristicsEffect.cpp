@@ -28,7 +28,7 @@ namespace dandan::effects
         for (const auto &ability : old_abilities)
         {
             old_characteristics.additional_abilities.push_back(
-                &ability.definition());
+                ability.definition().clone());
         }
 
         card->setCharacteristics(m_card_characteristics, exec_ctx);
