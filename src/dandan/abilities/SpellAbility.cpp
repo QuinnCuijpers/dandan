@@ -1,7 +1,9 @@
 #include "dandan/abilities/SpellAbility.h"
 #include "dandan/effects/EffectContext.h"
 #include "dandan/effects/one_shot/EffectList.h"
+#include <algorithm>
 #include <iostream>
+#include <iterator>
 
 namespace dandan::abilities
 {
@@ -49,13 +51,16 @@ namespace dandan::abilities
 
     [[nodiscard]] std::unique_ptr<IAbility> SpellAbility::clone() const
     {
-        auto cloned_effects{std::vector<
-            std::unique_ptr<effects::IOneShotEffectDefinition>>{}};
+        auto cloned_effects{
+            std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>{},
+        };
+
         cloned_effects.reserve(m_effects.size());
-        for (const auto &effect : m_effects)
-        {
-            cloned_effects.push_back(effect->clone());
-        }
+
+        std::transform(m_effects.begin(), m_effects.end(),
+                       std::back_inserter(cloned_effects),
+                       [](const auto &effect) { return effect->clone(); });
+
         return std::make_unique<SpellAbility>(std::move(cloned_effects));
     }
 

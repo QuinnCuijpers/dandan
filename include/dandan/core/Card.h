@@ -14,6 +14,7 @@
 #include "dandan/core/Target.h"
 #include "dandan/core/Zone.h"
 #include <algorithm>
+#include <iterator>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -62,10 +63,12 @@ namespace dandan::core
               base_stats(other.base_stats),
               loses_all_abilities(other.loses_all_abilities)
         {
-            for (const auto &ability : other.additional_abilities)
-            {
-                additional_abilities.push_back(ability->clone());
-            }
+
+            std::transform(other.additional_abilities.begin(),
+                           other.additional_abilities.end(),
+                           std::back_inserter(additional_abilities),
+                           [](const auto &ability)
+                           { return ability->clone(); });
         }
 
         CardCharacteristics &operator=(const CardCharacteristics &other)
@@ -77,10 +80,12 @@ namespace dandan::core
                 base_stats = other.base_stats;
                 loses_all_abilities = other.loses_all_abilities;
                 additional_abilities.clear();
-                for (const auto &ability : other.additional_abilities)
-                {
-                    additional_abilities.push_back(ability->clone());
-                }
+
+                std::transform(other.additional_abilities.begin(),
+                               other.additional_abilities.end(),
+                               std::back_inserter(additional_abilities),
+                               [](const auto &ability)
+                               { return ability->clone(); });
             }
             return *this;
         }
@@ -304,15 +309,20 @@ namespace dandan::core
 
         template <typename T> const T *getAbility() const
         {
-            for (const auto &ability : m_current_abilities)
-            {
-                if (auto *result =
-                        dynamic_cast<const T *>(&ability.definition()))
+            auto ability_iter = std::find_if(
+                m_current_abilities.begin(), m_current_abilities.end(),
+                [](const auto &ability)
                 {
-                    return result;
-                }
+                    return dynamic_cast<const T *>(&ability.definition()) !=
+                           nullptr;
+                });
+
+            if (ability_iter == m_current_abilities.end())
+            {
+                return nullptr;
             }
-            return nullptr;
+
+            return dynamic_cast<const T *>(&ability_iter->definition());
         }
 
     private:
