@@ -33,7 +33,7 @@ if(DANDAN_BUILD_SERIALIZE)
 endif()
 
 if(CODE_COVERAGE)
-  target_code_coverage(DandanUnitTests AUTO ALL)
+  target_code_coverage(DandanUnitTests)
 endif()
 
 include(GoogleTest)

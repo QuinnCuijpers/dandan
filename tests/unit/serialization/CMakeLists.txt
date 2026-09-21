@@ -32,7 +32,7 @@ if(DANDAN_BUILD_SERIALIZE)
                                        GTest::gtest_main DandanTestCommon)
 
   if(CODE_COVERAGE)
-    target_code_coverage(DandanLibSerializationTest AUTO ALL)
+    target_code_coverage(DandanLibSerializationTest)
   endif()
 
   include(GoogleTest)
