@@ -33,7 +33,8 @@ add_custom_target(
     inconsistent --output-file ${COVERAGE_INFO}
   COMMAND
     ${LCOV_PATH} --remove ${COVERAGE_INFO} */tests/* */external/*
-    --rc check_data_consistency=0 --output-file ${COVERAGE_INFO}
+    --rc branch_coverage=1 --rc check_data_consistency=0 --output-file
+    ${COVERAGE_INFO}
   COMMAND
     ${GENHTML_PATH} ${COVERAGE_INFO}
     --output-directory ${COVERAGE_OUTPUT_DIR}/all-merged --branch-coverage
