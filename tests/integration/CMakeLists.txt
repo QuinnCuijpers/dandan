@@ -44,7 +44,7 @@ if(DANDAN_ENABLE_LOGGING)
 endif()
 
 if(CODE_COVERAGE)
-  target_code_coverage(DandanLibTest AUTO ALL)
+  target_code_coverage(DandanLibTest)
 endif()
 
 include(GoogleTest)
