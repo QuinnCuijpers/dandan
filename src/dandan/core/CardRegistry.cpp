@@ -47,8 +47,9 @@ namespace dandan::core
                 for (int i = 0; i < amount; ++i)
                 {
                     auto card{Card{name}};
+                    auto card_id{card.getID()};
                     auto [iter, inserted] = m_card_lookup.insert_or_assign(
-                        card.getID(), std::make_unique<Card>(std::move(card)));
+                        card_id, std::make_unique<Card>(std::move(card)));
                     if (inserted)
                     {
                         auto &inserted_card = *iter->second;
@@ -89,8 +90,9 @@ namespace dandan::core
 
         for (auto &card : cards)
         {
+            auto card_id{card.getID()};
             auto [iter, inserted] = m_card_lookup.insert_or_assign(
-                card.getID(), std::make_unique<Card>(std::move(card)));
+                card_id, std::make_unique<Card>(std::move(card)));
             if (inserted)
             {
                 auto &inserted_card = *iter->second;
