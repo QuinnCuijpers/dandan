@@ -147,10 +147,10 @@ namespace dandan::serialization::registration
 
                     const auto &color = characteristics_json["color"];
                     const auto &subtypes = characteristics_json["subtypes"];
-                    auto base_power = characteristics_json["base_power"];
-                    auto base_thoughness =
+                    const auto &base_power = characteristics_json["base_power"];
+                    const auto &base_thoughness =
                         characteristics_json["base_thoughness"];
-                    auto stats{Stats{base_power, base_thoughness}};
+                    const auto &stats{Stats{base_power, base_thoughness}};
                     const auto &loses_all_abilities =
                         characteristics_json["loses_all_abilities"];
 
