@@ -19,6 +19,7 @@
 #include <cassert>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 
 namespace dandan::core
 {
@@ -34,6 +35,11 @@ namespace dandan::core
          */
         [[nodiscard]] const Player &getPlayer(PlayerID player_id) const
         {
+            if (player_id == PlayerID::getInvalidID())
+            {
+                throw std::runtime_error(
+                    "Could not get player with invalid ID");
+            }
             return m_players.at(player_id.id());
         }
 
@@ -43,6 +49,11 @@ namespace dandan::core
          */
         [[nodiscard]] Player &getPlayer(PlayerID player_id)
         {
+            if (player_id == PlayerID::getInvalidID())
+            {
+                throw std::runtime_error(
+                    "Could not get player with invalid ID");
+            }
             return m_players.at(player_id.id());
         }
 

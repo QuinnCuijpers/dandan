@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -113,6 +114,11 @@ namespace dandan::core
 
     Card *CardRegistry::get(CardID card_id) const
     {
+        if (card_id == CardID::getInvalidID())
+        {
+            throw std::runtime_error(
+                "Attempted to get a card from registry with invalid ID");
+        }
         return m_card_lookup.at(card_id).get();
     }
 
