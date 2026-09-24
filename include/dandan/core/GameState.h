@@ -263,8 +263,8 @@ namespace dandan::core
         /** Prints the names and IDs of the specified cards.
          * @param card_ids The IDs of the cards to print.
          */
-        void printCards(const std::vector<CardID> &card_ids,
-                        const CardRegistry &card_registry) const
+        static void printCards(const std::vector<CardID> &card_ids,
+                               const CardRegistry &card_registry)
         {
             std::cout << "[";
             for (const auto &card_id : card_ids)
