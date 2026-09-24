@@ -59,7 +59,7 @@ namespace dandan::effects
             EffectContext context) const override
         {
             const auto &card_registry{exec_ctx.cards.get()};
-            const auto *card{card_registry.get(context.card_id.value())};
+            const auto *card{card_registry.get(context.card_id)};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             context.expires = expires();

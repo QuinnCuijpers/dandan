@@ -50,7 +50,7 @@ namespace dandan::effects
             [[maybe_unused]] EffectContext context) const override
         {
             const auto &card_registry{exec_ctx.cards.get()};
-            const auto *card{card_registry.get(context.card_id.value())};
+            const auto *card{card_registry.get(context.card_id)};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};
             auto player_choice{std::get<core::PlayerID>(choice)};

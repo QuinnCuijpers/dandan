@@ -30,7 +30,11 @@ namespace dandan::conditions
         const auto &card_registry{exec_ctx.cards.get()};
 
         auto basic{m_type};
-        auto text_replacements{context->text_replacements};
+        std::optional<std::vector<core::TextReplacement>> text_replacements;
+        if (context.has_value())
+        {
+            text_replacements = context->text_replacements;
+        }
 
         if (text_replacements.has_value())
         {

@@ -64,7 +64,7 @@ namespace dandan::effects
             EffectContext context) const override
         {
             return std::make_unique<PutCardOnTopEffect>(
-                m_amount, context.player_id.value(), context);
+                m_amount, context.player_id, context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

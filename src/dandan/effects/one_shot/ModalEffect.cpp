@@ -9,7 +9,7 @@ namespace dandan::effects
     {
         const auto &card_registry{exec_ctx.cards.get()};
 
-        const auto *card{card_registry.get(context.card_id.value())};
+        const auto *card{card_registry.get(context.card_id)};
         std::cout << "Binding modal effect for card " << card->getData().name
                   << '\n';
         auto modal_choice{card->getModalChoice(*this)};

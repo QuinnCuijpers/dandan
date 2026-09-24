@@ -20,7 +20,8 @@ namespace dandan::effects
             return std::any_of(filter_types.begin(), filter_types.end(),
                                [&card_id, &card_registry](const auto &type)
                                {
-                                   const auto *card = card_registry.get(card_id);
+                                   const auto *card =
+                                       card_registry.get(card_id);
                                    return card->getData().type == type;
                                });
         };

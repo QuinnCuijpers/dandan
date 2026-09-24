@@ -44,8 +44,10 @@ namespace dandan::effects
 
                 auto context{getEffectContext()};
                 context.expires = core::ExpireTime::None;
-                auto undo_effect{std::make_unique<ChangeCharacteristicsEffect>(
-                    m_target, old_characteristics, context)};
+                auto undo_effect{
+                    std::make_unique<ChangeCharacteristicsEffect>(
+                        m_target, old_characteristics, context),
+                };
                 game.addEndOfTurnEffect(std::move(undo_effect));
             }
         }

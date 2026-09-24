@@ -55,8 +55,8 @@ namespace dandan::effects
             [[maybe_unused]] core::ExecutionContext exex_ctx,
             EffectContext context) const override
         {
-            return std::make_unique<PeekEffect>(
-                m_peek_amount, context.player_id.value(), context);
+            return std::make_unique<PeekEffect>(m_peek_amount,
+                                                context.player_id, context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
@@ -74,7 +74,6 @@ namespace dandan::effects
         int m_peek_amount{3};
     };
 } // namespace dandan::effects
-
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
@@ -111,7 +110,7 @@ namespace dandan::serialization::registration
             });
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif

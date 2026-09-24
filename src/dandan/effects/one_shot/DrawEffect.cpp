@@ -1,9 +1,8 @@
 #include "dandan/effects/one_shot/DrawEffect.h"
 #include "dandan/core/ExecutionContext.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/numbers/ExactNumber.h"
 
-#include "dandan/serialization/JsonFactory.h"
 #include "dandan/utils/convertToWords.h"
 #include <iostream>
 #include <memory>
@@ -43,7 +42,7 @@ namespace dandan::effects
         if (value == 1)
         {
             std::cout << "Applying draw effect\n";
-            auto &player{game.getPlayer(getEffectContext().player_id.value())};
+            auto &player{game.getPlayer(getEffectContext().player_id)};
             player.drawCard(exec_ctx);
             return nullptr;
         }
@@ -54,10 +53,10 @@ namespace dandan::effects
         for (int i = 0; i < value; ++i)
         {
             auto draw_definition{std::make_unique<DrawEffectDefinition>(1)};
-            const auto &player{
-                game.getPlayer(getEffectContext().player_id.value())};
+            const auto &player{game.getPlayer(getEffectContext().player_id)};
             auto draw_effect{
-                draw_definition->bind(exec_ctx, EffectContext{player.getID()})};
+                draw_definition->bind(exec_ctx, EffectContext{player.getID()}),
+            };
 
             // breaking effect up doesnt require checking replacement effects as
             // all underlying effects are checked
