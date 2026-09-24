@@ -43,8 +43,10 @@ namespace dandan::effects
         // any relevant state triggers
         for (int i = 0; i < m_amount; ++i)
         {
-            auto put_effect{std::make_unique<PutCardOnTopEffect>(
-                1, m_playerID, getEffectContext())};
+            auto put_effect{
+                std::make_unique<PutCardOnTopEffect>(1, m_playerID,
+                                                     getEffectContext()),
+            };
             static_cast<void>(put_effect->apply(exec_ctx));
         }
 

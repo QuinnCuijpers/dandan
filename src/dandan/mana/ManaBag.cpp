@@ -7,6 +7,7 @@
 namespace dandan::mana
 
 {
+
     ManaBag::ManaBag(
         std::initializer_list<std::pair<ManaType, size_t>> init_list)
     {
