@@ -19,7 +19,8 @@ namespace dandan::effects
 
         if (m_amount == 1)
         {
-            game.printCards(player.hand().getCards(), card_registry);
+            core::GameState::printCards(player.hand().getCards(),
+                                        card_registry);
             auto hand_size = player.hand().getCards().size();
             if (hand_size == 0)
             {

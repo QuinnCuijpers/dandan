@@ -34,7 +34,7 @@ namespace dandan::effects
                      { return included(card, m_filter_types); });
 
         // ask player which cardid they want
-        game.printCards(options, card_registry);
+        core::GameState::printCards(options, card_registry);
         std::cout << "Choose a cardID to retrieve from the graveyard: ";
         std::string input;
         std::getline(istream, input);
