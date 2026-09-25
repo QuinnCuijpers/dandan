@@ -20,7 +20,8 @@ namespace dandan::effects
             return std::any_of(filter_types.begin(), filter_types.end(),
                                [&card_id, &card_registry](const auto &type)
                                {
-                                   const auto *card = card_registry.get(card_id);
+                                   const auto *card =
+                                       card_registry.get(card_id);
                                    return card->getData().type == type;
                                });
         };
@@ -33,7 +34,7 @@ namespace dandan::effects
                      { return included(card, m_filter_types); });
 
         // ask player which cardid they want
-        game.printCards(options, card_registry);
+        core::GameState::printCards(options, card_registry);
         std::cout << "Choose a cardID to retrieve from the graveyard: ";
         std::string input;
         std::getline(istream, input);

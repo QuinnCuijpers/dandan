@@ -12,36 +12,26 @@ namespace dandan::effects
     struct EffectContext
     {
         explicit EffectContext(
-            std::optional<core::CardID> card_id = std::nullopt,
-            std::optional<core::PlayerID> player = std::nullopt)
+            core::CardID card_id = core::CardID::getInvalidID(),
+            core::PlayerID player = core::PlayerID::getInvalidID())
             : card_id(card_id), player_id(player)
         {
         }
 
-        explicit EffectContext(core::CardID card_id)
-            : EffectContext(card_id, std::nullopt)
-        {
-        }
-
         explicit EffectContext(core::PlayerID player_id)
-            : EffectContext(std::nullopt, player_id)
+            : EffectContext(core::CardID::getInvalidID(), player_id)
         {
         }
 
-        explicit EffectContext(core::CardID card_id, core::PlayerID player_id)
-            : card_id(card_id), player_id(player_id)
-        {
-        }
-
-        explicit EffectContext(abilities::AbilityContext context)
+        explicit EffectContext(const abilities::AbilityContext &context)
             : card_id(context.source_card_id), player_id(context.controller_id),
               chosen_mode_index(context.chosen_mode_index),
               text_replacements(context.text_replacements)
         {
         }
 
-        std::optional<core::CardID> card_id;
-        std::optional<core::PlayerID> player_id;
+        core::CardID card_id;
+        core::PlayerID player_id;
         std::optional<size_t> chosen_mode_index;
         std::optional<std::vector<core::TextReplacement>> text_replacements;
         core::ExpireTime expires{core::ExpireTime::None};

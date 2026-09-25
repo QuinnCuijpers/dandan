@@ -37,7 +37,7 @@ namespace dandan::effects
             [[maybe_unused]] EffectContext context) const override
         {
             return std::make_unique<SelfSacrificeEffect>(
-                context.card_id.value(), context);
+                context.card_id, context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

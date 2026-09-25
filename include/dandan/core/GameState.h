@@ -19,6 +19,7 @@
 #include <cassert>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 
 namespace dandan::core
 {
@@ -34,6 +35,11 @@ namespace dandan::core
          */
         [[nodiscard]] const Player &getPlayer(PlayerID player_id) const
         {
+            if (player_id == PlayerID::getInvalidID())
+            {
+                throw std::runtime_error(
+                    "Could not get player with invalid ID");
+            }
             return m_players.at(player_id.id());
         }
 
@@ -43,6 +49,11 @@ namespace dandan::core
          */
         [[nodiscard]] Player &getPlayer(PlayerID player_id)
         {
+            if (player_id == PlayerID::getInvalidID())
+            {
+                throw std::runtime_error(
+                    "Could not get player with invalid ID");
+            }
             return m_players.at(player_id.id());
         }
 
@@ -252,8 +263,8 @@ namespace dandan::core
         /** Prints the names and IDs of the specified cards.
          * @param card_ids The IDs of the cards to print.
          */
-        void printCards(const std::vector<CardID> &card_ids,
-                        const CardRegistry &card_registry) const
+        static void printCards(const std::vector<CardID> &card_ids,
+                               const CardRegistry &card_registry)
         {
             std::cout << "[";
             for (const auto &card_id : card_ids)
