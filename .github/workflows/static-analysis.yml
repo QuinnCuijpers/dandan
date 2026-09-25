@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   pull_request:
 
+env:
+  LLVM_VERSION: '21'
+  CPPCHECK_VERSION: '2.20.0'
+
 jobs:
   static-analysis:
     name: Run Static Analysis
@@ -13,20 +17,39 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
-        with: 
-            submodules: 'recursive'
+        with:
+          submodules: 'recursive'
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cppcheck cmake clang-tidy
-      
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake wget lsb-release software-properties-common gnupg
+          wget -qO /tmp/llvm.sh https://apt.llvm.org/llvm.sh
+          sudo bash /tmp/llvm.sh ${LLVM_VERSION}
+          sudo apt-get install -y clang-tidy-${LLVM_VERSION} clang-tools-${LLVM_VERSION}
+          clang-tidy-${LLVM_VERSION} --version
+
       - name: Configure with CMake
         run: cmake -B build --preset=DandanWithSerialize -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-      
+
       - name: Run clang-tidy
         run: |
-          run-clang-tidy \
+          run-clang-tidy-${LLVM_VERSION} \
+            -clang-tidy-binary clang-tidy-${LLVM_VERSION} \
             -p build \
             '.*/(include/dandan|src/dandan|src/main\.cpp).*'
+
+      - name: Install cppcheck
+        run: |
+          sudo apt-get install -y build-essential libpcre2-dev
+          wget -qO /tmp/cppcheck.tar.gz https://github.com/danmar/cppcheck/archive/refs/tags/${CPPCHECK_VERSION}.tar.gz
+          rm -rf /tmp/cppcheck-src /tmp/cppcheck-build
+          mkdir -p /tmp/cppcheck-src
+          tar -xzf /tmp/cppcheck.tar.gz -C /tmp/cppcheck-src --strip-components=1
+          cmake -S /tmp/cppcheck-src -B /tmp/cppcheck-build -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=ON
+          cmake --build /tmp/cppcheck-build -j$(nproc)
+          sudo cmake --install /tmp/cppcheck-build
+          cppcheck --version
 
       - name: run cppcheck
         run: |
@@ -42,5 +65,4 @@ jobs:
             --suppress=missingIncludeSystem \
             --suppress=missingInclude \
             --suppress=unusedFunction \
-            -j$(nproc) 
-
+            -j$(nproc)
