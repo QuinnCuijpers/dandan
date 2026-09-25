@@ -41,12 +41,12 @@ jobs:
 
       - name: Install cppcheck
         run: |
-          sudo apt-get install -y build-essential libpcre2-dev
+          sudo apt-get install -y build-essential
           wget -qO /tmp/cppcheck.tar.gz https://github.com/danmar/cppcheck/archive/refs/tags/${CPPCHECK_VERSION}.tar.gz
           rm -rf /tmp/cppcheck-src /tmp/cppcheck-build
           mkdir -p /tmp/cppcheck-src
           tar -xzf /tmp/cppcheck.tar.gz -C /tmp/cppcheck-src --strip-components=1
-          cmake -S /tmp/cppcheck-src -B /tmp/cppcheck-build -DCMAKE_BUILD_TYPE=Release -DHAVE_RULES=ON
+          cmake -S /tmp/cppcheck-src -B /tmp/cppcheck-build -DCMAKE_BUILD_TYPE=Release
           cmake --build /tmp/cppcheck-build -j$(nproc)
           sudo cmake --install /tmp/cppcheck-build
           cppcheck --version
