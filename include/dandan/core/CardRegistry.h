@@ -31,9 +31,9 @@ namespace dandan::core
 
         Card *get(int card_id);
 
-        Card *get(CardID card_id) const;
+        [[nodiscard]] Card *get(CardID card_id) const;
 
-        Card *get(int card_id) const;
+        [[nodiscard]] Card *get(int card_id) const;
 
         Card *operator[](CardID card_id);
 

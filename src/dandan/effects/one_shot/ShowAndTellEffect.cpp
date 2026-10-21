@@ -1,7 +1,6 @@
 #include "dandan/effects/one_shot/ShowAndTellEffect.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/GameState.h"
-#include "dandan/core/TargetRequirement.h"
 #include "dandan/events/IEvent.h"
 #include <algorithm>
 #include <iterator>
@@ -32,7 +31,7 @@ namespace dandan::effects
         std::copy_if(hand.begin(), hand.end(),
                      std::back_inserter(available_options), valid_type);
 
-        game.printCards(available_options, card_registry);
+        core::GameState::printCards(available_options, card_registry);
         std::cout << "You may put an artifact, creature, enchantment, or land "
                      "card from your hand onto the battlefield.\n";
         std::cout << "Which card would you like to put onto the battlefield "

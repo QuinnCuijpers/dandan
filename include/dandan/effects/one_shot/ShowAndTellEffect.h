@@ -50,7 +50,7 @@ namespace dandan::effects
             [[maybe_unused]] const core::ExecutionContext exec_ctx,
             EffectContext context) const override
         {
-            auto player_id{context.player_id.value()};
+            auto player_id{context.player_id};
             return std::make_unique<ShowAndTellEffect>(player_id, context);
         }
 

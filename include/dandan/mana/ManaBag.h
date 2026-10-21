@@ -13,6 +13,8 @@ namespace dandan::mana
     class ManaBag
     {
     public:
+        ManaBag() = default;
+
         explicit ManaBag(
             std::initializer_list<std::pair<ManaType, size_t>> init_list);
 

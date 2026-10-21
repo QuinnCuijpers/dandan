@@ -19,7 +19,7 @@ namespace dandan::conditions
         assert(context.has_value() &&
                "Effect with Matches Read Links Condition tried checking "
                "without a context and thus no source card");
-        auto card_id{context->card_id.value()};
+        auto card_id{context->card_id};
         const auto *card{card_registry.get(card_id)};
         auto links{card->linkMap()};
         std::cout << m_first << '\n';

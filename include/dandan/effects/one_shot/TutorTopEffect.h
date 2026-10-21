@@ -47,7 +47,7 @@ namespace dandan::effects
             EffectContext context) const override
         {
             return std::make_unique<TutorTopEffect>(
-                m_filter_types, context.player_id.value(), context);
+                m_filter_types, context.player_id, context);
         }
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

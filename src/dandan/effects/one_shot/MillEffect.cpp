@@ -1,5 +1,5 @@
 #include "dandan/effects/one_shot/MillEffect.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include "dandan/utils/convertToWords.h"
 
 namespace dandan::effects
@@ -12,16 +12,13 @@ namespace dandan::effects
 
         auto context{getEffectContext()};
         auto milled_cards{game.library().mill(exec_ctx, m_amount)};
-        if (context.card_id.has_value())
+        auto card_id{context.card_id};
+        if (milled_cards.size() == 1)
         {
-            auto card_id{context.card_id.value()};
-            if (milled_cards.size() == 1)
-            {
-                auto *card{card_registry.get(card_id)};
-                auto milled_id{milled_cards[0]};
-                const auto &name{card_registry.get(milled_id)->getData().name};
-                card->remember("milledCardName", name);
-            }
+            auto *card{card_registry.get(card_id)};
+            auto milled_id{milled_cards[0]};
+            const auto &name{card_registry.get(milled_id)->getData().name};
+            card->remember("milledCardName", name);
         }
         return nullptr;
     }

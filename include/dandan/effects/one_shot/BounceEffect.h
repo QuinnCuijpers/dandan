@@ -53,14 +53,14 @@ namespace dandan::effects
             const core::ExecutionContext exec_ctx,
             EffectContext context) const override
         {
-            if (!context.card_id.has_value())
+            if (context.card_id == core::CardID::getInvalidID())
             {
                 throw std::runtime_error(
                     "tried binding a Bounce Effect without a source card");
             }
 
             const auto &card_registry{exec_ctx.cards.get()};
-            auto source{context.card_id.value()};
+            auto source{context.card_id};
             const auto *card{card_registry.get(source)};
             auto choices{card->getTargetChoices(*this)};
             auto choice{choices.at(0)};

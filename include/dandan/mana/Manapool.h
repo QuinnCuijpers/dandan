@@ -64,7 +64,7 @@ namespace dandan::mana
 
             remaining = remaining.subtractAny(price.generic());
 
-            m_manapool = remaining;
+            m_manapool = std::move(remaining);
             return true;
         }
 
@@ -88,7 +88,7 @@ namespace dandan::mana
         }
 
     private:
-        ManaBag m_manapool{};
+        ManaBag m_manapool;
     };
 } // namespace dandan::mana
 

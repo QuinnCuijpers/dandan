@@ -31,7 +31,7 @@ namespace dandan::effects
         bind([[maybe_unused]] const core::ExecutionContext exec_ctx,
              EffectContext context) const
     {
-        return std::make_unique<BounceLandEffect>(context.player_id.value(),
+        return std::make_unique<BounceLandEffect>(context.player_id,
                                                   context);
     }
 } // namespace dandan::effects

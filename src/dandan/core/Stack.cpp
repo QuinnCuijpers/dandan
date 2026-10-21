@@ -136,11 +136,11 @@ namespace dandan::core
         return m_stack;
     }
 
-    void Stack::removeObject(const StackObject &object)
-    {
-        m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(),
-                                     [&](const StackObject &stack_object)
-                                     { return object == stack_object; }),
-                      m_stack.end());
-    }
+    // void Stack::removeObject(const StackObject &object)
+    // {
+    //     m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(),
+    //                                  [&](const StackObject &stack_object)
+    //                                  { return object == stack_object; }),
+    //                   m_stack.end());
+    // }
 } // namespace dandan::core

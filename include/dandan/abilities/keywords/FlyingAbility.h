@@ -10,8 +10,8 @@ namespace dandan::abilities
     {
     public:
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
-            core::ExecutionContext exec_ctx,
-            AbilityContext context) const override
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            [[maybe_unused]] AbilityContext context) const override
         {
             return nullptr;
         }

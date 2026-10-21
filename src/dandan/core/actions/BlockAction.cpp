@@ -14,10 +14,10 @@ namespace dandan::core
         throw std::runtime_error("Creating block effect not yet implemented");
     }
 
-    [[nodiscard]] CardID BlockAction::getAttacker() const
-    {
-        return m_attacker;
-    }
+    // [[nodiscard]] CardID BlockAction::getAttacker() const
+    // {
+    //     return m_attacker;
+    // }
 
     [[nodiscard]] CardID BlockAction::getBlocker() const
     {

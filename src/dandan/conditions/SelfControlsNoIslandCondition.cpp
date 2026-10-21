@@ -54,9 +54,8 @@ namespace dandan::conditions
                                { return basic != type; });
         };
         std::cout << "Checking SelfControlsNoBasicCondition for player "
-                  << context->player_id.value() << '\n';
-        const core::Player &self_player =
-            game.getPlayer(context->player_id.value());
+                  << context->player_id << '\n';
+        const core::Player &self_player = game.getPlayer(context->player_id);
         const auto &battlefield{self_player.battlefield()};
         return std::all_of(battlefield.getLands().begin(),
                            battlefield.getLands().end(), no_basic_filter);
