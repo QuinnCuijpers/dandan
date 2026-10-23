@@ -1,6 +1,7 @@
 target_sources(
   DandanLib
   PRIVATE DrawEffect.cpp
+          CastEffect.cpp
           ETBEffect.cpp
           PeekEffect.cpp
           ScryEffect.cpp
@@ -26,4 +27,7 @@ target_sources(
           RegrowthEffect.cpp
           ChangeCharacteristicsEffect.cpp
           SelfSacrificeEffect.cpp
-          SpinToTopEffect.cpp)
+          SpinToTopEffect.cpp
+          LoseGameEffect.cpp
+          EffectList.cpp
+          IOneShotEffectDefinition.cpp)

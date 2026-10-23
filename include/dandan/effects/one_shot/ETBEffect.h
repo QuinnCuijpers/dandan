@@ -20,18 +20,9 @@ namespace dandan::effects
         /** Constructor
          * @param card the card that would be entering the battlefield
          */
-        explicit ETBEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_card{card}
-        {
-        }
+        explicit ETBEffect(core::Card &card, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            auto cloned_effect =
-                std::make_unique<ETBEffect>(m_card, getEffectContext());
-            cloned_effect->setTapped(m_tapped);
-            return cloned_effect;
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;

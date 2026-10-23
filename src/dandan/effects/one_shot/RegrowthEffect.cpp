@@ -2,9 +2,52 @@
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/core/GameState.h"
 #include "dandan/events/IEvent.h"
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace dandan::effects
 {
+    RegrowthEffect::RegrowthEffect(std::vector<core::Type> filter_types,
+                                   core::PlayerID player_id,
+                                   EffectContext context)
+        : IOneShotEffect(std::move(context)),
+          m_filter_types(std::move(filter_types)), m_player_id(player_id)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> RegrowthEffect::copy() const
+    {
+        return std::make_unique<RegrowthEffect>(m_filter_types, m_player_id,
+                                                getEffectContext());
+    }
+
+    RegrowthEffectDefinition::RegrowthEffectDefinition(
+        std::vector<dandan::core::Type> filter_types)
+        : m_filter_types(std::move(filter_types))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> RegrowthEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        EffectContext context) const
+    {
+        return std::make_unique<RegrowthEffect>(m_filter_types,
+                                                context.player_id, context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> RegrowthEffectDefinition::clone()
+        const
+    {
+        return std::make_unique<RegrowthEffectDefinition>(m_filter_types);
+    }
+
+    const std::vector<dandan::core::Type> &RegrowthEffectDefinition::
+        getFilterTypes() const
+    {
+        return m_filter_types;
+    }
+
     std::unique_ptr<events::IEvent> RegrowthEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {

@@ -15,16 +15,9 @@ namespace dandan::effects
     {
 
     public:
-        ShowAndTellEffect(core::PlayerID player_id, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_player(player_id)
-        {
-        }
+        ShowAndTellEffect(core::PlayerID player_id, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<ShowAndTellEffect>(m_player,
-                                                       getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -41,31 +34,17 @@ namespace dandan::effects
 
     public:
         explicit ShowAndTellEffectDefinition(
-            core::TargetRequirement target_requirement)
-            : m_target_requirements(std::move(target_requirement))
-        {
-        }
+            core::TargetRequirement target_requirement);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            auto player_id{context.player_id};
-            return std::make_unique<ShowAndTellEffect>(player_id, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<ShowAndTellEffectDefinition>(
-                m_target_requirements);
-        }
+            const override;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirements;
-        }
+            const override;
 
     private:
         core::TargetRequirement m_target_requirements;

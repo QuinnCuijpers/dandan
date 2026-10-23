@@ -1,10 +1,56 @@
 #include "dandan/effects/one_shot/OptionalDrawEffect.h"
 #include "dandan/core/GameState.h"
 #include "dandan/effects/one_shot/DrawEffect.h"
+#include <memory>
 #include <string>
+#include <utility>
 
 namespace dandan::effects
 {
+    OptionalDrawEffect::OptionalDrawEffect(int amount, bool each_player,
+                                           EffectContext context)
+        : IOneShotEffect(std::move(context)), m_amount(amount),
+          m_each_player(each_player)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> OptionalDrawEffect::copy() const
+    {
+        return std::make_unique<OptionalDrawEffect>(m_amount, m_each_player,
+                                                    getEffectContext());
+    }
+
+    std::unique_ptr<IOneShotEffect> OptionalDrawEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        [[maybe_unused]] EffectContext context) const
+    {
+        return std::make_unique<OptionalDrawEffect>(m_amount, m_each_player,
+                                                    context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> OptionalDrawEffectDefinition::
+        clone() const
+    {
+        return std::make_unique<OptionalDrawEffectDefinition>(m_amount,
+                                                              m_each_player);
+    }
+
+    OptionalDrawEffectDefinition::OptionalDrawEffectDefinition(int amount,
+                                                               bool each_player)
+        : m_amount(amount), m_each_player(each_player)
+    {
+    }
+
+    int OptionalDrawEffectDefinition::getAmount() const
+    {
+        return m_amount;
+    }
+
+    bool OptionalDrawEffectDefinition::isEachPlayer() const
+    {
+        return m_each_player;
+    }
+
     std::unique_ptr<events::IEvent> OptionalDrawEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {

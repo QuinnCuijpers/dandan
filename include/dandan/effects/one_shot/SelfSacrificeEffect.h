@@ -33,18 +33,11 @@ namespace dandan::effects
     {
     public:
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            [[maybe_unused]] EffectContext context) const override
-        {
-            return std::make_unique<SelfSacrificeEffect>(
-                context.card_id, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            [[maybe_unused]] EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<SelfSacrificeEffectDefinition>();
-        }
+            const override;
     };
 } // namespace dandan::effects
 

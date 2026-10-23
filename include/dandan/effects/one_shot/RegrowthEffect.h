@@ -12,17 +12,9 @@ namespace dandan::effects
     {
     public:
         RegrowthEffect(std::vector<core::Type> filter_types,
-                       core::PlayerID player_id, EffectContext context)
-            : IOneShotEffect(std::move(context)),
-              m_filter_types(std::move(filter_types)), m_player_id(player_id)
-        {
-        }
+                       core::PlayerID player_id, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<RegrowthEffect>(m_filter_types, m_player_id,
-                                                    getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -36,30 +28,17 @@ namespace dandan::effects
     {
     public:
         explicit RegrowthEffectDefinition(
-            std::vector<dandan::core::Type> filter_types)
-            : m_filter_types(std::move(filter_types))
-        {
-        }
+            std::vector<dandan::core::Type> filter_types);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            return std::make_unique<RegrowthEffect>(
-                m_filter_types, context.player_id, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<RegrowthEffectDefinition>(m_filter_types);
-        }
+            const override;
 
         [[nodiscard]] const std::vector<dandan::core::Type> &getFilterTypes()
-            const
-        {
-            return m_filter_types;
-        }
+            const;
 
     private:
         std::vector<dandan::core::Type> m_filter_types;

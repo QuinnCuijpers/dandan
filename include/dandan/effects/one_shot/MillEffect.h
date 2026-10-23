@@ -15,17 +15,9 @@ namespace dandan::effects
     class MillEffect : public IOneShotEffect
     {
     public:
-        MillEffect(int amount, core::PlayerID player_id, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_amount(amount),
-              m_player_id(player_id)
-        {
-        }
+        MillEffect(int amount, core::PlayerID player_id, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<MillEffect>(m_amount, m_player_id,
-                                                getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -39,44 +31,21 @@ namespace dandan::effects
     {
     public:
         MillEffectDefinition(int amount,
-                             core::TargetRequirement target_requirement)
-            : m_amount(amount),
-              m_target_requirement(std::move(target_requirement))
-        {
-        }
+                             core::TargetRequirement target_requirement);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            const core::ExecutionContext exec_ctx,
-            [[maybe_unused]] EffectContext context) const override
-        {
-            const auto &card_registry{exec_ctx.cards.get()};
-            const auto *card{card_registry.get(context.card_id)};
-            auto choices{card->getTargetChoices(*this)};
-            auto choice{choices.at(0)};
-            auto player_choice{std::get<core::PlayerID>(choice)};
-            return std::make_unique<MillEffect>(m_amount, player_choice,
-                                                context);
-        }
+            core::ExecutionContext exec_ctx,
+            [[maybe_unused]] EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<MillEffectDefinition>(m_amount,
-                                                          m_target_requirement);
-        }
+            const override;
 
         [[nodiscard]] std::string display() const override;
 
-        [[nodiscard]] int getAmount() const
-        {
-            return m_amount;
-        }
+        [[nodiscard]] int getAmount() const;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirement;
-        }
+            const override;
 
     private:
         int m_amount;

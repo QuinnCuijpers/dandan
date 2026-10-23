@@ -22,10 +22,7 @@ namespace dandan::effects
          * @param player The player to cause to lose the game.
          */
         explicit LoseGameEffect(const core::PlayerID &player,
-                                EffectContext context)
-            : IOneShotEffect(std::move(context)), m_player(player)
-        {
-        }
+                                EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override
@@ -38,11 +35,7 @@ namespace dandan::effects
             return nullptr;
         }
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<LoseGameEffect>(m_player,
-                                                    getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
     private:
         core::PlayerID m_player;

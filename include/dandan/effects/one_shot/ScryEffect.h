@@ -22,24 +22,13 @@ namespace dandan::effects
          * @param player the player who will scry
          */
         explicit ScryEffect(int scry_amount, core::PlayerID player,
-                            EffectContext context)
-            : IOneShotEffect(std::move(context)), m_scry_amount(scry_amount),
-              m_player(player)
-        {
-        }
+                            EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<ScryEffect>(m_scry_amount, m_player,
-                                                getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
-        [[nodiscard]] int getScryAmount() const
-        {
-            return m_scry_amount;
-        }
+        [[nodiscard]] int getScryAmount() const;
 
     private:
         int m_scry_amount{1};
@@ -50,28 +39,15 @@ namespace dandan::effects
     {
     public:
         ScryEffectDefinition() = default;
-        explicit ScryEffectDefinition(int scry_amount)
-            : m_scry_amount(scry_amount)
-        {
-        }
+        explicit ScryEffectDefinition(int scry_amount);
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            return std::make_unique<ScryEffect>(
-                m_scry_amount, context.player_id, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<ScryEffectDefinition>(m_scry_amount);
-        }
+            const override;
 
-        [[nodiscard]] int getScryAmount() const
-        {
-            return m_scry_amount;
-        }
+        [[nodiscard]] int getScryAmount() const;
 
     private:
         int m_scry_amount{1};
