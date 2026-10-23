@@ -62,10 +62,12 @@ namespace dandan::core
         void sacrificeCard(Card &card, core::ExecutionContext exec_ctx);
 
     private:
-        PermanentMap m_permanents{{Type::Land, {}},        {Type::Creature, {}},
-                                  {Type::Sorcery, {}},     {Type::Instant, {}},
-                                  {Type::Enchantment, {}}, {Type::Artifact, {}},
-                                  {Type::Planeswalker, {}}};
+        PermanentMap m_permanents{
+            {Type::Land, {}},         {Type::Creature, {}},
+            {Type::Sorcery, {}},      {Type::Instant, {}},
+            {Type::Enchantment, {}},  {Type::Artifact, {}},
+            {Type::Planeswalker, {}},
+        };
     };
 }; // namespace dandan::core
 

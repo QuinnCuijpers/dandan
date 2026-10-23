@@ -180,11 +180,7 @@ namespace dandan::core
          * @param damage The amount of damage to take.
          * @param game The game instance.
          */
-        void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx)
-        {
-            // TODO: add took damage event
-            m_life_total -= damage;
-        }
+        void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx);
 
         [[nodiscard]] bool canActivateSomething(
             ExecutionContext exec_ctx) const;

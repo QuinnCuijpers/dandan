@@ -85,6 +85,18 @@ namespace dandan::core
         return Game(std::move(cards), shuffle);
     }
 
+    void Game::setIstream(std::istream &istream)
+    {
+        m_input_manager.setInput(istream);
+    }
+
+    ExecutionContext Game::execution_context()
+    {
+        return {m_game_state,       m_card_registry,      m_input_manager,
+                m_event_manager,    m_prevention_manager, m_replacement_manager,
+                m_priority_manager, m_condition_manager,  m_sba_manager};
+    }
+
     void Game::run()
     {
         try

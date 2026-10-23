@@ -43,10 +43,7 @@ namespace dandan::core
          * @param starting_player The player ID of the player who starts with
          * priority.
          */
-        explicit PriorityManager(PlayerID starting_player)
-            : m_current_player_with_priority{starting_player}
-        {
-        }
+        explicit PriorityManager(PlayerID starting_player);
 
         /** Gets the player ID of the player who currently has priority.
          * @return The player ID of the player with priority.
