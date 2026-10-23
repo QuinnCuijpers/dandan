@@ -3,7 +3,6 @@
 
 #include "dandan/mana/ManaBag.h"
 #include <cstddef>
-#include <utility>
 namespace dandan::mana
 
 {
@@ -11,25 +10,13 @@ namespace dandan::mana
     {
     public:
         explicit ManaPrice(ManaBag specific = ManaBag{},
-                           size_t generic_amount = {})
-            : m_specific{std::move(specific)}, m_generic{generic_amount}
-        {
-        }
+                           size_t generic_amount = {});
 
-        [[nodiscard]] const ManaBag &specific() const
-        {
-            return m_specific;
-        }
+        [[nodiscard]] const ManaBag &specific() const;
 
-        [[nodiscard]] size_t generic() const
-        {
-            return m_generic;
-        }
+        [[nodiscard]] size_t generic() const;
 
-        [[nodiscard]] size_t totalRequired() const
-        {
-            return m_specific.total() + m_generic;
-        }
+        [[nodiscard]] size_t totalRequired() const;
 
     private:
         ManaBag m_specific;
