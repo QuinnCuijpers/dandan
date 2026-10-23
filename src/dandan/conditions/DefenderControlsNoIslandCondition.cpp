@@ -84,4 +84,9 @@ namespace dandan::conditions
         }
     }
     // NOLINTEND(bugprone-easily-swappable-parameters)
+
+    std::unique_ptr<ICondition> DefenderControlsNoBasicCondition::clone() const
+    {
+        return std::make_unique<DefenderControlsNoBasicCondition>(m_type);
+    }
 } // namespace dandan::conditions
