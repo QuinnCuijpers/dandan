@@ -29,4 +29,9 @@ namespace dandan::costs
         player.sacrificeCard(*card, exec_ctx);
     }
 
+    std::unique_ptr<ICost> SelfSacrificeCost::clone() const
+    {
+        return std::make_unique<SelfSacrificeCost>();
+    }
+
 } // namespace dandan::costs
