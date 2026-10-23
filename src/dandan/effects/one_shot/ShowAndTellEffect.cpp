@@ -3,13 +3,54 @@
 #include "dandan/core/GameState.h"
 #include "dandan/events/IEvent.h"
 #include <algorithm>
+#include <array>
 #include <iterator>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace dandan::effects
 {
+    ShowAndTellEffect::ShowAndTellEffect(core::PlayerID player_id,
+                                         EffectContext context)
+        : IOneShotEffect(std::move(context)), m_player(player_id)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ShowAndTellEffect::copy() const
+    {
+        return std::make_unique<ShowAndTellEffect>(m_player,
+                                                   getEffectContext());
+    }
+
+    ShowAndTellEffectDefinition::ShowAndTellEffectDefinition(
+        core::TargetRequirement target_requirement)
+        : m_target_requirements(std::move(target_requirement))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ShowAndTellEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        EffectContext context) const
+    {
+        auto player_id{context.player_id};
+        return std::make_unique<ShowAndTellEffect>(player_id, context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> ShowAndTellEffectDefinition::
+        clone() const
+    {
+        return std::make_unique<ShowAndTellEffectDefinition>(
+            m_target_requirements);
+    }
+
+    const core::TargetRequirement *ShowAndTellEffectDefinition::
+        getTargetRequirement() const
+    {
+        return &m_target_requirements;
+    }
+
     std::unique_ptr<events::IEvent> ShowAndTellEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {

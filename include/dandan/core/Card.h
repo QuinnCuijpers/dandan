@@ -58,37 +58,9 @@ namespace dandan::core
               additional_abilities(std::move(additional_abilities))
         {
         }
-        CardCharacteristics(const CardCharacteristics &other)
-            : color(other.color), subtypes(other.subtypes),
-              base_stats(other.base_stats),
-              loses_all_abilities(other.loses_all_abilities)
-        {
+        CardCharacteristics(const CardCharacteristics &other);
 
-            std::transform(other.additional_abilities.begin(),
-                           other.additional_abilities.end(),
-                           std::back_inserter(additional_abilities),
-                           [](const auto &ability)
-                           { return ability->clone(); });
-        }
-
-        CardCharacteristics &operator=(const CardCharacteristics &other)
-        {
-            if (this != &other)
-            {
-                color = other.color;
-                subtypes = other.subtypes;
-                base_stats = other.base_stats;
-                loses_all_abilities = other.loses_all_abilities;
-                additional_abilities.clear();
-
-                std::transform(other.additional_abilities.begin(),
-                               other.additional_abilities.end(),
-                               std::back_inserter(additional_abilities),
-                               [](const auto &ability)
-                               { return ability->clone(); });
-            }
-            return *this;
-        }
+        CardCharacteristics &operator=(const CardCharacteristics &other);
 
         CardCharacteristics(CardCharacteristics &&) noexcept = default;
         CardCharacteristics &operator=(CardCharacteristics &&) noexcept =
@@ -288,24 +260,7 @@ namespace dandan::core
 
         const std::unordered_map<std::string, Memorable> &linkMap() const;
 
-        bool hasKeyword(abilities::Keyword key_word) const
-        {
-            return std::any_of(
-                m_current_abilities.begin(), m_current_abilities.end(),
-                [&key_word](const auto &ability)
-                {
-                    if (const auto *keyword =
-                            dynamic_cast<const abilities::IKeyWordAbility *>(
-                                &ability.definition()))
-                    {
-                        if (keyword->keyword() == key_word)
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-        }
+        bool hasKeyword(abilities::Keyword key_word) const;
 
         template <typename T> const T *getAbility() const
         {
@@ -361,15 +316,9 @@ namespace dandan::core
         // instance
         const CardData *m_card_data;
 
-        void setCurrentPower(int power)
-        {
-            m_characteristics.base_stats.power = power;
-        }
+        void setCurrentPower(int power);
 
-        void setCurrentToughness(int toughness)
-        {
-            m_characteristics.base_stats.toughness = toughness;
-        }
+        void setCurrentToughness(int toughness);
     };
 } // namespace dandan::core
 

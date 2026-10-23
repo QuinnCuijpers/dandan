@@ -1,11 +1,51 @@
 #include "dandan/core/Library.h"
 #include "dandan/core/CardID.h"
-#include "dandan/core/Game.h"
+#include "dandan/core/GameState.h"
 #include <iostream>
+#include <random>
 #include <vector>
 
 namespace dandan::core
 {
+    Library::Library(std::vector<Card> &cards)
+    {
+        std::transform(cards.begin(), cards.end(), std::back_inserter(m_cards),
+                       [](const Card &card) { return card.getID(); });
+        std::shuffle(m_cards.begin(), m_cards.end(),
+                     std::mt19937{std::random_device{}()});
+    }
+
+    void Library::addCardBottom(Card &card)
+    {
+        card.setZone(Zone::LIBRARY);
+        m_cards.emplace_back(card.getID());
+    }
+
+    void Library::addCardTop(Card &card)
+    {
+        card.setZone(Zone::LIBRARY);
+        m_cards.emplace_front(card.getID());
+    }
+
+    void Library::removeCard(const Card &card)
+    {
+        auto iter = std::find(m_cards.begin(), m_cards.end(), card.getID());
+        if (iter != m_cards.end())
+        {
+            m_cards.erase(iter);
+        }
+    }
+
+    [[nodiscard]] std::deque<CardID> &Library::getCards()
+    {
+        return m_cards;
+    }
+
+    [[nodiscard]] const std::deque<CardID> &Library::getCards() const
+
+    {
+        return m_cards;
+    }
 
     CardID Library::draw()
     {
@@ -45,5 +85,11 @@ namespace dandan::core
             game.graveyard().addCard(*card_registry.get(milled_card));
         }
         return res;
+    }
+
+    void Library::shuffle()
+    {
+        std::shuffle(m_cards.begin(), m_cards.end(),
+                     std::mt19937{std::random_device{}()});
     }
 } // namespace dandan::core

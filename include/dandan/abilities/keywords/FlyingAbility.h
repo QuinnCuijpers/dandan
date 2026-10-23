@@ -11,20 +11,11 @@ namespace dandan::abilities
     public:
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             [[maybe_unused]] core::ExecutionContext exec_ctx,
-            [[maybe_unused]] AbilityContext context) const override
-        {
-            return nullptr;
-        }
+            [[maybe_unused]] AbilityContext context) const override;
 
-        [[nodiscard]] std::unique_ptr<IAbility> clone() const override
-        {
-            return std::make_unique<FlyingAbility>();
-        }
+        [[nodiscard]] std::unique_ptr<IAbility> clone() const override;
 
-        [[nodiscard]] Keyword keyword() const override
-        {
-            return Keyword::Flying;
-        }
+        [[nodiscard]] Keyword keyword() const override;
 
     private:
     };

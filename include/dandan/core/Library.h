@@ -3,10 +3,8 @@
 
 #include "dandan/core/Card.h"
 #include "dandan/core/CardID.h"
-#include <algorithm>
 #include <deque>
 #include <filesystem>
-#include <random>
 #include <vector>
 
 namespace dandan::core
@@ -24,64 +22,33 @@ namespace dandan::core
         /** Constructs a library with the given cards.
          * @param cards The cards vector to initialize the library with.
          */
-        explicit Library(std::vector<Card> &cards)
-        {
-            std::transform(cards.begin(), cards.end(),
-                           std::back_inserter(m_cards),
-                           [](const Card &card) { return card.getID(); });
-            std::shuffle(m_cards.begin(), m_cards.end(),
-                         std::mt19937{std::random_device{}()});
-        }
+        explicit Library(std::vector<Card> &cards);
 
         /** Adds a card to the bottom of the library.
          * @param card The card to add.
          */
-        void addCardBottom(Card &card)
-        {
-            card.setZone(Zone::LIBRARY);
-            m_cards.emplace_back(card.getID());
-        }
+        void addCardBottom(Card &card);
 
-        void addCardTop(Card &card)
-        {
-            card.setZone(Zone::LIBRARY);
-            m_cards.emplace_front(card.getID());
-        }
+        void addCardTop(Card &card);
 
-        void removeCard(const Card &card)
-        {
-            auto iter = std::find(m_cards.begin(), m_cards.end(), card.getID());
-            if (iter != m_cards.end())
-            {
-                m_cards.erase(iter);
-            }
-        }
+        void removeCard(const Card &card);
 
         /** Gets the cards in the library mutably.
          * @return A reference to the deque of card IDs in the library.
          */
-        [[nodiscard]] std::deque<CardID> &getCards()
-        {
-            return m_cards;
-        }
-
-        std::vector<CardID> mill(core::ExecutionContext exec_ctx, int count = 1);
+        [[nodiscard]] std::deque<CardID> &getCards();
 
         /** Gets the cards in the library immutably.
          * @return A const reference to the deque of card IDs in the library.
          */
-        [[nodiscard]] const std::deque<CardID> &getCards() const
-        {
-            return m_cards;
-        }
+        [[nodiscard]] const std::deque<CardID> &getCards() const;
+
+        std::vector<CardID> mill(core::ExecutionContext exec_ctx,
+                                 int count = 1);
 
         /** Shuffles the cards in the library.
          */
-        void shuffle()
-        {
-            std::shuffle(m_cards.begin(), m_cards.end(),
-                         std::mt19937{std::random_device{}()});
-        }
+        void shuffle();
 
         /** Draws a card from the library.
          * @return The card ID of the drawn card.

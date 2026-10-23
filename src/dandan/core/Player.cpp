@@ -44,8 +44,10 @@ namespace
                 const auto *basic_ability =
                     dynamic_cast<const abilities::BasicLandAbility *>(
                         &ability.definition());
-                const auto *mana_ability{basic_ability->getManaAbility(
-                    exec_ctx, ability.getContext())};
+                const auto *mana_ability{
+                    basic_ability->getManaAbility(exec_ctx,
+                                                  ability.getContext()),
+                };
                 const auto mana_list{mana_ability->getManaList()};
 
                 for (const auto &option : mana_list.getOptions())
@@ -106,6 +108,13 @@ namespace dandan::core
         std::cout << "Player is sacrificing card with ID "
                   << card.getID().getID() << '\n';
         m_battlefield.sacrificeCard(card, exec_ctx);
+    }
+
+    void Player::takeDamage(int damage,
+                            [[maybe_unused]] ExecutionContext exec_ctx)
+    {
+        // TODO: add took damage event
+        m_life_total -= damage;
     }
 
     bool Player::canActivateSomething(ExecutionContext exec_ctx) const

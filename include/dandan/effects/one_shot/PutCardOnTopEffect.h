@@ -23,11 +23,7 @@ namespace dandan::effects
          * @param playerID The ID of the player who will use this effect.
          */
         PutCardOnTopEffect(int amount, core::PlayerID playerID,
-                           EffectContext context)
-            : IOneShotEffect(std::move(context)), m_amount(amount),
-              m_playerID(playerID)
-        {
-        }
+                           EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -39,10 +35,7 @@ namespace dandan::effects
         /** @brief Get the amount of cards to put on top.
          * @return The number of cards to put on top.
          */
-        [[nodiscard]] int getAmount() const
-        {
-            return m_amount;
-        }
+        [[nodiscard]] int getAmount() const;
 
     private:
         int m_amount{};
@@ -55,33 +48,21 @@ namespace dandan::effects
         /** @brief Create a PutCardOnTopEffect.
          * @param amount The number of cards to put on top.
          */
-        explicit PutCardOnTopEffectDefinition(int amount) : m_amount(amount)
-        {
-        }
+        explicit PutCardOnTopEffectDefinition(int amount);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            return std::make_unique<PutCardOnTopEffect>(
-                m_amount, context.player_id, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<PutCardOnTopEffectDefinition>(m_amount);
-        }
+            const override;
 
         // [[nodiscard]] std::string display() const override;
 
         /** @brief Get the amount of cards to put on top.
          * @return The number of cards to put on top.
          */
-        [[nodiscard]] int getAmount() const
-        {
-            return m_amount;
-        }
+        [[nodiscard]] int getAmount() const;
 
     private:
         int m_amount{};

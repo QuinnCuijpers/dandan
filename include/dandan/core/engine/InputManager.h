@@ -10,19 +10,11 @@ namespace dandan::core
     public:
         InputManager() = default;
 
-        explicit InputManager(std::istream &stream) : m_stream(&stream)
-        {
-        }
+        explicit InputManager(std::istream &stream);
 
-        std::istream &stream()
-        {
-            return *m_stream;
-        }
+        std::istream &stream();
 
-        void setInput(std::istream &stream)
-        {
-            m_stream = &stream;
-        }
+        void setInput(std::istream &stream);
 
     private:
         // TODO: consider making this own the stream

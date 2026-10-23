@@ -1,5 +1,6 @@
 #include "dandan/core/Card.h"
 #include "dandan/abilities/BoundAbility.h"
+#include "dandan/abilities/keywords/IKeyWordAbility.h"
 #include "dandan/core/CardData.h"
 #include "dandan/core/ColorWord.h"
 #include "dandan/core/GameState.h"
@@ -16,6 +17,38 @@
 
 namespace dandan::core
 {
+    CardCharacteristics::CardCharacteristics(const CardCharacteristics &other)
+        : color(other.color), subtypes(other.subtypes),
+          base_stats(other.base_stats),
+          loses_all_abilities(other.loses_all_abilities)
+    {
+
+        std::transform(other.additional_abilities.begin(),
+                       other.additional_abilities.end(),
+                       std::back_inserter(additional_abilities),
+                       [](const auto &ability) { return ability->clone(); });
+    }
+
+    CardCharacteristics &CardCharacteristics::operator=(
+        const CardCharacteristics &other)
+    {
+        if (this != &other)
+        {
+            color = other.color;
+            subtypes = other.subtypes;
+            base_stats = other.base_stats;
+            loses_all_abilities = other.loses_all_abilities;
+            additional_abilities.clear();
+
+            std::transform(other.additional_abilities.begin(),
+                           other.additional_abilities.end(),
+                           std::back_inserter(additional_abilities),
+                           [](const auto &ability)
+                           { return ability->clone(); });
+        }
+        return *this;
+    }
+
 #ifdef DANDAN_SERIALIZE
     Card::Card(std::string_view card_name, PlayerID controller_id)
         : m_card_id(CardID::generate()), m_controller_id(controller_id),
@@ -451,4 +484,33 @@ namespace dandan::core
         }
     }
     // NOLINTEND(bugprone-easily-swappable-parameters)
+
+    bool Card::hasKeyword(abilities::Keyword key_word) const
+    {
+        return std::any_of(
+            m_current_abilities.begin(), m_current_abilities.end(),
+            [&key_word](const auto &ability)
+            {
+                if (const auto *keyword =
+                        dynamic_cast<const abilities::IKeyWordAbility *>(
+                            &ability.definition()))
+                {
+                    if (keyword->keyword() == key_word)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            });
+    }
+
+    void Card::setCurrentPower(int power)
+    {
+        m_characteristics.base_stats.power = power;
+    }
+
+    void Card::setCurrentToughness(int toughness)
+    {
+        m_characteristics.base_stats.toughness = toughness;
+    }
 } // namespace dandan::core

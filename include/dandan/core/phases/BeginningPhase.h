@@ -39,7 +39,7 @@ namespace dandan::core
             Draw,
             /// Indicates that there are no more steps and we should proceed to
             /// the next phase
-            Done
+            Done,
         };
 
         /**

@@ -1,8 +1,22 @@
 #include "dandan/effects/one_shot/SelfSacrificeEffect.h"
 #include "dandan/core/Card.h"
+#include <memory>
 
 namespace dandan::effects
 {
+    std::unique_ptr<IOneShotEffect> SelfSacrificeEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        [[maybe_unused]] EffectContext context) const
+    {
+        return std::make_unique<SelfSacrificeEffect>(context.card_id, context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> SelfSacrificeEffectDefinition::
+        clone() const
+    {
+        return std::make_unique<SelfSacrificeEffectDefinition>();
+    }
+
     SelfSacrificeEffect::SelfSacrificeEffect(core::CardID card_id,
                                              EffectContext context)
         : IOneShotEffect(std::move(context)), m_card_id(card_id)

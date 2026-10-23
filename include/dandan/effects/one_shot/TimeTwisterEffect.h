@@ -13,34 +13,22 @@ namespace dandan::effects
     class TimeTwisterEffect : public IOneShotEffect
     {
     public:
-        explicit TimeTwisterEffect(EffectContext context)
-            : IOneShotEffect(std::move(context))
-        {
-        }
+        explicit TimeTwisterEffect(EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<TimeTwisterEffect>(getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
     };
 
     class TimeTwisterEffectDefinition : public IOneShotEffectDefinition
     {
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<TimeTwisterEffectDefinition>();
-        }
+            const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            [[maybe_unused]] EffectContext context) const override
-        {
-            return std::make_unique<TimeTwisterEffect>(context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            [[maybe_unused]] EffectContext context) const override;
     };
 } // namespace dandan::effects
 

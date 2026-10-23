@@ -5,6 +5,12 @@
 
 namespace dandan::effects
 {
+    DrawPreventionEffect::DrawPreventionEffect(
+        std::unique_ptr<conditions::ICondition> condition)
+        : IPreventionEffect(std::move(condition))
+    {
+    }
+
     bool DrawPreventionEffect::prevents(
         const core::IAction &action, core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
@@ -20,5 +26,10 @@ namespace dandan::effects
             }
         }
         return false;
+    }
+
+    std::unique_ptr<IPreventionEffect> DrawPreventionEffect::clone() const
+    {
+        return std::make_unique<DrawPreventionEffect>(cloneCondition());
     }
 } // namespace dandan::effects

@@ -36,11 +36,7 @@ namespace dandan::costs
         [[nodiscard]] bool canPay(const core::Card &source,
                                   const core::Player &player) const override;
 
-        [[nodiscard]] std::unique_ptr<ICost> clone() const override
-        {
-            return std::make_unique<AndCost>(m_first->clone(),
-                                             m_second->clone());
-        }
+        [[nodiscard]] std::unique_ptr<ICost> clone() const override;
 
     private:
         std::unique_ptr<ICost> m_first;

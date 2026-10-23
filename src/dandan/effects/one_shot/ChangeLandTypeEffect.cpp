@@ -4,10 +4,57 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <tuple>
+#include <utility>
 
 namespace dandan::effects
 {
+    ChangeLandTypeEffect::ChangeLandTypeEffect(EffectContext context)
+        : IOneShotEffect(std::move(context))
+    {
+    }
+
+    ChangeLandTypeEffect::ChangeLandTypeEffect(core::SubType basic_land_1,
+                                               core::SubType basic_land_2,
+                                               EffectContext context)
+        : IOneShotEffect(std::move(context)), m_basic_land_1(basic_land_1),
+          m_basic_land_2(basic_land_2)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ChangeLandTypeEffect::copy() const
+    {
+        if (m_basic_land_1.has_value() && m_basic_land_2.has_value())
+        {
+            return std::make_unique<ChangeLandTypeEffect>(
+                m_basic_land_1.value(), m_basic_land_2.value(),
+                getEffectContext());
+        }
+
+        return std::make_unique<ChangeLandTypeEffect>(getEffectContext());
+    }
+
+    std::unique_ptr<IOneShotEffect> ChangeLandTypeEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        [[maybe_unused]] EffectContext context) const
+    {
+        return std::make_unique<ChangeLandTypeEffect>(context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> ChangeLandTypeEffectDefinition::
+        clone() const
+    {
+        return std::make_unique<ChangeLandTypeEffectDefinition>();
+    }
+
+    std::string ChangeLandTypeEffectDefinition::display() const
+    {
+        return "Choose a land type and a basic land type. Each land of the "
+               "first chosen type becomes the second chosen type until end "
+               "of turn.";
+    }
+
     std::unique_ptr<events::IEvent> ChangeLandTypeEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {
