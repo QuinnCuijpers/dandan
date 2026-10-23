@@ -41,23 +41,14 @@ namespace dandan::abilities
         /** @brief Get the display string for the ability
          * @return The display string
          */
-        [[nodiscard]] virtual std::string display() const
-        {
-            throw std::runtime_error("Unimplemented display for " +
-                                     std::string(typeid(*this).name()));
-        }
+        [[nodiscard]] virtual std::string display() const;
 
         /** @brief Get the display string for a specific option of the ability
          * @param index The index of the option
          * @return The display string for the option
          */
         [[nodiscard]] virtual std::string displayOption(
-            [[maybe_unused]] size_t index) const
-        {
-            throw std::runtime_error(
-                "Unimplemented display option for ability " +
-                std::string(typeid(*this).name()));
-        }
+            [[maybe_unused]] size_t index) const;
 
         /** Create the effect for the ability
          * @param game The game object to mutate when the ability is resolving
@@ -76,20 +67,12 @@ namespace dandan::abilities
          */
         [[nodiscard]] virtual bool canActivate(
             [[maybe_unused]] core::ExecutionContext exec_ctx,
-            [[maybe_unused]] const AbilityContext &context) const
-        {
-            return false;
-        }
+            [[maybe_unused]] const AbilityContext &context) const;
 
         /** @brief Get the number of options for the ability
          * @return The number of options
          */
-        [[nodiscard]] virtual size_t optionsAmount() const
-        {
-            throw std::runtime_error(
-                "Unimplemented options count for ability " +
-                std::string(typeid(*this).name()));
-        }
+        [[nodiscard]] virtual size_t optionsAmount() const;
 
         /** Create a copy of the ability.
          * @return The copy of the ability
