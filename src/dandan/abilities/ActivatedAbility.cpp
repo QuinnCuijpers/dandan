@@ -50,18 +50,19 @@ namespace dandan::abilities
         return m_effect->bind(exec_ctx,
                               effects::EffectContext(context.controller_id));
     }
-    [[nodiscard]] const costs::ICost *ActivatedAbility::getCost() const
+
+    const costs::ICost *ActivatedAbility::getCost() const
     {
         return m_cost.get();
     }
 
-    [[nodiscard]] const effects::IOneShotEffectDefinition *ActivatedAbility::
-        getEffect() const
+    const effects::IOneShotEffectDefinition *ActivatedAbility::getEffect() const
     {
         return m_effect.get();
     }
-    [[nodiscard]] bool ActivatedAbility::canActivate(
-        core::ExecutionContext exec_ctx, const AbilityContext &context) const
+
+    bool ActivatedAbility::canActivate(core::ExecutionContext exec_ctx,
+                                       const AbilityContext &context) const
     {
         const auto &card_registry{exec_ctx.cards.get()};
         auto &game{exec_ctx.state.get()};
@@ -75,7 +76,7 @@ namespace dandan::abilities
         return true;
     }
 
-    [[nodiscard]] std::unique_ptr<IAbility> ActivatedAbility::clone() const
+    std::unique_ptr<IAbility> ActivatedAbility::clone() const
     {
         return std::make_unique<ActivatedAbility>(m_cost->clone(),
                                                   m_effect->clone());

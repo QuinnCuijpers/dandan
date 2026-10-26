@@ -42,14 +42,13 @@ namespace dandan::abilities
                                                      effect_context);
     }
 
-    [[nodiscard]] const std::vector<
-        std::unique_ptr<effects::IOneShotEffectDefinition>> &
+    const std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>> &
     SpellAbility::effects() const
     {
         return m_effects;
     }
 
-    [[nodiscard]] std::unique_ptr<IAbility> SpellAbility::clone() const
+    std::unique_ptr<IAbility> SpellAbility::clone() const
     {
         auto cloned_effects{
             std::vector<std::unique_ptr<effects::IOneShotEffectDefinition>>{},
