@@ -23,10 +23,7 @@ namespace dandan::core
         /** Gets the list of cards in the exile.
          * @return A constant reference to the vector of card IDs.
          */
-        [[nodiscard]] const std::vector<CardID> &getCards() const
-        {
-            return m_cards;
-        }
+        [[nodiscard]] const std::vector<CardID> &getCards() const;
 
     private:
         std::vector<CardID> m_cards;

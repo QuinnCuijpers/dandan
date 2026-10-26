@@ -20,19 +20,12 @@ namespace dandan::effects
         /** Constructor
          * @param creature The creature to apply the effect to.
          */
-        explicit AttackEffect(core::Card &creature, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_creature{creature}
-        {
-        }
+        explicit AttackEffect(core::Card &creature, EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<AttackEffect>(m_creature,
-                                                  getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
     private:
         core::Card &m_creature;

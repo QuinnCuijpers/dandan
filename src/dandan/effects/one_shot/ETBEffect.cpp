@@ -5,9 +5,23 @@
 #include "dandan/effects/continuous/prevention/AttackPreventionEffect.h"
 #include "dandan/events/ETBEvent.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
+    ETBEffect::ETBEffect(core::Card &card, EffectContext context)
+        : IOneShotEffect(std::move(context)), m_card{card}
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ETBEffect::copy() const
+    {
+        auto cloned_effect =
+            std::make_unique<ETBEffect>(m_card, getEffectContext());
+        cloned_effect->setTapped(m_tapped);
+        return cloned_effect;
+    }
+
     std::unique_ptr<events::IEvent> ETBEffect::apply_impl(
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {

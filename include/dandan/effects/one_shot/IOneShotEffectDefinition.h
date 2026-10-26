@@ -25,11 +25,7 @@ namespace dandan::effects
     public:
         IOneShotEffectDefinition(
             std::optional<links> read_links = std::nullopt,
-            std::optional<links> write_links = std::nullopt)
-            : m_write_links(std::move(write_links)),
-              m_read_links(std::move(read_links))
-        {
-        }
+            std::optional<links> write_links = std::nullopt);
 
         IOneShotEffectDefinition(const IOneShotEffectDefinition &) = delete;
         IOneShotEffectDefinition(IOneShotEffectDefinition &&) = delete;
@@ -42,29 +38,17 @@ namespace dandan::effects
         [[nodiscard]] virtual std::unique_ptr<IOneShotEffect> bind(
             core::ExecutionContext exec_ctx, EffectContext context) const = 0;
 
-        [[nodiscard]] virtual std::string display() const
-        {
-            throw std::runtime_error("Unimplemented display for definition");
-        }
+        [[nodiscard]] virtual std::string display() const;
 
         [[nodiscard]] virtual std::unique_ptr<IOneShotEffectDefinition> clone()
             const = 0;
 
         [[nodiscard]] virtual const core::TargetRequirement *
-        getTargetRequirement() const
-        {
-            return nullptr;
-        }
+        getTargetRequirement() const;
 
-        [[nodiscard]] const std::optional<links> &writeLinks() const
-        {
-            return m_write_links;
-        }
+        [[nodiscard]] const std::optional<links> &writeLinks() const;
 
-        [[nodiscard]] const std::optional<links> &readLinks() const
-        {
-            return m_read_links;
-        }
+        [[nodiscard]] const std::optional<links> &readLinks() const;
 
         void addReadLink(const std::string &key)
         {
@@ -90,10 +74,7 @@ namespace dandan::effects
             }
         }
 
-        [[nodiscard]] core::ExpireTime expires() const
-        {
-            return m_expires;
-        }
+        [[nodiscard]] core::ExpireTime expires() const;
 
         void addExpireTime(core::ExpireTime expire_time)
         {

@@ -33,87 +33,50 @@ namespace dandan::core
          * @param player_id The ID of the player to get.
          * @return A const reference to the player at the specified ID.
          */
-        [[nodiscard]] const Player &getPlayer(PlayerID player_id) const
-        {
-            if (player_id == PlayerID::getInvalidID())
-            {
-                throw std::runtime_error(
-                    "Could not get player with invalid ID");
-            }
-            return m_players.at(player_id.id());
-        }
+        [[nodiscard]] const Player &getPlayer(PlayerID player_id) const;
 
         /** Gets a player from the game accosiated with the given ID mutably.
          * @param player_id The ID of the player to get.
          * @return A reference to the player at the specified ID.
          */
-        [[nodiscard]] Player &getPlayer(PlayerID player_id)
-        {
-            if (player_id == PlayerID::getInvalidID())
-            {
-                throw std::runtime_error(
-                    "Could not get player with invalid ID");
-            }
-            return m_players.at(player_id.id());
-        }
+        [[nodiscard]] Player &getPlayer(PlayerID player_id);
 
         /** Gets all players in the game immutably.
          * @return A const reference to the array of players.
          */
         [[nodiscard]] const std::array<Player, AMOUNT_PLAYERS> &getPlayers()
-            const
-        {
-            return m_players;
-        }
+            const;
 
         /** Gets all players in the game mutably.
          * @return A reference to the array of players.
          */
-        [[nodiscard]] std::array<Player, AMOUNT_PLAYERS> &getPlayers()
-        {
-            return m_players;
-        }
+        [[nodiscard]] std::array<Player, AMOUNT_PLAYERS> &getPlayers();
 
         /** Gets the current active player immutably.
          * @return A const reference to the active player.
          */
-        [[nodiscard]] const Player &activePlayer() const
-        {
-            return m_players.at(m_active_player_index);
-        }
+        [[nodiscard]] const Player &activePlayer() const;
 
         /** Gets the current active player mutably.
          * @return A reference to the active player.
          */
-        [[nodiscard]] Player &activePlayer()
-        {
-            return m_players.at(m_active_player_index);
-        }
+        [[nodiscard]] Player &activePlayer();
 
         /** Gets the non-active player immutably.
          * @return A const reference to the non-active player.
          */
-        [[nodiscard]] const Player &nonActivePlayer() const
-        {
-            return m_players.at(1 - m_active_player_index);
-        }
+        [[nodiscard]] const Player &nonActivePlayer() const;
 
         /** Gets the non-active player mutably.
          * @return A reference to the non-active player.
          */
-        [[nodiscard]] Player &nonActivePlayer()
-        {
-            return m_players.at(1 - m_active_player_index);
-        }
+        [[nodiscard]] Player &nonActivePlayer();
 
         /** Gets the next player ID in turn order.
          * @param player_id The ID of the current player.
          * @return The ID of the next player.
          */
-        [[nodiscard]] PlayerID getNextPlayerID(PlayerID player_id) const
-        {
-            return m_players.at((player_id.id() + 1) % AMOUNT_PLAYERS).getID();
-        }
+        [[nodiscard]] PlayerID getNextPlayerID(PlayerID player_id) const;
 
         [[nodiscard]] std::vector<core::Target> getValidTargets(
             core::ExecutionContext exec_ctx, core::TargetType type,
@@ -122,63 +85,35 @@ namespace dandan::core
         /** Gets the library mutably.
          * @return A reference to the library.
          */
-        [[nodiscard]] Library &library()
-        {
-            return m_library;
-        }
-
-        [[nodiscard]] const Library &library() const
-        {
-            return m_library;
-        }
+        [[nodiscard]] Library &library();
+        [[nodiscard]] const Library &library() const;
 
         /** Gets the stack mutably.
          * @return A reference to the stack.
          */
-        [[nodiscard]] Stack &stack()
-        {
-            return m_stack;
-        }
-
+        [[nodiscard]] Stack &stack();
         /** Gets the stack immutably.
          * @return A const reference to the stack.
          */
-        [[nodiscard]] const Stack &stack() const
-        {
-            return m_stack;
-        }
+        [[nodiscard]] const Stack &stack() const;
 
         /** Gets the graveyard mutably.
          * @return A reference to the graveyard.
          */
-        [[nodiscard]] Graveyard &graveyard()
-        {
-            return m_graveyard;
-        }
-
+        [[nodiscard]] Graveyard &graveyard();
         /** Gets the graveyard immutably.
          * @return A const reference to the graveyard.
          */
-        [[nodiscard]] const Graveyard &graveyard() const
-        {
-            return m_graveyard;
-        }
+        [[nodiscard]] const Graveyard &graveyard() const;
 
         /** Gets the exile mutably.
          * @return A reference to the exile.
          */
-        [[nodiscard]] Exile &exile()
-        {
-            return m_exile;
-        }
-
+        [[nodiscard]] Exile &exile();
         /** Gets the exile immutably.
          * @return A const reference to the exile.
          */
-        [[nodiscard]] const Exile &exile() const
-        {
-            return m_exile;
-        }
+        [[nodiscard]] const Exile &exile() const;
 
         /** Clears the card from its current zone.
          * @param player The player whose card is to be cleared.
@@ -198,85 +133,38 @@ namespace dandan::core
          */
         void quit(const Player &player) const;
 
-        void addEndOfTurnEffect(std::unique_ptr<effects::IOneShotEffect> effect)
-        {
-            std::cout << "added an end of turn effect\n";
-            m_end_of_turn_effects.push_back(std::move(effect));
-        }
+        void addEndOfTurnEffect(
+            std::unique_ptr<effects::IOneShotEffect> effect);
 
-        void applyEndOfTurnEffects(const ExecutionContext &exec_ctx)
-        {
-            for (const auto &effect : m_end_of_turn_effects)
-            {
-                std::cout << "Applying end of turn effect\n";
-                // TODO: handle end of turn events
-                static_cast<void>(effect->apply(exec_ctx));
-            }
-            m_end_of_turn_effects.clear();
-        }
+        void applyEndOfTurnEffects(const ExecutionContext &exec_ctx);
 
         /** Passes the turn to the next player.
          */
-        void passTurn(const ExecutionContext &exec_ctx)
-        {
-            changePhase(std::make_unique<EndingPhase>(exec_ctx));
-            m_active_player_index = 1 - m_active_player_index;
-            m_first_turn = false;
-            changePhase(std::make_unique<BeginningPhase>(exec_ctx));
-        }
+        void passTurn(const ExecutionContext &exec_ctx);
 
         /** Handles the current phase and transitions to the next phase.
          */
-        void handlePhase()
-        {
-            assert(m_phase &&
-                   "Phase should never be null during handlePhase()");
-            auto next_phase = m_phase->handle();
-            activePlayer().manaPool().empty();
-            nonActivePlayer().manaPool().empty();
-            m_phase = std::move(next_phase);
-        }
+        void handlePhase();
 
         /** Changes the current phase.
          * @param phase The new phase.
          */
-        void changePhase(std::unique_ptr<IPhase> &&phase)
-        {
-            m_phase = std::move(phase);
-        }
+        void changePhase(std::unique_ptr<IPhase> &&phase);
 
         /** Checks if it is the first turn of the first player.
          * @return True if it is the first turn, false otherwise.
          */
-        [[nodiscard]] bool isFirstTurn() const
-        {
-            return m_first_turn;
-        }
+        [[nodiscard]] bool isFirstTurn() const;
 
         /** Gets the current phase.
          * @return A reference to the current phase.
          */
-        [[nodiscard]] std::unique_ptr<IPhase> &phase()
-        {
-            return m_phase;
-        }
+        [[nodiscard]] std::unique_ptr<IPhase> &phase();
         /** Prints the names and IDs of the specified cards.
          * @param card_ids The IDs of the cards to print.
          */
         static void printCards(const std::vector<CardID> &card_ids,
-                               const CardRegistry &card_registry)
-        {
-            std::cout << "[";
-            for (const auto &card_id : card_ids)
-            {
-                const auto *card = card_registry.get(card_id);
-                std::cout << card->getData().name << "("
-                          << "CardID: " << card->getID().getID() << ", ";
-                std::cout << "#Abilities: "
-                          << card->getCurrentAbilities().size() << ") ";
-            }
-            std::cout << "]\n";
-        }
+                               const CardRegistry &card_registry);
         static void clearScreen();
 
         /** Renders the game state.

@@ -22,29 +22,19 @@ namespace dandan::abilities
         /** Constructor
          * @param ability The ability to decorate
          */
-        explicit IAbilityDecorator(std::unique_ptr<IAbility> ability)
-            : m_ability{std::move(ability)} {};
+        explicit IAbilityDecorator(std::unique_ptr<IAbility> ability);
 
         /**
          * Get the inner ability being decorated
          * @return The inner ability being decorated
          */
-        [[nodiscard]] const IAbility *getInnerAbility() const
-        {
-            return m_ability.get();
-        }
+        [[nodiscard]] const IAbility *getInnerAbility() const;
 
         [[nodiscard]] bool canActivate(
             core::ExecutionContext exec_ctx,
-            const AbilityContext &context) const override
-        {
-            return m_ability->canActivate(exec_ctx, context);
-        }
+            const AbilityContext &context) const override;
 
-        [[nodiscard]] size_t optionsAmount() const override
-        {
-            return m_ability->optionsAmount();
-        }
+        [[nodiscard]] size_t optionsAmount() const override;
     };
 } // namespace dandan::abilities
 

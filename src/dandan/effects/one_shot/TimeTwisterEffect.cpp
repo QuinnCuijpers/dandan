@@ -3,10 +3,35 @@
 #include "dandan/core/Zone.h"
 #include <algorithm>
 #include <cassert>
+#include <memory>
+#include <utility>
 #include <vector>
 
 namespace dandan::effects
 {
+    TimeTwisterEffect::TimeTwisterEffect(EffectContext context)
+        : IOneShotEffect(std::move(context))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> TimeTwisterEffect::copy() const
+    {
+        return std::make_unique<TimeTwisterEffect>(getEffectContext());
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> TimeTwisterEffectDefinition::
+        clone() const
+    {
+        return std::make_unique<TimeTwisterEffectDefinition>();
+    }
+
+    std::unique_ptr<IOneShotEffect> TimeTwisterEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        [[maybe_unused]] EffectContext context) const
+    {
+        return std::make_unique<TimeTwisterEffect>(context);
+    }
+
     std::unique_ptr<events::IEvent> TimeTwisterEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {

@@ -22,10 +22,7 @@ namespace dandan::effects
             dandan::effects::IOneShotEffect &effect) const override;
 
         [[nodiscard]] std::unique_ptr<IContinuousEffect> cloneContinuous()
-            const override
-        {
-            return std::make_unique<EntersTappedEffect>();
-        }
+            const override;
     };
 } // namespace dandan::effects
 

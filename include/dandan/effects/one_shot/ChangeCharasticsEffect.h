@@ -18,17 +18,9 @@ namespace dandan::effects
     public:
         ChangeCharacteristicsEffect(core::Target target,
                                     core::CardCharacteristics characteristics,
-                                    EffectContext context)
-            : IOneShotEffect(std::move(context)), m_target(std::move(target)),
-              m_card_characteristics(std::move(characteristics))
-        {
-        }
+                                    EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<ChangeCharacteristicsEffect>(
-                m_target, m_card_characteristics, getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             [[maybe_unused]] core::ExecutionContext exec_ctx) const override;
@@ -45,46 +37,20 @@ namespace dandan::effects
     public:
         explicit ChangeCharacteristicsEffectDefinition(
             core::TargetRequirement target_reqs,
-            core::CardCharacteristics characteristics)
-            : m_target_requirements(std::move(target_reqs)),
-              m_card_characteristics(std::move(characteristics))
-        {
-            std::cout << "Size of addditional abilities after construction: "
-                      << m_card_characteristics.additional_abilities.size()
-                      << '\n';
-        }
+            core::CardCharacteristics characteristics);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            const auto &card_registry{exec_ctx.cards.get()};
-            const auto *card{card_registry.get(context.card_id)};
-            auto choices{card->getTargetChoices(*this)};
-            auto choice{choices.at(0)};
-            context.expires = expires();
-            return std::make_unique<ChangeCharacteristicsEffect>(
-                choice, m_card_characteristics, context);
-        }
+            core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<ChangeCharacteristicsEffectDefinition>(
-                m_target_requirements, m_card_characteristics);
-        }
+            const override;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirements;
-        }
+            const override;
 
         [[nodiscard]] const core::CardCharacteristics &getCharacteristics()
-            const
-        {
-            return m_card_characteristics;
-        }
+            const;
 
     private:
         core::TargetRequirement m_target_requirements;

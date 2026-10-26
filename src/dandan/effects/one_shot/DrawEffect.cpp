@@ -6,9 +6,51 @@
 #include "dandan/utils/convertToWords.h"
 #include <iostream>
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
+    DrawEffect::DrawEffect(std::unique_ptr<numbers::INumber> amount,
+                           EffectContext context)
+        : IOneShotEffect(std::move(context)), m_amount(std::move(amount))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> DrawEffect::copy() const
+    {
+        return std::make_unique<DrawEffect>(m_amount->clone(),
+                                            getEffectContext());
+    }
+
+    DrawEffectDefinition::DrawEffectDefinition(int amount)
+        : m_amount(std::make_unique<numbers::ExactNumber>(amount))
+    {
+    }
+
+    DrawEffectDefinition::DrawEffectDefinition(
+        std::unique_ptr<numbers::INumber> amount)
+        : m_amount(std::move(amount))
+    {
+    }
+
+    const std::unique_ptr<numbers::INumber> &DrawEffectDefinition::getNumber()
+        const
+    {
+        return m_amount;
+    }
+
+    std::unique_ptr<IOneShotEffect> DrawEffectDefinition::bind(
+        [[maybe_unused]] core::ExecutionContext exec_ctx,
+        EffectContext context) const
+    {
+        return std::make_unique<DrawEffect>(m_amount->clone(), context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> DrawEffectDefinition::clone()
+        const
+    {
+        return std::make_unique<DrawEffectDefinition>(m_amount->clone());
+    }
 
     std::string DrawEffectDefinition::display() const
     {

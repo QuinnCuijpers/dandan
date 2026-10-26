@@ -2,10 +2,48 @@
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/core/GameState.h"
 #include <iostream>
+#include <memory>
 #include <string>
+#include <utility>
 
 namespace dandan::effects
 {
+    PeekEffect::PeekEffect(int peek_amount, core::PlayerID player_id,
+                           EffectContext context)
+        : IOneShotEffect(std::move(context)), m_peek_amount(peek_amount),
+          m_player_id(player_id)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> PeekEffect::copy() const
+    {
+        return std::make_unique<PeekEffect>(m_peek_amount, m_player_id,
+                                            getEffectContext());
+    }
+
+    PeekEffectDefinition::PeekEffectDefinition(int peek_amount)
+        : m_peek_amount(peek_amount)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> PeekEffectDefinition::bind(
+        [[maybe_unused]] core::ExecutionContext exex_ctx,
+        EffectContext context) const
+    {
+        return std::make_unique<PeekEffect>(m_peek_amount, context.player_id,
+                                            context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> PeekEffectDefinition::clone()
+        const
+    {
+        return std::make_unique<PeekEffectDefinition>(m_peek_amount);
+    }
+
+    int PeekEffectDefinition::getPeekAmount() const
+    {
+        return m_peek_amount;
+    }
 
     void printPeekedCards(const std::vector<core::CardID> &card_ids,
                           core::ExecutionContext exec_ctx)

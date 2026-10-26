@@ -22,10 +22,7 @@ namespace dandan::effects
     class IOneShotEffect
     {
     public:
-        IOneShotEffect(EffectContext effect_context)
-            : m_effect_context(std::move(effect_context))
-        {
-        }
+        IOneShotEffect(EffectContext effect_context);
 
         IOneShotEffect(const IOneShotEffect &) = delete;
         IOneShotEffect(IOneShotEffect &&) = delete;
@@ -36,10 +33,7 @@ namespace dandan::effects
         /** @brief Get the display string for the effect
          * @return The display string
          */
-        [[nodiscard]] virtual std::string display() const
-        {
-            throw std::runtime_error("Unimplemented display");
-        }
+        [[nodiscard]] virtual std::string display() const;
 
         /**
          * creates a new Effect that clones the underlying effect.
@@ -64,10 +58,7 @@ namespace dandan::effects
         [[nodiscard]] virtual std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const = 0;
 
-        [[nodiscard]] virtual EffectContext getEffectContext() const
-        {
-            return m_effect_context;
-        }
+        [[nodiscard]] virtual EffectContext getEffectContext() const;
 
     private:
         EffectContext m_effect_context;

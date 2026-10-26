@@ -50,7 +50,7 @@ namespace dandan::core
             EndOfCombat,
             /// Indicates that there are no more steps and we should proceed to
             /// the next phase
-            Done
+            Done,
         };
 
         /** Constructor

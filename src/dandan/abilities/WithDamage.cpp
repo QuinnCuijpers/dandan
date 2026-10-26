@@ -37,13 +37,13 @@ namespace dandan::abilities
         return res;
     }
 
-    [[nodiscard]] int WithDamage::getDamage() const
+    int WithDamage::getDamage() const
     {
         return m_damage;
     }
 
-    [[nodiscard]] bool WithDamage::appliesTo(
-        const events::IEvent &event, abilities::AbilityContext context) const
+    bool WithDamage::appliesTo(const events::IEvent &event,
+                               abilities::AbilityContext context) const
     {
         if (const auto *eventTriggeredAbility =
                 dynamic_cast<const EventTriggeredAbility *>(m_ability.get()))

@@ -3,9 +3,20 @@
 #include "dandan/core/PriorityManager.h"
 #include "dandan/events/IEvent.h"
 #include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
+    AddManaEffect::AddManaEffect(mana::ManaBag mana, EffectContext context)
+        : IOneShotEffect(std::move(context)), m_mana(std::move(mana))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> AddManaEffect::copy() const
+    {
+        return std::make_unique<AddManaEffect>(m_mana, getEffectContext());
+    }
+
     std::unique_ptr<events::IEvent> AddManaEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {
@@ -15,5 +26,10 @@ namespace dandan::effects
         auto &player{game.getPlayer(priority_manager.getPlayerWithPriority())};
         player.manaPool().add(m_mana);
         return nullptr;
+    }
+
+    const mana::ManaBag &AddManaEffect::getMana() const
+    {
+        return m_mana;
     }
 } // namespace dandan::effects

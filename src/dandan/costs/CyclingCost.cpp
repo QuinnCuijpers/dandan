@@ -46,4 +46,9 @@ namespace dandan::costs
         player.discardCard(*card, exec_ctx);
     }
 
+    std::unique_ptr<ICost> CyclingCost::clone() const
+    {
+        return std::make_unique<CyclingCost>(m_inner_cost->clone());
+    }
+
 } // namespace dandan::costs

@@ -11,27 +11,12 @@ namespace dandan::effects
     class ChangeLandTypeEffect : public IOneShotEffect
     {
     public:
-        explicit ChangeLandTypeEffect(EffectContext context)
-            : IOneShotEffect(std::move(context))
-        {
-        }
+        explicit ChangeLandTypeEffect(EffectContext context);
 
         ChangeLandTypeEffect(core::SubType basic_land_1,
-                             core::SubType basic_land_2, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_basic_land_1(basic_land_1),
-              m_basic_land_2(basic_land_2) {};
+                             core::SubType basic_land_2, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            if (m_basic_land_1.has_value() && m_basic_land_2.has_value())
-            {
-                return std::make_unique<ChangeLandTypeEffect>(
-                    m_basic_land_1.value(), m_basic_land_2.value(),
-                    getEffectContext());
-            }
-
-            return std::make_unique<ChangeLandTypeEffect>(getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -45,24 +30,13 @@ namespace dandan::effects
     {
     public:
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            [[maybe_unused]] EffectContext context) const override
-        {
-            return std::make_unique<ChangeLandTypeEffect>(context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            [[maybe_unused]] EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<ChangeLandTypeEffectDefinition>();
-        }
+            const override;
 
-        [[nodiscard]] std::string display() const override
-        {
-            return "Choose a land type and a basic land type. Each land of the "
-                   "first chosen type becomes the second chosen type until end "
-                   "of turn.";
-        }
+        [[nodiscard]] std::string display() const override;
     };
 } // namespace dandan::effects
 

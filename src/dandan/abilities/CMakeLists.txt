@@ -2,6 +2,8 @@
 target_sources(
 DandanLib
   PRIVATE ActivatedAbility.cpp
+          IAbility.cpp
+          IAbilityDecorator.cpp
           ManaAbility.cpp
           WithDamage.cpp
           StaticAbility.cpp
@@ -11,5 +13,7 @@ DandanLib
           StateTriggeredAbility.cpp
           AbilityType.cpp
           BoundAbility.cpp
-          Keyword.cpp)
+          Keyword.cpp
+          keywords/FlashbackAbility.cpp
+          keywords/FlyingAbility.cpp)
 

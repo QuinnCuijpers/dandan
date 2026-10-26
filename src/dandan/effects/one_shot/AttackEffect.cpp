@@ -1,9 +1,21 @@
 #include "dandan/effects/one_shot/AttackEffect.h"
 #include "dandan/core/Game.h"
 #include "dandan/core/phases/CombatPhase.h"
+#include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
+    AttackEffect::AttackEffect(core::Card &creature, EffectContext context)
+        : IOneShotEffect(std::move(context)), m_creature{creature}
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> AttackEffect::copy() const
+    {
+        return std::make_unique<AttackEffect>(m_creature, getEffectContext());
+    }
+
     std::unique_ptr<events::IEvent> AttackEffect::apply_impl(
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {

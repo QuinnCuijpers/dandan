@@ -25,10 +25,7 @@ namespace dandan::costs
          * @return The display string
          */
         [[nodiscard]] virtual std::string display(
-            [[maybe_unused]] bool isFinal = true) const
-        {
-            throw std::runtime_error("Unimplemented display");
-        }
+            [[maybe_unused]] bool isFinal = true) const;
 
         /** Checks if the cost can be paid.
          * @param source The card generating the cost.

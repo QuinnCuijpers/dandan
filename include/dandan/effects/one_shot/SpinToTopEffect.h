@@ -33,34 +33,17 @@ namespace dandan::effects
     {
 
     public:
-        explicit SpinToTopEffectDefinition(core::TargetRequirement target_req)
-            : m_target_requirements(std::move(target_req))
-        {
-        }
+        explicit SpinToTopEffectDefinition(core::TargetRequirement target_req);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            const auto &card_registry{exec_ctx.cards.get()};
-            const auto *card{card_registry.get(context.card_id)};
-            auto choices{card->getTargetChoices(*this)};
-            auto choice{choices.at(0)};
-            return std::make_unique<SpinToTopEffect>(choice, context);
-        }
+            core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<SpinToTopEffectDefinition>(
-                m_target_requirements);
-        }
+            const override;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirements;
-        }
+            const override;
 
     private:
         core::TargetRequirement m_target_requirements;
