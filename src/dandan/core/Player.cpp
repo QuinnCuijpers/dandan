@@ -4,14 +4,102 @@
 #include "dandan/abilities/BasicLandAbility.h"
 #include "dandan/abilities/IAbilityDecorator.h"
 #include "dandan/abilities/ManaAbility.h"
+#include "dandan/core/Card.h"
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/core/GameState.h"
 #include "dandan/mana/ManaBag.h"
 #include "dandan/mana/Manapool.h"
 #include <algorithm>
+#include <iostream>
 
-namespace
+namespace dandan::core
 {
+    Player::Player() : m_player_id(PlayerID::generate())
+    {
+        std::cout << "Constructed player\n";
+        std::cout << "Which name do you want to give this player? ";
+        std::getline(std::cin, m_name);
+    }
+
+    const std::string &Player::getName() const
+    {
+        return m_name;
+    }
+
+    const PlayerID &Player::getID() const
+    {
+        return m_player_id;
+    }
+
+    int Player::getLifeTotal() const
+    {
+        return m_life_total;
+    }
+
+    Hand &Player::hand()
+    {
+        return m_hand;
+    }
+
+    const Hand &Player::hand() const
+    {
+        return m_hand;
+    }
+
+    Battlefield &Player::battlefield()
+    {
+        return m_battlefield;
+    }
+
+    const Battlefield &Player::battlefield() const
+    {
+        return m_battlefield;
+    }
+
+    bool Player::playedLandThisTurn() const
+    {
+        return m_played_land_this_turn;
+    }
+
+    void Player::setPlayedLandThisTurn(bool played)
+    {
+        m_played_land_this_turn = played;
+    }
+
+    void Player::setDrewCardFromEmptyLibrary(bool drew)
+    {
+        m_drew_card_from_empty_library = drew;
+    }
+
+    bool Player::drewCardFromEmptyLibrary() const
+    {
+        return m_drew_card_from_empty_library;
+    }
+
+    size_t Player::maxHandSize() const
+    {
+        return m_max_hand_size;
+    }
+
+    mana::Manapool &Player::manaPool()
+    {
+        return m_mana_pool;
+    }
+
+    const mana::Manapool &Player::manaPool() const
+    {
+        return m_mana_pool;
+    }
+
+    bool Player::lost() const
+    {
+        return m_lost_game;
+    }
+
+    void Player::setLost()
+    {
+        m_lost_game = true;
+    }
     using namespace dandan;
 
     mana::ManaBag getMaxManaForLand(const core::Card &land,
@@ -62,7 +150,7 @@ namespace
         return max_mana_for_land;
     }
 
-} // namespace
+} // namespace dandan::core
 
 namespace dandan::core
 {

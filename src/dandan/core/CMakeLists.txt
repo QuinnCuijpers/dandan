@@ -33,6 +33,7 @@ target_sources(
           CardID.cpp
           SBAManager.cpp
           PriorityManager.cpp
+          Graveyard.cpp
           Hand.cpp
           Target.cpp
           TargetRequirement.cpp

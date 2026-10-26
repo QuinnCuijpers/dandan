@@ -136,11 +136,22 @@ namespace dandan::core
         return m_stack;
     }
 
-    // void Stack::removeObject(const StackObject &object)
-    // {
-    //     m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(),
-    //                                  [&](const StackObject &stack_object)
-    //                                  { return object == stack_object; }),
-    //                   m_stack.end());
-    // }
+    void Stack::removeObject([[maybe_unused]] const StackObject &object)
+    {
+        // TODO: implement when needed
+    }
+
+    void Stack::removeCard(CardID card_id)
+    {
+        m_stack.erase(
+            std::remove_if(
+                m_stack.begin(), m_stack.end(),
+                [card_id](const StackObject &object)
+                {
+                    return std::holds_alternative<CastContext>(object) &&
+                           std::get<CastContext>(object).card_id == card_id;
+                }),
+            m_stack.end());
+    }
+
 } // namespace dandan::core
