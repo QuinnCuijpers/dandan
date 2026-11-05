@@ -31,20 +31,7 @@ namespace dandan::effects
 
         // TODO: impl an event bus instead of pushing the last event
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
-            core::ExecutionContext exec_ctx) const override
-        {
-            auto &replacement_manager{exec_ctx.replacement_manager.get()};
-
-            std::unique_ptr<events::IEvent> last_event{};
-            for (const auto &effect : m_effects)
-            {
-                auto replaced_sub_effect{
-                    replacement_manager.applyReplacementEffects(*effect,
-                                                                exec_ctx)};
-                last_event = replaced_sub_effect->apply(exec_ctx);
-            }
-            return last_event;
-        }
+            core::ExecutionContext exec_ctx) const override;
 
     private:
         std::vector<std::unique_ptr<IOneShotEffect>> m_effects;

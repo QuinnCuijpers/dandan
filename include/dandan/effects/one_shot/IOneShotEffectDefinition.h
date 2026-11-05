@@ -50,36 +50,13 @@ namespace dandan::effects
 
         [[nodiscard]] const std::optional<links> &readLinks() const;
 
-        void addReadLink(const std::string &key)
-        {
-            if (m_read_links.has_value())
-            {
-                m_read_links->emplace_back(key);
-            }
-            else
-            {
-                m_read_links = {key};
-            }
-        }
+        void addReadLink(const std::string &key);
 
-        void addWriteLink(const std::string &key)
-        {
-            if (m_write_links.has_value())
-            {
-                m_write_links->emplace_back(key);
-            }
-            else
-            {
-                m_write_links = {key};
-            }
-        }
+        void addWriteLink(const std::string &key);
 
         [[nodiscard]] core::ExpireTime expires() const;
 
-        void addExpireTime(core::ExpireTime expire_time)
-        {
-            m_expires = expire_time;
-        }
+        void addExpireTime(core::ExpireTime expire_time);
 
     private:
         std::optional<links> m_write_links;

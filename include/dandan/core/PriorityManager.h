@@ -48,10 +48,7 @@ namespace dandan::core
         /** Gets the player ID of the player who currently has priority.
          * @return The player ID of the player with priority.
          */
-        [[nodiscard]] PlayerID getPlayerWithPriority() const
-        {
-            return m_current_player_with_priority;
-        }
+        [[nodiscard]] PlayerID getPlayerWithPriority() const;
 
         /** Sets the priority to the active player.
          * @param game The game object to get the active player from.

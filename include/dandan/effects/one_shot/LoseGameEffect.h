@@ -25,15 +25,7 @@ namespace dandan::effects
                                 EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
-            core::ExecutionContext exec_ctx) const override
-        {
-            const auto &game{exec_ctx.state.get()};
-            const auto &player = game.getPlayer(m_player);
-
-            std::cout << player.getName() << " has lost the game!" << '\n';
-            game.quit(player);
-            return nullptr;
-        }
+            core::ExecutionContext exec_ctx) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 

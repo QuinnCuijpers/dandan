@@ -52,12 +52,7 @@ namespace dandan::core
         CardCharacteristics(ColorWord color, std::vector<SubType> subtypes,
                             Stats base_stats, bool loses_all_abilities,
                             std::vector<std::unique_ptr<abilities::IAbility>>
-                                additional_abilities)
-            : color(color), subtypes(std::move(subtypes)),
-              base_stats(base_stats), loses_all_abilities(loses_all_abilities),
-              additional_abilities(std::move(additional_abilities))
-        {
-        }
+                                additional_abilities);
         CardCharacteristics(const CardCharacteristics &other);
 
         CardCharacteristics &operator=(const CardCharacteristics &other);

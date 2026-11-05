@@ -31,10 +31,7 @@ namespace dandan::effects
          * @param tapped boolean representing whether or not the ETB should be
          * tapped or not.
          */
-        void setTapped(bool tapped)
-        {
-            m_tapped = tapped;
-        }
+        void setTapped(bool tapped);
 
     private:
         core::Card &m_card;

@@ -16,10 +16,7 @@ namespace dandan::events
          * @param source The CardID of the source card that generated the event
          * @param controller The Controller of the source card
          */
-        explicit IEvent(core::CardID source, core::PlayerID controller)
-            : m_source{source}, m_controller{controller}
-        {
-        }
+        explicit IEvent(core::CardID source, core::PlayerID controller);
 
         IEvent(const IEvent &) = delete;
         IEvent(IEvent &&) = delete;
@@ -31,10 +28,7 @@ namespace dandan::events
          * @returns the CardID of the card that generated this event
          *
          */
-        [[nodiscard]] core::CardID source() const
-        {
-            return m_source;
-        }
+        [[nodiscard]] core::CardID source() const;
 
     private:
         [[maybe_unused]] core::CardID m_source;

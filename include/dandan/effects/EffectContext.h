@@ -13,22 +13,11 @@ namespace dandan::effects
     {
         explicit EffectContext(
             core::CardID card_id = core::CardID::getInvalidID(),
-            core::PlayerID player = core::PlayerID::getInvalidID())
-            : card_id(card_id), player_id(player)
-        {
-        }
+            core::PlayerID player = core::PlayerID::getInvalidID());
 
-        explicit EffectContext(core::PlayerID player_id)
-            : EffectContext(core::CardID::getInvalidID(), player_id)
-        {
-        }
+        explicit EffectContext(core::PlayerID player_id);
 
-        explicit EffectContext(const abilities::AbilityContext &context)
-            : card_id(context.source_card_id), player_id(context.controller_id),
-              chosen_mode_index(context.chosen_mode_index),
-              text_replacements(context.text_replacements)
-        {
-        }
+        explicit EffectContext(const abilities::AbilityContext &context);
 
         core::CardID card_id;
         core::PlayerID player_id;
