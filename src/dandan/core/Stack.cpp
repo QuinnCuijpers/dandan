@@ -141,7 +141,6 @@ namespace dandan::core
         return m_stack;
     }
 
-<<<<<<< Updated upstream
     // void Stack::removeObject(const StackObject &object)
     // {
     //     m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(),
@@ -149,7 +148,6 @@ namespace dandan::core
     //                                  { return object == stack_object; }),
     //                   m_stack.end());
     // }
-=======
     void Stack::removeObject(const StackObject &object)
     {
         std::visit(
@@ -160,18 +158,4 @@ namespace dandan::core
             object);
     }
 
-    void Stack::removeCard(CardID card_id)
-    {
-        m_stack.erase(
-            std::remove_if(
-                m_stack.begin(), m_stack.end(),
-                [card_id](const StackObject &object)
-                {
-                    return std::holds_alternative<CastContext>(object) &&
-                           std::get<CastContext>(object).card_id == card_id;
-                }),
-            m_stack.end());
-    }
-
->>>>>>> Stashed changes
 } // namespace dandan::core
