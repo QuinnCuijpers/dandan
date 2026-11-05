@@ -5,7 +5,6 @@
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
-#include <stdexcept>
 
 namespace dandan::core
 {
@@ -60,7 +59,8 @@ namespace dandan::abilities
         }
 
         /** Create the effect for the ability
-         * @param exec_ctx The execution context for the ability's resolution
+         * @param exec_ctx The execution context to mutate when the ability is
+         * resolving
          * @param context The context for the ability's execution
          * @return The effect created by the ability
          */

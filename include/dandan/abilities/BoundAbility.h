@@ -31,9 +31,10 @@ namespace dandan::abilities
     public:
         /** Create a bound ability from a definition and context.
          * @param definition The ability definition.
-         * @param source_card The source card.
+         * @param source_card The source card ID.
          * @param chosen_mode_index The index of the chosen mode.
-         * @param text_replacements Optional text replacements for the ability.
+         * @param text_replacements The text replacements to apply to the
+         * ability
          */
         BoundAbility(const IAbility &definition, core::Card *source_card,
                      std::optional<size_t> chosen_mode_index = std::nullopt,
@@ -45,6 +46,10 @@ namespace dandan::abilities
          */
         [[nodiscard]] const IAbility &definition() const;
 
+        /**
+         * @brief Get the accosiated ability type
+         * @return The accosiated type
+         */
         [[nodiscard]] AbilityType::Type type() const;
 
         /** Get the source card ID.
@@ -58,20 +63,32 @@ namespace dandan::abilities
         [[nodiscard]] core::PlayerID sourcePlayer() const;
 
         /** Create an effect instance for this ability.
-         * @param exec_ctx The execution context.
+         * @param exec_ctx The game execution context.
          * @return The created effect instance.
          */
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::ExecutionContext exec_ctx) const;
 
+        /**
+         * @brief Add a text replacement to the ability
+         * @param text_replacement The text replacement to add
+         */
         void addTextReplacement(core::TextReplacement text_replacement);
 
+        /**
+         * @brief Generate an ability context for the ability
+         * @return The ability context for this ability
+         */
         [[nodiscard]] AbilityContext getContext() const;
 
+        /**
+         * @brief Equality operator for bound abilities
+         * @param ability The ability to compare to
+         * @return Whether the bound abilities are equal
+         */
         bool operator==(const BoundAbility &ability) const;
 
     private:
-        // TODO: consider making this hold a context directly
         const IAbility *m_definition{};
         const core::Card *m_source_card{};
         AbilityType m_ability_type;

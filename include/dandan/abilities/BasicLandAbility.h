@@ -40,6 +40,13 @@ namespace dandan::abilities
             core::ExecutionContext exec_ctx,
             AbilityContext context) const override;
 
+        /**
+         * @brief Get the underlying mana ability
+         * @param exec_ctx The execution context in which to get the mana
+         * ability
+         * @param context The ability context
+         * @return The mana ability
+         */
         const ManaAbility *getManaAbility(core::ExecutionContext exec_ctx,
                                           const AbilityContext &context) const;
 

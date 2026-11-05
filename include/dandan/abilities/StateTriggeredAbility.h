@@ -27,7 +27,7 @@ namespace dandan::abilities
             std::unique_ptr<effects::IOneShotEffectDefinition> effect);
 
         /** Create an effect instance for this ability.
-         * @param exec_ctx The execution context.
+         * @param exec_ctx The game execution context.
          * @param context The ability context.
          * @return The created effect instance.
          */
@@ -58,7 +58,6 @@ namespace dandan::abilities
         std::unique_ptr<effects::IOneShotEffectDefinition> m_effect;
     };
 } // namespace dandan::abilities
-
 
 #ifdef DANDAN_SERIALIZE
 #include "dandan/abilities/EventTriggeredAbility.h"
@@ -128,7 +127,7 @@ namespace dandan::serialization::registration::stateTriggeredAbility
 
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration::stateTriggeredAbility
 #endif
 
 #endif
