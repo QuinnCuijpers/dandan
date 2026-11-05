@@ -4,7 +4,6 @@
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/CastContext.h"
-#include <algorithm>
 #include <variant>
 #include <vector>
 
@@ -33,7 +32,7 @@ namespace dandan::core
         [[nodiscard]] bool isEmpty() const;
 
         /** Resolves the next object in the stack and pops it from the stack.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void resolveNext(core::ExecutionContext exec_ctx);
 

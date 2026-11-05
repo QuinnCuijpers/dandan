@@ -56,13 +56,14 @@ namespace dandan::core
             return m_current_player_with_priority;
         }
 
-        /** Sets the priority to the active player.
-         * @param game The game object to get the active player from.
+        /** Sets the priority to the given player.
+         * @param player_id The ID of the player to give priority to.
+         * @param exec_ctx The execution context.
          */
         void setPriorityToPlayer(PlayerID player_id, ExecutionContext exec_ctx);
 
         /** Passes priority to the next player in turn order.
-         * @param game The game object to get the next player from.
+         * @param exec_ctx The execution context.
          */
         void passPriority(ExecutionContext exec_ctx);
 

@@ -27,7 +27,7 @@ namespace dandan::abilities
             std::unique_ptr<effects::IOneShotEffectDefinition> effect);
 
         /** Create an effect instance for this ability.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          * @param context The ability context.
          * @return The created effect instance.
          */

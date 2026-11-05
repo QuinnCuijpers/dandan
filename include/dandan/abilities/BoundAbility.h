@@ -31,9 +31,9 @@ namespace dandan::abilities
     public:
         /** Create a bound ability from a definition and context.
          * @param definition The ability definition.
-         * @param source_card The source card ID.
-         * @param source_player The source player ID.
+         * @param source_card The source card.
          * @param chosen_mode_index The index of the chosen mode.
+         * @param text_replacements Optional text replacements for the ability.
          */
         BoundAbility(const IAbility &definition, core::Card *source_card,
                      std::optional<size_t> chosen_mode_index = std::nullopt,
@@ -58,7 +58,7 @@ namespace dandan::abilities
         [[nodiscard]] core::PlayerID sourcePlayer() const;
 
         /** Create an effect instance for this ability.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          * @return The created effect instance.
          */
         [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> createEffect(

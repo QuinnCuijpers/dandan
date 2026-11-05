@@ -23,8 +23,7 @@ namespace dandan::mana
         virtual ~Manapool() = default;
 
         /** Adds mana to the resource pool.
-         * @param type The type of mana to add.
-         * @param amount The amount of mana to add.
+         * @param mana The mana to add.
          */
         void add(const ManaBag &mana)
         {
@@ -50,8 +49,9 @@ namespace dandan::mana
         }
 
         /** Pays the cost of the mana passed in.
-         * @param cost The cost to pay.
+         * @param price The price to pay.
          */
+<<<<<<< Updated upstream
 
         bool pay(const ManaPrice &price)
         {
@@ -67,6 +67,9 @@ namespace dandan::mana
             m_manapool = std::move(remaining);
             return true;
         }
+=======
+        bool pay(const ManaPrice &price);
+>>>>>>> Stashed changes
 
         /** Empties the mana pool.
          */

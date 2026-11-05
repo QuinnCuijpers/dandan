@@ -58,7 +58,7 @@ namespace dandan::effects
             core::ExecutionContext exec_ctx) const;
 
         /** @brief Apply the effect specific implementation.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          * @return The event to notify that the effect happened.
          */
         [[nodiscard]] virtual std::unique_ptr<events::IEvent> apply_impl(

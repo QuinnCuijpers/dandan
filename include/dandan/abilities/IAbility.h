@@ -60,7 +60,7 @@ namespace dandan::abilities
         }
 
         /** Create the effect for the ability
-         * @param game The game object to mutate when the ability is resolving
+         * @param exec_ctx The execution context for the ability's resolution
          * @param context The context for the ability's execution
          * @return The effect created by the ability
          */
@@ -69,7 +69,8 @@ namespace dandan::abilities
                      AbilityContext context) const = 0;
 
         /** Determine if the ability can be activated
-         * @param game The game object to check for activation conditions
+         * @param exec_ctx The execution context to check for activation
+         * conditions
          * @param context The context for the ability's execution
          * @return True if the ability can be activated, false otherwise.
          * The default implementation returns false.

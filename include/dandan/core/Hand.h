@@ -89,7 +89,7 @@ namespace dandan::core
 
         /** Discards a card from the hand.
          * @param card_id The ID of the card to discard.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void discardCard(CardID card_id, ExecutionContext exec_ctx);
 

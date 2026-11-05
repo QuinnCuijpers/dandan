@@ -23,7 +23,9 @@ namespace dandan::core
     // TODO: implement builder pattern to make it easier to build
     // OR make the game setup be a function that needs to be called explicitly
 
-    /** @brief A class that represents the game state.
+    /** @brief The top-level game controller.
+     *
+     * Owns the game state and engine managers and drives the game loop.
      * @class Game
      */
     class Game

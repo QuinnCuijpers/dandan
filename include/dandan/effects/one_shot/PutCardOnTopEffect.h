@@ -73,8 +73,6 @@ namespace dandan::effects
             return std::make_unique<PutCardOnTopEffectDefinition>(m_amount);
         }
 
-        // [[nodiscard]] std::string display() const override;
-
         /** @brief Get the amount of cards to put on top.
          * @return The number of cards to put on top.
          */
