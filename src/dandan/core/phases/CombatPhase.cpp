@@ -198,10 +198,9 @@ namespace dandan::core
                                                  context());
             m_step = Step::DeclareAttackers;
             break;
-        // TODO:
-        // lists all creatures that could attack and applies actions for every
-        // choice should eventually queue the events this generates but for now
-        // just handle nullptr events
+        // TODO: list every creature that can attack, apply an action for each
+        // choice, and queue the generated events instead of handling only null
+        // events.
         case Step::DeclareAttackers:
             handleDeclareAttackersStep();
             break;

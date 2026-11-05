@@ -18,10 +18,6 @@ namespace dandan::effects
             std::cout << "Checking attack prevention effect condition\n";
             if (getCondition()->isSatisfied(exec_ctx, context))
             {
-                // TODO: give conditions display
-                //  std::cout << "Attack prevention with condition "
-                //            << typeid(*getCondition()).name()
-                //            << " prevents attack action\n";
                 return true;
             }
         }

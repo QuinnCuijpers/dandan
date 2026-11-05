@@ -13,6 +13,7 @@
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/utils/overloadVisitor.h"
 #include <memory>
+#include <variant>
 
 namespace dandan::core
 {
@@ -57,15 +58,17 @@ namespace dandan::core
                     {
                         resolvingSpell = true;
 
-                        auto spell_ability_it{std::find_if(
-                            card->getData().abilities.begin(),
-                            card->getData().abilities.end(),
-                            [](const auto &ability)
-                            {
-                                return dynamic_cast<
-                                           const abilities::SpellAbility *>(
-                                           ability.get()) != nullptr;
-                            })};
+                        auto spell_ability_it{
+                            std::find_if(
+                                card->getData().abilities.begin(),
+                                card->getData().abilities.end(),
+                                [](const auto &ability)
+                                {
+                                    return dynamic_cast<
+                                               const abilities::SpellAbility *>(
+                                               ability.get()) != nullptr;
+                                }),
+                        };
 
                         const auto *spell_ability =
                             dynamic_cast<const abilities::SpellAbility *>(
@@ -93,7 +96,8 @@ namespace dandan::core
         if (effect)
         {
             auto final_effect{
-                replacement_manager.applyReplacementEffects(*effect, exec_ctx)};
+                replacement_manager.applyReplacementEffects(*effect, exec_ctx),
+            };
             auto event{final_effect->apply(exec_ctx)};
             if (event)
             {
@@ -126,7 +130,8 @@ namespace dandan::core
                         }
                         m_stack.pop_back();
                     },
-                    [](const abilities::BoundAbility &) {}},
+                    [](const abilities::BoundAbility &) {},
+                },
                 new_object);
         }
     }
@@ -136,6 +141,7 @@ namespace dandan::core
         return m_stack;
     }
 
+<<<<<<< Updated upstream
     // void Stack::removeObject(const StackObject &object)
     // {
     //     m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(),
@@ -143,4 +149,29 @@ namespace dandan::core
     //                                  { return object == stack_object; }),
     //                   m_stack.end());
     // }
+=======
+    void Stack::removeObject(const StackObject &object)
+    {
+        std::visit(
+            utils::overloaded{
+                [this](const CastContext &ctx) { removeCard(ctx.card_id); },
+                [](const abilities::BoundAbility &) {},
+            },
+            object);
+    }
+
+    void Stack::removeCard(CardID card_id)
+    {
+        m_stack.erase(
+            std::remove_if(
+                m_stack.begin(), m_stack.end(),
+                [card_id](const StackObject &object)
+                {
+                    return std::holds_alternative<CastContext>(object) &&
+                           std::get<CastContext>(object).card_id == card_id;
+                }),
+            m_stack.end());
+    }
+
+>>>>>>> Stashed changes
 } // namespace dandan::core

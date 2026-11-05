@@ -29,7 +29,6 @@ namespace dandan::effects
             return res;
         }
         throw std::runtime_error("Unknown INumber type in DrawEffect display");
-        // return "Draw " + m_amount->display() + " cards";
     }
 
     std::unique_ptr<events::IEvent> DrawEffect::apply_impl(
