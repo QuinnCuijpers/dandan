@@ -33,6 +33,11 @@ namespace dandan::core
     {
     }
 
+    PlayerID PriorityManager::getPlayerWithPriority() const
+    {
+        return m_current_player_with_priority;
+    }
+
     void PriorityManager::passPriority(core::ExecutionContext exec_ctx)
     {
         auto &game{exec_ctx.state.get()};

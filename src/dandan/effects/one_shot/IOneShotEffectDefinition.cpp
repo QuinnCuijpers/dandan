@@ -44,4 +44,33 @@ namespace dandan::effects
     {
         return m_expires;
     }
+
+    void IOneShotEffectDefinition::addReadLink(const std::string &key)
+    {
+        if (m_read_links.has_value())
+        {
+            m_read_links->emplace_back(key);
+        }
+        else
+        {
+            m_read_links = {key};
+        }
+    }
+
+    void IOneShotEffectDefinition::addWriteLink(const std::string &key)
+    {
+        if (m_write_links.has_value())
+        {
+            m_write_links->emplace_back(key);
+        }
+        else
+        {
+            m_write_links = {key};
+        }
+    }
+
+    void IOneShotEffectDefinition::addExpireTime(core::ExpireTime expire_time)
+    {
+        m_expires = expire_time;
+    }
 } // namespace dandan::effects

@@ -9,6 +9,7 @@
 #include "dandan/core/engine/PreventionManager.h"
 #include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/utils/log.h"
+#include <utility>
 #include <vector>
 
 #ifdef DANDAN_SERIALIZE
@@ -17,6 +18,16 @@
 
 namespace dandan::core
 {
+    CardCharacteristics::CardCharacteristics(
+        ColorWord color, std::vector<SubType> subtypes, Stats base_stats,
+        bool loses_all_abilities,
+        std::vector<std::unique_ptr<abilities::IAbility>> additional_abilities)
+        : color(color), subtypes(std::move(subtypes)), base_stats(base_stats),
+          loses_all_abilities(loses_all_abilities),
+          additional_abilities(std::move(additional_abilities))
+    {
+    }
+
     CardCharacteristics::CardCharacteristics(const CardCharacteristics &other)
         : color(other.color), subtypes(other.subtypes),
           base_stats(other.base_stats),

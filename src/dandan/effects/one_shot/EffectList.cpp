@@ -38,4 +38,19 @@ namespace dandan::effects
                        [](const auto &effect) { return effect->copy(); });
         return std::make_unique<EffectList>(cloned_effects, getEffectContext());
     }
+
+    std::unique_ptr<events::IEvent> EffectList::apply_impl(
+        core::ExecutionContext exec_ctx) const
+    {
+        auto &replacement_manager{exec_ctx.replacement_manager.get()};
+
+        std::unique_ptr<events::IEvent> last_event{};
+        for (const auto &effect : m_effects)
+        {
+            auto replaced_sub_effect{
+                replacement_manager.applyReplacementEffects(*effect, exec_ctx)};
+            last_event = replaced_sub_effect->apply(exec_ctx);
+        }
+        return last_event;
+    }
 } // namespace dandan::effects

@@ -9,6 +9,11 @@
 
 namespace dandan::effects
 {
+    void ETBEffect::setTapped(bool tapped)
+    {
+        m_tapped = tapped;
+    }
+
     ETBEffect::ETBEffect(core::Card &card, EffectContext context)
         : IOneShotEffect(std::move(context)), m_card{card}
     {
