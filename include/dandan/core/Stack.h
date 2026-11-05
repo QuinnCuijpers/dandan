@@ -4,6 +4,7 @@
 #include "dandan/abilities/BoundAbility.h"
 #include "dandan/core/CardID.h"
 #include "dandan/core/CastContext.h"
+#include <algorithm>
 #include <variant>
 #include <vector>
 
