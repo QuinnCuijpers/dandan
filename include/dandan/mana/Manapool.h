@@ -51,7 +51,6 @@ namespace dandan::mana
         /** Pays the cost of the mana passed in.
          * @param price The price to pay.
          */
-<<<<<<< Updated upstream
 
         bool pay(const ManaPrice &price)
         {
@@ -67,9 +66,6 @@ namespace dandan::mana
             m_manapool = std::move(remaining);
             return true;
         }
-=======
-        bool pay(const ManaPrice &price);
->>>>>>> Stashed changes
 
         /** Empties the mana pool.
          */
