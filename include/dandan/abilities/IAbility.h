@@ -5,7 +5,6 @@
 #include "dandan/core/ExecutionContext.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
-#include <stdexcept>
 
 namespace dandan::core
 {
@@ -51,7 +50,8 @@ namespace dandan::abilities
             [[maybe_unused]] size_t index) const;
 
         /** Create the effect for the ability
-         * @param game The game object to mutate when the ability is resolving
+         * @param exec_ctx The execution context to mutate when the ability is
+         * resolving
          * @param context The context for the ability's execution
          * @return The effect created by the ability
          */
@@ -60,7 +60,8 @@ namespace dandan::abilities
                      AbilityContext context) const = 0;
 
         /** Determine if the ability can be activated
-         * @param game The game object to check for activation conditions
+         * @param exec_ctx The execution context to check for activation
+         * conditions
          * @param context The context for the ability's execution
          * @return True if the ability can be activated, false otherwise.
          * The default implementation returns false.

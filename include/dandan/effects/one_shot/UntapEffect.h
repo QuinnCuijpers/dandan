@@ -34,7 +34,7 @@ namespace dandan::effects
 
         /**
          * Apply the untap effect and generate the corresponding event.
-         * @param game The game state to apply the effect to.
+         * @param exec_ctx The execution context.
          * @return The event generated from applying the effect.
          */
         [[nodiscard]] [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(

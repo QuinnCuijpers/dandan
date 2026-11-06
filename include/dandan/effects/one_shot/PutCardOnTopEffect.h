@@ -57,8 +57,6 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
-        // [[nodiscard]] std::string display() const override;
-
         /** @brief Get the amount of cards to put on top.
          * @return The number of cards to put on top.
          */
