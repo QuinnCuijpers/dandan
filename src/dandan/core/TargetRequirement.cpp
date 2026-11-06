@@ -1,4 +1,5 @@
 #include "dandan/core/TargetRequirement.h"
+#include <cassert>
 
 namespace dandan::core
 {
@@ -23,7 +24,7 @@ namespace dandan::core
         case TargetType::Any:
             return "Any";
         default:
-            return "Unknown";
+            assert(false && "unreachable");
         }
     }
 
