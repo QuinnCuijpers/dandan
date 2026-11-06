@@ -45,7 +45,8 @@ namespace dandan::effects
     {
     public:
         /** Constructor
-         *@param card The card that would be played
+         * @param cast_ctx The context of the cast.
+         * @param context The effect context.
          */
         explicit CastEffect(core::CastContext cast_ctx, EffectContext context);
 

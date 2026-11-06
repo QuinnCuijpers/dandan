@@ -205,7 +205,7 @@ namespace dandan::core
         // TODO: should generate a damage event
         /** Take damage.
          * @param damage The damage to take.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx);
 
@@ -214,11 +214,11 @@ namespace dandan::core
         ColorWord getColor() const;
 
         /** Destroy the card.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void destroy(ExecutionContext exec_ctx) const;
 
-        // TODO: check this thoroughly
+        // TODO: verify that all per-turn card state is reset here
         /** Reset the state of the card.
          */
         void resetState();

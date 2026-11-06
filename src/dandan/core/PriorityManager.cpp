@@ -83,10 +83,8 @@ namespace dandan::core
             return;
         }
 
-        // TODO: move to correct place
         while (player.canActivateSomething(exec_ctx))
         {
-            // game.render();
             std::cout << "checking priotity actions from player "
                       << player.getName() << '\n';
             std::cout << "What do you want to do? (play [card index], activate "
