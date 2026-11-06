@@ -36,4 +36,9 @@ namespace dandan::costs
                m_second->canPay(source, player);
     }
 
+    std::unique_ptr<ICost> AndCost::clone() const
+    {
+        return std::make_unique<AndCost>(m_first->clone(), m_second->clone());
+    }
+
 } // namespace dandan::costs

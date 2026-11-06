@@ -14,7 +14,7 @@ namespace dandan::core
         BATTLEFIELD,
         GRAVEYARD,
         EXILE,
-        STACK
+        STACK,
     };
 
     std::string zoneToString(Zone zone);

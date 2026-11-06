@@ -1,7 +1,7 @@
 add_library(DandanEvents OBJECT)
 
 target_sources(DandanEvents PRIVATE ETBEvent.cpp
-NoIslandsEvent.cpp UntapEvent.cpp)
+NoIslandsEvent.cpp UntapEvent.cpp IEvent.cpp)
 
 target_sources(DandanEvents PUBLIC FILE_SET HEADERS BASE_DIRS
   ${CMAKE_SOURCE_DIR}/include)

@@ -6,6 +6,12 @@
 
 namespace dandan::effects
 {
+    PlayCardPreventionEffect::PlayCardPreventionEffect(
+        std::unique_ptr<conditions::ICondition> condition)
+        : IPreventionEffect(std::move(condition))
+    {
+    }
+
     bool PlayCardPreventionEffect::prevents(
         const core::IAction &action, const core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
@@ -24,5 +30,10 @@ namespace dandan::effects
             }
         }
         return false;
+    }
+
+    std::unique_ptr<IPreventionEffect> PlayCardPreventionEffect::clone() const
+    {
+        return std::make_unique<PlayCardPreventionEffect>(cloneCondition());
     }
 } // namespace dandan::effects

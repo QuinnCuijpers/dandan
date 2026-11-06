@@ -2,6 +2,7 @@
 #include "dandan/core/GameState.h"
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/SBAManager.h"
+#include <random>
 #include <stdexcept>
 #include <string>
 
@@ -25,6 +26,16 @@ namespace dandan::core
     PriorityManager::PriorityManager()
         : m_current_player_with_priority(determineStartingPlayer())
     {
+    }
+
+    PriorityManager::PriorityManager(PlayerID starting_player)
+        : m_current_player_with_priority{starting_player}
+    {
+    }
+
+    PlayerID PriorityManager::getPlayerWithPriority() const
+    {
+        return m_current_player_with_priority;
     }
 
     void PriorityManager::passPriority(core::ExecutionContext exec_ctx)

@@ -17,18 +17,11 @@ namespace dandan::effects
     {
 
     public:
-        explicit MemoryLapseEffect(core::Target target, EffectContext context,
-                                   core::Zone target_zone = core::Zone::LIBRARY)
-            : IOneShotEffect(std::move(context)), m_target(std::move(target)),
-              m_target_zone(target_zone)
-        {
-        }
+        explicit MemoryLapseEffect(
+            core::Target target, EffectContext context,
+            core::Zone target_zone = core::Zone::LIBRARY);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<MemoryLapseEffect>(m_target,
-                                                       getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -43,34 +36,17 @@ namespace dandan::effects
 
     public:
         explicit MemoryLapseEffectDefinition(
-            core::TargetRequirement target_requirements)
-            : m_target_requirements(std::move(target_requirements))
-        {
-        }
+            core::TargetRequirement target_requirements);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            const auto &card_registry{exec_ctx.cards.get()};
-            const auto *card{card_registry.get(context.card_id)};
-            auto choices{card->getTargetChoices(*this)};
-            auto choice{choices.at(0)};
-            return std::make_unique<MemoryLapseEffect>(choice, context);
-        }
+            core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<MemoryLapseEffectDefinition>(
-                m_target_requirements);
-        }
+            const override;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirements;
-        }
+            const override;
 
     private:
         core::TargetRequirement m_target_requirements;

@@ -1,8 +1,51 @@
 #include "dandan/effects/one_shot/ScryEffect.h"
 #include "dandan/core/GameState.h"
+#include <memory>
+#include <utility>
 
 namespace dandan::effects
 {
+    ScryEffect::ScryEffect(int scry_amount, core::PlayerID player,
+                           EffectContext context)
+        : IOneShotEffect(std::move(context)), m_scry_amount(scry_amount),
+          m_player(player)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ScryEffect::copy() const
+    {
+        return std::make_unique<ScryEffect>(m_scry_amount, m_player,
+                                            getEffectContext());
+    }
+
+    int ScryEffect::getScryAmount() const
+    {
+        return m_scry_amount;
+    }
+
+    ScryEffectDefinition::ScryEffectDefinition(int scry_amount)
+        : m_scry_amount(scry_amount)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ScryEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        EffectContext context) const
+    {
+        return std::make_unique<ScryEffect>(m_scry_amount, context.player_id,
+                                            context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> ScryEffectDefinition::clone()
+        const
+    {
+        return std::make_unique<ScryEffectDefinition>(m_scry_amount);
+    }
+
+    int ScryEffectDefinition::getScryAmount() const
+    {
+        return m_scry_amount;
+    }
 
     std::unique_ptr<events::IEvent> ScryEffect::apply_impl(
         [[maybe_unused]] core::ExecutionContext exec_ctx) const

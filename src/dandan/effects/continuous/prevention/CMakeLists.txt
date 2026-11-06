@@ -1,6 +1,7 @@
 
 target_sources(
   DandanLib
-  PRIVATE AttackPreventionEffect.cpp DrawPreventionEffect.cpp
+  PRIVATE IPreventionEffect.cpp
+          AttackPreventionEffect.cpp DrawPreventionEffect.cpp
           PlayCardPreventionEffect.cpp BlockPreventionEffect.cpp)
 

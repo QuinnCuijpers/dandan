@@ -49,18 +49,9 @@ namespace dandan::core
         /** Sets the input stream.
          * @param istream The input stream to set.
          */
-        void setIstream(std::istream &istream)
-        {
-            m_input_manager.setInput(istream);
-        }
+        void setIstream(std::istream &istream);
 
-        ExecutionContext execution_context()
-        {
-            return {
-                m_game_state,       m_card_registry,      m_input_manager,
-                m_event_manager,    m_prevention_manager, m_replacement_manager,
-                m_priority_manager, m_condition_manager,  m_sba_manager};
-        }
+        ExecutionContext execution_context();
 
         /** Runs the game loop.
          */

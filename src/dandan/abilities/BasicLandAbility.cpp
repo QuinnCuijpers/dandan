@@ -123,4 +123,9 @@ namespace dandan::abilities
         auto type{card->getCurrentSubTypes()[0]};
         return m_basic_land_ability_map.at(type).get();
     }
+
+    std::unique_ptr<IAbility> BasicLandAbility::clone() const
+    {
+        return std::make_unique<BasicLandAbility>();
+    }
 }; // namespace dandan::abilities

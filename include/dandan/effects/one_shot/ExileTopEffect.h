@@ -12,20 +12,13 @@ namespace dandan::effects
     class ExileTopEffect : public IOneShotEffect
     {
     public:
-        ExileTopEffect(int amount, core::PlayerID player, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_amount(amount),
-              m_player(player)
-        {
-        }
+        ExileTopEffect(int amount, core::PlayerID player,
+                       EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<ExileTopEffect>(m_amount, m_player,
-                                                    getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
     private:
         int m_amount;
@@ -36,27 +29,15 @@ namespace dandan::effects
     {
     public:
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            return std::make_unique<ExileTopEffect>(
-                m_amount, context.player_id, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<ExileTopEffectDefinition>(m_amount);
-        }
+            const override;
 
-        explicit ExileTopEffectDefinition(int amount) : m_amount(amount)
-        {
-        }
+        explicit ExileTopEffectDefinition(int amount);
 
-        [[nodiscard]] int getAmount() const
-        {
-            return m_amount;
-        }
+        [[nodiscard]] int getAmount() const;
 
     private:
         int m_amount;

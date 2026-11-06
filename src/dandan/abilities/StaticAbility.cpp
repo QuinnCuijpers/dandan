@@ -13,6 +13,16 @@ namespace dandan::abilities
     {
     }
 
+    StaticAbility::Type StaticAbility::getType() const
+    {
+        return m_type;
+    }
+
+    const effects::IContinuousEffect *StaticAbility::getEffect() const
+    {
+        return m_effect.get();
+    }
+
     std::unique_ptr<effects::IOneShotEffect> StaticAbility::createEffect(
         [[maybe_unused]] core::ExecutionContext exec_ctx,
         [[maybe_unused]] AbilityContext context) const
@@ -21,19 +31,9 @@ namespace dandan::abilities
         return nullptr;
     }
 
-    [[nodiscard]] StaticAbility::Type StaticAbility::getType() const
+    std::unique_ptr<IAbility> StaticAbility::clone() const
     {
-        return m_type;
-    }
-
-    [[nodiscard]] const effects::IContinuousEffect *StaticAbility::getEffect()
-        const
-    {
-        return m_effect.get();
-    }
-
-    [[nodiscard]] std::unique_ptr<IAbility> StaticAbility::clone() const
-    {
-        return std::make_unique<StaticAbility>(m_type, m_effect->cloneContinuous());
+        return std::make_unique<StaticAbility>(m_type,
+                                               m_effect->cloneContinuous());
     }
 } // namespace dandan::abilities

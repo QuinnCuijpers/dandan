@@ -20,9 +20,7 @@ namespace dandan::core
         /** Constructor
          * @param game The game instance.
          */
-        explicit IPhase(ExecutionContext exec_ctx) : m_ctx(exec_ctx)
-        {
-        }
+        explicit IPhase(ExecutionContext exec_ctx);
 
         IPhase(const IPhase &) = delete;
         IPhase(IPhase &&) = delete;
@@ -44,10 +42,7 @@ namespace dandan::core
         /** Returns the execution context for the phase
          * @return The execution context
          */
-        [[nodiscard]] const ExecutionContext &context() const
-        {
-            return m_ctx;
-        }
+        [[nodiscard]] const ExecutionContext &context() const;
 
         /** Outputs the phase name to the stream
          * @param ostream The output stream
@@ -55,11 +50,7 @@ namespace dandan::core
          * @return The output stream
          */
         friend std::ostream &operator<<(std::ostream &ostream,
-                                        const IPhase &phase)
-        {
-            ostream << "Phase{name: " << phase.name() << '}';
-            return ostream;
-        }
+                                        const IPhase &phase);
 
     private:
         ExecutionContext m_ctx;

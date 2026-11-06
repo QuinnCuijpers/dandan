@@ -5,6 +5,12 @@
 
 namespace dandan::effects
 {
+    BlockPreventionEffect::BlockPreventionEffect(
+        std::unique_ptr<conditions::ICondition> condition)
+        : IPreventionEffect(std::move(condition))
+    {
+    }
+
     bool BlockPreventionEffect::prevents(
         const core::IAction &action, const core::ExecutionContext exec_ctx,
         [[maybe_unused]] std::optional<effects::EffectContext> context) const
@@ -24,5 +30,10 @@ namespace dandan::effects
             }
         }
         return false;
+    }
+
+    std::unique_ptr<IPreventionEffect> BlockPreventionEffect::clone() const
+    {
+        return std::make_unique<BlockPreventionEffect>(cloneCondition());
     }
 } // namespace dandan::effects

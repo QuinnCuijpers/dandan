@@ -36,10 +36,7 @@ namespace dandan::core
          * @return The action actor. Defaults to monostate, which represents a
          * global action not associated with any particular card or player.
          */
-        [[nodiscard]] virtual ActionActor getActor() const
-        {
-            return std::monostate{};
-        }
+        [[nodiscard]] virtual ActionActor getActor() const;
     };
 } // namespace dandan::core
 

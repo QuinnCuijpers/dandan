@@ -2,6 +2,8 @@
 #define DANDAN_PLAYERID_H
 
 #include "dandan/core/Constants.h"
+#include <cstddef>
+#include <functional>
 #include <stdexcept>
 
 namespace dandan::core
@@ -19,72 +21,39 @@ namespace dandan::core
         /** Generates the next PlayerID.
          * @return The generated PlayerID.
          */
-        static PlayerID generate()
-        {
-            if (next_id >= AMOUNT_PLAYERS)
-            {
-                throw std::runtime_error("Exceeded maximum number of players, "
-                                         "cannot generate new PlayerID");
-            }
-            return PlayerID{next_id++};
-        }
+        static PlayerID generate();
 
         /** Resets the PlayerID generator back to the zero id.
          */
-        static void reset()
-        {
-            next_id = 0;
-        }
+        static void reset();
 
         /** Gets the invalid PlayerID represented by -1.
          * @return The invalid PlayerID.
          */
-        static PlayerID getInvalidID()
-        {
-            return PlayerID{-1};
-        }
+        static PlayerID getInvalidID();
 
         /** Gets the underlying integer for the ID of the player.
          * @return The ID of the player.
          */
-        [[nodiscard]] int id() const
-        {
-            return m_id;
-        }
+        [[nodiscard]] int id() const;
 
-        PlayerID static fromInt(int player_id)
-        {
-            if (player_id < -1 || player_id >= AMOUNT_PLAYERS)
-            {
-                throw std::runtime_error("Invalid integer for PlayerID: " +
-                                         std::to_string(player_id));
-            }
-            return PlayerID{player_id};
-        }
+        PlayerID static fromInt(int player_id);
 
         /** Checks if two PlayerIDs are equal.
          * @param other The other PlayerID to compare with.
          * @return True if the PlayerIDs are equal, false otherwise.
          */
-        bool operator==(const PlayerID &other) const
-        {
-            return m_id == other.m_id;
-        }
+        bool operator==(const PlayerID &other) const;
 
         /** Checks if two PlayerIDs are not equal.
          * @param other The other PlayerID to compare with.
          * @return True if the PlayerIDs are not equal, false otherwise.
          */
-        bool operator!=(const PlayerID &other) const
-        {
-            return m_id != other.m_id;
-        }
+        bool operator!=(const PlayerID &other) const;
 
     private:
         int m_id{};
-        explicit PlayerID(int next_id) : m_id(next_id)
-        {
-        }
+        explicit PlayerID(int next_id);
     };
 
 } // namespace dandan::core
@@ -98,10 +67,7 @@ namespace std
          * @param card_id The CardID to hash.
          * @return The hash value.
          */
-        std::size_t operator()(const dandan::core::PlayerID &player_id) const
-        {
-            return std::hash<int>()(player_id.id());
-        }
+        std::size_t operator()(const dandan::core::PlayerID &player_id) const;
     };
 } // namespace std
 #endif

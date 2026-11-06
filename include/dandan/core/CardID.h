@@ -16,19 +16,12 @@ namespace dandan::core
         /** Gets an invalid CardID.
          * @return An invalid CardID.
          */
-        static CardID getInvalidID()
-        {
-            return CardID{-1};
-        }
+        static CardID getInvalidID();
 
         /** Generates the next unique CardID.
          * @return The next unique CardID.
          */
-        static CardID generate()
-        {
-            static int current_id{0};
-            return CardID{current_id++};
-        }
+        static CardID generate();
 
         /** Creates a CardID from an integer. Use with caution as this can lead
          * to collisions.
@@ -36,47 +29,30 @@ namespace dandan::core
          * @return A new CardID.
          * @note As this can lead to collisions, use it with caution.
          */
-        static CardID fromInt(int card_id)
-        {
-            return CardID{card_id};
-        }
+        static CardID fromInt(int card_id);
 
         /** Checks if two CardIDs are equal.
          * @param other The other CardID to compare with.
          * @return True if the CardIDs are equal, false otherwise.
          */
-        bool operator==(const CardID &other) const
-        {
-            return m_id == other.m_id;
-        }
+        bool operator==(const CardID &other) const;
 
         /** Checks if two CardIDs are not equal.
          * @param other The other CardID to compare with.
          * @return True if the CardIDs are not equal, false otherwise.
          */
-        bool operator!=(const CardID &other) const
-        {
-            return m_id != other.m_id;
-        }
+        bool operator!=(const CardID &other) const;
 
-        bool operator<(const CardID &other) const
-        {
-            return m_id < other.m_id;
-        }
+        bool operator<(const CardID &other) const;
 
         /** Gets the integer ID of the card.
          * @return The integer ID of the card.
          */
-        [[nodiscard]] int getID() const
-        {
-            return m_id;
-        }
+        [[nodiscard]] int getID() const;
 
     private:
         int m_id{0};
-        explicit CardID(int next_id) : m_id(next_id)
-        {
-        }
+        explicit CardID(int next_id);
     };
 } // namespace dandan::core
 
@@ -89,10 +65,7 @@ namespace std
          * @param card_id The CardID to hash.
          * @return The hash value.
          */
-        std::size_t operator()(const dandan::core::CardID &card_id) const
-        {
-            return std::hash<int>()(card_id.getID());
-        }
+        std::size_t operator()(const dandan::core::CardID &card_id) const;
     };
 } // namespace std
 

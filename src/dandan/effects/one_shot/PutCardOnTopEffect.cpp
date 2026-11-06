@@ -3,9 +3,46 @@
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <memory>
 #include <string>
+#include <utility>
 
 namespace dandan::effects
 {
+    PutCardOnTopEffect::PutCardOnTopEffect(int amount, core::PlayerID playerID,
+                                           EffectContext context)
+        : IOneShotEffect(std::move(context)), m_amount(amount),
+          m_playerID(playerID)
+    {
+    }
+
+    int PutCardOnTopEffect::getAmount() const
+    {
+        return m_amount;
+    }
+
+    PutCardOnTopEffectDefinition::PutCardOnTopEffectDefinition(int amount)
+        : m_amount(amount)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> PutCardOnTopEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        EffectContext context) const
+    {
+        return std::make_unique<PutCardOnTopEffect>(m_amount, context.player_id,
+                                                    context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> PutCardOnTopEffectDefinition::
+        clone() const
+    {
+        return std::make_unique<PutCardOnTopEffectDefinition>(m_amount);
+    }
+
+    int PutCardOnTopEffectDefinition::getAmount() const
+    {
+        return m_amount;
+    }
+
     std::unique_ptr<events::IEvent> PutCardOnTopEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {

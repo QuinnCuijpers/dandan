@@ -42,20 +42,9 @@ namespace dandan::core
          */
         [[nodiscard]] const std::vector<StackObject> &getStackObjects() const;
 
-        void removeObject(const StackObject &object);
+        static void removeObject(const StackObject &object);
 
-        void removeCard(CardID card_id)
-        {
-            m_stack.erase(
-                std::remove_if(
-                    m_stack.begin(), m_stack.end(),
-                    [card_id](const StackObject &object)
-                    {
-                        return std::holds_alternative<CastContext>(object) &&
-                               std::get<CastContext>(object).card_id == card_id;
-                    }),
-                m_stack.end());
-        }
+        void removeCard(CardID card_id);
 
     private:
         std::vector<StackObject> m_stack;

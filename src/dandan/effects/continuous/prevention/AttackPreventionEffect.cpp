@@ -7,6 +7,12 @@
 
 namespace dandan::effects
 {
+    AttackPreventionEffect::AttackPreventionEffect(
+        std::unique_ptr<conditions::ICondition> condition)
+        : IPreventionEffect(std::move(condition))
+    {
+    }
+
     bool AttackPreventionEffect::prevents(
         const core::IAction &action, const core::ExecutionContext exec_ctx,
         std::optional<effects::EffectContext> context) const
@@ -26,5 +32,10 @@ namespace dandan::effects
             }
         }
         return false;
+    }
+
+    std::unique_ptr<IPreventionEffect> AttackPreventionEffect::clone() const
+    {
+        return std::make_unique<AttackPreventionEffect>(cloneCondition());
     }
 } // namespace dandan::effects

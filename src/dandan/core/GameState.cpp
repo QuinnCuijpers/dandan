@@ -9,6 +9,7 @@
 #include "dandan/core/engine/PreventionManager.h"
 #include "dandan/core/engine/ReplacementManager.h"
 #include "dandan/utils/overloadVisitor.h"
+#include <array>
 #include <cassert>
 #include <stdexcept>
 
@@ -435,4 +436,163 @@ namespace dandan::core
         }
         std::cout << "\n";
     }
+
+    void GameState::addEndOfTurnEffect(
+        std::unique_ptr<effects::IOneShotEffect> effect)
+    {
+        std::cout << "added an end of turn effect\n";
+        m_end_of_turn_effects.push_back(std::move(effect));
+    }
+
+    void GameState::applyEndOfTurnEffects(const ExecutionContext &exec_ctx)
+    {
+        for (const auto &effect : m_end_of_turn_effects)
+        {
+            std::cout << "Applying end of turn effect\n";
+            // TODO: handle end of turn events
+            static_cast<void>(effect->apply(exec_ctx));
+        }
+        m_end_of_turn_effects.clear();
+    }
+
+    void GameState::passTurn(const ExecutionContext &exec_ctx)
+    {
+        changePhase(std::make_unique<EndingPhase>(exec_ctx));
+        m_active_player_index = 1 - m_active_player_index;
+        m_first_turn = false;
+        changePhase(std::make_unique<BeginningPhase>(exec_ctx));
+    }
+
+    void GameState::handlePhase()
+    {
+        assert(m_phase && "Phase should never be null during handlePhase()");
+        auto next_phase = m_phase->handle();
+        activePlayer().manaPool().empty();
+        nonActivePlayer().manaPool().empty();
+        m_phase = std::move(next_phase);
+    }
+
+    void GameState::changePhase(std::unique_ptr<IPhase> &&phase)
+    {
+        m_phase = std::move(phase);
+    }
+
+    void GameState::printCards(const std::vector<CardID> &card_ids,
+                               const CardRegistry &card_registry)
+    {
+        std::cout << "[";
+        for (const auto &card_id : card_ids)
+        {
+            const auto *card = card_registry.get(card_id);
+            std::cout << card->getData().name << "("
+                      << "CardID: " << card->getID().getID() << ", ";
+            std::cout << "#Abilities: " << card->getCurrentAbilities().size()
+                      << ") ";
+        }
+        std::cout << "]\n";
+    }
+
+    const Player &GameState::getPlayer(PlayerID player_id) const
+    {
+        if (player_id == PlayerID::getInvalidID())
+        {
+            throw std::runtime_error("Could not get player with invalid ID");
+        }
+        return m_players.at(player_id.id());
+    }
+
+    Player &GameState::getPlayer(PlayerID player_id)
+    {
+        if (player_id == PlayerID::getInvalidID())
+        {
+            throw std::runtime_error("Could not get player with invalid ID");
+        }
+        return m_players.at(player_id.id());
+    }
+
+    const std::array<Player, AMOUNT_PLAYERS> &GameState::getPlayers() const
+    {
+        return m_players;
+    }
+
+    std::array<Player, AMOUNT_PLAYERS> &GameState::getPlayers()
+    {
+        return m_players;
+    }
+
+    const Player &GameState::activePlayer() const
+    {
+        return m_players.at(m_active_player_index);
+    }
+
+    Player &GameState::activePlayer()
+    {
+        return m_players.at(m_active_player_index);
+    }
+
+    const Player &GameState::nonActivePlayer() const
+    {
+        return m_players.at(1 - m_active_player_index);
+    }
+
+    Player &GameState::nonActivePlayer()
+    {
+        return m_players.at(1 - m_active_player_index);
+    }
+
+    PlayerID GameState::getNextPlayerID(PlayerID player_id) const
+    {
+        return m_players.at((player_id.id() + 1) % AMOUNT_PLAYERS).getID();
+    }
+
+    Library &GameState::library()
+    {
+        return m_library;
+    }
+
+    const Library &GameState::library() const
+    {
+        return m_library;
+    }
+
+    Stack &GameState::stack()
+    {
+        return m_stack;
+    }
+
+    const Stack &GameState::stack() const
+    {
+        return m_stack;
+    }
+
+    Graveyard &GameState::graveyard()
+    {
+        return m_graveyard;
+    }
+
+    const Graveyard &GameState::graveyard() const
+    {
+        return m_graveyard;
+    }
+
+    Exile &GameState::exile()
+    {
+        return m_exile;
+    }
+
+    const Exile &GameState::exile() const
+    {
+        return m_exile;
+    }
+
+    bool GameState::isFirstTurn() const
+    {
+        return m_first_turn;
+    }
+
+    std::unique_ptr<IPhase> &GameState::phase()
+    {
+        return m_phase;
+    }
+
 } // namespace dandan::core

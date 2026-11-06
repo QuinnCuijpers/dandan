@@ -5,6 +5,22 @@
 namespace dandan::core
 {
 
+    CastMode CastModeFromStr(const std::string &str)
+    {
+        if (str == "flashback")
+        {
+            return CastMode::Flashback;
+        }
+
+        return CastMode::Normal;
+    }
+
+    CastRequest::CastRequest(dandan::core::CardID card_id,
+                             std::optional<CastMode> mode)
+        : card_id(card_id), mode{mode.value_or(CastMode::Normal)}
+    {
+    }
+
     CastRequest CastRequest::fromStr(const std::string &input)
     {
         auto parts = strSplit(input);

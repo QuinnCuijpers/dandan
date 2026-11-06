@@ -18,24 +18,13 @@ namespace dandan::core
         Flashback,
     };
 
-    inline CastMode CastModeFromStr(const std::string &str)
-    {
-        if (str == "flashback")
-        {
-            return CastMode::Flashback;
-        }
-
-        return CastMode::Normal;
-    }
+    CastMode CastModeFromStr(const std::string &str);
 
     struct CastRequest
     {
 
         explicit CastRequest(dandan::core::CardID card_id,
-                             std::optional<CastMode> mode = std::nullopt)
-            : card_id(card_id), mode{mode.value_or(CastMode::Normal)}
-        {
-        }
+                             std::optional<CastMode> mode = std::nullopt);
 
         dandan::core::CardID card_id;
         CastMode mode = CastMode::Normal;

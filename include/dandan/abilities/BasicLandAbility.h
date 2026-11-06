@@ -43,10 +43,7 @@ namespace dandan::abilities
         const ManaAbility *getManaAbility(core::ExecutionContext exec_ctx,
                                           const AbilityContext &context) const;
 
-        [[nodiscard]] std::unique_ptr<IAbility> clone() const override
-        {
-            return std::make_unique<BasicLandAbility>();
-        }
+        [[nodiscard]] std::unique_ptr<IAbility> clone() const override;
 
     private:
         const std::unordered_map<core::SubType, std::unique_ptr<ManaAbility>>

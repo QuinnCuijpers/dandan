@@ -8,7 +8,7 @@ namespace dandan::core
     enum class ExpireTime : std::uint8_t
     {
         EnfOfTurn,
-        None
+        None,
     };
 } // namespace dandan::core
 

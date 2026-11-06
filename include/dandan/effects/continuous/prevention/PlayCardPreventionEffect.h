@@ -22,20 +22,14 @@ namespace dandan::effects
          * @param condition The condition under which to prevent playing cards.
          */
         explicit PlayCardPreventionEffect(
-            std::unique_ptr<conditions::ICondition> condition)
-            : IPreventionEffect(std::move(condition))
-        {
-        }
+            std::unique_ptr<conditions::ICondition> condition);
 
         [[nodiscard]] bool prevents(const core::IAction &action,
                                     core::ExecutionContext exec_ctx,
                                     std::optional<effects::EffectContext>
                                         context = std::nullopt) const override;
 
-        [[nodiscard]] std::unique_ptr<IPreventionEffect> clone() const override
-        {
-            return std::make_unique<PlayCardPreventionEffect>(cloneCondition());
-        }
+        [[nodiscard]] std::unique_ptr<IPreventionEffect> clone() const override;
     };
 } // namespace dandan::effects
 

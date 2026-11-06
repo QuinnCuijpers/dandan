@@ -17,33 +17,15 @@ namespace dandan::effects
     {
 
     public:
-        explicit MindBendEffect(core::Target target, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_target(std::move(target))
-        {
-        }
+        explicit MindBendEffect(core::Target target, EffectContext context);
 
-        // NOLINTBEGIN(bugprone-easily-swappable-parameters)
         MindBendEffect(core::Target target, core::ReplacementType to_replace,
                        core::ReplacementType replace_with,
-                       EffectContext context)
-            : IOneShotEffect(std::move(context)), m_target(std::move(target)),
-              m_to_replace(to_replace), m_replace_with(replace_with)
-        {
-        }
-        // NOLINTEND(bugprone-easily-swappable-parameters)
+                       EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<MindBendEffect>(m_target,
-                                                    getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
-        [[nodiscard]] std::string display() const override
-        {
-            return "Change the text of target permanent by replacing all "
-                   "instances of one color word with another or one basic land "
-                   "type with another.";
-        }
+        [[nodiscard]] std::string display() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -58,35 +40,17 @@ namespace dandan::effects
     {
     public:
         explicit MindBendEffectDefinition(
-            core::TargetRequirement target_requirements)
-            : m_target_requirements(std::move(target_requirements))
-        {
-        }
+            core::TargetRequirement target_requirements);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            [[maybe_unused]] EffectContext context) const override
-        {
-            const auto &card_registry{exec_ctx.cards.get()};
-            const auto *card{card_registry.get(context.card_id)};
-            auto choices{card->getTargetChoices(*this)};
-            auto choice{choices.at(0)};
-            context.expires = expires();
-            return std::make_unique<MindBendEffect>(choice, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            [[maybe_unused]] EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<MindBendEffectDefinition>(
-                m_target_requirements);
-        }
+            const override;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirements;
-        }
+            const override;
 
     private:
         core::TargetRequirement m_target_requirements;

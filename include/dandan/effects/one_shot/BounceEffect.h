@@ -18,20 +18,11 @@ namespace dandan::effects
     {
 
     public:
-        explicit BounceEffect(core::Target target, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_target(std::move(target))
-        {
-        }
+        explicit BounceEffect(core::Target target, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<BounceEffect>(m_target, getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
-        [[nodiscard]] std::string display() const override
-        {
-            return "Return target spell or creature to its owner's hand.";
-        }
+        [[nodiscard]] std::string display() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -44,41 +35,17 @@ namespace dandan::effects
     {
     public:
         explicit BounceEffectDefinition(
-            core::TargetRequirement target_requirements)
-            : m_target_requirements(std::move(target_requirements))
-        {
-        }
+            core::TargetRequirement target_requirements);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            const core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            if (context.card_id == core::CardID::getInvalidID())
-            {
-                throw std::runtime_error(
-                    "tried binding a Bounce Effect without a source card");
-            }
-
-            const auto &card_registry{exec_ctx.cards.get()};
-            auto source{context.card_id};
-            const auto *card{card_registry.get(source)};
-            auto choices{card->getTargetChoices(*this)};
-            auto choice{choices.at(0)};
-            return std::make_unique<BounceEffect>(choice, context);
-        }
+            core::ExecutionContext exec_ctx,
+            EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<BounceEffectDefinition>(
-                m_target_requirements);
-        }
+            const override;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirements;
-        }
+            const override;
 
     private:
         core::TargetRequirement m_target_requirements;

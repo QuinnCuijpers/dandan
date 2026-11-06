@@ -16,10 +16,7 @@ namespace dandan::core
         CastMode mode = CastMode::Normal;
         mana::ManaPrice cost;
 
-        bool operator==(const core::CastContext &cast_ctx) const
-        {
-            return card_id == cast_ctx.card_id;
-        }
+        bool operator==(const core::CastContext &cast_ctx) const;
 
         static CastContext resolveCast(const CastRequest &req,
                                        ExecutionContext exec_ctx);

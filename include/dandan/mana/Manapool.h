@@ -26,54 +26,25 @@ namespace dandan::mana
          * @param type The type of mana to add.
          * @param amount The amount of mana to add.
          */
-        void add(const ManaBag &mana)
-        {
-            m_manapool = m_manapool.add(mana);
-        }
+        void add(const ManaBag &mana);
 
-        [[nodiscard]] const ManaBag &view() const
-        {
-            return m_manapool;
-        }
+        [[nodiscard]] const ManaBag &view() const;
 
         /** Checks if the mana can cover the cost passed in.
          * @param price The price to check.
          * @return True if the mana can pay the price, false otherwise.
          */
-        [[nodiscard]] bool canPay(const ManaPrice &price) const
-        {
-            if (!m_manapool.contains(price.specific()))
-            {
-                return false;
-            }
-            return m_manapool.total() >= price.totalRequired();
-        }
+        [[nodiscard]] bool canPay(const ManaPrice &price) const;
 
         /** Pays the cost of the mana passed in.
          * @param cost The cost to pay.
          */
 
-        bool pay(const ManaPrice &price)
-        {
-            if (!canPay(price))
-            {
-                return false;
-            }
-
-            ManaBag remaining = m_manapool.subtract(price.specific());
-
-            remaining = remaining.subtractAny(price.generic());
-
-            m_manapool = std::move(remaining);
-            return true;
-        }
+        bool pay(const ManaPrice &price);
 
         /** Empties the mana pool.
          */
-        void empty()
-        {
-            m_manapool = ManaBag{};
-        }
+        void empty();
 
         /** Outputs the mana to an output stream.
          * @param ostream The output stream.
@@ -81,11 +52,7 @@ namespace dandan::mana
          * @return The output stream.
          */
         friend std::ostream &operator<<(std::ostream &ostream,
-                                        const Manapool &mana)
-        {
-            ostream << ManaBag::ManaToSymbols(mana.view());
-            return ostream;
-        }
+                                        const Manapool &mana);
 
     private:
         ManaBag m_manapool;
