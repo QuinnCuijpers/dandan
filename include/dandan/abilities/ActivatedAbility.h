@@ -65,7 +65,6 @@ namespace dandan::abilities
     };
 } // namespace dandan::abilities
 
-
 #ifdef DANDAN_SERIALIZE
 #include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonTypeRegistry.h"
@@ -105,7 +104,7 @@ namespace dandan::serialization::registration
             });
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif

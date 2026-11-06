@@ -2,10 +2,30 @@
 #include "dandan/core/GameState.h"
 #include "dandan/core/engine/EventManager.h"
 #include <iostream>
+#include <memory>
 #include <string>
+#include <utility>
 
 namespace dandan::effects
 {
+    BounceLandEffect::BounceLandEffect(core::PlayerID player_id,
+                                       EffectContext effect_context)
+        : IOneShotEffect(std::move(effect_context)), m_player_id(player_id)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> BounceLandEffect::copy() const
+    {
+        return std::make_unique<BounceLandEffect>(m_player_id,
+                                                  getEffectContext());
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> BounceLandEffectDefinition::
+        clone() const
+    {
+        return std::make_unique<BounceLandEffectDefinition>();
+    }
+
     std::unique_ptr<events::IEvent> BounceLandEffect::apply_impl(
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {

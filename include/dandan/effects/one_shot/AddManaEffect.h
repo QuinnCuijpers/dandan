@@ -20,23 +20,14 @@ namespace dandan::effects
         /** Constructor
          * @param mana the mana that this effect will add.
          */
-        explicit AddManaEffect(mana::ManaBag mana, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_mana(std::move(mana))
-        {
-        }
+        explicit AddManaEffect(mana::ManaBag mana, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<AddManaEffect>(m_mana, getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
-        [[nodiscard]] const mana::ManaBag &getMana() const
-        {
-            return m_mana;
-        }
+        [[nodiscard]] const mana::ManaBag &getMana() const;
 
     private:
         mana::ManaBag m_mana;

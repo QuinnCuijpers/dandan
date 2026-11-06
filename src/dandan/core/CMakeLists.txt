@@ -15,7 +15,9 @@ target_sources(
           phases/BeginningPhase.cpp
           phases/MainPhase.cpp
           phases/EndingPhase.cpp
+          phases/IPhase.cpp
           engine/ConditionManager.cpp
+          engine/InputManager.cpp
           PreventionManager.cpp
           PlayerID.cpp
           ReplacementManager.cpp
@@ -31,11 +33,15 @@ target_sources(
           CardID.cpp
           SBAManager.cpp
           PriorityManager.cpp
+          Graveyard.cpp
           Hand.cpp
           Target.cpp
+          TargetRequirement.cpp
           CardRegistry.cpp
           CastRequest.cpp
-CastContext.cpp)
+          CastContext.cpp
+          IMindBendable.cpp
+          actions/IAction.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
   ${CMAKE_SOURCE_DIR}/include)

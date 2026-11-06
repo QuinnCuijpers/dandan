@@ -27,4 +27,10 @@ namespace dandan::effects
             "EntersTappedEffect can only replace ETB effects");
     }
 
+    std::unique_ptr<IContinuousEffect> EntersTappedEffect::cloneContinuous()
+        const
+    {
+        return std::make_unique<EntersTappedEffect>();
+    }
+
 } // namespace dandan::effects

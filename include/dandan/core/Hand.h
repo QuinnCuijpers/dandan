@@ -20,72 +20,35 @@ namespace dandan::core
         /** Constructs a hand with the given cards.
          * @param cards The cards vector to initialize the hand with.
          */
-        explicit Hand(std::vector<CardID> cards) : m_cards{std::move(cards)}
-        {
-        }
+        explicit Hand(std::vector<CardID> cards);
 
         /** Gets the cards in the hand immutably.
          * @return A const reference to the vector of card IDs in the hand.
          */
-        [[nodiscard]] const std::vector<CardID> &getCards() const
-        {
-            return m_cards;
-        }
+        [[nodiscard]] const std::vector<CardID> &getCards() const;
 
         /** Gets a card from the hand at the specified index.
          * @param index The index of the card to get.
          * @return The card ID at the specified index.
          */
-        [[nodiscard]] CardID getCard(int index) const
-        {
-            return m_cards[index];
-        }
+        [[nodiscard]] CardID getCard(int index) const;
 
         /** Gets a card from the hand at the specified index and removes it from
          * the hand.
          * @param index The index of the card to get.
          * @return The card ID at the specified index.
          */
-        [[nodiscard]] CardID getCard(int index)
-        {
-            auto card{m_cards[index]};
-            // erase chosen over pop and swap as we want to maintain card order
-            // in hand while in the backend it is more effiecient to pop and
-            // swap, the order of cards remaining constant makes UI later easier
-            // to implement
-            m_cards.erase(m_cards.begin() + index);
-            return card;
-        }
+        [[nodiscard]] CardID getCard(int index);
 
         /** Removes a card from the hand.
          * @param card The card to remove.
          */
-        void removeCard(const Card &card)
-        {
-            auto card_id = card.getID();
-            auto iter = std::find_if(m_cards.begin(), m_cards.end(),
-                                     [&card_id](const CardID &other)
-                                     { return card_id == other; });
-            if (iter != m_cards.end())
-            {
-                std::cout << "Removing card:" << card.getData().name << '\n';
-                m_cards.erase(iter);
-            }
-            else
-            {
-                std::cout << "Couldn't find card " << card.getData().name
-                          << " in hand to remove\n";
-            }
-        }
+        void removeCard(const Card &card);
 
         /** Adds a card to the hand.
          * @param card The card to add.
          */
-        void addCard(Card &card)
-        {
-            card.setZone(Zone::HAND);
-            m_cards.emplace_back(card.getID());
-        }
+        void addCard(Card &card);
 
         /** Discards a card from the hand.
          * @param card_id The ID of the card to discard.

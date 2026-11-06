@@ -19,17 +19,9 @@ namespace dandan::effects
     public:
         ChooseCardNameAndMillEffect(int amount, core::CardID card_id,
                                     core::Target target,
-                                    EffectContext effect_context)
-            : IOneShotEffect(std::move(effect_context)), m_amount(amount),
-              m_source(card_id), m_target(std::move(target))
-        {
-        }
+                                    EffectContext effect_context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<ChooseCardNameAndMillEffect>(
-                m_amount, m_source, m_target, getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -46,47 +38,21 @@ namespace dandan::effects
 
     public:
         explicit ChooseCardNameAndMillEffectDefinition(
-            core::TargetRequirement target_reqs)
-            : m_target_requirements(std::move(target_reqs))
-        {
-        }
+            core::TargetRequirement target_reqs);
         ChooseCardNameAndMillEffectDefinition(
-            int amount, core::TargetRequirement target_reqs)
-            : m_amount(amount), m_target_requirements(std::move(target_reqs))
-        {
-        }
+            int amount, core::TargetRequirement target_reqs);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] const core::ExecutionContext exec_ctx,
-            [[maybe_unused]] EffectContext context) const override
-        {
-            const auto &card_registry{exec_ctx.cards.get()};
-            const auto *source_card{card_registry.get(context.card_id)};
-
-            auto choices{source_card->getTargetChoices(*this)};
-            auto choice{choices.at(0)};
-
-            return std::make_unique<ChooseCardNameAndMillEffect>(
-                m_amount, source_card->getID(), choice, context);
-        }
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
+            [[maybe_unused]] EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<ChooseCardNameAndMillEffectDefinition>(
-                m_amount, m_target_requirements);
-        }
+            const override;
 
-        [[nodiscard]] int getAmount() const
-        {
-            return m_amount;
-        }
+        [[nodiscard]] int getAmount() const;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
-            const override
-        {
-            return &m_target_requirements;
-        }
+            const override;
 
     private:
         int m_amount{1};

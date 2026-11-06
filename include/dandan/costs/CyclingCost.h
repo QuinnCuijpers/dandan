@@ -35,10 +35,7 @@ namespace dandan::costs
         void pay(core::ExecutionContext exec_ctx,
                  abilities::AbilityContext context) const override;
 
-        [[nodiscard]] std::unique_ptr<ICost> clone() const override
-        {
-            return std::make_unique<CyclingCost>(m_inner_cost->clone());
-        }
+        [[nodiscard]] std::unique_ptr<ICost> clone() const override;
 
     private:
         std::unique_ptr<ICost> m_inner_cost;

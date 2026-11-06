@@ -10,6 +10,7 @@ namespace dandan::core
         card.setZone(Zone::EXILE);
         m_cards.emplace_back(card.getID());
     }
+
     void Exile::removeCard(const Card &card)
     {
         auto iter = std::find(m_cards.begin(), m_cards.end(), card.getID());
@@ -17,5 +18,10 @@ namespace dandan::core
         {
             m_cards.erase(iter);
         }
+    }
+
+    const std::vector<CardID> &Exile::getCards() const
+    {
+        return m_cards;
     }
 } // namespace dandan::core

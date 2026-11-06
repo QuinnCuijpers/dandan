@@ -38,4 +38,9 @@ namespace dandan::costs
         player.manaPool().pay(m_mana);
     }
 
+    std::unique_ptr<ICost> ManaCost::clone() const
+    {
+        return std::make_unique<ManaCost>(m_mana);
+    }
+
 } // namespace dandan::costs

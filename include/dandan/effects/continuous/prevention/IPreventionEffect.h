@@ -30,10 +30,7 @@ namespace dandan::effects
          * @param condition The condition under which to prevent the action.
          */
         explicit IPreventionEffect(
-            std::unique_ptr<conditions::ICondition> condition)
-            : m_condition(std::move(condition))
-        {
-        }
+            std::unique_ptr<conditions::ICondition> condition);
 
         /** Determines if this prevention effect prevents the given action.
          * @param action The action to check.
@@ -56,29 +53,20 @@ namespace dandan::effects
          * @return A unique pointer to the cloned continuous effect.
          */
         [[nodiscard]] std::unique_ptr<IContinuousEffect> cloneContinuous()
-            const override
-        {
-            return clone();
-        }
+            const override;
 
         /** Gets the condition associated with this prevention effect.
          * @return A pointer to the condition associated with this prevention
          * effect.
          */
-        [[nodiscard]] const conditions::ICondition *getCondition() const
-        {
-            return m_condition.get();
-        }
+        [[nodiscard]] const conditions::ICondition *getCondition() const;
 
         /** Creates a copy of the condition associated with this prevention
          * effect.
          * @return A unique pointer to the cloned condition.
          */
         [[nodiscard]] std::unique_ptr<conditions::ICondition> cloneCondition()
-            const
-        {
-            return m_condition->clone();
-        }
+            const;
 
     private:
         std::unique_ptr<conditions::ICondition> m_condition;

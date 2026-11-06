@@ -3,11 +3,53 @@
 #include "dandan/core/GameState.h"
 #include <algorithm>
 #include <iterator>
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace dandan::effects
 {
+    TutorTopEffect::TutorTopEffect(std::vector<core::Type> filter_types,
+                                   core::PlayerID player_id,
+                                   EffectContext context)
+        : IOneShotEffect(std::move(context)),
+          m_filter_types(std::move(filter_types)), m_player_id(player_id)
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> TutorTopEffect::copy() const
+    {
+        return std::make_unique<TutorTopEffect>(m_filter_types, m_player_id,
+                                                getEffectContext());
+    }
+
+    TutorTopEffectDefinition::TutorTopEffectDefinition(
+        std::vector<dandan::core::Type> filter_types)
+        : m_filter_types(std::move(filter_types))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> TutorTopEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        EffectContext context) const
+    {
+        return std::make_unique<TutorTopEffect>(m_filter_types,
+                                                context.player_id, context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> TutorTopEffectDefinition::clone()
+        const
+    {
+        return std::make_unique<TutorTopEffectDefinition>(m_filter_types);
+    }
+
+    const std::vector<dandan::core::Type> &TutorTopEffectDefinition::
+        getFilterTypes() const
+    {
+        return m_filter_types;
+    }
+
     std::unique_ptr<events::IEvent> TutorTopEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {

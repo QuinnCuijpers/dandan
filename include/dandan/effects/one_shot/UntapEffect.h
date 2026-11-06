@@ -28,15 +28,9 @@ namespace dandan::effects
          * Constructs an UntapEffect for a specified card.
          * @param card The card to be untapped by this effect.
          */
-        explicit UntapEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_card{card}
-        {
-        }
+        explicit UntapEffect(core::Card &card, EffectContext context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<UntapEffect>(m_card, getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         /**
          * Apply the untap effect and generate the corresponding event.

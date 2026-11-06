@@ -23,32 +23,14 @@ namespace dandan::core
         /** Adds a card to the graveyard.
          * @param card The card to add.
          */
-        void addCard(Card &card)
-        {
-            std::cout << "Adding card " << card.getData().name
-                      << " with ID: " << card.getID().getID()
-                      << " to graveyard\n";
-            card.setZone(Zone::GRAVEYARD);
-            card.resetState();
-            m_cards.emplace_back(card.getID());
-        }
+        void addCard(Card &card);
 
-        void removeCard(const Card &card)
-        {
-            auto iter = std::find(m_cards.begin(), m_cards.end(), card.getID());
-            if (iter != m_cards.end())
-            {
-                m_cards.erase(iter);
-            }
-        }
+        void removeCard(const Card &card);
 
         /** Gets the cards in the graveyard.
          * @return A const reference to the vector of card IDs.
          */
-        [[nodiscard]] const std::vector<CardID> &getCards() const
-        {
-            return m_cards;
-        }
+        [[nodiscard]] const std::vector<CardID> &getCards() const;
 
     private:
         std::vector<CardID> m_cards;

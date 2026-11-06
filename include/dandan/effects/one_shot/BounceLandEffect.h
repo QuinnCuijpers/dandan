@@ -19,16 +19,9 @@ namespace dandan::effects
     {
     public:
         explicit BounceLandEffect(core::PlayerID player_id,
-                                  EffectContext effect_context)
-            : IOneShotEffect(std::move(effect_context)), m_player_id(player_id)
-        {
-        }
+                                  EffectContext effect_context);
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<BounceLandEffect>(m_player_id,
-                                                      getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
@@ -41,10 +34,7 @@ namespace dandan::effects
     {
     public:
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<BounceLandEffectDefinition>();
-        }
+            const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
             [[maybe_unused]] core::ExecutionContext exec_ctx,

@@ -7,10 +7,70 @@
 #include "dandan/utils/stringToBasicLandType.h"
 #include "dandan/utils/stringToColorWord.h"
 #include <memory>
+#include <utility>
 #include <variant>
 
 namespace dandan::effects
 {
+    MindBendEffect::MindBendEffect(core::Target target, EffectContext context)
+        : IOneShotEffect(std::move(context)), m_target(std::move(target))
+    {
+    }
+
+    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+    MindBendEffect::MindBendEffect(core::Target target,
+                                   core::ReplacementType to_replace,
+                                   core::ReplacementType replace_with,
+                                   EffectContext context)
+        : IOneShotEffect(std::move(context)), m_target(std::move(target)),
+          m_to_replace(to_replace), m_replace_with(replace_with)
+    {
+    }
+    // NOLINTEND(bugprone-easily-swappable-parameters)
+
+    std::unique_ptr<IOneShotEffect> MindBendEffect::copy() const
+    {
+        return std::make_unique<MindBendEffect>(m_target, getEffectContext());
+    }
+
+    std::string MindBendEffect::display() const
+    {
+        return "Change the text of target permanent by replacing all "
+               "instances of one color word with another or one basic land "
+               "type with another.";
+    }
+
+    MindBendEffectDefinition::MindBendEffectDefinition(
+        core::TargetRequirement target_requirements)
+        : m_target_requirements(std::move(target_requirements))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> MindBendEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        [[maybe_unused]] EffectContext context) const
+    {
+        const auto &card_registry{exec_ctx.cards.get()};
+        const auto *card{card_registry.get(context.card_id)};
+        auto choices{card->getTargetChoices(*this)};
+        auto choice{choices.at(0)};
+        context.expires = expires();
+        return std::make_unique<MindBendEffect>(choice, context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition> MindBendEffectDefinition::clone()
+        const
+    {
+        return std::make_unique<MindBendEffectDefinition>(
+            m_target_requirements);
+    }
+
+    const core::TargetRequirement *MindBendEffectDefinition::
+        getTargetRequirement() const
+    {
+        return &m_target_requirements;
+    }
+
     std::unique_ptr<events::IEvent> MindBendEffect::apply_impl(
         [[maybe_unused]] core::ExecutionContext exec_ctx) const
     {

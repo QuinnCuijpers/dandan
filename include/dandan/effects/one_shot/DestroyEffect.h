@@ -20,18 +20,12 @@ namespace dandan::effects
         /** @brief Constructs a new destroy effect with the specified card.
          * @param card The card to destroy.
          */
-        explicit DestroyEffect(core::Card &card, EffectContext context)
-            : IOneShotEffect(std::move(context)), m_card{card}
-        {
-        }
+        explicit DestroyEffect(core::Card &card, EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<DestroyEffect>(m_card, getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
     private:
         core::Card &m_card;

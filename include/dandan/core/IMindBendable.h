@@ -17,15 +17,9 @@ namespace dandan::core
         virtual ~IMindBendable() = default;
 
         // NOLINTBEGIN(bugprone-easily-swappable-parameters)
-        virtual void replaceColorWord([[maybe_unused]] ColorWord from,
-                                      [[maybe_unused]] ColorWord new_color)
-        {
-        }
+        virtual void replaceColorWord(ColorWord from, ColorWord new_color);
 
-        virtual void replaceBasicWord([[maybe_unused]] SubType from,
-                                      [[maybe_unused]] SubType new_basic)
-        {
-        }
+        virtual void replaceBasicWord(SubType from, SubType new_basic);
         // NOLINTEND(bugprone-easily-swappable-parameters)
     };
 } // namespace dandan::core

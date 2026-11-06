@@ -28,7 +28,7 @@ namespace dandan::serialization
     enum class JsonRepresentation : std::uint8_t
     {
         TAGGED,
-        INLINE
+        INLINE,
     };
 
     template <typename Product, typename... Args> class JsonTypeRegistry
@@ -51,7 +51,7 @@ namespace dandan::serialization
         JsonTypeRegistry(JsonTypeRegistry &&other) = delete;
         ~JsonTypeRegistry() = default;
 
-        static JsonTypeRegistry &instance()
+        static JsonTypeRegistry &instance() noexcept
         {
             static JsonTypeRegistry registry{};
             return registry;
@@ -65,7 +65,10 @@ namespace dandan::serialization
         {
             static_assert(std::is_base_of_v<Product, T>);
             m_serializer_map[std::type_index(typeid(T))] = {
-                type_name, std::move(serializer), representation};
+                type_name,
+                std::move(serializer),
+                representation,
+            };
             m_deserializer_map[type_name] = std::move(deserializer);
         }
 
@@ -97,7 +100,8 @@ namespace dandan::serialization
         }
 
     private:
-        std::unordered_map<std::type_index, JsonRegistration> m_serializer_map{};
+        std::unordered_map<std::type_index, JsonRegistration>
+            m_serializer_map{};
         std::unordered_map<std::string, Deserializer> m_deserializer_map{};
 
         JsonTypeRegistry() = default;

@@ -22,10 +22,7 @@ namespace dandan::conditions
             std::optional<effects::EffectContext> context =
                 std::nullopt) const override;
 
-        [[nodiscard]] std::unique_ptr<ICondition> clone() const override
-        {
-            return std::make_unique<DefenderControlsNoBasicCondition>(m_type);
-        }
+        [[nodiscard]] std::unique_ptr<ICondition> clone() const override;
 
         // NOLINTBEGIN(bugprone-easily-swappable-parameters)
         void replaceBasicWord(core::SubType from,

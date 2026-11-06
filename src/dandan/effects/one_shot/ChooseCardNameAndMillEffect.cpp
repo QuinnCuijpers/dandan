@@ -5,9 +5,70 @@
 #include "dandan/events/IEvent.h"
 #include <memory>
 #include <string>
+#include <utility>
 
 namespace dandan::effects
 {
+    ChooseCardNameAndMillEffect::ChooseCardNameAndMillEffect(
+        int amount, core::CardID card_id, core::Target target,
+        EffectContext effect_context)
+        : IOneShotEffect(std::move(effect_context)), m_amount(amount),
+          m_source(card_id), m_target(std::move(target))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ChooseCardNameAndMillEffect::copy() const
+    {
+        return std::make_unique<ChooseCardNameAndMillEffect>(
+            m_amount, m_source, m_target, getEffectContext());
+    }
+
+    ChooseCardNameAndMillEffectDefinition::
+        ChooseCardNameAndMillEffectDefinition(
+            core::TargetRequirement target_reqs)
+        : m_target_requirements(std::move(target_reqs))
+    {
+    }
+
+    ChooseCardNameAndMillEffectDefinition::
+        ChooseCardNameAndMillEffectDefinition(
+            int amount, core::TargetRequirement target_reqs)
+        : m_amount(amount), m_target_requirements(std::move(target_reqs))
+    {
+    }
+
+    std::unique_ptr<IOneShotEffect> ChooseCardNameAndMillEffectDefinition::bind(
+        [[maybe_unused]] const core::ExecutionContext exec_ctx,
+        [[maybe_unused]] EffectContext context) const
+    {
+        const auto &card_registry{exec_ctx.cards.get()};
+        const auto *source_card{card_registry.get(context.card_id)};
+
+        auto choices{source_card->getTargetChoices(*this)};
+        auto choice{choices.at(0)};
+
+        return std::make_unique<ChooseCardNameAndMillEffect>(
+            m_amount, source_card->getID(), choice, context);
+    }
+
+    std::unique_ptr<IOneShotEffectDefinition>
+    ChooseCardNameAndMillEffectDefinition::clone() const
+    {
+        return std::make_unique<ChooseCardNameAndMillEffectDefinition>(
+            m_amount, m_target_requirements);
+    }
+
+    int ChooseCardNameAndMillEffectDefinition::getAmount() const
+    {
+        return m_amount;
+    }
+
+    const core::TargetRequirement *ChooseCardNameAndMillEffectDefinition::
+        getTargetRequirement() const
+    {
+        return &m_target_requirements;
+    }
+
     std::unique_ptr<events::IEvent> ChooseCardNameAndMillEffect::apply_impl(
         core::ExecutionContext exec_ctx) const
     {

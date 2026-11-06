@@ -16,19 +16,12 @@ namespace dandan::effects
     {
     public:
         DrawEffect(std::unique_ptr<numbers::INumber> amount,
-                   EffectContext context)
-            : IOneShotEffect(std::move(context)), m_amount(std::move(amount))
-        {
-        }
+                   EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
-        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override
-        {
-            return std::make_unique<DrawEffect>(m_amount->clone(),
-                                                getEffectContext());
-        }
+        [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
 
     private:
         std::unique_ptr<numbers::INumber> m_amount;
@@ -41,35 +34,20 @@ namespace dandan::effects
         /** Constructor
          * @param amount the amount of cards this effect would draw
          */
-        explicit DrawEffectDefinition(int amount)
-            : m_amount(std::make_unique<numbers::ExactNumber>(amount))
-        {
-        }
+        explicit DrawEffectDefinition(int amount);
+        explicit DrawEffectDefinition(std::unique_ptr<numbers::INumber> amount);
 
-        explicit DrawEffectDefinition(std::unique_ptr<numbers::INumber> amount)
-            : m_amount(std::move(amount))
-        {
-        }
-
-        [[nodiscard]] const std::unique_ptr<numbers::INumber> &getNumber() const
-        {
-            return m_amount;
-        }
+        [[nodiscard]] const std::unique_ptr<numbers::INumber> &getNumber()
+            const;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
             [[maybe_unused]] core::ExecutionContext exec_ctx,
-            EffectContext context) const override
-        {
-            return std::make_unique<DrawEffect>(m_amount->clone(), context);
-        }
+            EffectContext context) const override;
 
         [[nodiscard]] std::string display() const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
-            const override
-        {
-            return std::make_unique<DrawEffectDefinition>(m_amount->clone());
-        }
+            const override;
 
     private:
         std::unique_ptr<numbers::INumber> m_amount{

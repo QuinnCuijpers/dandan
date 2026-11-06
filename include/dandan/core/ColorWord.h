@@ -11,7 +11,7 @@ namespace dandan::core
         Black,
         Red,
         Green,
-        Colorless
+        Colorless,
     };
 } // namespace dandan::core
 

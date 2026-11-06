@@ -28,4 +28,9 @@ namespace dandan::costs
         card->setTapped(true);
     }
 
+    std::unique_ptr<ICost> TapCost::clone() const
+    {
+        return std::make_unique<TapCost>();
+    }
+
 } // namespace dandan::costs

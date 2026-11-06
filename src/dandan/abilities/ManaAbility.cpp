@@ -50,17 +50,6 @@ namespace dandan::abilities
         return res;
     }
 
-    [[nodiscard]] const mana::ManaList &ManaAbility::getManaList() const
-    {
-        return m_mana_list;
-    }
-
-    [[nodiscard]] const costs::ICost *ManaAbility::getCost() const
-
-    {
-        return m_cost.get();
-    }
-
     std::unique_ptr<effects::IOneShotEffect> ManaAbility::createEffect(
         [[maybe_unused]] core::ExecutionContext exec_ctx,
         [[maybe_unused]] AbilityContext context) const
@@ -80,8 +69,18 @@ namespace dandan::abilities
             m_mana_list.getOptions()[0], effect_context);
     }
 
-    [[nodiscard]] bool ManaAbility::canActivate(
-        core::ExecutionContext exec_ctx, const AbilityContext &context) const
+    const costs::ICost *ManaAbility::getCost() const
+    {
+        return m_cost.get();
+    }
+
+    const mana::ManaList &ManaAbility::getManaList() const
+    {
+        return m_mana_list;
+    }
+
+    bool ManaAbility::canActivate(core::ExecutionContext exec_ctx,
+                                  const AbilityContext &context) const
     {
         if (m_cost)
         {
@@ -92,12 +91,12 @@ namespace dandan::abilities
         return true;
     }
 
-    [[nodiscard]] size_t ManaAbility::optionsAmount() const
+    size_t ManaAbility::optionsAmount() const
     {
         return m_mana_list.getOptions().size();
     }
 
-    [[nodiscard]] std::unique_ptr<IAbility> ManaAbility::clone() const
+    std::unique_ptr<IAbility> ManaAbility::clone() const
     {
         return std::make_unique<ManaAbility>(m_cost->clone(), m_mana_list);
     }
