@@ -51,12 +51,12 @@ TEST(DandanLibTest, ManaAbilities)
         {"Shivan Reef", true},
         {"Temple of Epiphany", true},
         {"Izzet Boilerworks", false},
-        {"Svyelunite Temple", true}};
+        {"Svyelunite Temple", true},};
 
     std::unordered_map<std::string, size_t> desired_option{
         {"Shivan Reef", 2},
         {"Temple of Epiphany", 1},
-        {"Svyelunite Temple", 1}};
+        {"Svyelunite Temple", 1},};
 
     auto padded{createTestCards(2 * TEST_DECK_SIZE)};
     lands.insert(lands.end(), padded.begin(), padded.end());

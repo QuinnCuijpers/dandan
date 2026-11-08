@@ -10,7 +10,7 @@ void DeserializeTest::SetUp()
     std::string_view name{card.getData().name};
 
     auto json_file_path{std::filesystem::path{DANDAN_PROJECT_SOURCE} /
-                        "data/jsons" / name};
+                        "data/jsons" / name,};
     json_file_path += ".json";
 
     std::ifstream file{json_file_path};

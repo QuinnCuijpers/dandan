@@ -16,7 +16,7 @@ TEST(DandanLibTest, Bounceland)
                                        {dandan::core::SubType::Island},
                                        dandan::core::SuperType::None,
                                        std::move(abilities),
-                                       std::nullopt};
+                                       std::nullopt,};
 
     auto test_cards = createTestCards(TEST_DECK_SIZE, &data);
     std::stringstream stream{};
@@ -70,7 +70,7 @@ TEST(DandanLibTest, TempleOfEpiphanyTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(abilities),
-        std::nullopt};
+        std::nullopt,};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     auto game{dandan::Game::withCards(std::move(test_cards))};
@@ -117,7 +117,7 @@ TEST(DandanLibTest, HalimarDepthsAbilities)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(abilities),
-        std::nullopt};
+        std::nullopt,};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     auto game{dandan::Game::withCards(std::move(test_cards))};
@@ -170,12 +170,12 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
     auto data =
         dandan::core::CardData{"Test Card ",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 0}}},
+                                   {dandan::mana::ManaType::BLUE, 0},}},
                                dandan::core::Type::Land,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(abilities),
-                               std::nullopt};
+                               std::nullopt,};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     auto game{dandan::Game::withCards(std::move(test_cards))};
@@ -196,7 +196,7 @@ TEST(DandanLibTest, ActivateCyclingAbilityTest)
 
     // main phase
     game_state.activePlayer().manaPool().add(dandan::mana::ManaBag{
-        {dandan::mana::ManaType::BLUE, 2 * (STARTING_HAND_SIZE - 1)}});
+        {dandan::mana::ManaType::BLUE, 2 * (STARTING_HAND_SIZE - 1)},});
 
     // should activate 6 cycling abilities
     game.run();

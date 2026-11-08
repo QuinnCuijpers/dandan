@@ -21,21 +21,21 @@ TEST(DandanLibTest, MysticalTutorTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto mystical_tutor_data{
         dandan::core::CardData{"Mystical Tutor",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 1}}},
+                                   {dandan::mana::ManaType::BLUE, 1},}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(mystical_tutor_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto mystical_tutor_cards{
-        createTestCards(NUM_TUTORS, &mystical_tutor_data)};
+        createTestCards(NUM_TUTORS, &mystical_tutor_data),};
     cards.insert(cards.end(), mystical_tutor_cards.begin(),
                  mystical_tutor_cards.end());
 

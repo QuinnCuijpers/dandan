@@ -21,14 +21,14 @@ TEST(UtilTest, ConvertToWords)
         "One Hundred Seventy Eight Thousand Two Hundred Thirty One",
         "Nine Hundred Forty Six Thousand Three Hundred Ninety Two",
         std::string{"Three Hundred Sixty Seven Million Two Hundred Nineteen "
-                    "Thousand Six Hundred Seventy Three"}}};
+                    "Thousand Six Hundred Seventy Three"},},};
 
     for (size_t i{}; i < nums.size(); ++i)
     {
         int num{nums[i]};
         std::string expected{"Draw " + strings[i] + " cards"};
         auto draw_effect{
-            std::make_unique<dandan::effects::DrawEffectDefinition>(num)};
+            std::make_unique<dandan::effects::DrawEffectDefinition>(num),};
         EXPECT_EQ(draw_effect->display(), expected);
     }
 }
