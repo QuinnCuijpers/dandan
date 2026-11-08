@@ -26,7 +26,7 @@ namespace dandan::numbers
                                  {
                                      auto card{card_registry.get(card_id)};
                                      return card->getData().name == m_name;
-                                 })};
+                                 }),};
         return static_cast<int>(count);
     }
 

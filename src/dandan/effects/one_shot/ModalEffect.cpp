@@ -29,7 +29,7 @@ namespace dandan::effects
         const
     {
         auto cloned_options{
-            std::vector<std::unique_ptr<IOneShotEffectDefinition>>{}};
+            std::vector<std::unique_ptr<IOneShotEffectDefinition>>{},};
 
         std::transform(m_options.begin(), m_options.end(),
                        std::back_inserter(cloned_options),

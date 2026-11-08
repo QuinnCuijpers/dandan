@@ -17,7 +17,7 @@ namespace dandan::serialization
     {
         auto json = nlohmann::json::object();
         const auto &registration{
-            OneShotEffectRegistry::instance().serializerFor(*effect)};
+            OneShotEffectRegistry::instance().serializerFor(*effect),};
 
         auto data = registration.serializer(effect);
 
@@ -94,7 +94,7 @@ namespace dandan::serialization
                         target_json.at("types").dump());
                 }
                 auto types{target_json.at("types")
-                               .get<std::vector<dandan::core::TargetType>>()};
+                               .get<std::vector<dandan::core::TargetType>>(),};
 
                 if (target_json.contains("controller"))
                 {

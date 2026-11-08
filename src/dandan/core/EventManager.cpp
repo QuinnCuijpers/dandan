@@ -70,10 +70,9 @@ namespace dandan::core
                 const auto &underlying_ability{ability->definition()};
                 if (const auto *event_triggered_ability =
                         dynamic_cast<const abilities::EventTriggeredAbility *>(
-                            &underlying_ability))
-                {
-                    if (event_triggered_ability->appliesTo(event,
+                            &underlying_ability); (event_triggered_ability != nullptr) && event_triggered_ability->appliesTo(event,
                                                            ability_context))
+                
                     {
                         std::cout << "Triggered ability put on stack\n";
                         auto *card{card_registry.get(card_id)};
@@ -82,7 +81,7 @@ namespace dandan::core
                             ability_context.chosen_mode_index,
                             ability_context.text_replacements});
                     }
-                }
+                
             }
         }
     }

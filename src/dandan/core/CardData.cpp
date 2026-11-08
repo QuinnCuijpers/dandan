@@ -32,7 +32,7 @@ namespace dandan::core
     std::optional<CardData> getCardData(std::string_view name)
     {
         auto json_path{std::filesystem::path(DANDAN_PROJECT_SOURCE) /
-                       "data/jsons" / (std::string(name) + ".json")};
+                       "data/jsons" / (std::string(name) + ".json"),};
         std::ifstream file{json_path};
         if (!file)
         {

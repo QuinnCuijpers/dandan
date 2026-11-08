@@ -72,10 +72,10 @@ namespace dandan::core
                                 spell_ability_it->get());
 
                         abilities::AbilityContext context{
-                            card->getID(), card->getControllerID()};
+                            card->getID(), card->getControllerID(),};
 
                         auto effect{
-                            spell_ability->createEffect(exec_ctx, context)};
+                            spell_ability->createEffect(exec_ctx, context),};
                         return effect;
                     }
                     effects::EffectContext context{card->getControllerID()};
@@ -87,8 +87,8 @@ namespace dandan::core
                 {
                     m_stack.pop_back();
                     return ability.createEffect(exec_ctx);
-                }},
-            object)};
+                },},
+            object),};
 
         if (effect)
         {

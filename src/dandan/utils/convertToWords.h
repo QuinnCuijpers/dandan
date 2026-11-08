@@ -18,15 +18,15 @@ namespace dandan::utils
         "",        "One",     "Two",       "Three",    "Four",
         "Five",    "Six",     "Seven",     "Eight",    "Nine",
         "Ten",     "Eleven",  "Twelve",    "Thirteen", "Fourteen",
-        "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+        "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",};
 
     // Words for numbers multiple of 10
     static constexpr std::array<const char *, 10> tens = {
         "",      "",      "Twenty",  "Thirty", "Forty",
-        "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        "Fifty", "Sixty", "Seventy", "Eighty", "Ninety",};
 
     static constexpr std::array<const char *, 4> multiplier = {
-        "", "Thousand", "Million", "Billion"};
+        "", "Thousand", "Million", "Billion",};
 
     inline std::string convertToWords(int n)
     {

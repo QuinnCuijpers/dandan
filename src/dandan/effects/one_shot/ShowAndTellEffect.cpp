@@ -62,7 +62,7 @@ namespace dandan::effects
         {
             auto *card{card_registry.get(card_id)};
             const auto *fit{std::find(m_types.begin(), m_types.end(),
-                                      card->getData().type)};
+                                      card->getData().type),};
             return (fit != m_types.end());
         };
 

@@ -30,9 +30,9 @@ namespace dandan::core
                 effects::EffectContext context{};
                 player.setLost();
                 auto lose_effect{std::make_unique<effects::LoseGameEffect>(
-                    player.getID(), context)};
+                    player.getID(), context),};
                 auto final_effect{replacement_manager.applyReplacementEffects(
-                    *lose_effect, exec_ctx)};
+                    *lose_effect, exec_ctx),};
                 static_cast<void>(final_effect->apply(exec_ctx));
             }
         }
@@ -50,9 +50,9 @@ namespace dandan::core
                 effects::EffectContext context{};
                 player.setLost();
                 auto lose_effect{std::make_unique<effects::LoseGameEffect>(
-                    player.getID(), context)};
+                    player.getID(), context),};
                 auto final_effect{replacement_manager.applyReplacementEffects(
-                    *lose_effect, exec_ctx)};
+                    *lose_effect, exec_ctx),};
                 static_cast<void>(final_effect->apply(exec_ctx));
             }
         }
@@ -77,10 +77,10 @@ namespace dandan::core
                     effects::EffectContext context{};
                     auto destroy_effect{
                         std::make_unique<effects::DestroyEffect>(*card,
-                                                                 context)};
+                                                                 context),};
                     auto final_effect{
                         replacement_manager.applyReplacementEffects(
-                            *destroy_effect, exec_ctx)};
+                            *destroy_effect, exec_ctx),};
                     static_cast<void>(final_effect->apply(exec_ctx));
                 }
             }
@@ -104,13 +104,13 @@ namespace dandan::core
                     std::cout << "Triggering state triggered ability on card "
                               << card_id.getID() << '\n';
                     PlayerID controller_id{
-                        card_registry.get(card_id)->getControllerID()};
+                        card_registry.get(card_id)->getControllerID(),};
                     abilities::AbilityContext context{card_id, controller_id};
                     auto final_effect{
                         replacement_manager.applyReplacementEffects(
                             *triggered_record.bound_ability->createEffect(
                                 exec_ctx),
-                            exec_ctx)};
+                            exec_ctx),};
                     static_cast<void>(final_effect->apply(exec_ctx));
                 }
             }

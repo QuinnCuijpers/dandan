@@ -70,7 +70,7 @@ namespace dandan::core
             {
                 auto *creature{card_registry.get(creature_id)};
                 const auto &attack_action{
-                    std::make_unique<core::AttackAction>(*creature)};
+                    std::make_unique<core::AttackAction>(*creature),};
                 if (!prevention_manager.isPrevented(*attack_action, context()))
                 {
                     std::cout << "Creature " << creature->getData().name
@@ -117,12 +117,12 @@ namespace dandan::core
                 break;
             }
             auto attack_action{std::make_unique<core::AttackAction>(
-                *viable_attackers[card_index])};
+                *viable_attackers[card_index]),};
 
             auto effect{attack_action->createEffect(context())};
             const auto &final_effect{
                 replacement_manager.applyReplacementEffects(*effect,
-                                                            context())};
+                                                            context()),};
 
             auto event{final_effect->apply(context())};
             if (event != nullptr)

@@ -37,7 +37,7 @@ namespace
                                 dandan::effects::IPreventionEffect> &prevention)
                             { return prevention.get() == effect; },
                             [](const dandan::abilities::BoundAbility *)
-                            { return false; }},
+                            { return false; },},
                         candidate);
                 }),
             list.end());
@@ -57,7 +57,7 @@ namespace
                                    { return false; },
                                    [&](const dandan::abilities::BoundAbility
                                            *sub_ability)
-                                   { return sub_ability == &ability; }},
+                                   { return sub_ability == &ability; },},
                                candidate);
                        }),
                    list.end());
@@ -99,8 +99,8 @@ namespace
                         // should be unreachable as only prevention effects are
                         // registered in this class
                         return false;
-                    }},
-                prevention)};
+                    },},
+                prevention),};
             if (prevented)
             {
                 return true;

@@ -93,9 +93,8 @@ namespace dandan::effects
         card->setPrevCharacteristics(old_characteristics);
 
         if (auto expiry = getEffectContext().expires;
-            expiry != core::ExpireTime::None)
-        {
-            if (expiry == core::ExpireTime::EnfOfTurn)
+            (expiry != core::ExpireTime::None) && (expiry == core::ExpireTime::EnfOfTurn))
+        
             {
                 auto old_characistics{card->getPrevCharacteristics()};
                 old_characteristics.loses_all_abilities = true;
@@ -108,7 +107,7 @@ namespace dandan::effects
                 };
                 game.addEndOfTurnEffect(std::move(undo_effect));
             }
-        }
+        
         return nullptr;
     }
 } // namespace dandan::effects

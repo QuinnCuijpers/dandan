@@ -68,14 +68,13 @@ namespace dandan::core
                     &ability->definition());
             if (const auto *replacement_effect =
                     dynamic_cast<const effects::IReplacementEffect *>(
-                        static_ability->getEffect()))
-            {
-                if (replacement_effect->appliesTo(*current_effect))
+                        static_ability->getEffect()); (replacement_effect != nullptr) && replacement_effect->appliesTo(*current_effect))
+            
                 {
                     current_effect =
                         &replacement_effect->replace(*current_effect);
                 }
-            }
+            
         }
         return current_effect->copy();
     }

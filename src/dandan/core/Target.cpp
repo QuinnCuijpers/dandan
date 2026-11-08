@@ -17,7 +17,7 @@ namespace dandan::core
                 [&ostream](const PlayerID player_id)
                 { ostream << "Player with ID: " << player_id.id(); },
                 [&ostream](const CardID card_id)
-                { ostream << "Card with ID: " << card_id.getID(); }},
+                { ostream << "Card with ID: " << card_id.getID(); },},
             target);
         return ostream;
     }

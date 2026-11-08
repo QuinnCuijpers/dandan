@@ -13,14 +13,14 @@ namespace dandan::core
         if (auto iter = m_card_data_cache.find(key);
             iter != m_card_data_cache.end())
         {
-            return *(iter->second);
+            return *iter->second;
         }
 
         auto new_card_data{getCardData(name)};
         if (new_card_data.has_value())
         {
             auto ptr{
-                std::make_unique<CardData>(std::move(new_card_data.value()))};
+                std::make_unique<CardData>(std::move(new_card_data.value())),};
             if (ptr->supertype == core::SuperType::Basic)
             {
                 ptr->abilities.push_back(
