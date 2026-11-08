@@ -8,6 +8,8 @@
 #include "dandan/core/engine/EventManager.h"
 #include "dandan/core/engine/PreventionManager.h"
 #include "dandan/core/engine/ReplacementManager.h"
+#include "dandan/core/phases/BeginningPhase.h"
+#include "dandan/core/phases/EndingPhase.h"
 #include "dandan/utils/overloadVisitor.h"
 #include <array>
 #include <cassert>
@@ -61,10 +63,15 @@ namespace dandan::core
         const auto &abilities = cardp->getCurrentAbilities();
 
         auto ability_indices{
-            std::vector<std::pair<size_t, std::optional<size_t>>>{},};
+            std::vector<std::pair<size_t, std::optional<size_t>>>{},
+        };
 
-        auto base_ability_context{abilities::AbilityContext{
-            cardp->getID(), cardp->getControllerID(),},};
+        auto base_ability_context{
+            abilities::AbilityContext{
+                cardp->getID(),
+                cardp->getControllerID(),
+            },
+        };
 
         for (const auto &ability : cardp->getCurrentAbilities())
         {
@@ -133,8 +140,13 @@ namespace dandan::core
 
         const auto ability = abilities[real_index];
 
-        auto ability_context{abilities::AbilityContext{
-            cardp->getID(), cardp->getControllerID(), modal_index_opt,},};
+        auto ability_context{
+            abilities::AbilityContext{
+                cardp->getID(),
+                cardp->getControllerID(),
+                modal_index_opt,
+            },
+        };
 
         auto action = std::make_unique<ActivateAbilityAction>(
             &ability.definition(), ability_context);
@@ -153,7 +165,8 @@ namespace dandan::core
         }
         std::cout << "Created effect for ability activation\n";
         const auto &final_effect{
-            replacement_manager.applyReplacementEffects(*effect, exec_ctx),};
+            replacement_manager.applyReplacementEffects(*effect, exec_ctx),
+        };
 
         auto event{final_effect->apply(exec_ctx)};
         if (event)
@@ -181,7 +194,8 @@ namespace dandan::core
 
         auto effect{action->createEffect(exec_ctx)};
         const auto &final_effect{
-            replacement_manager.applyReplacementEffects(*effect, exec_ctx),};
+            replacement_manager.applyReplacementEffects(*effect, exec_ctx),
+        };
 
         auto event{final_effect->apply(exec_ctx)};
         if (event)
@@ -431,7 +445,8 @@ namespace dandan::core
                     {
                         std::cout << ability.definition().display()
                                   << " (Ability)\n";
-                    },},
+                    },
+                },
                 object);
         }
         std::cout << "\n";
