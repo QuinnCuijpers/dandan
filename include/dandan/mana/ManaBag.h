@@ -15,7 +15,7 @@ namespace dandan::mana
     public:
         ManaBag() = default;
 
-        explicit ManaBag(
+        ManaBag(
             std::initializer_list<std::pair<ManaType, size_t>> init_list);
 
         [[nodiscard]] std::size_t get(ManaType type) const;

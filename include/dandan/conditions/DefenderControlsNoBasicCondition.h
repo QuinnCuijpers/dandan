@@ -56,7 +56,7 @@ namespace dandan::serialization::registration
                     auto json = nlohmann::json::object();
                     const auto *defender_controls{
                         dynamic_cast<const DefenderControlsNoBasicCondition *>(
-                            condition)};
+                            condition),};
                     json["type"] = defender_controls->type();
                     return json;
                 },

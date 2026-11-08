@@ -42,7 +42,7 @@ namespace dandan::serialization::registration
                 {
                     auto json = nlohmann::json::object();
                     const auto *block{
-                        dynamic_cast<const BlockPreventionEffect *>(effect)};
+                        dynamic_cast<const BlockPreventionEffect *>(effect),};
                     json["condition"] = JsonFactory<ICondition>::create_json(
                         block->getCondition());
                     return json;

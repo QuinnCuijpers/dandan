@@ -42,7 +42,7 @@ namespace dandan::serialization::registration
             {
                 auto json = nlohmann::json::object();
                 const auto *graveyard_count{
-                    dynamic_cast<const GraveyardCount *>(number)};
+                    dynamic_cast<const GraveyardCount *>(number),};
                 json["card_name"] = graveyard_count->getName();
                 return json;
             },

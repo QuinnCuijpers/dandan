@@ -93,7 +93,7 @@ namespace dandan::serialization::registration
             {
                 auto json = nlohmann::json::object();
                 const auto *static_ability{
-                    dynamic_cast<const StaticAbility *>(ability)};
+                    dynamic_cast<const StaticAbility *>(ability),};
 
                 json["static_type"] = static_ability->getType();
 
@@ -105,11 +105,11 @@ namespace dandan::serialization::registration
             [](const nlohmann::json &json)
             {
                 auto static_type{
-                    json.at("static_type").get<StaticAbility::Type>()};
+                    json.at("static_type").get<StaticAbility::Type>(),};
 
                 auto continuous_effect{
                     JsonFactory<IContinuousEffect>::create_product(
-                        json.at("continuous_effect"))};
+                        json.at("continuous_effect")),};
 
                 return std::make_unique<StaticAbility>(
                     static_type, std::move(continuous_effect));
