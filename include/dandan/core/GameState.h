@@ -169,9 +169,7 @@ namespace dandan::core
 
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{
-            Player(DEFAULT_NAMES.at(0)),
-            Player(DEFAULT_NAMES.at(1)),
-        };
+            Player(DEFAULT_NAMES.at(0)), Player(DEFAULT_NAMES.at(1)),};
         int m_active_player_index{};
 
         Library m_library;
