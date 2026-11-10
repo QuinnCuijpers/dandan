@@ -23,7 +23,8 @@ namespace dandan::effects
 
         std::cout << "Applying attack effect\n";
         if (auto *combat_phase{
-                dynamic_cast<core::CombatPhase *>(game.phase().get()),};
+                dynamic_cast<core::CombatPhase *>(game.phase().get()),
+            };
             combat_phase != nullptr)
         {
             m_creature.setAttacking(true);

@@ -30,7 +30,8 @@ namespace dandan::abilities
         }
 
         auto bound_effects{
-            std::vector<std::unique_ptr<effects::IOneShotEffect>>{},};
+            std::vector<std::unique_ptr<effects::IOneShotEffect>>{},
+        };
         effects::EffectContext effect_context{context.source_card_id,
                                               context.controller_id};
         for (const auto &effect_def : effects())

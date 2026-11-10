@@ -56,7 +56,8 @@ namespace dandan::core
             for (auto &triggered_record : triggered_records)
             {
                 const auto &underlying_ability{
-                    triggered_record.bound_ability->definition(),};
+                    triggered_record.bound_ability->definition(),
+                };
 
                 if (const auto *triggered_ability =
                         dynamic_cast<const abilities::StateTriggeredAbility *>(

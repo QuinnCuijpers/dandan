@@ -93,21 +93,22 @@ namespace dandan::effects
         card->setPrevCharacteristics(old_characteristics);
 
         if (auto expiry = getEffectContext().expires;
-            (expiry != core::ExpireTime::None) && (expiry == core::ExpireTime::EnfOfTurn))
-        
-            {
-                auto old_characistics{card->getPrevCharacteristics()};
-                old_characteristics.loses_all_abilities = true;
+            (expiry != core::ExpireTime::None) &&
+            (expiry == core::ExpireTime::EnfOfTurn))
 
-                auto context{getEffectContext()};
-                context.expires = core::ExpireTime::None;
-                auto undo_effect{
-                    std::make_unique<ChangeCharacteristicsEffect>(
-                        m_target, old_characteristics, context),
-                };
-                game.addEndOfTurnEffect(std::move(undo_effect));
-            }
-        
+        {
+            auto old_characistics{card->getPrevCharacteristics()};
+            old_characteristics.loses_all_abilities = true;
+
+            auto context{getEffectContext()};
+            context.expires = core::ExpireTime::None;
+            auto undo_effect{
+                std::make_unique<ChangeCharacteristicsEffect>(
+                    m_target, old_characteristics, context),
+            };
+            game.addEndOfTurnEffect(std::move(undo_effect));
+        }
+
         return nullptr;
     }
 } // namespace dandan::effects

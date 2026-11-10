@@ -59,7 +59,8 @@ namespace dandan::core
             }
 
             const auto *flash_back{
-                card->getAbility<abilities::FlashbackAbility>(),};
+                card->getAbility<abilities::FlashbackAbility>(),
+            };
 
             if (flash_back == nullptr)
             {

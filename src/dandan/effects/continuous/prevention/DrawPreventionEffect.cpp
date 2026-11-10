@@ -17,13 +17,15 @@ namespace dandan::effects
     {
 
         if ([[maybe_unused]] const auto *card_draw_action =
-                dynamic_cast<const core::CardDrawAction *>(&action); (card_draw_action != nullptr) && getCondition()->isSatisfied(exec_ctx, context))
-        
-            {
-                DLOGI << "Draw prevention effect prevents drawing card\n";
-                return true;
-            }
-        
+                dynamic_cast<const core::CardDrawAction *>(&action);
+            card_draw_action &&
+            (getCondition()->isSatisfied(exec_ctx, context)))
+
+        {
+            DLOGI << "Draw prevention effect prevents drawing card\n";
+            return true;
+        }
+
         return false;
     }
 

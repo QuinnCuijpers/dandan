@@ -88,8 +88,10 @@ namespace dandan::effects
 
         card->remember("chosenCardName", input);
 
-        auto mill_effect{std::make_unique<MillEffect>(m_amount, player_id,
-                                                      getEffectContext()),};
+        auto mill_effect{
+            std::make_unique<MillEffect>(m_amount, player_id,
+                                         getEffectContext()),
+        };
         auto mill_event{mill_effect->apply_impl(exec_ctx)};
         return mill_event;
     }

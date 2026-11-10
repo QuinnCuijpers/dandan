@@ -61,8 +61,9 @@ namespace dandan::effects
         auto valid_type = [this, &card_registry](const core::CardID card_id)
         {
             auto *card{card_registry.get(card_id)};
-            const auto *fit{std::find(m_types.begin(), m_types.end(),
-                                      card->getData().type),};
+            const auto *fit{
+                std::find(m_types.begin(), m_types.end(), card->getData().type),
+            };
             return (fit != m_types.end());
         };
 

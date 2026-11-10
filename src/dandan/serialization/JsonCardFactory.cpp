@@ -49,8 +49,10 @@ namespace dandan::serialization
         if (stats.has_value())
         {
             auto stats_safe{*stats};
-            json["stats"] = {{"power", stats_safe.power},
-                             {"toughness", stats_safe.toughness},};
+            json["stats"] = {
+                {"power", stats_safe.power},
+                {"toughness", stats_safe.toughness},
+            };
         }
         if (!abilities_json.empty())
         {
@@ -86,8 +88,10 @@ namespace dandan::serialization
         if (json.contains("stats"))
         {
             auto stats_json = json.at("stats");
-            stats = core::Stats{stats_json.at("power").get<int>(),
-                                stats_json.at("toughness").get<int>(),};
+            stats = core::Stats{
+                stats_json.at("power").get<int>(),
+                stats_json.at("toughness").get<int>(),
+            };
         }
 
         auto abilities{std::vector<std::unique_ptr<abilities::IAbility>>{}};
@@ -107,9 +111,16 @@ namespace dandan::serialization
             color = json.at("color");
         }
 
-        return std::make_unique<core::CardData>(
-            core::CardData{name, cost, type, subtypes, supertype,
-                           std::move(abilities), stats, color,});
+        return std::make_unique<core::CardData>(core::CardData{
+            name,
+            cost,
+            type,
+            subtypes,
+            supertype,
+            std::move(abilities),
+            stats,
+            color,
+        });
     }
 } // namespace dandan::serialization
 

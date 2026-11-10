@@ -52,8 +52,10 @@ namespace dandan::core
             {
                 auto *cardp{card_registry.get(card)};
                 effects::EffectContext effect_context{};
-                auto effect{std::make_unique<effects::UntapEffect>(
-                    *cardp, effect_context),};
+                auto effect{
+                    std::make_unique<effects::UntapEffect>(*cardp,
+                                                           effect_context),
+                };
                 // TODO: throw generated events onto a queue
                 static_cast<void>(effect->apply(context()));
 
@@ -104,7 +106,8 @@ namespace dandan::core
                 auto draw_effect{draw_action->createEffect(context())};
                 const auto &final_effect{
                     replacement_manager.applyReplacementEffects(*draw_effect,
-                                                                context()),};
+                                                                context()),
+                };
                 static_cast<void>(final_effect->apply(context()));
             }
             priority_manager.setPriorityToPlayer(game.activePlayer().getID(),

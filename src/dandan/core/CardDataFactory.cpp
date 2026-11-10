@@ -20,7 +20,8 @@ namespace dandan::core
         if (new_card_data.has_value())
         {
             auto ptr{
-                std::make_unique<CardData>(std::move(new_card_data.value())),};
+                std::make_unique<CardData>(std::move(new_card_data.value())),
+            };
             if (ptr->supertype == core::SuperType::Basic)
             {
                 ptr->abilities.push_back(

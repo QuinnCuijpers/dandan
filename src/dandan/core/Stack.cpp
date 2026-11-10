@@ -45,50 +45,56 @@ namespace dandan::core
 
         bool resolvingSpell{false};
 
-        auto effect{std::visit(
-            utils::overloaded{
-                [&resolvingSpell, &card_registry,
-                 &exec_ctx](const CastContext &cast_ctx)
-                    -> std::unique_ptr<effects::IOneShotEffect>
-                {
-                    auto *card{card_registry.get(cast_ctx.card_id)};
-                    if (card->getData().type == Type::Instant ||
-                        card->getData().type == Type::Sorcery)
+        auto effect{
+            std::visit(
+                utils::overloaded{
+                    [&resolvingSpell, &card_registry,
+                     &exec_ctx](const CastContext &cast_ctx)
+                        -> std::unique_ptr<effects::IOneShotEffect>
                     {
-                        resolvingSpell = true;
+                        auto *card{card_registry.get(cast_ctx.card_id)};
+                        if (card->getData().type == Type::Instant ||
+                            card->getData().type == Type::Sorcery)
+                        {
+                            resolvingSpell = true;
 
-                        auto spell_ability_it{std::find_if(
-                            card->getData().abilities.begin(),
-                            card->getData().abilities.end(),
-                            [](const auto &ability)
-                            {
-                                return dynamic_cast<
-                                           const abilities::SpellAbility *>(
-                                           ability.get()) != nullptr;
-                            })};
+                            auto spell_ability_it{std::find_if(
+                                card->getData().abilities.begin(),
+                                card->getData().abilities.end(),
+                                [](const auto &ability)
+                                {
+                                    return dynamic_cast<
+                                               const abilities::SpellAbility *>(
+                                               ability.get()) != nullptr;
+                                })};
 
-                        const auto *spell_ability =
-                            dynamic_cast<const abilities::SpellAbility *>(
-                                spell_ability_it->get());
+                            const auto *spell_ability =
+                                dynamic_cast<const abilities::SpellAbility *>(
+                                    spell_ability_it->get());
 
-                        abilities::AbilityContext context{
-                            card->getID(), card->getControllerID(),};
+                            abilities::AbilityContext context{
+                                card->getID(),
+                                card->getControllerID(),
+                            };
 
-                        auto effect{
-                            spell_ability->createEffect(exec_ctx, context),};
-                        return effect;
-                    }
-                    effects::EffectContext context{card->getControllerID()};
-                    return std::make_unique<effects::ETBEffect>(
-                        *card_registry.get(card->getID()), context);
+                            auto effect{
+                                spell_ability->createEffect(exec_ctx, context),
+                            };
+                            return effect;
+                        }
+                        effects::EffectContext context{card->getControllerID()};
+                        return std::make_unique<effects::ETBEffect>(
+                            *card_registry.get(card->getID()), context);
+                    },
+                    [this, &exec_ctx](const abilities::BoundAbility &ability)
+                        -> std::unique_ptr<effects::IOneShotEffect>
+                    {
+                        m_stack.pop_back();
+                        return ability.createEffect(exec_ctx);
+                    },
                 },
-                [this, &exec_ctx](const abilities::BoundAbility &ability)
-                    -> std::unique_ptr<effects::IOneShotEffect>
-                {
-                    m_stack.pop_back();
-                    return ability.createEffect(exec_ctx);
-                },},
-            object),};
+                object),
+        };
 
         if (effect)
         {

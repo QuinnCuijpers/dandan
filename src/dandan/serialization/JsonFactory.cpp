@@ -18,7 +18,8 @@ namespace dandan::serialization
     {
         auto json = nlohmann::json::object();
         const auto &registration{
-            JsonTypeRegistry<T>::instance().serializerFor(*obj),};
+            JsonTypeRegistry<T>::instance().serializerFor(*obj),
+        };
 
         auto data = registration.serializer(obj);
 

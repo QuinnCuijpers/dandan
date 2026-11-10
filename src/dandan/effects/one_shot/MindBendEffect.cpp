@@ -100,7 +100,8 @@ namespace dandan::effects
                         if (std::holds_alternative<core::SubType>(replace_with))
                         {
                             auto replace_with_basic{
-                                std::get<core::SubType>(replace_with),};
+                                std::get<core::SubType>(replace_with),
+                            };
                             card->replaceText(to_replace_basic,
                                               replace_with_basic);
                             return;
@@ -112,7 +113,8 @@ namespace dandan::effects
                                 replace_with))
                         {
                             auto replace_with_color{
-                                std::get<core::ColorWord>(replace_with),};
+                                std::get<core::ColorWord>(replace_with),
+                            };
                             card->replaceText(to_replace_color,
                                               replace_with_color);
                             return;
@@ -156,7 +158,8 @@ namespace dandan::effects
                     std::string replace_with_color_str;
                     std::getline(istream, replace_with_color_str);
                     auto replace_with_color{
-                        utils::stringToColorWord(replace_with_color_str),};
+                        utils::stringToColorWord(replace_with_color_str),
+                    };
                     if (replace_with_color == core::ColorWord::Colorless)
                     {
                         throw std::runtime_error("Invalid color word: " +
@@ -171,7 +174,8 @@ namespace dandan::effects
                     std::string replace_with_basic_str;
                     std::getline(istream, replace_with_basic_str);
                     auto replace_with_basic{
-                        utils::stringToBasicLandType(replace_with_basic_str),};
+                        utils::stringToBasicLandType(replace_with_basic_str),
+                    };
                     if (replace_with_basic == core::SubType::None)
                     {
                         throw std::runtime_error("Invalid basic land type: " +
@@ -184,15 +188,17 @@ namespace dandan::effects
             to_replace_var);
 
         if (auto expiry = getEffectContext().expires;
-            (expiry != core::ExpireTime::None) && (expiry == core::ExpireTime::EnfOfTurn))
-        
-            {
-                auto undo_effect{std::make_unique<MindBendEffect>(
-                    m_target, replace_with_var, to_replace_var,
-                    getEffectContext()),};
-                game.addEndOfTurnEffect(std::move(undo_effect));
-            }
-        
+            (expiry != core::ExpireTime::None) &&
+            (expiry == core::ExpireTime::EnfOfTurn))
+
+        {
+            auto undo_effect{
+                std::make_unique<MindBendEffect>(m_target, replace_with_var,
+                                                 to_replace_var,
+                                                 getEffectContext()),
+            };
+            game.addEndOfTurnEffect(std::move(undo_effect));
+        }
 
         return nullptr;
     }

@@ -48,7 +48,8 @@ namespace dandan::effects
         for (const auto &effect : m_effects)
         {
             auto replaced_sub_effect{
-                replacement_manager.applyReplacementEffects(*effect, exec_ctx),};
+                replacement_manager.applyReplacementEffects(*effect, exec_ctx),
+            };
             last_event = replaced_sub_effect->apply(exec_ctx);
         }
         return last_event;
