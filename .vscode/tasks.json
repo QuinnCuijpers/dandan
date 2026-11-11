@@ -82,13 +82,13 @@
             "label": "clang-tidy",
             "type": "shell",
             "group": "build",
-            "command": "run-clang-tidy",
+            "command": "run-clang-tidy-23",
             "args": [
                 "-p",
                 "build",
                 "'.*/(include/dandan|src/dandan|src/main\\.cpp).*'",
                 "-j",
-                "8",
+                "$(nproc)",
                 "-quiet"
             ],
             "problemMatcher": {
