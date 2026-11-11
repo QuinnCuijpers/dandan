@@ -23,8 +23,10 @@ namespace dandan::core
             return "Card";
         case TargetType::Any:
             return "Any";
+            // LCOV_EXCL_START
         default:
             assert(false && "unreachable");
+            // LCOV_EXCL_STOP
         }
     }
 

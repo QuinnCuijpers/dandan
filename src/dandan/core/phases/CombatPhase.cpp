@@ -243,8 +243,10 @@ namespace dandan::core
             std::cout << "End of combat step\n";
             m_step = Step::Done;
             break;
+            // LCOV_EXCL_START
         case Step::Done:
             assert(false && "Unreachable code in CombatPhase::handleNextStep");
+            // //LCOV_EXCL_STOP
         }
     }
 } // namespace dandan::core
