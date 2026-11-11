@@ -40,7 +40,6 @@ target_sources(
           CardRegistry.cpp
           CastRequest.cpp
           CastContext.cpp
-          IMindBendable.cpp
           actions/IAction.cpp)
 
 target_sources(DandanCore PUBLIC FILE_SET HEADERS BASE_DIRS
