@@ -9,7 +9,7 @@ namespace dandan::abilities
     enum class Keyword : uint8_t
     {
         Flying,
-        Flashback
+        Flashback,
     };
 
 } // namespace dandan::abilities

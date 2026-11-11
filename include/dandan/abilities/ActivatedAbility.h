@@ -84,7 +84,7 @@ namespace dandan::serialization::registration
             {
                 auto json = nlohmann::json::object();
                 const auto *activated{
-                    dynamic_cast<const ActivatedAbility *>(ability)};
+                    dynamic_cast<const ActivatedAbility *>(ability),};
                 json["cost"] =
                     JsonFactory<ICost>::create_json(activated->getCost());
                 json["effect"] =
@@ -98,7 +98,7 @@ namespace dandan::serialization::registration
 
                 auto effect{
                     JsonFactory<IOneShotEffectDefinition>::create_product(
-                        json.at("effect"))};
+                        json.at("effect")),};
                 return std::make_unique<ActivatedAbility>(std::move(cost),
                                                           std::move(effect));
             });

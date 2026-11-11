@@ -33,11 +33,13 @@ namespace dandan::core
 
         auto one_land_a_turn{
             std::make_unique<effects::PlayCardPreventionEffect>(
-                std::make_unique<conditions::PlayedLandCondition>())};
+                std::make_unique<conditions::PlayedLandCondition>()),
+        };
 
         auto no_draw_starting_player{
             std::make_unique<effects::DrawPreventionEffect>(
-                std::make_unique<conditions::StartingPlayerCondition>())};
+                std::make_unique<conditions::StartingPlayerCondition>()),
+        };
 
         m_prevention_manager.subscribe(m_game_state.activePlayer().getID(),
                                        std::move(no_draw_starting_player));
@@ -58,7 +60,7 @@ namespace dandan::core
 
         DLOGI << "Changing phase to beginning phase\n";
         m_game_state.changePhase(
-            std::make_unique<BeginningPhase>((execution_context())));
+            std::make_unique<BeginningPhase>(execution_context()));
     }
 #ifdef DANDAN_SERIALIZE
     Game::Game(const std::filesystem::path &path)
@@ -92,9 +94,11 @@ namespace dandan::core
 
     ExecutionContext Game::execution_context()
     {
-        return {m_game_state,       m_card_registry,      m_input_manager,
-                m_event_manager,    m_prevention_manager, m_replacement_manager,
-                m_priority_manager, m_condition_manager,  m_sba_manager};
+        return {
+            m_game_state,       m_card_registry,      m_input_manager,
+            m_event_manager,    m_prevention_manager, m_replacement_manager,
+            m_priority_manager, m_condition_manager,  m_sba_manager,
+        };
     }
 
     void Game::run()

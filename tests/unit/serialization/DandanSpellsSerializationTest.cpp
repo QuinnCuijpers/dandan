@@ -17,7 +17,7 @@ static const std::array<std::string, 12> card_names{
     "Brainstorm",     "Accumulated_Knowledge", "Diminishing_Returns",
     "Mystical_Tutor", "Vision_Charm",          "Crystal_Spray",
     "Mind_Bend",      "Unsubstantiate",        "Memory_Lapse",
-    "Predict",        "Dance_of_the_Skywise",  "Metamorphose"};
+    "Predict",        "Dance_of_the_Skywise",  "Metamorphose",};
 
 static std::vector<dandan::Card> getCards()
 {

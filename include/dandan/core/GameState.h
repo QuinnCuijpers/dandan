@@ -11,15 +11,11 @@
 #include "dandan/core/PlayerID.h"
 #include "dandan/core/Stack.h"
 #include "dandan/core/TargetRequirement.h"
-#include "dandan/core/phases/BeginningPhase.h"
-#include "dandan/core/phases/EndingPhase.h"
 #include "dandan/core/phases/IPhase.h"
 #include "dandan/effects/one_shot/IOneShotEffect.h"
 #include <array>
 #include <cassert>
-#include <iostream>
 #include <memory>
-#include <stdexcept>
 
 namespace dandan::core
 {
@@ -173,7 +169,7 @@ namespace dandan::core
 
     private:
         std::array<Player, AMOUNT_PLAYERS> m_players{
-            Player(DEFAULT_NAMES.at(0)), Player(DEFAULT_NAMES.at(1))};
+            Player(DEFAULT_NAMES.at(0)), Player(DEFAULT_NAMES.at(1)),};
         int m_active_player_index{};
 
         Library m_library;

@@ -67,18 +67,18 @@ namespace dandan::core
                 const auto &underlying_ability{ability->definition()};
                 if (const auto *event_triggered_ability =
                         dynamic_cast<const abilities::EventTriggeredAbility *>(
-                            &underlying_ability))
+                            &underlying_ability);
+                    event_triggered_ability &&
+                    (event_triggered_ability->appliesTo(event,
+                                                        ability_context)))
+
                 {
-                    if (event_triggered_ability->appliesTo(event,
-                                                           ability_context))
-                    {
-                        std::cout << "Triggered ability put on stack\n";
-                        auto *card{card_registry.get(card_id)};
-                        game.stack().push(abilities::BoundAbility{
-                            *event_triggered_ability, card,
-                            ability_context.chosen_mode_index,
-                            ability_context.text_replacements});
-                    }
+                    std::cout << "Triggered ability put on stack\n";
+                    auto *card{card_registry.get(card_id)};
+                    game.stack().push(abilities::BoundAbility{
+                        *event_triggered_ability, card,
+                        ability_context.chosen_mode_index,
+                        ability_context.text_replacements});
                 }
             }
         }

@@ -82,7 +82,7 @@ namespace dandan::serialization::registration::stateTriggeredAbility
             {
                 auto json = nlohmann::json::object();
                 const auto *state_triggered{
-                    dynamic_cast<const StateTriggeredAbility *>(ability)};
+                    dynamic_cast<const StateTriggeredAbility *>(ability),};
 
                 json["condition"] = JsonFactory<ICondition>::create_json(
                     state_triggered->condition());
@@ -100,11 +100,11 @@ namespace dandan::serialization::registration::stateTriggeredAbility
                 {
                     auto trigger{
                         JsonFactory<dandan::triggers::ITrigger>::create_product(
-                            json.at("trigger"))};
+                            json.at("trigger")),};
 
                     auto effect{
                         JsonFactory<IOneShotEffectDefinition>::create_product(
-                            json.at("effect"))};
+                            json.at("effect")),};
 
                     return std::make_unique<EventTriggeredAbility>(
                         std::move(trigger), std::move(effect));
@@ -113,11 +113,11 @@ namespace dandan::serialization::registration::stateTriggeredAbility
                 if (kind == "state")
                 {
                     auto condition{JsonFactory<dandan::conditions::ICondition>::
-                                       create_product(json.at("condition"))};
+                                       create_product(json.at("condition")),};
 
                     auto effect{
                         JsonFactory<IOneShotEffectDefinition>::create_product(
-                            json.at("effect"))};
+                            json.at("effect")),};
 
                     return std::make_unique<StateTriggeredAbility>(
                         std::move(condition), std::move(effect));

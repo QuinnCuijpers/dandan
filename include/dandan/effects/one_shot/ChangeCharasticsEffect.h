@@ -136,12 +136,12 @@ namespace dandan::serialization::registration
 
                     auto card_characteristics{CardCharacteristics{
                         color, subtypes, stats, loses_all_abilities,
-                        std::move(additional_abilities)}};
+                        std::move(additional_abilities)},};
 
                     auto effect{
                         std::make_unique<ChangeCharacteristicsEffectDefinition>(
                             TargetRequirement{target_specs},
-                            card_characteristics)};
+                            card_characteristics),};
 
                     effect->addExpireTime(expiry);
                     return effect;

@@ -25,7 +25,7 @@ namespace dandan::effects
     private:
         const std::array<core::Type, 4> m_types{
             core::Type::Artifact, core::Type::Creature, core::Type::Enchantment,
-            core::Type::Land};
+            core::Type::Land,};
         core::PlayerID m_player;
     };
 

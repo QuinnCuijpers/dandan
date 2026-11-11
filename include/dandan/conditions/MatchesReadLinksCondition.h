@@ -51,7 +51,7 @@ namespace dandan::serialization::registration
             {
                 auto json = nlohmann::json::object();
                 const auto *matches{
-                    dynamic_cast<const MatchesReadLinksCondition *>(condition)};
+                    dynamic_cast<const MatchesReadLinksCondition *>(condition),};
                 json["first"] = matches->getfirst();
                 json["second"] = matches->getSecond();
                 return json;

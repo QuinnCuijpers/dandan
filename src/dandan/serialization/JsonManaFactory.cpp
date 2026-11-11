@@ -60,7 +60,7 @@ namespace dandan::serialization
 
         for (std::size_t i = 0; i < mana_str.size(); ++i)
         {
-            const char char_ = mana_str[i];
+            const char char_ = mana_str.at(i);
             switch (char_)
             {
             case 'C':

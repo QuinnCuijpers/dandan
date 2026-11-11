@@ -58,7 +58,7 @@ namespace dandan::serialization::registration
                     auto json = nlohmann::json::object();
                     const auto *self_controls{
                         dynamic_cast<const SelfControlsNoBasicCondition *>(
-                            condition)};
+                            condition),};
                     json["type"] = self_controls->type();
                     return json;
                 },

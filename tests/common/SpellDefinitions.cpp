@@ -17,7 +17,7 @@ std::vector<std::unique_ptr<dandan::abilities::IAbility>> Brainstorm_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::DrawEffectDefinition>(3));
     ability_effects.emplace_back(
@@ -35,7 +35,7 @@ Accumulated_Knowledge_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::DrawEffectDefinition>(1));
@@ -59,7 +59,7 @@ Diminishing_Returns_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::TimeTwisterEffectDefinition>());
@@ -82,11 +82,11 @@ Mystical_Tutor_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::TutorTopEffectDefinition>(
             std::vector<dandan::core::Type>{dandan::core::Type::Instant,
-                                            dandan::core::Type::Sorcery}));
+                                            dandan::core::Type::Sorcery,}));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
@@ -101,10 +101,10 @@ Vision_Charm_Abilities()
 
     auto target_requirement{dandan::core::TargetRequirement{
         std::vector<std::vector<dandan::core::TargetType>>{
-            {dandan::core::TargetType::Player}}}};
+            {dandan::core::TargetType::Player},}},};
 
     auto options{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
     options.emplace_back(
         std::make_unique<dandan::effects::MillEffectDefinition>(
             4, target_requirement));
@@ -112,10 +112,10 @@ Vision_Charm_Abilities()
         std::make_unique<dandan::effects::ChangeLandTypeEffectDefinition>());
 
     auto modal_effect{
-        std::make_unique<ModalEffectDefinition>(std::move(options))};
+        std::make_unique<ModalEffectDefinition>(std::move(options)),};
 
     auto spell_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
     spell_effects.emplace_back(std::move(modal_effect));
 
     abilities.emplace_back(
@@ -130,16 +130,16 @@ Crystal_Spray_Abilities()
     auto target_req{dandan::core::TargetRequirement{
         std::vector<std::vector<dandan::core::TargetType>>{
             {dandan::core::TargetType::Spell,
-             dandan::core::TargetType::Permanent}}}};
+             dandan::core::TargetType::Permanent,},}},};
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     auto mind_bend_effect{
         std::make_unique<dandan::effects::MindBendEffectDefinition>(
-            target_req)};
+            target_req),};
     mind_bend_effect->addExpireTime(dandan::core::ExpireTime::EnfOfTurn);
 
     ability_effects.emplace_back(std::move(mind_bend_effect));
@@ -157,12 +157,12 @@ std::vector<std::unique_ptr<dandan::abilities::IAbility>> Mind_Bend_Abilities()
 {
     auto target_req{dandan::core::TargetRequirement{
         std::vector<std::vector<dandan::core::TargetType>>{
-            {dandan::core::TargetType::Permanent}}}};
+            {dandan::core::TargetType::Permanent},}},};
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::MindBendEffectDefinition>(
@@ -181,12 +181,12 @@ Unsubstantiate_Abilities()
     auto target_req{dandan::core::TargetRequirement{
         std::vector<std::vector<dandan::core::TargetType>>{
             {dandan::core::TargetType::Spell,
-             dandan::core::TargetType::Creature}}}};
+             dandan::core::TargetType::Creature,},}},};
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::BounceEffectDefinition>(target_req));
@@ -203,12 +203,12 @@ Memory_Lapse_Abilities()
 
     auto target_req{dandan::core::TargetRequirement{
         std::vector<std::vector<dandan::core::TargetType>>{
-            {dandan::core::TargetType::Spell}}}};
+            {dandan::core::TargetType::Spell},}},};
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::MemoryLapseEffectDefinition>(
@@ -225,15 +225,15 @@ std::vector<std::unique_ptr<dandan::abilities::IAbility>> Predict_Abilities()
 
     auto target_req{dandan::core::TargetRequirement{
         std::vector<std::vector<dandan::core::TargetType>>{
-            {dandan::core::TargetType::Player}}}};
+            {dandan::core::TargetType::Player},}},};
 
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     auto first_effect{std::make_unique<
-        dandan::effects::ChooseCardNameAndMillEffectDefinition>(1, target_req)};
+        dandan::effects::ChooseCardNameAndMillEffectDefinition>(1, target_req),};
 
     first_effect->addWriteLink("chosenCardName");
     first_effect->addWriteLink("milledCardName");
@@ -246,10 +246,10 @@ std::vector<std::unique_ptr<dandan::abilities::IAbility>> Predict_Abilities()
 
     auto conditional_number{
         std::make_unique<dandan::numbers::ConditionalNumber>(
-            2, 1, std::move(condition))};
+            2, 1, std::move(condition)),};
 
     auto second_effect{std::make_unique<dandan::effects::DrawEffectDefinition>(
-        std::move(conditional_number))};
+        std::move(conditional_number)),};
 
     second_effect->addReadLink("chosenCardName");
     second_effect->addReadLink("milledCardName");
@@ -267,12 +267,12 @@ Dance_of_the_Skywise_Abilities()
 {
 
     auto types{std::vector<dandan::core::TargetType>{
-        dandan::core::TargetType::Creature}};
+        dandan::core::TargetType::Creature,},};
 
     auto flying{std::make_unique<dandan::abilities::FlyingAbility>()};
 
     auto added_abilities{
-        std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
+        std::vector<std::unique_ptr<dandan::abilities::IAbility>>{},};
 
     added_abilities.push_back(std::move(flying));
 
@@ -281,7 +281,7 @@ Dance_of_the_Skywise_Abilities()
         {dandan::core::SubType::Dragon, dandan::core::SubType::Illusion},
         dandan::core::Stats{4, 4},
         true,
-        std::move(added_abilities)}};
+        std::move(added_abilities)},};
 
     dandan::core::TargetSpec target_spec{types, dandan::core::Controller::You};
 
@@ -290,11 +290,11 @@ Dance_of_the_Skywise_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     auto change_effect{std::make_unique<
         dandan::effects::ChangeCharacteristicsEffectDefinition>(target_req,
-                                                                changes)};
+                                                                changes),};
     change_effect->addExpireTime(dandan::core::ExpireTime::EnfOfTurn);
 
     ability_effects.push_back(std::move(change_effect));
@@ -310,7 +310,7 @@ Metamorphose_Abilities()
 {
     auto controller{dandan::core::Controller::Opponent};
     auto types{std::vector<dandan::core::TargetType>{
-        dandan::core::TargetType::Permanent}};
+        dandan::core::TargetType::Permanent,},};
 
     dandan::core::TargetSpec target_specs{types, controller};
 
@@ -321,17 +321,17 @@ Metamorphose_Abilities()
     auto abilities{std::vector<std::unique_ptr<dandan::abilities::IAbility>>{}};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
 
     auto spin_effect{
         std::make_unique<dandan::effects::SpinToTopEffectDefinition>(
-            target_req)};
+            target_req),};
     spin_effect->addWriteLink("targetOwner");
 
     ability_effects.push_back(std::move(spin_effect));
 
     auto types_2{std::vector<dandan::core::TargetType>{
-        dandan::core::TargetType::Player}};
+        dandan::core::TargetType::Player,},};
     dandan::core::TargetSpec target_spec_2{types_2, "targetOwner", controller};
 
     dandan::core::TargetRequirement targets_2{
@@ -339,7 +339,7 @@ Metamorphose_Abilities()
 
     auto show_and_tell_effect{
         std::make_unique<dandan::effects::ShowAndTellEffectDefinition>(
-            targets_2)};
+            targets_2),};
 
     show_and_tell_effect->addReadLink("targetOwner");
 
@@ -358,14 +358,14 @@ Mystic_Retrieval_Abilities()
 
     auto flashback{std::make_unique<dandan::abilities::FlashbackAbility>(
         dandan::mana::ManaPrice{
-            dandan::mana::ManaBag{{dandan::mana::ManaType::RED, 1}}, 2})};
+            dandan::mana::ManaBag{{dandan::mana::ManaType::RED, 1}}, 2}),};
 
     auto ability_effects{std::vector<
-        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{}};
+        std::unique_ptr<dandan::effects::IOneShotEffectDefinition>>{},};
     ability_effects.emplace_back(
         std::make_unique<dandan::effects::RegrowthEffectDefinition>(
             std::vector<dandan::core::Type>{dandan::core::Type::Instant,
-                                            dandan::core::Type::Sorcery}));
+                                            dandan::core::Type::Sorcery,}));
 
     abilities.emplace_back(
         std::make_unique<dandan::SpellAbility>(std::move(ability_effects)));
