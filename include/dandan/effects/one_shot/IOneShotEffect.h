@@ -33,6 +33,8 @@ namespace dandan::effects
         /** @brief Get the display string for the effect
          * @return The display string
          */
+        // TODO: all effects should have a display method, in which case this
+        // can be an abstract method
         [[nodiscard]] virtual std::string display() const;
 
         /**
