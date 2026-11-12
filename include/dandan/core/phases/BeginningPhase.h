@@ -44,7 +44,7 @@ namespace dandan::core
 
         /**
          * Constructor
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         explicit BeginningPhase(ExecutionContext exec_ctx);
 
@@ -59,8 +59,6 @@ namespace dandan::core
 
         void handleNextStep();
         void handleUntapStep();
-        // void handleUpkeepStep();
-        // void handleDrawStep();
     };
 } // namespace dandan::core
 #endif

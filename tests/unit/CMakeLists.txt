@@ -1,9 +1,18 @@
 add_executable(DandanUnitTests)
 
-target_sources(DandanUnitTests PRIVATE core/CardDataTest.cpp UtilTest.cpp)
+target_sources(DandanUnitTests PRIVATE
+                core/CardDataTest.cpp
+                core/ZoneTest.cpp
+                core/CardTypesTest.cpp
+                core/TargetRequirementTest.cpp
+                utils/stringToColorWordTest.cpp
+                UtilTest.cpp)
 
 target_sources(DandanUnitTests PRIVATE FILE_SET HEADERS BASE_DIRS
                                        ${CMAKE_SOURCE_DIR}/tests)
+
+target_include_directories(DandanUnitTests PRIVATE
+  ${CMAKE_SOURCE_DIR}/src)
 
 target_compile_features(DandanUnitTests PRIVATE cxx_std_17)
 

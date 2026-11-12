@@ -60,11 +60,11 @@ namespace dandan::core
 
 namespace std
 {
-    /** Hashing implementation for CardID */
+    /** Hashing implementation for PlayerID */
     template <> struct hash<dandan::core::PlayerID>
     {
-        /** Hashes a CardID.
-         * @param card_id The CardID to hash.
+        /** Hashes a PlayerID.
+         * @param player_id The PlayerID to hash.
          * @return The hash value.
          */
         std::size_t operator()(const dandan::core::PlayerID &player_id) const;

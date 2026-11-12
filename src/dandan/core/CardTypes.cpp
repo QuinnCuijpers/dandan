@@ -22,7 +22,7 @@ namespace dandan::core
         case Type::Planeswalker:
             return "Planeswalker";
         }
-        assert(false && "Unreachable Card type");
+        assert(false && "Unreachable Card type"); // LCOV_EXCL_LINE
     }
 
     std::string_view SubTypeToString(SubType subtype)
@@ -48,6 +48,6 @@ namespace dandan::core
         case SubType::Dragon:
             return "Dragon";
         }
-        assert(false && "Unreachable Card subtype");
+        assert(false && "Unreachable Card subtype"); // LCOV_EXCL_LINE
     }
 } // namespace dandan::core

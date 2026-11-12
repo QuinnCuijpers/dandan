@@ -59,11 +59,12 @@ namespace dandan::core
 
         /** Check if an action is prevented.
          * @param action The action to check.
-         * @param game The game instance. Game is treated as const but as bound
-         * abilities need to create a copy of their effect and those could pay
-         * costs, we cant mark it as const for now
+         * @param exec_ctx The execution context.
          * @return True if the action is prevented by a prevention effect, false
          * otherwise.
+         * @note The game is treated as const, but bound abilities need to
+         * create a copy of their effect and those could pay costs, so it
+         * cannot be marked const for now.
          */
         [[nodiscard]] bool isPrevented(const IAction &action, ExecutionContext exec_ctx) const;
 
