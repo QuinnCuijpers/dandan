@@ -30,6 +30,13 @@ namespace dandan::conditions
         // NOLINTBEGIN(bugprone-easily-swappable-parameters)
         void replaceBasicWord(core::SubType from,
                               core::SubType new_basic) override;
+
+        void replaceColorWord(
+            [[maybe_unused]] core::ColorWord from,
+            [[maybe_unused]] core::ColorWord new_color) override
+        {
+            // controlling basics cannot have its color changed
+        }
         // NOLINTEND(bugprone-easily-swappable-parameters)
 
     private:
@@ -37,10 +44,9 @@ namespace dandan::conditions
     };
 } // namespace dandan::conditions
 
-
 #ifdef DANDAN_SERIALIZE
-#include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonEnums.h" // IWYU pragma: keep
+#include "dandan/serialization/JsonFactory.h"
 #include "dandan/serialization/JsonTypeRegistry.h"
 #include <nlohmann/json.hpp>
 namespace dandan::serialization::registration
@@ -58,7 +64,8 @@ namespace dandan::serialization::registration
                     auto json = nlohmann::json::object();
                     const auto *self_controls{
                         dynamic_cast<const SelfControlsNoBasicCondition *>(
-                            condition),};
+                            condition),
+                    };
                     json["type"] = self_controls->type();
                     return json;
                 },
@@ -69,7 +76,7 @@ namespace dandan::serialization::registration
                 });
         return true;
     }();
-} // namespace
+} // namespace dandan::serialization::registration
 #endif
 
 #endif
