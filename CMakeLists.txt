@@ -12,6 +12,15 @@ option(DANDAN_BUILD_SERIALIZE
   "Enable building and testing the serialization" OFF)
 option(CODE_COVERAGE "Enable code coverage" OFF)
 
+find_program(CCACHE_PROGRAM ccache)
+if (CCACHE_PROGRAM)
+  set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+  set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+  message(STATUS "Ccache found: ${CCACHE_PROGRAM}")
+else ()
+  message(STATUS "Ccache not found")
+endif ()
+
 add_compile_definitions(DANDAN_PROJECT_SOURCE="${CMAKE_SOURCE_DIR}")
 
 include(cmake/DoxyGen.cmake)
