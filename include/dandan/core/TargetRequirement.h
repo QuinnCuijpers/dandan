@@ -66,14 +66,27 @@ namespace dandan::core
 
     struct TargetSpec
     {
+        /// The acceptable target types.
         std::vector<TargetType> types;
+        /// The controller restriction for the target.
         Controller controller{Controller::Any};
+        /// Where the target is chosen from.
         TargetSource source{TargetSource::Prompt};
+        /// The optional key used to link this target to another effect.
         std::optional<std::string> key;
 
+        /** Constructs a prompted target specification.
+         * @param types The acceptable target types.
+         * @param controller The controller restriction.
+         */
         explicit TargetSpec(std::vector<TargetType> types,
                             Controller controller = Controller::Any);
 
+        /** Constructs a linked target specification.
+         * @param types The acceptable target types.
+         * @param key The key used to link the target.
+         * @param controller The controller restriction.
+         */
         TargetSpec(std::vector<TargetType> types, const std::string &key,
                    Controller controller = Controller::Any);
     };
@@ -81,11 +94,20 @@ namespace dandan::core
     class TargetRequirement
     {
     public:
+        /** Constructs a requirement from explicit target specifications.
+         * @param target_types The target specifications.
+         */
         explicit TargetRequirement(const std::vector<TargetSpec> &target_types);
 
+        /** Constructs a requirement from groups of acceptable target types.
+         * @param target_types One group of acceptable types per target slot.
+         */
         explicit TargetRequirement(
             const std::vector<std::vector<TargetType>> &target_types);
 
+        /** Gets the target specifications.
+         * @return A const reference to the target specifications.
+         */
         [[nodiscard]] const std::vector<TargetSpec> &getTargetTypes() const;
 
     private:
