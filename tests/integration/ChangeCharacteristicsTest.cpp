@@ -24,27 +24,27 @@ TEST(DandanLibTest, DandanMindBendTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
                                std::move(dandan_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto mind_bend_data{
         dandan::core::CardData{"Mind Bend",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 1}}},
+                                   {dandan::mana::ManaType::BLUE, 1},}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(mind_bend_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
@@ -68,7 +68,7 @@ TEST(DandanLibTest, DandanMindBendTest)
 
     auto dandan_1_1{game_state.activePlayer().hand().getCards()[2].getID()};
     auto mind_bend_2_1{
-        game_state.nonActivePlayer().hand().getCards()[4].getID()};
+        game_state.nonActivePlayer().hand().getCards()[4].getID(),};
 
     // turn 1 player 1
     stream << "play " << island_1_1 << '\n';
@@ -126,27 +126,27 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
                                std::move(dandan_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto mind_bend_data{
         dandan::core::CardData{"Dance of the Skywise",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(dance_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
@@ -161,7 +161,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     auto &game_state{game.execution_context().state.get()};
     const auto &card_registry{game.execution_context().cards.get()};
     auto &replacement_manager{
-        game.execution_context().replacement_manager.get()};
+        game.execution_context().replacement_manager.get(),};
     auto &condition_manager{game.execution_context().condition_manager.get()};
     auto &event_manager{game.execution_context().event_manager.get()};
     auto &prevention_manager{game.execution_context().prevention_manager.get()};
@@ -178,7 +178,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
     auto dance_1_1{game_state.activePlayer().hand().getCards()[4].getID()};
 
     auto discard_2_1{
-        game_state.nonActivePlayer().hand().getCards().back().getID()};
+        game_state.nonActivePlayer().hand().getCards().back().getID(),};
 
     // turn 1 player 1
     stream << "play " << island_1_1 << '\n';
@@ -212,7 +212,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseChangeTest)
 
     auto *dandan{card_registry.get(dandan_1_1)};
     auto expected_subtypes{std::vector{dandan::core::SubType::Dragon,
-                                       dandan::core::SubType::Illusion}};
+                                       dandan::core::SubType::Illusion,},};
 
     EXPECT_EQ(dandan->getColor(), dandan::core::ColorWord::Blue);
     EXPECT_EQ(dandan->getCurrentAbilities().size(), 1);
@@ -245,28 +245,28 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
                                std::move(dandan_abilities),
                                dandan::core::Stats{4, 1},
-                               dandan::core::ColorWord::Blue}};
+                               dandan::core::ColorWord::Blue,},};
 
     auto mind_bend_data{
         dandan::core::CardData{"Dance of the Skywise",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(dance_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
@@ -292,7 +292,7 @@ TEST(DandanLibTest, DanceOfTheSkywiseExpiresTest)
     auto dance_1_1{game_state.activePlayer().hand().getCards()[4].getID()};
 
     auto discard_2_1{
-        game_state.nonActivePlayer().hand().getCards().back().getID()};
+        game_state.nonActivePlayer().hand().getCards().back().getID(),};
 
     // turn 1 player 1
     stream << "play " << island_1_1 << '\n';
@@ -358,7 +358,7 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto crystal_data{dandan::core::CardData{
         "Crystal Spray",
@@ -369,28 +369,28 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
         dandan::core::SuperType::None,
         std::move(crystal_abilities),
         std::nullopt,
-        dandan::core::ColorWord::Blue}};
+        dandan::core::ColorWord::Blue,},};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
                                std::move(dandan_abilities),
                                dandan::core::Stats{4, 1},
-                               dandan::core::ColorWord::Blue}};
+                               dandan::core::ColorWord::Blue,},};
 
     auto mind_bend_data{
         dandan::core::CardData{"Dance of the Skywise",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(dance_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
@@ -427,14 +427,14 @@ TEST(DandanLibTest, DanceSavesDandanFromCrystal)
             .hand()
             .getCards()[5] // NOLINT(cppcoreguidelines-avoid-magic-numbers,
                            // readability-magic-numbers)
-            .getID()};
+            .getID(),};
 
     auto dance_2_1{
         game_state.nonActivePlayer()
             .hand()
             .getCards()[6] // NOLINT(cppcoreguidelines-avoid-magic-numbers,
                            // readability-magic-numbers)
-            .getID()};
+            .getID(),};
 
     // turn 1 player 1
     stream << "play " << island_1_1 << '\n';

@@ -9,8 +9,8 @@ namespace dandan::core
 {
     const static int AMOUNT_PLAYERS{2};
 
-    const static std::array<std::string, AMOUNT_PLAYERS> DEFAULT_NAMES{
-        std::array<std::string, AMOUNT_PLAYERS>{"Player 1", "Player 2"},
+    const static std::array<const char *, AMOUNT_PLAYERS> DEFAULT_NAMES{
+        std::array<const char *, AMOUNT_PLAYERS>{"Player 1", "Player 2"},
     };
 
     const static int CLEAR_SCREEN_LINES{10};

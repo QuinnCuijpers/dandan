@@ -23,7 +23,7 @@ namespace dandan::effects
     class IOneShotEffectDefinition
     {
     public:
-        IOneShotEffectDefinition(
+        explicit IOneShotEffectDefinition(
             std::optional<links> read_links = std::nullopt,
             std::optional<links> write_links = std::nullopt);
 

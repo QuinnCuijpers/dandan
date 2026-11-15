@@ -58,7 +58,7 @@ namespace dandan::serialization::registration
             {
                 auto json = nlohmann::json::object();
                 const auto *condition_number{
-                    dynamic_cast<const ConditionalNumber *>(number)};
+                    dynamic_cast<const ConditionalNumber *>(number),};
                 json["ifNumber"] = JsonFactory<INumber>::create_json(
                     condition_number->getIfNumber());
                 json["elseNumber"] = JsonFactory<INumber>::create_json(
@@ -70,7 +70,7 @@ namespace dandan::serialization::registration
             [](const nlohmann::json &data)
             {
                 auto condition{JsonFactory<ICondition>::create_product(
-                    data.at("condition"))};
+                    data.at("condition")),};
 
                 auto if_ = data["ifNumber"].is_number()
                                ? std::make_unique<ExactNumber>(

@@ -67,7 +67,7 @@ namespace dandan::serialization::registration
             {
                 auto json = nlohmann::json::object();
                 const auto *spell_ability{
-                    dynamic_cast<const SpellAbility *>(ability)};
+                    dynamic_cast<const SpellAbility *>(ability),};
                 auto effect_list = nlohmann::json::array();
                 std::transform(
                     spell_ability->effects().begin(),

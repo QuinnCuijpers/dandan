@@ -16,7 +16,7 @@ TEST(DandanLibTest, CombatTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     // dandan can't attack unless the defending player controls an island
     auto abilities{Dandan_Abilities()};
@@ -26,12 +26,12 @@ TEST(DandanLibTest, CombatTest)
     auto data =
         dandan::core::CardData{"Dandan",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 0}}},
+                                   {dandan::mana::ManaType::BLUE, 0},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(abilities),
-                               dandan::core::Stats{4, 1}};
+                               dandan::core::Stats{4, 1},};
 
     auto dandan_cards{createTestCards(TEST_DECK_SIZE, &data)};
     auto island_cards{std::vector<dandan::Card>{island1, island2}};
@@ -49,10 +49,10 @@ TEST(DandanLibTest, CombatTest)
     };
     auto attacker_it{std::find_if(
         game_state.activePlayer().hand().getCards().begin(),
-        game_state.activePlayer().hand().getCards().end(), find_dandan)};
+        game_state.activePlayer().hand().getCards().end(), find_dandan),};
     auto defender_it{std::find_if(
         game_state.nonActivePlayer().hand().getCards().begin(),
-        game_state.nonActivePlayer().hand().getCards().end(), find_dandan)};
+        game_state.nonActivePlayer().hand().getCards().end(), find_dandan),};
 
     ASSERT_NE(attacker_it, game_state.activePlayer().hand().getCards().end());
     ASSERT_NE(defender_it,

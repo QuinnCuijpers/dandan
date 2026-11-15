@@ -93,9 +93,9 @@ namespace dandan::serialization::registration
             [](const nlohmann::json &json)
             {
                 auto mana_list{JsonFactory<ManaList>::create_product(
-                    json.at("mana_list"))};
+                    json.at("mana_list")),};
                 std::unique_ptr<ICost> cost{
-                    JsonFactory<ICost>::create_product(json.at("cost"))};
+                    JsonFactory<ICost>::create_product(json.at("cost")),};
                 return std::make_unique<ManaAbility>(std::move(cost),
                                                      std::move(mana_list));
             });

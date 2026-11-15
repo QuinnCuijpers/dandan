@@ -84,7 +84,7 @@ namespace dandan::abilities
     {
         if (m_cost)
         {
-            auto *source{(exec_ctx.cards.get())[context.source_card_id]};
+            auto *source{exec_ctx.cards.get()[context.source_card_id]};
             return m_cost->canPay(*source, exec_ctx.state.get().getPlayer(
                                                source->getControllerID()));
         }

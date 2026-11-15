@@ -40,9 +40,12 @@ namespace dandan::abilities
     [[nodiscard]] std::unique_ptr<effects::IOneShotEffect> BoundAbility::
         createEffect(core::ExecutionContext exec_ctx) const
     {
-        AbilityContext context{m_source_card->getID(),
-                               m_source_card->getControllerID(),
-                               m_chosen_mode_index, m_text_replacement};
+        AbilityContext context{
+            m_source_card->getID(),
+            m_source_card->getControllerID(),
+            m_chosen_mode_index,
+            m_text_replacement,
+        };
         auto effect{m_definition->createEffect(exec_ctx, context)};
         return effect;
     }
@@ -63,8 +66,12 @@ namespace dandan::abilities
 
     AbilityContext BoundAbility::getContext() const
     {
-        return {sourceCard(), sourcePlayer(), m_chosen_mode_index,
-                m_text_replacement};
+        return {
+            sourceCard(),
+            sourcePlayer(),
+            m_chosen_mode_index,
+            m_text_replacement,
+        };
     }
 
     bool BoundAbility::operator==(const BoundAbility &ability) const

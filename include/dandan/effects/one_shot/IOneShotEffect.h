@@ -22,7 +22,7 @@ namespace dandan::effects
     class IOneShotEffect
     {
     public:
-        IOneShotEffect(EffectContext effect_context);
+        explicit IOneShotEffect(EffectContext effect_context);
 
         IOneShotEffect(const IOneShotEffect &) = delete;
         IOneShotEffect(IOneShotEffect &&) = delete;

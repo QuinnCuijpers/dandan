@@ -37,24 +37,49 @@ namespace dandan::effects
 
 namespace dandan::core
 {
+    /** @brief The mutable characteristics of a card instance.
+     *
+     * These values can be changed by continuous effects and are kept separate
+     * from the static CardData shared by every instance of the same card.
+     * @struct CardCharacteristics
+     */
     struct CardCharacteristics
     {
+        /// The current color of the card.
         ColorWord color{ColorWord::Colorless};
-        // could be unordered set, but json requires order preservation
+        /// The current subtypes of the card. A vector is used instead of a set
+        /// because JSON serialization requires stable ordering.
         std::vector<SubType> subtypes;
+        /// The current base power and toughness of the card.
         Stats base_stats;
+        /// Whether the card currently loses all of its abilities.
         bool loses_all_abilities{};
+        /// Abilities granted to the card in addition to its printed abilities.
         std::vector<std::unique_ptr<abilities::IAbility>> additional_abilities;
 
         CardCharacteristics() = default;
         ~CardCharacteristics() = default;
 
+        /** Constructs a full set of card characteristics.
+         * @param color The current color of the card.
+         * @param subtypes The current subtypes of the card.
+         * @param base_stats The current base power and toughness.
+         * @param loses_all_abilities Whether the card loses all abilities.
+         * @param additional_abilities Abilities granted to the card.
+         */
         CardCharacteristics(ColorWord color, std::vector<SubType> subtypes,
                             Stats base_stats, bool loses_all_abilities,
                             std::vector<std::unique_ptr<abilities::IAbility>>
                                 additional_abilities);
+        /** Copies characteristics, including the additional abilities.
+         * @param other The characteristics to copy.
+         */
         CardCharacteristics(const CardCharacteristics &other);
 
+        /** Copies characteristics, including the additional abilities.
+         * @param other The characteristics to copy.
+         * @return A reference to this object.
+         */
         CardCharacteristics &operator=(const CardCharacteristics &other);
 
         CardCharacteristics(CardCharacteristics &&) noexcept = default;
@@ -65,7 +90,7 @@ namespace dandan::core
     /** @brief A class representing a card instance in the game.
      * @class Card
      * All variable traits of the card instance are stored in this class,
-     * while the static traits of the card are stored in CardData accesible
+     * while the static traits of the card are stored in CardData accessible
      * through `getData()`.
      */
     class Card
@@ -82,13 +107,6 @@ namespace dandan::core
          */
         explicit Card(CardData *card_data,
                       PlayerID controller_id = PlayerID::getInvalidID());
-
-        ~Card() = default;
-
-        Card(const Card &other) = default;
-        Card &operator=(const Card &other) = default;
-        Card(Card &&other) noexcept = default;
-        Card &operator=(Card &&other) noexcept = default;
 
         /** Get the ID of the card.
          * @return The ID of the card.
@@ -185,21 +203,47 @@ namespace dandan::core
          */
         [[nodiscard]] int getDamageMarked() const;
 
+        /** Gets the current subtypes of the card.
+         * @return A const reference to the current subtypes.
+         */
         [[nodiscard]] const std::vector<SubType> &getCurrentSubTypes() const;
 
+        /** Replaces the current subtypes of the card.
+         * @param subtypes The new subtypes.
+         */
         void setCurrentSubTypes(std::vector<SubType> subtypes);
 
+        /** Gets the abilities currently granted to the card.
+         * @return A reference to the current bound abilities.
+         */
         std::vector<abilities::BoundAbility> &getCurrentAbilities();
 
+        /** Gets the abilities currently granted to the card.
+         * @return A const reference to the current bound abilities.
+         */
         const std::vector<abilities::BoundAbility> &getCurrentAbilities() const;
 
+        /** Gets the current card characteristics.
+         * @return A reference to the current characteristics.
+         */
         CardCharacteristics &getCharacteristics();
 
+        /** Gets the characteristics from before the last update.
+         * @return A reference to the previous characteristics.
+         */
         CardCharacteristics &getPrevCharacteristics();
 
+        /** Applies new characteristics to the card and records the previous
+         * characteristics.
+         * @param character The new characteristics.
+         * @param exec_ctx The execution context.
+         */
         void setCharacteristics(const CardCharacteristics &character,
                                 ExecutionContext exec_ctx);
 
+        /** Replaces the recorded previous characteristics.
+         * @param character The characteristics to record as previous.
+         */
         void setPrevCharacteristics(CardCharacteristics character);
 
         // TODO: should generate a damage event
@@ -209,8 +253,14 @@ namespace dandan::core
          */
         void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx);
 
+        /** Checks whether the card can currently be countered.
+         * @return True if the card can be countered, false otherwise.
+         */
         bool canBeCountered() const;
 
+        /** Gets the current color of the card.
+         * @return The current color.
+         */
         ColorWord getColor() const;
 
         /** Destroy the card.
@@ -223,19 +273,43 @@ namespace dandan::core
          */
         void resetState();
 
+        /** Records the chosen mode for a modal effect.
+         * @param modal_effect The modal effect whose choice is recorded.
+         * @param choice The chosen mode index.
+         */
         void addModalChoice(const effects::ModalEffectDefinition &modal_effect,
                             int choice);
 
+        /** Gets the recorded mode choice for a modal effect.
+         * @param modal_effect The modal effect to query.
+         * @return The chosen mode index.
+         */
         int getModalChoice(
             const effects::ModalEffectDefinition &modal_effect) const;
 
+        /** Records the targets chosen for an effect.
+         * @param effect The effect whose targets are recorded.
+         * @param targets The chosen targets.
+         */
         void addTargetChoices(const effects::IOneShotEffectDefinition &effect,
                               std::vector<core::Target> targets);
 
+        /** Gets the targets chosen for an effect.
+         * @param effect The effect to query.
+         * @return A const reference to the chosen targets.
+         */
         const std::vector<core::Target> &getTargetChoices(
             const effects::IOneShotEffectDefinition &effect) const;
 
+        /** Replaces instances of one color word with another.
+         * @param from The color word to replace.
+         * @param new_color The replacement color word.
+         */
         void replaceText(ColorWord from, ColorWord new_color);
+        /** Replaces instances of one basic land subtype with another.
+         * @param from The subtype to replace.
+         * @param new_basic The replacement subtype.
+         */
         void replaceText(SubType from, SubType new_basic);
 
         /** Output the card to an ostream.
@@ -247,16 +321,37 @@ namespace dandan::core
                                         const Card &card);
 
         // TODO: should only be public to Game::GameSetup
+        /** Replaces the abilities currently granted to the card.
+         * @param abilities The new bound abilities.
+         */
         void setBoundAbilities(std::vector<abilities::BoundAbility> abilities);
 
+        /** Stores a value in the card's memory link map.
+         * @param key The key identifying the value.
+         * @param value The value to remember.
+         */
         void remember(const std::string &key, Memorable value);
 
+        /** Gets the card's memory link map.
+         * @return A reference to the link map.
+         */
         std::unordered_map<std::string, Memorable> &linkMap();
 
+        /** Gets the card's memory link map.
+         * @return A const reference to the link map.
+         */
         const std::unordered_map<std::string, Memorable> &linkMap() const;
 
+        /** Checks whether the card has the given keyword ability.
+         * @param key_word The keyword to look for.
+         * @return True if the card has the keyword, false otherwise.
+         */
         bool hasKeyword(abilities::Keyword key_word) const;
 
+        /** Finds the first current ability of the requested type.
+         * @tparam T The ability type to find.
+         * @return A pointer to the ability, or nullptr if it is not present.
+         */
         template <typename T> const T *getAbility() const
         {
             auto ability_iter = std::find_if(

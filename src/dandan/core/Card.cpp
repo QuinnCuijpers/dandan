@@ -501,13 +501,13 @@ namespace dandan::core
             {
                 if (const auto *keyword =
                         dynamic_cast<const abilities::IKeyWordAbility *>(
-                            &ability.definition()))
+                            &ability.definition());
+                    keyword && (keyword->keyword() == key_word))
+
                 {
-                    if (keyword->keyword() == key_word)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
+
                 return false;
             });
     }

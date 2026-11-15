@@ -86,7 +86,7 @@ namespace dandan::serialization::registration
                    ExpireTime expiry)
                 {
                     auto effect{std::make_unique<MindBendEffectDefinition>(
-                        TargetRequirement{target_specs})};
+                        TargetRequirement{target_specs}),};
                     effect->addExpireTime(expiry);
                     return effect;
                 });

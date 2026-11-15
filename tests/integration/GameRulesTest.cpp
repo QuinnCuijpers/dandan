@@ -123,12 +123,12 @@ TEST(DandanLibTest, PlayCreatureTest)
     auto data =
         dandan::core::CardData{"Test Card ",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(abilities),
-                               std::nullopt};
+                               std::nullopt,};
 
     auto test_cards{createTestCards(TEST_DECK_SIZE, &data)};
     auto game{dandan::Game::withCards(std::move(test_cards))};
@@ -149,7 +149,7 @@ TEST(DandanLibTest, PlayCreatureTest)
 
     // main phase
     game_state.activePlayer().manaPool().add(dandan::mana::ManaBag{
-        {dandan::mana::ManaType::BLUE, 2 * (STARTING_HAND_SIZE - 1)}});
+        {dandan::mana::ManaType::BLUE, 2 * (STARTING_HAND_SIZE - 1)},});
 
     // should play 6 dandan
     game.run();

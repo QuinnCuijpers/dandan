@@ -21,17 +21,17 @@ TEST(DandanLibTest, BrainstormTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto brainstorm_data{
         dandan::core::CardData{"Brainstorm",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 1}}},
+                                   {dandan::mana::ManaType::BLUE, 1},}},
                                dandan::core::Type::Instant,
                                {dandan::core::SubType::None},
                                dandan::core::SuperType::None,
                                std::move(brainstorm_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto brainstorms{createTestCards(NUM_BRAINSTORMS, &brainstorm_data)};
@@ -105,7 +105,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(svyenulite_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto accumulated_knowledge_data{dandan::core::CardData{
         "Accumulated Knowledge",
@@ -115,11 +115,11 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(accumulated_knowledge_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto cards{createTestCards(NUM_SVYELUNITE, &svyenulite_temple_data)};
     auto accumulated_knowledge_cards{
-        createTestCards(NUM_ACCUMULATED, &accumulated_knowledge_data)};
+        createTestCards(NUM_ACCUMULATED, &accumulated_knowledge_data),};
     cards.insert(cards.end(), accumulated_knowledge_cards.begin(),
                  accumulated_knowledge_cards.end());
 
@@ -143,7 +143,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
                          const auto *card = card_registry.get(card_id);
                          return card != nullptr &&
                                 card->getData().name == "Accumulated Knowledge";
-                     })};
+                     }),};
     auto accumulated_knowledge_id_2_it{
         std::find_if(game_state.nonActivePlayer().hand().getCards().begin(),
                      game_state.nonActivePlayer().hand().getCards().end(),
@@ -152,7 +152,7 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
                          const auto *card = card_registry.get(card_id);
                          return card != nullptr &&
                                 card->getData().name == "Accumulated Knowledge";
-                     })};
+                     }),};
 
     ASSERT_NE(accumulated_knowledge_id_1_it,
               game_state.activePlayer().hand().getCards().end());
@@ -208,9 +208,9 @@ TEST(DandanLibTest, AccumulatedKnowledgeTest)
     std::cout << accumulated_knowledge_id_1.getID() << '\n';
     std::cout << accumulated_knowledge_id_2.getID() << '\n';
     auto *accumulated_knowledge_1{
-        card_registry.get(accumulated_knowledge_id_1.getID())};
+        card_registry.get(accumulated_knowledge_id_1.getID()),};
     auto *accumulated_knowledge_2{
-        card_registry.get(accumulated_knowledge_id_2.getID())};
+        card_registry.get(accumulated_knowledge_id_2.getID()),};
 
     EXPECT_EQ(accumulated_knowledge_1->getZone(),
               dandan::core::Zone::GRAVEYARD);

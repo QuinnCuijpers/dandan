@@ -71,7 +71,7 @@ namespace dandan::serialization::registration
             {
                 auto json = nlohmann::json::object();
                 const auto *with_damage{
-                    dynamic_cast<const WithDamage *>(ability)};
+                    dynamic_cast<const WithDamage *>(ability),};
                 json["damage"] = with_damage->getDamage();
                 json["ability"] = JsonFactory<IAbility>::create_json(
                     with_damage->getInnerAbility());

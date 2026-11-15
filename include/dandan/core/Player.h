@@ -39,7 +39,6 @@ namespace dandan::core
          * @return a const reference to the ID of the player.
          */
         [[nodiscard]] const PlayerID &getID() const;
-
         /** Gets the life total of the player.
          * @return The life total of the player.
          */
@@ -110,6 +109,7 @@ namespace dandan::core
          */
         [[nodiscard]] bool lost() const;
 
+        /** Marks the player as having lost the game. */
         void setLost();
 
         /** Draws a card from the library.
@@ -119,8 +119,16 @@ namespace dandan::core
 
         void playCard(Card &card);
 
+        /** Moves a card from the player's hand to the graveyard.
+         * @param card The card to discard.
+         * @param exec_ctx The execution context.
+         */
         void discardCard(const Card &card, ExecutionContext exec_ctx);
 
+        /** Sacrifices a permanent controlled by the player.
+         * @param card The permanent to sacrifice.
+         * @param exec_ctx The execution context.
+         */
         void sacrificeCard(Card &card, ExecutionContext exec_ctx);
 
         /** Takes damage
@@ -129,6 +137,10 @@ namespace dandan::core
          */
         void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx);
 
+        /** Checks whether the player can currently activate any ability.
+         * @param exec_ctx The execution context.
+         * @return True if an ability can be activated, false otherwise.
+         */
         [[nodiscard]] bool canActivateSomething(
             ExecutionContext exec_ctx) const;
 

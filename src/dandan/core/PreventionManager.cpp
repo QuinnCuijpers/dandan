@@ -37,7 +37,8 @@ namespace
                                 dandan::effects::IPreventionEffect> &prevention)
                             { return prevention.get() == effect; },
                             [](const dandan::abilities::BoundAbility *)
-                            { return false; }},
+                            { return false; },
+                        },
                         candidate);
                 }),
             list.end());
@@ -57,7 +58,8 @@ namespace
                                    { return false; },
                                    [&](const dandan::abilities::BoundAbility
                                            *sub_ability)
-                                   { return sub_ability == &ability; }},
+                                   { return sub_ability == &ability; },
+                               },
                                candidate);
                        }),
                    list.end());
@@ -73,34 +75,43 @@ namespace
 
         for (const auto &prevention : list)
         {
-            auto prevented{std::visit(
-                dandan::utils::overloaded{
-                    [&](const std::unique_ptr<
-                        dandan::effects::IPreventionEffect> &prevention_effect)
-                    { return prevention_effect->prevents(action, exec_ctx); },
-                    [&](const abilities::BoundAbility *ability)
-                    {
-                        if (const auto *static_ability =
-                                dynamic_cast<const abilities::StaticAbility *>(
-                                    &ability->definition()))
+            auto prevented{
+                std::visit(
+                    dandan::utils::overloaded{
+                        [&](const std::unique_ptr<
+                            dandan::effects::IPreventionEffect>
+                                &prevention_effect)
                         {
-                            assert(static_ability->getType() ==
-                                   abilities::StaticAbility::Type::Prevention);
-                            if (const auto *prevention_effect = dynamic_cast<
-                                    const effects::IPreventionEffect *>(
-                                    static_ability->getEffect()))
+                            return prevention_effect->prevents(action,
+                                                               exec_ctx);
+                        },
+                        [&](const abilities::BoundAbility *ability)
+                        {
+                            if (const auto *static_ability = dynamic_cast<
+                                    const abilities::StaticAbility *>(
+                                    &ability->definition()))
                             {
-                                effects::EffectContext context{
-                                    ability->getContext()};
-                                return prevention_effect->prevents(
-                                    action, exec_ctx, context);
+                                assert(
+                                    static_ability->getType() ==
+                                    abilities::StaticAbility::Type::Prevention);
+                                if (const auto *prevention_effect =
+                                        dynamic_cast<
+                                            const effects::IPreventionEffect *>(
+                                            static_ability->getEffect()))
+                                {
+                                    effects::EffectContext context{
+                                        ability->getContext()};
+                                    return prevention_effect->prevents(
+                                        action, exec_ctx, context);
+                                }
                             }
-                        }
-                        // should be unreachable as only prevention effects are
-                        // registered in this class
-                        return false;
-                    }},
-                prevention)};
+                            // should be unreachable as only prevention effects
+                            // are registered in this class
+                            return false;
+                        },
+                    },
+                    prevention),
+            };
             if (prevented)
             {
                 return true;

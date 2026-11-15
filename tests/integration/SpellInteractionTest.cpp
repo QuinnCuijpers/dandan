@@ -30,7 +30,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(svyenulite_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto diminishing_returns_data{dandan::core::CardData{
         "Diminishing Returns",
@@ -40,11 +40,11 @@ TEST(DandanLibTest, DiminishingReturnsTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(diminishing_returns_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto cards{createTestCards(NUM_SVYELUNITE, &svyenulite_temple_data)};
     auto diminishing_returns_cards{
-        createTestCards(NUM_DIMINISHING, &diminishing_returns_data)};
+        createTestCards(NUM_DIMINISHING, &diminishing_returns_data),};
     cards.insert(cards.end(), diminishing_returns_cards.begin(),
                  diminishing_returns_cards.end());
 
@@ -71,7 +71,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
                          const auto *card = card_registry.get(card_id);
                          return card != nullptr &&
                                 card->getData().name == "Diminishing Returns";
-                     })};
+                     }),};
 
     ASSERT_NE(diminishing_returns_id_it,
               game_state.activePlayer().hand().getCards().end());
@@ -112,7 +112,7 @@ TEST(DandanLibTest, DiminishingReturnsTest)
     auto *discard_card_1{card_registry.get(discard_1.getID())};
     auto *discard_card_2{card_registry.get(discard_2.getID())};
     auto *diminishing_returns_card{
-        card_registry.get(diminishing_returns_id.getID())};
+        card_registry.get(diminishing_returns_id.getID()),};
 
     EXPECT_FALSE(svyenulite_1->getZone() == dandan::core::Zone::BATTLEFIELD ||
                  svyenulite_1->getZone() == dandan::core::Zone::GRAVEYARD);
@@ -151,17 +151,17 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
                                std::move(dandan_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto unsub_data{dandan::core::CardData{
         "Unsubstantiate",
@@ -171,7 +171,7 @@ TEST(DandanLibTest, UnsubstantiateSpellTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(unsub_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
@@ -253,17 +253,17 @@ TEST(DandanLibTest, MemoryLapseTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto dandan_data{
         dandan::core::CardData{"Dandan",
                                dandan::mana::ManaPrice{dandan::mana::ManaBag{
-                                   {dandan::mana::ManaType::BLUE, 2}}},
+                                   {dandan::mana::ManaType::BLUE, 2},}},
                                dandan::core::Type::Creature,
                                {dandan::core::SubType::Fish},
                                dandan::core::SuperType::None,
                                std::move(dandan_abilities),
-                               std::nullopt}};
+                               std::nullopt,},};
 
     auto memory_data{dandan::core::CardData{
         "Memory Lapse",
@@ -273,7 +273,7 @@ TEST(DandanLibTest, MemoryLapseTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(memory_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto dandan_cards{createTestCards(NUM_DANDANS, &dandan_data)};
@@ -355,7 +355,7 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
         {dandan::core::SubType::Island},
         dandan::core::SuperType::Basic,
         std::move(island_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto crystal_data{dandan::core::CardData{
         "Crystal Spray",
@@ -365,7 +365,7 @@ TEST(DandanLibTest, DandanCrystalSprayTest)
         {dandan::core::SubType::None},
         dandan::core::SuperType::None,
         std::move(crystal_abilities),
-        std::nullopt}};
+        std::nullopt,},};
 
     auto cards{createTestCards(NUM_ISLANDS, &island_data)};
     auto crystal_cards{createTestCards(NUM_CRYSTAL, &crystal_data)};

@@ -57,8 +57,9 @@ namespace dandan::core
     }
 
     std::unique_ptr<effects::IOneShotEffect> ReplacementManager::
-        applyReplacementEffects(effects::IOneShotEffect &effect,
-                                [[maybe_unused]] ExecutionContext exec_ctx) const
+        applyReplacementEffects(
+            effects::IOneShotEffect &effect,
+            [[maybe_unused]] ExecutionContext exec_ctx) const
     {
         effects::IOneShotEffect *current_effect{&effect};
         for (const auto *ability : m_replacement_effects)
@@ -68,13 +69,12 @@ namespace dandan::core
                     &ability->definition());
             if (const auto *replacement_effect =
                     dynamic_cast<const effects::IReplacementEffect *>(
-                        static_ability->getEffect()))
+                        static_ability->getEffect());
+                replacement_effect &&
+                (replacement_effect->appliesTo(*current_effect)))
+
             {
-                if (replacement_effect->appliesTo(*current_effect))
-                {
-                    current_effect =
-                        &replacement_effect->replace(*current_effect);
-                }
+                current_effect = &replacement_effect->replace(*current_effect);
             }
         }
         return current_effect->copy();

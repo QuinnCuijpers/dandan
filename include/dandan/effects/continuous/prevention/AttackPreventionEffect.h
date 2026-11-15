@@ -55,7 +55,7 @@ namespace dandan::serialization::registration
                 {
                     auto json = nlohmann::json::object();
                     const auto *attack{
-                        dynamic_cast<const AttackPreventionEffect *>(effect)};
+                        dynamic_cast<const AttackPreventionEffect *>(effect),};
                     json["condition"] = JsonFactory<ICondition>::create_json(
                         attack->getCondition());
                     return json;

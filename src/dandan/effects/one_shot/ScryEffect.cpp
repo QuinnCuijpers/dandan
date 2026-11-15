@@ -93,12 +93,12 @@ namespace dandan::effects
             std::getline(istream, input);
             if (input == "top")
             {
-                game.library().getCards().push_front(cards[card_index]);
+                game.library().getCards().push_front(cards.at(card_index));
                 cards.erase(cards.begin() + card_index);
             }
             else if (input == "bottom")
             {
-                game.library().getCards().push_back(cards[card_index]);
+                game.library().getCards().push_back(cards.at(card_index));
                 cards.erase(cards.begin() + card_index);
             }
             else

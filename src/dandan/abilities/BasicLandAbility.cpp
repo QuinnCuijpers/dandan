@@ -21,27 +21,32 @@ namespace
         map.emplace(dandan::core::SubType::Plains,
                     std::make_unique<dandan::abilities::ManaAbility>(
                         dandan::mana::ManaList{dandan::mana::ManaBag{
-                            {dandan::mana::ManaType::WHITE, 1}}}));
+                            {dandan::mana::ManaType::WHITE, 1},
+                        }}));
 
         map.emplace(dandan::core::SubType::Island,
                     std::make_unique<dandan::abilities::ManaAbility>(
                         dandan::mana::ManaList{dandan::mana::ManaBag{
-                            {dandan::mana::ManaType::BLUE, 1}}}));
+                            {dandan::mana::ManaType::BLUE, 1},
+                        }}));
 
         map.emplace(dandan::core::SubType::Swamp,
                     std::make_unique<dandan::abilities::ManaAbility>(
                         dandan::mana::ManaList{dandan::mana::ManaBag{
-                            {dandan::mana::ManaType::BLACK, 1}}}));
+                            {dandan::mana::ManaType::BLACK, 1},
+                        }}));
 
         map.emplace(dandan::core::SubType::Mountain,
                     std::make_unique<dandan::abilities::ManaAbility>(
                         dandan::mana::ManaList{dandan::mana::ManaBag{
-                            {dandan::mana::ManaType::BLACK, 1}}}));
+                            {dandan::mana::ManaType::BLACK, 1},
+                        }}));
 
         map.emplace(dandan::core::SubType::Forest,
                     std::make_unique<dandan::abilities::ManaAbility>(
                         dandan::mana::ManaList{dandan::mana::ManaBag{
-                            {dandan::mana::ManaType::BLACK, 1}}}));
+                            {dandan::mana::ManaType::BLACK, 1},
+                        }}));
 
         return map;
     }
@@ -71,7 +76,7 @@ namespace dandan::abilities
         core::ExecutionContext exec_ctx, const AbilityContext &context) const
     {
         auto res{false};
-        auto *card{(exec_ctx.cards.get())[context.source_card_id]};
+        auto *card{exec_ctx.cards.get()[context.source_card_id]};
         for (auto subtype : card->getCurrentSubTypes())
         {
             switch (subtype)

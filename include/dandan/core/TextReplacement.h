@@ -9,9 +9,14 @@ namespace dandan::core
 {
     using ReplacementType = std::variant<SubType, ColorWord>;
 
+    /** @brief Describes replacing one word with another.
+     * @struct TextReplacement
+     */
     struct TextReplacement
     {
+        /// The word to replace.
         ReplacementType from;
+        /// The word to replace it with.
         ReplacementType to;
     };
 } // namespace dandan::core
