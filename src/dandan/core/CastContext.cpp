@@ -69,11 +69,6 @@ namespace dandan::core
             }
 
             cost = flash_back->getCost();
-            // TODO: impl a check for flashback;
-            // auto iter = std::find_if(abilities.begin(), abilities.end(),
-            //                          []() { return true; });
-            // TODO: impl a way to find the flashback ability
-            // flashBackAbility();
             zone = Zone::GRAVEYARD;
             break;
         }

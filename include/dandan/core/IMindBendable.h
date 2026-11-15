@@ -6,6 +6,9 @@
 
 namespace dandan::core
 {
+    /** @brief An interface for objects affected by text-changing effects.
+     * @class IMindBendable
+     */
     class IMindBendable
     {
     public:

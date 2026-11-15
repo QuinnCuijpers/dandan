@@ -19,17 +19,25 @@ namespace dandan::core
 {
 
     /** @brief A class to hold the static data for a card.
-     * @class CardData
+     * @struct CardData
      */
     struct CardData
     {
+        /// The printed name of the card.
         std::string name{"unknown"};
+        /// The mana cost required to cast the card.
         mana::ManaPrice mana_cost;
+        /// The card's primary type.
         Type type{Type::Land};
+        /// The card's subtypes.
         std::vector<SubType> subtypes;
+        /// The card's supertype.
         SuperType supertype{SuperType::None};
+        /// The abilities printed on the card.
         std::vector<std::unique_ptr<abilities::IAbility>> abilities;
+        /// The printed power and toughness, if the card has them.
         std::optional<Stats> stats;
+        /// The color of the card.
         ColorWord color{ColorWord::Colorless};
     };
 

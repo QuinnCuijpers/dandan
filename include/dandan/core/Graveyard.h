@@ -25,6 +25,9 @@ namespace dandan::core
          */
         void addCard(Card &card);
 
+        /** Removes a card from the graveyard.
+         * @param card The card to remove.
+         */
         void removeCard(const Card &card);
 
         /** Gets the cards in the graveyard.
