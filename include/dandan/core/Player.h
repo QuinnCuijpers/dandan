@@ -113,7 +113,7 @@ namespace dandan::core
         void setLost();
 
         /** Draws a card from the library.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void drawCard(ExecutionContext exec_ctx);
 
@@ -125,7 +125,7 @@ namespace dandan::core
 
         /** Takes damage
          * @param damage The amount of damage to take.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void takeDamage(int damage, [[maybe_unused]] ExecutionContext exec_ctx);
 

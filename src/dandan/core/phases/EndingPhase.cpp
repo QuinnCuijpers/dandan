@@ -78,10 +78,12 @@ namespace dandan::core
             game.applyEndOfTurnEffects(context());
             m_step = Step::Done;
             break;
+            // LCOV_EXCL_START
         case Step::Done:
             assert(false && "Unreachable code in EndingPhase::handleNextStep");
             break;
         }
+        // LCOV_EXCL_STOP
     }
     [[nodiscard]] std::unique_ptr<IPhase> EndingPhase::handle()
     {

@@ -54,7 +54,7 @@ namespace dandan::core
         };
 
         /** Constructor
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         explicit CombatPhase(ExecutionContext exec_ctx);
 

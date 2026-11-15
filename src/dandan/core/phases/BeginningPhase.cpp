@@ -116,10 +116,12 @@ namespace dandan::core
             m_step = Step::Done;
             break;
         }
+            // LCOV_EXCL_START
         case Step::Done:
-            assert(false &&
-                   "Unreachable code in BeginningPhase::handleNextStep");
+            assert(false && "Unreachable code in "
+                            "BeginningPhase::handleNextStep"); // LCOV_EXCL_LINE
             break;
         }
+        // LCOV_EXCL_STOP
     }
 } // namespace dandan::core

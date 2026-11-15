@@ -18,7 +18,7 @@ namespace dandan::core
     {
     public:
         /** Constructor
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         explicit IPhase(ExecutionContext exec_ctx);
 

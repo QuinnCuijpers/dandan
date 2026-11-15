@@ -14,7 +14,7 @@ namespace dandan::core
     {
     public:
         /** Checks for state-based actions and handles them.
-         * @param game The game instance to check for state-based actions in.
+         * @param exec_ctx The execution context.
          */
         static void checkSBAs(ExecutionContext exec_ctx);
     };

@@ -20,11 +20,6 @@ namespace dandan::events
          */
         explicit ETBEvent(core::CardID card_id, core::PlayerID controller);
 
-        // void setTapped(bool tapped)
-        // {
-        //     m_tapped = tapped;
-        // }
-
         /** query whether the card entered tapped
          * @returns a boolean representing whether the card entered tapped
          */

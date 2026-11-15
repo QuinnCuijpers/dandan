@@ -27,7 +27,7 @@ namespace dandan::core
 
         /** Notifies all subscribers of an event.
          * @param event The event to notify subscribers of.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void notify(const events::IEvent &event, core::ExecutionContext exec_ctx) const;
 

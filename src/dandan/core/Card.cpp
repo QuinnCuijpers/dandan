@@ -316,10 +316,9 @@ namespace dandan::core
         m_prev_characteristics = std::move(character);
     }
 
-    // TODO: should generate a damage event
     /** Take damage.
      * @param damage The damage to take.
-     * @param game The game instance.
+     * @param exec_ctx The execution context.
      */
     void Card::takeDamage(int damage,
                           [[maybe_unused]] ExecutionContext exec_ctx)
@@ -337,7 +336,6 @@ namespace dandan::core
         return m_characteristics.color;
     }
 
-    // TODO: check this thoroughly
     /** Reset the state of the card.
      */
     void Card::resetState()
@@ -411,7 +409,6 @@ namespace dandan::core
         return ostream;
     }
 
-    // TODO: should only be public to Game::GameSetup
     void Card::setBoundAbilities(std::vector<abilities::BoundAbility> abilities)
     {
         m_current_abilities = std::move(abilities);

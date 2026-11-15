@@ -33,6 +33,8 @@ namespace dandan::effects
         /** @brief Get the display string for the effect
          * @return The display string
          */
+        // TODO: all effects should have a display method, in which case this
+        // can be an abstract method
         [[nodiscard]] virtual std::string display() const;
 
         /**
@@ -52,7 +54,7 @@ namespace dandan::effects
             core::ExecutionContext exec_ctx) const;
 
         /** @brief Apply the effect specific implementation.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          * @return The event to notify that the effect happened.
          */
         [[nodiscard]] virtual std::unique_ptr<events::IEvent> apply_impl(

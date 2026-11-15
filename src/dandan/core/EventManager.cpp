@@ -30,10 +30,7 @@ namespace dandan::core
         {
             return;
         }
-        if (m_subscribers.at(source).empty())
-        {
-            return;
-        }
+
         auto source_abilities{m_subscribers[source]};
         source_abilities.erase(
             std::remove_if(source_abilities.begin(), source_abilities.end(),
