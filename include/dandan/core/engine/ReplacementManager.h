@@ -25,8 +25,14 @@ namespace dandan::core
          */
         void unsubscribe(Card &card);
 
+        /** Unsubscribes a bound ability from replacement effects.
+         * @param ability The bound ability to unsubscribe.
+         */
         void unsubscribe(const abilities::BoundAbility &ability);
 
+        /** Gets the number of subscribed replacement effects.
+         * @return The number of replacement effects.
+         */
         [[nodiscard]] std::size_t size() const;
 
         /** Applies all active replacement effects to the given effect.

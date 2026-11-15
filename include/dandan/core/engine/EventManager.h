@@ -16,6 +16,9 @@ namespace dandan::core
     class EventManager
     {
     public:
+        /** Subscribes a bound ability to receive events.
+         * @param ability The bound ability to subscribe.
+         */
         void subscribe(abilities::BoundAbility &ability);
 
         /** Unsubscribes a card from the event manager.
@@ -23,6 +26,9 @@ namespace dandan::core
          */
         void unsubscribe(const Card &card);
 
+        /** Unsubscribes a bound ability from receiving events.
+         * @param ability The bound ability to unsubscribe.
+         */
         void unsubscribe(const abilities::BoundAbility &ability);
 
         /** Notifies all subscribers of an event.

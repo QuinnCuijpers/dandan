@@ -50,6 +50,9 @@ namespace dandan::core
          */
         void addStateTriggeredAbility(abilities::BoundAbility *ability);
 
+        /** Removes a state-triggered ability from the manager.
+         * @param ability The state-triggered ability to remove.
+         */
         void removeStateTriggeredAbility(
             const abilities::BoundAbility &ability);
 
@@ -63,6 +66,9 @@ namespace dandan::core
          */
         void checkConditions(ExecutionContext exec_ctx);
 
+        /** Gets the number of tracked triggers.
+         * @return The number of tracked triggers.
+         */
         std::size_t size() const;
 
         /** @brief Get the trigger records.

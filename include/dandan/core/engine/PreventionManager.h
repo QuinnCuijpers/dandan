@@ -37,10 +37,21 @@ namespace dandan::core
         void subscribe(CardID card,
                        std::unique_ptr<effects::IPreventionEffect> effect);
 
+        /** Subscribe a global bound-ability prevention effect.
+         * @param ability The bound ability providing the prevention effect.
+         */
         void subscribe(abilities::BoundAbility &ability);
 
+        /** Subscribe a card-scoped bound-ability prevention effect.
+         * @param card_id The card that owns the prevention effect.
+         * @param ability The bound ability providing the prevention effect.
+         */
         void subscribe(CardID card_id, abilities::BoundAbility &ability);
 
+        /** Subscribe a player-scoped bound-ability prevention effect.
+         * @param player_id The player that owns the prevention effect.
+         * @param ability The bound ability providing the prevention effect.
+         */
         void subscribe(PlayerID player_id, abilities::BoundAbility &ability);
 
         /** Unsubscribe the prevention effect.
@@ -53,8 +64,14 @@ namespace dandan::core
          */
         void unsubscribe(CardID card_id);
 
+        /** Unsubscribe a bound-ability prevention effect.
+         * @param ability The bound ability to unsubscribe.
+         */
         void unsubscribe(const abilities::BoundAbility &ability);
 
+        /** Gets the number of subscribed prevention effects.
+         * @return The number of prevention effects.
+         */
         std::size_t size() const;
 
         /** Check if an action is prevented.
