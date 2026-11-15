@@ -83,13 +83,6 @@ namespace dandan::core
         explicit Card(CardData *card_data,
                       PlayerID controller_id = PlayerID::getInvalidID());
 
-        ~Card() = default;
-
-        Card(const Card &other) = default;
-        Card &operator=(const Card &other) = default;
-        Card(Card &&other) noexcept = default;
-        Card &operator=(Card &&other) noexcept = default;
-
         /** Get the ID of the card.
          * @return The ID of the card.
          */
