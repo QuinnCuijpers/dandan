@@ -59,6 +59,10 @@ namespace dandan::core
          */
         void removeCard(const Card &card);
 
+        /** Sacrifices a card on the battlefield.
+         * @param card The card to sacrifice.
+         * @param exec_ctx The execution context.
+         */
         void sacrificeCard(Card &card, core::ExecutionContext exec_ctx);
 
     private:
