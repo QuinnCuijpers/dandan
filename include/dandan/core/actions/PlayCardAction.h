@@ -12,23 +12,43 @@
 
 namespace dandan::core
 {
+    /** @brief The ways a card can be cast. */
     enum class CastMode : uint8_t
     {
+        /// Cast from hand for its normal cost.
         Normal,
+        /// Cast from the graveyard using flashback.
         Flashback,
     };
 
+    /** Parses a cast mode from a string.
+     * @param str The string to parse.
+     * @return The parsed cast mode.
+     */
     CastMode CastModeFromStr(const std::string &str);
 
+    /** @brief A request to cast a card.
+     * @struct CastRequest
+     */
     struct CastRequest
     {
 
+        /** Constructs a cast request.
+         * @param card_id The ID of the card to cast.
+         * @param mode The optional cast mode.
+         */
         explicit CastRequest(dandan::core::CardID card_id,
                              std::optional<CastMode> mode = std::nullopt);
 
+        /// The ID of the card to cast.
         dandan::core::CardID card_id;
+        /// The mode used to cast the card.
         CastMode mode = CastMode::Normal;
 
+        /** Parses a cast request from an input string.
+         * @param input The input string to parse.
+         * @return The parsed cast request.
+         */
         static CastRequest fromStr(const std::string &input);
     };
 
@@ -52,6 +72,10 @@ namespace dandan::core
          */
         [[nodiscard]] CardID getCardID() const;
 
+        /** Creates the effect that casts the requested card.
+         * @param exec_ctx The execution context.
+         * @return The effect that casts the card.
+         */
         std::unique_ptr<effects::IOneShotEffect> createEffect(
             core::ExecutionContext exec_ctx) override;
 
