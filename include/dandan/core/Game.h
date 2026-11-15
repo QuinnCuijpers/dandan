@@ -44,6 +44,7 @@ namespace dandan::core
 
         /** Constructs a game with the given cards.
          * @param cards The cards vector to initialize the game with.
+         * @param shuffle Whether to shuffle the library after setup.
          * @return The constructed game instance.
          */
         static Game withCards(std::vector<Card> cards, bool shuffle = true);
@@ -53,6 +54,10 @@ namespace dandan::core
          */
         void setIstream(std::istream &istream);
 
+        /** Gets the execution context for this game.
+         * @return The execution context referencing this game's state and
+         * managers.
+         */
         ExecutionContext execution_context();
 
         /** Runs the game loop.

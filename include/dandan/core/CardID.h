@@ -43,6 +43,10 @@ namespace dandan::core
          */
         bool operator!=(const CardID &other) const;
 
+        /** Orders CardIDs by their underlying integer ID.
+         * @param other The other CardID to compare with.
+         * @return True if this ID is less than the other ID, false otherwise.
+         */
         bool operator<(const CardID &other) const;
 
         /** Gets the integer ID of the card.

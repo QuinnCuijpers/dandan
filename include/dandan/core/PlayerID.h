@@ -37,6 +37,11 @@ namespace dandan::core
          */
         [[nodiscard]] int id() const;
 
+        /** Creates a PlayerID from an integer. Use with caution as this can
+         * lead to collisions.
+         * @param player_id The integer ID to create the PlayerID from.
+         * @return The created PlayerID.
+         */
         PlayerID static fromInt(int player_id);
 
         /** Checks if two PlayerIDs are equal.
