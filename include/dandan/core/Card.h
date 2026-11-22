@@ -82,7 +82,11 @@ namespace dandan::core
          */
         CardCharacteristics &operator=(const CardCharacteristics &other);
 
+        /** Moves characteristics from another object. */
         CardCharacteristics(CardCharacteristics &&) noexcept = default;
+        /** Moves characteristics from another object.
+         * @return A reference to this object.
+         */
         CardCharacteristics &operator=(CardCharacteristics &&) noexcept =
             default;
     };
