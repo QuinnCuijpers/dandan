@@ -117,6 +117,9 @@ namespace dandan::core
          */
         void drawCard(ExecutionContext exec_ctx);
 
+        /** Adds a card from the player's hand to the battlefield.
+         * @param card The card to play.
+         */
         void playCard(Card &card);
 
         /** Moves a card from the player's hand to the graveyard.

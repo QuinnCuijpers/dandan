@@ -15,6 +15,13 @@ namespace dandan::core
     class ReplacementManager;
     class SBAManager;
 
+    /** @brief References to the game state and managers needed while resolving
+     * an effect.
+     *
+     * The context is passed by value so callers can safely hand copies to
+     * effects without transferring ownership of the referenced systems.
+     * @struct ExecutionContext
+     */
     struct ExecutionContext
     {
         /// The current game state.

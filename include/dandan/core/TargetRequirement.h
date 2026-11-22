@@ -64,6 +64,9 @@ namespace dandan::core
      */
     std::ostream &operator<<(std::ostream &ostream, TargetType target_type);
 
+    /** @brief A single target specification in a target requirement.
+     * @struct TargetSpec
+     */
     struct TargetSpec
     {
         /// The acceptable target types.
@@ -91,6 +94,9 @@ namespace dandan::core
                    Controller controller = Controller::Any);
     };
 
+    /** @brief The collection of target specifications required by an effect.
+     * @class TargetRequirement
+     */
     class TargetRequirement
     {
     public:
