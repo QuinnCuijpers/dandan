@@ -29,7 +29,6 @@ namespace dandan::core
     class GameState
     {
     public:
-        /** Constructs a game state with the default players. */
         GameState() = default;
 
         /** Gets a player from the game associated with the given ID immutably.

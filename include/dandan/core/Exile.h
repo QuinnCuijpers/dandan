@@ -14,7 +14,6 @@ namespace dandan::core
     class Exile
     {
     public:
-        /** Constructs an empty exile zone. */
         Exile() = default;
 
         /** Adds a card to the exile.
