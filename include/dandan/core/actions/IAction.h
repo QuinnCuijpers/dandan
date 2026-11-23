@@ -26,7 +26,8 @@ namespace dandan::core
 
         /**
          * Creates an effect associated with this action.
-         * @param game The game instance to use when creating the effect.
+         * @param exec_ctx The execution context to use when creating the
+         * effect.
          * @return A unique pointer to the created effect.
          */
         virtual std::unique_ptr<effects::IOneShotEffect> createEffect(

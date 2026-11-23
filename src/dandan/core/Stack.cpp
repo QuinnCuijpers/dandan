@@ -13,6 +13,7 @@
 #include "dandan/effects/one_shot/ETBEffect.h"
 #include "dandan/utils/overloadVisitor.h"
 #include <memory>
+#include <variant>
 
 namespace dandan::core
 {
@@ -99,7 +100,8 @@ namespace dandan::core
         if (effect)
         {
             auto final_effect{
-                replacement_manager.applyReplacementEffects(*effect, exec_ctx)};
+                replacement_manager.applyReplacementEffects(*effect, exec_ctx),
+            };
             auto event{final_effect->apply(exec_ctx)};
             if (event)
             {
@@ -132,7 +134,8 @@ namespace dandan::core
                         }
                         m_stack.pop_back();
                     },
-                    [](const abilities::BoundAbility &) {}},
+                    [](const abilities::BoundAbility &) {},
+                },
                 new_object);
         }
     }

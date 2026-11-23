@@ -16,12 +16,12 @@ namespace dandan::core
     {
     public:
         /** Subscribes to replacement effects.
-         * @param effect The replacement effect to subscribe to.
+         * @param ability The bound ability providing the replacement effect.
          */
         void subscribe(abilities::BoundAbility &ability);
 
         /** Unsubscribes from replacement effects.
-         * @param effect The replacement effect to unsubscribe from.
+         * @param card The card whose replacement effects to unsubscribe.
          */
         void unsubscribe(Card &card);
 
@@ -31,7 +31,7 @@ namespace dandan::core
 
         /** Applies all active replacement effects to the given effect.
          * @param effect The effect to apply replacement effects to.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          * @return The modified effect.
          */
         std::unique_ptr<effects::IOneShotEffect> applyReplacementEffects(

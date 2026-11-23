@@ -1,4 +1,5 @@
 #include "dandan/core/TargetRequirement.h"
+#include <cassert>
 
 namespace dandan::core
 {
@@ -22,8 +23,10 @@ namespace dandan::core
             return "Card";
         case TargetType::Any:
             return "Any";
+            // LCOV_EXCL_START
         default:
-            return "Unknown";
+            assert(false && "unreachable");
+            // LCOV_EXCL_STOP
         }
     }
 

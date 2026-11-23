@@ -46,7 +46,6 @@ namespace dandan::core
     {
     public:
         /** @brief Add a state-triggered ability to the manager.
-         * @param source The card ID of the source.
          * @param ability The state-triggered ability.
          */
         void addStateTriggeredAbility(abilities::BoundAbility *ability);
@@ -60,7 +59,7 @@ namespace dandan::core
         void removeCardConditions(CardID card_id);
 
         /** @brief Update the conditions for all tracked abilities.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void checkConditions(ExecutionContext exec_ctx);
 

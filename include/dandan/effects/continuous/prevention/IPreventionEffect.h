@@ -34,7 +34,7 @@ namespace dandan::effects
 
         /** Determines if this prevention effect prevents the given action.
          * @param action The action to check.
-         * @param game The game state.
+         * @param exec_ctx The execution context.
          * @return True if the prevention effect prevents the action, false
          * otherwise.
          */

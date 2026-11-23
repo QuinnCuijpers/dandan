@@ -16,7 +16,7 @@ namespace dandan::costs
     {
     public:
         /** Constructs a ManaCost with a specific amount of mana.
-         * @param mana The mana requirement for the cost.
+         * @param price The mana requirement for the cost.
          */
         explicit ManaCost(mana::ManaPrice price);
 
