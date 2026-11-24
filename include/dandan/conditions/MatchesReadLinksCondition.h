@@ -8,10 +8,17 @@
 
 namespace dandan::conditions
 {
+    /** @brief Checks whether two remembered link values are equal.
+     * @class MatchesReadLinksCondition
+     */
     class MatchesReadLinksCondition : public ICondition
     {
 
     public:
+        /** Constructs a condition comparing two remembered values.
+         * @param first The key of the first remembered value.
+         * @param second The key of the second remembered value.
+         */
         MatchesReadLinksCondition(std::string first, std::string second);
 
         [[nodiscard]] bool isSatisfied(
@@ -21,8 +28,14 @@ namespace dandan::conditions
 
         [[nodiscard]] std::unique_ptr<ICondition> clone() const override;
 
+        /** Gets the first remembered key.
+         * @return A const reference to the first key.
+         */
         [[nodiscard]] const std::string &getfirst() const;
 
+        /** Gets the second remembered key.
+         * @return A const reference to the second key.
+         */
         [[nodiscard]] const std::string &getSecond() const;
 
     private:

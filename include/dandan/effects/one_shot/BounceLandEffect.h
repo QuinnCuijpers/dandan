@@ -18,6 +18,10 @@ namespace dandan::effects
     class BounceLandEffect : public IOneShotEffect
     {
     public:
+        /** @brief Constructs an effect that bounces a land controlled by a player.
+         * @param player_id Player whose land is bounced.
+         * @param effect_context Effect execution context.
+         */
         explicit BounceLandEffect(core::PlayerID player_id,
                                   EffectContext effect_context);
 
@@ -30,6 +34,11 @@ namespace dandan::effects
         core::PlayerID m_player_id;
     };
 
+    /** @brief Definition for creating land-bounce effects.
+     * @class BounceLandEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class BounceLandEffectDefinition : public IOneShotEffectDefinition
     {
     public:

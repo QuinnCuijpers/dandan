@@ -12,11 +12,6 @@ namespace dandan::abilities
     {
     }
 
-    /** Create an effect instance for this ability.
-     * @param game The game instance.
-     * @param context The ability context.
-     * @return The created effect instance.
-     */
     [[nodiscard]] std::unique_ptr<effects::IOneShotEffect>
     StateTriggeredAbility::createEffect(
         core::ExecutionContext exec_ctx,

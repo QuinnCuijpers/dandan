@@ -7,6 +7,10 @@
 
 namespace dandan::abilities
 {
+    /** @brief The flashback keyword ability.
+     * @class FlashbackAbility
+     * @implements IKeyWordAbility
+     */
     class FlashbackAbility final : public IKeyWordAbility
     {
     public:
@@ -16,8 +20,14 @@ namespace dandan::abilities
             [[maybe_unused]] core::ExecutionContext exec_ctx,
             [[maybe_unused]] AbilityContext context) const override;
 
+        /** Constructs a flashback ability with the given alternative cost.
+         * @param cost The mana cost to cast the card with flashback.
+         */
         explicit FlashbackAbility(mana::ManaPrice cost);
 
+        /** Gets the alternative mana cost.
+         * @return A const reference to the mana cost.
+         */
         [[nodiscard]] const mana::ManaPrice &getCost() const;
 
         [[nodiscard]] std::unique_ptr<IAbility> clone() const override;

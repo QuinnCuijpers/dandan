@@ -19,6 +19,7 @@ namespace dandan::effects
     public:
         /** @brief Constructs a new destroy effect with the specified card.
          * @param card The card to destroy.
+         * @param context Effect execution context.
          */
         explicit DestroyEffect(core::Card &card, EffectContext context);
 

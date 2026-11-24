@@ -6,11 +6,21 @@
 
 namespace dandan::numbers
 {
+    /** @brief Counts cards with a given name in a graveyard.
+     * @class GraveyardCount
+     * @implements INumber
+     */
     class GraveyardCount : public INumber
     {
     public:
+        /** Constructs a count for the given card name.
+         * @param name The card name to count.
+         */
         explicit GraveyardCount(std::string name);
 
+        /** Gets the card name being counted.
+         * @return A const reference to the card name.
+         */
         [[nodiscard]] const std::string &getName() const;
 
         [[nodiscard]] int getValue(

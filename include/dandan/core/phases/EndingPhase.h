@@ -37,7 +37,7 @@ namespace dandan::core
 
         /**
          * Constructor
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         explicit EndingPhase(ExecutionContext exec_ctx);
 

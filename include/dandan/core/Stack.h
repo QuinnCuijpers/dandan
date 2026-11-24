@@ -33,7 +33,7 @@ namespace dandan::core
         [[nodiscard]] bool isEmpty() const;
 
         /** Resolves the next object in the stack and pops it from the stack.
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          */
         void resolveNext(core::ExecutionContext exec_ctx);
 
@@ -42,8 +42,14 @@ namespace dandan::core
          */
         [[nodiscard]] const std::vector<StackObject> &getStackObjects() const;
 
+        /** Removes every object equal to the given object from the stack.
+         * @param object The object to remove.
+         */
         static void removeObject(const StackObject &object);
 
+        /** Removes every stack object associated with a card.
+         * @param card_id The ID of the card to remove.
+         */
         void removeCard(CardID card_id);
 
     private:

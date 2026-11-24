@@ -20,6 +20,7 @@ namespace dandan::effects
     public:
         /** @brief Construct an EffectList with a vector of one-shot effects.
          * @param effects The vector of one-shot effects.
+         * @param context The context associated with the effect list.
          */
         explicit EffectList(
             const std::vector<std::unique_ptr<IOneShotEffect>> &effects,

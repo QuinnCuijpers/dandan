@@ -37,10 +37,21 @@ namespace dandan::core
         void subscribe(CardID card,
                        std::unique_ptr<effects::IPreventionEffect> effect);
 
+        /** Subscribe a global bound-ability prevention effect.
+         * @param ability The bound ability providing the prevention effect.
+         */
         void subscribe(abilities::BoundAbility &ability);
 
+        /** Subscribe a card-scoped bound-ability prevention effect.
+         * @param card_id The card that owns the prevention effect.
+         * @param ability The bound ability providing the prevention effect.
+         */
         void subscribe(CardID card_id, abilities::BoundAbility &ability);
 
+        /** Subscribe a player-scoped bound-ability prevention effect.
+         * @param player_id The player that owns the prevention effect.
+         * @param ability The bound ability providing the prevention effect.
+         */
         void subscribe(PlayerID player_id, abilities::BoundAbility &ability);
 
         /** Unsubscribe the prevention effect.
@@ -53,17 +64,24 @@ namespace dandan::core
          */
         void unsubscribe(CardID card_id);
 
+        /** Unsubscribe a bound-ability prevention effect.
+         * @param ability The bound ability to unsubscribe.
+         */
         void unsubscribe(const abilities::BoundAbility &ability);
 
+        /** Gets the number of subscribed prevention effects.
+         * @return The number of prevention effects.
+         */
         std::size_t size() const;
 
         /** Check if an action is prevented.
          * @param action The action to check.
-         * @param game The game instance. Game is treated as const but as bound
-         * abilities need to create a copy of their effect and those could pay
-         * costs, we cant mark it as const for now
+         * @param exec_ctx The execution context.
          * @return True if the action is prevented by a prevention effect, false
          * otherwise.
+         * @note The game is treated as const, but bound abilities need to
+         * create a copy of their effect and those could pay costs, so it
+         * cannot be marked const for now.
          */
         [[nodiscard]] bool isPrevented(const IAction &action, ExecutionContext exec_ctx) const;
 

@@ -6,6 +6,11 @@
 #include <memory>
 namespace dandan::abilities
 {
+    /** @brief The flying keyword ability.
+     * @class FlyingAbility
+     *
+     * @implements IKeyWordAbility
+     */
     class FlyingAbility : public IKeyWordAbility
     {
     public:

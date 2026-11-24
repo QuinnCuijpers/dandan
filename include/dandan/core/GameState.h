@@ -20,18 +20,24 @@
 namespace dandan::core
 {
 
+    /** @brief The mutable state of a game.
+     *
+     * Owns the players and shared zones, and provides helpers for moving cards
+     * and handling player actions.
+     * @class GameState
+     */
     class GameState
     {
     public:
         GameState() = default;
 
-        /** Gets a player from the game accosiated with the given ID immutably.
+        /** Gets a player from the game associated with the given ID immutably.
          * @param player_id The ID of the player to get.
          * @return A const reference to the player at the specified ID.
          */
         [[nodiscard]] const Player &getPlayer(PlayerID player_id) const;
 
-        /** Gets a player from the game accosiated with the given ID mutably.
+        /** Gets a player from the game associated with the given ID mutably.
          * @param player_id The ID of the player to get.
          * @return A reference to the player at the specified ID.
          */
@@ -74,6 +80,12 @@ namespace dandan::core
          */
         [[nodiscard]] PlayerID getNextPlayerID(PlayerID player_id) const;
 
+        /** Gets all valid targets of a given type.
+         * @param exec_ctx The execution context.
+         * @param type The type of target to find.
+         * @param controller The controller restriction for the targets.
+         * @return A vector of valid targets.
+         */
         [[nodiscard]] std::vector<core::Target> getValidTargets(
             core::ExecutionContext exec_ctx, core::TargetType type,
             Controller controller = Controller::Any) const;
@@ -82,6 +94,9 @@ namespace dandan::core
          * @return A reference to the library.
          */
         [[nodiscard]] Library &library();
+        /** Gets the library immutably.
+         * @return A const reference to the library.
+         */
         [[nodiscard]] const Library &library() const;
 
         /** Gets the stack mutably.
@@ -117,10 +132,23 @@ namespace dandan::core
          */
         void moveCardFromZone(Player &player, const Card &card);
 
+        /** Moves a card from its current zone to the given zone.
+         * @param card The card to move.
+         * @param player The player who owns the destination zone.
+         * @param zone The destination zone.
+         */
         void moveCardToZone(Card &card, Player &player, Zone zone);
 
+        /** Handles a play-card input command.
+         * @param input The raw input command.
+         * @param exec_ctx The execution context.
+         */
         static void handlePlay(const std::string &input,
                                ExecutionContext exec_ctx);
+        /** Handles an activate-ability input command.
+         * @param input The raw input command.
+         * @param exec_ctx The execution context.
+         */
         static void handleActivate(const std::string &input,
                                    ExecutionContext exec_ctx);
 
@@ -129,12 +157,19 @@ namespace dandan::core
          */
         void quit(const Player &player) const;
 
+        /** Registers an effect to apply at the end of the current turn.
+         * @param effect The effect to register.
+         */
         void addEndOfTurnEffect(
             std::unique_ptr<effects::IOneShotEffect> effect);
 
+        /** Applies and clears all registered end-of-turn effects.
+         * @param exec_ctx The execution context.
+         */
         void applyEndOfTurnEffects(const ExecutionContext &exec_ctx);
 
         /** Passes the turn to the next player.
+         * @param exec_ctx The execution context.
          */
         void passTurn(const ExecutionContext &exec_ctx);
 
@@ -158,12 +193,15 @@ namespace dandan::core
         [[nodiscard]] std::unique_ptr<IPhase> &phase();
         /** Prints the names and IDs of the specified cards.
          * @param card_ids The IDs of the cards to print.
+         * @param card_registry The registry used to look up the cards.
          */
         static void printCards(const std::vector<CardID> &card_ids,
                                const CardRegistry &card_registry);
+        /** Clears the terminal screen. */
         static void clearScreen();
 
         /** Renders the game state.
+         * @param card_registry The registry used to look up card names.
          */
         void render(const CardRegistry &card_registry) const;
 

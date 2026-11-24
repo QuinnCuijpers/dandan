@@ -6,9 +6,15 @@
 
 namespace dandan::abilities
 {
+    /** @brief Interface for abilities identified by a keyword.
+     * @class IKeyWordAbility
+     */
     class IKeyWordAbility : public IAbility
     {
     public:
+        /** Gets the keyword represented by this ability.
+         * @return The keyword.
+         */
         [[nodiscard]] virtual Keyword keyword() const = 0;
 
     private:

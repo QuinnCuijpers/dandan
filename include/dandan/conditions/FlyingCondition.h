@@ -6,6 +6,9 @@
 #include <memory>
 namespace dandan::conditions
 {
+    /** @brief Checks whether a creature has flying.
+     * @class FlyingCondition
+     */
     class FlyingCondition : public ICondition
     {
 

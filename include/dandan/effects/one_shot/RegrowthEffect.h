@@ -8,9 +8,19 @@
 
 namespace dandan::effects
 {
+    /** @brief A one-shot effect that returns a graveyard card matching the
+     * given types to a player's hand.
+     * @class RegrowthEffect
+     * @implements IOneShotEffect
+     */
     class RegrowthEffect : public IOneShotEffect
     {
     public:
+        /** @brief Creates a regrowth effect.
+         * @param filter_types Card types used to filter graveyard cards.
+         * @param player_id The player whose hand receives the card.
+         * @param context Effect execution context.
+         */
         RegrowthEffect(std::vector<core::Type> filter_types,
                        core::PlayerID player_id, EffectContext context);
 
@@ -24,9 +34,17 @@ namespace dandan::effects
         core::PlayerID m_player_id;
     };
 
+    /** @brief Effect definition for returning a graveyard card to a player's
+     * hand.
+     * @class RegrowthEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class RegrowthEffectDefinition : public IOneShotEffectDefinition
     {
     public:
+        /** @brief Creates a regrowth effect definition.
+         * @param filter_types Card types used to filter graveyard cards.
+         */
         explicit RegrowthEffectDefinition(
             std::vector<dandan::core::Type> filter_types);
 
@@ -37,6 +55,9 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Gets the card types used to filter graveyard cards.
+         * @return The configured card types.
+         */
         [[nodiscard]] const std::vector<dandan::core::Type> &getFilterTypes()
             const;
 

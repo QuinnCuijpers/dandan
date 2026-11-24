@@ -14,10 +14,19 @@
 
 namespace dandan::effects
 {
+    /** @brief A one-shot effect that moves a targeted permanent to the top of
+     * the library.
+     * @class SpinToTopEffect
+     * @implements IOneShotEffect
+     */
     class SpinToTopEffect : public IOneShotEffect
     {
 
     public:
+        /** @brief Creates a spin-to-top effect.
+         * @param target The permanent to move.
+         * @param context Effect execution context.
+         */
         SpinToTopEffect(core::Target target, EffectContext context);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
@@ -29,10 +38,18 @@ namespace dandan::effects
         core::Target m_target;
     };
 
+    /** @brief Effect definition for moving a permanent to the top of the
+     * library.
+     * @class SpinToTopEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class SpinToTopEffectDefinition : public IOneShotEffectDefinition
     {
 
     public:
+        /** @brief Creates a spin-to-top effect definition.
+         * @param target_req Target requirement for the permanent to move.
+         */
         explicit SpinToTopEffectDefinition(core::TargetRequirement target_req);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(

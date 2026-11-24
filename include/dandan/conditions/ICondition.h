@@ -30,6 +30,7 @@ namespace dandan::conditions
         /**
          * @param exec_ctx The execution context for which to check whether the
          * condition is satisfied.
+         * @param context The effect context for the condition, if available.
          * @returns true if the condition is satisfied, false otherwise.
          */
         [[nodiscard]] virtual bool isSatisfied(

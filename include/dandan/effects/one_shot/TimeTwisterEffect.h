@@ -10,9 +10,17 @@
 
 namespace dandan::effects
 {
+    /** @brief A one-shot effect that moves all hand and graveyard cards into
+     * the library and shuffles it.
+     * @class TimeTwisterEffect
+     * @implements IOneShotEffect
+     */
     class TimeTwisterEffect : public IOneShotEffect
     {
     public:
+        /** @brief Creates a Time Twister effect.
+         * @param context Effect execution context.
+         */
         explicit TimeTwisterEffect(EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
@@ -21,6 +29,10 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
     };
 
+    /** @brief Effect definition for the Time Twister effect.
+     * @class TimeTwisterEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class TimeTwisterEffectDefinition : public IOneShotEffectDefinition
     {
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()

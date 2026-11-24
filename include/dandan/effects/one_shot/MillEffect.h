@@ -12,9 +12,19 @@
 
 namespace dandan::effects
 {
+    /** @brief Effect that mills cards from a player's library.
+     * @class MillEffect
+     *
+     * @implements IOneShotEffect
+     */
     class MillEffect : public IOneShotEffect
     {
     public:
+        /** @brief Constructs a mill effect.
+         * @param amount Number of cards to mill.
+         * @param player_id Player whose library is milled.
+         * @param context Effect execution context.
+         */
         MillEffect(int amount, core::PlayerID player_id, EffectContext context);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
@@ -27,9 +37,18 @@ namespace dandan::effects
         core::PlayerID m_player_id;
     };
 
+    /** @brief Definition of an effect that mills cards from a library.
+     * @class MillEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class MillEffectDefinition : public IOneShotEffectDefinition
     {
     public:
+        /** @brief Constructs a mill effect definition.
+         * @param amount Number of cards to mill.
+         * @param target_requirement Requirement for the player to mill.
+         */
         MillEffectDefinition(int amount,
                              core::TargetRequirement target_requirement);
 
@@ -42,6 +61,9 @@ namespace dandan::effects
 
         [[nodiscard]] std::string display() const override;
 
+        /** @brief Gets the number of cards to mill.
+         * @return Number of cards to mill.
+         */
         [[nodiscard]] int getAmount() const;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()

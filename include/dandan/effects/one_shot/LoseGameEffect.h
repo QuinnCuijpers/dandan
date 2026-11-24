@@ -20,6 +20,7 @@ namespace dandan::effects
     public:
         /** @brief Constructs a new lose game effect.
          * @param player The player to cause to lose the game.
+         * @param context Effect execution context.
          */
         explicit LoseGameEffect(const core::PlayerID &player,
                                 EffectContext context);

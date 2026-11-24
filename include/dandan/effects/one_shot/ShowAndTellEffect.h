@@ -11,10 +11,19 @@
 
 namespace dandan::effects
 {
+    /** @brief A one-shot effect that lets a player put an artifact, creature,
+     * enchantment, or land card from their hand onto the battlefield.
+     * @class ShowAndTellEffect
+     * @implements IOneShotEffect
+     */
     class ShowAndTellEffect : public IOneShotEffect
     {
 
     public:
+        /** @brief Creates a Show and Tell effect.
+         * @param player_id The player who may put a card onto the battlefield.
+         * @param context Effect execution context.
+         */
         ShowAndTellEffect(core::PlayerID player_id, EffectContext context);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
@@ -29,10 +38,17 @@ namespace dandan::effects
         core::PlayerID m_player;
     };
 
+    /** @brief Effect definition for the Show and Tell effect.
+     * @class ShowAndTellEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class ShowAndTellEffectDefinition : public IOneShotEffectDefinition
     {
 
     public:
+        /** @brief Creates a Show and Tell effect definition.
+         * @param target_requirement Target requirement for the effect.
+         */
         explicit ShowAndTellEffectDefinition(
             core::TargetRequirement target_requirement);
 

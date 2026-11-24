@@ -19,16 +19,11 @@ namespace dandan::core
     {
     public:
         /** Constructor
-         * @param game The game instance.
+         * @param exec_ctx The execution context.
          * @param pre_combat Whether this is a pre-combat main phase. Defaults
          * to true.
          */
         explicit MainPhase(ExecutionContext exec_ctx, bool pre_combat = true);
-
-        /** Constructor
-         * @param game The game instance.
-         * @param pre_combat Whether this is a pre-combat main phase.
-         */
 
         [[nodiscard]] std::unique_ptr<IPhase> handle() override;
 

@@ -29,8 +29,14 @@ namespace dandan::core
          */
         void addCardBottom(Card &card);
 
+        /** Adds a card to the top of the library.
+         * @param card The card to add.
+         */
         void addCardTop(Card &card);
 
+        /** Removes a card from the library.
+         * @param card The card to remove.
+         */
         void removeCard(const Card &card);
 
         /** Gets the cards in the library mutably.
@@ -43,6 +49,11 @@ namespace dandan::core
          */
         [[nodiscard]] const std::deque<CardID> &getCards() const;
 
+        /** Moves cards from the top of the library to the graveyard.
+         * @param exec_ctx The execution context.
+         * @param count The number of cards to mill.
+         * @return The IDs of the milled cards.
+         */
         std::vector<CardID> mill(core::ExecutionContext exec_ctx,
                                  int count = 1);
 

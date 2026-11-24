@@ -8,11 +8,24 @@
 #include <utility>
 namespace dandan::effects
 {
+    /** @brief One-shot effect that changes a land's basic land types.
+     * @class ChangeLandTypeEffect
+     *
+     * @implements IOneShotEffect
+     */
     class ChangeLandTypeEffect : public IOneShotEffect
     {
     public:
+        /** @brief Constructs an effect that prompts for land types.
+         * @param context Effect execution context.
+         */
         explicit ChangeLandTypeEffect(EffectContext context);
 
+        /** @brief Constructs an effect that sets two basic land types.
+         * @param basic_land_1 First basic land subtype.
+         * @param basic_land_2 Second basic land subtype.
+         * @param context Effect execution context.
+         */
         ChangeLandTypeEffect(core::SubType basic_land_1,
                              core::SubType basic_land_2, EffectContext context);
 
@@ -26,6 +39,11 @@ namespace dandan::effects
         std::optional<core::SubType> m_basic_land_2;
     };
 
+    /** @brief Definition for creating land-type change effects.
+     * @class ChangeLandTypeEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class ChangeLandTypeEffectDefinition : public IOneShotEffectDefinition
     {
     public:

@@ -9,9 +9,19 @@
 
 namespace dandan::effects
 {
+    /** @brief A one-shot effect that searches a player's library for a card of
+     * the given types and puts it on top.
+     * @class TutorTopEffect
+     * @implements IOneShotEffect
+     */
     class TutorTopEffect : public IOneShotEffect
     {
     public:
+        /** @brief Creates a tutor-to-top effect.
+         * @param filter_types Card types used to filter library cards.
+         * @param player_id The player performing the search.
+         * @param context Effect execution context.
+         */
         TutorTopEffect(std::vector<core::Type> filter_types,
                        core::PlayerID player_id, EffectContext context);
 
@@ -25,9 +35,16 @@ namespace dandan::effects
         core::PlayerID m_player_id;
     };
 
+    /** @brief Effect definition for the tutor-to-top effect.
+     * @class TutorTopEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class TutorTopEffectDefinition : public IOneShotEffectDefinition
     {
     public:
+        /** @brief Creates a tutor-to-top effect definition.
+         * @param filter_types Card types used to filter library cards.
+         */
         explicit TutorTopEffectDefinition(
             std::vector<dandan::core::Type> filter_types);
 
@@ -38,6 +55,9 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Gets the card types used to filter library cards.
+         * @return The configured card types.
+         */
         [[nodiscard]] const std::vector<dandan::core::Type> &getFilterTypes()
             const;
 

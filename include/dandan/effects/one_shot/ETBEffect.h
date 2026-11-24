@@ -19,6 +19,7 @@ namespace dandan::effects
     public:
         /** Constructor
          * @param card the card that would be entering the battlefield
+         * @param context Effect execution context.
          */
         explicit ETBEffect(core::Card &card, EffectContext context);
 
