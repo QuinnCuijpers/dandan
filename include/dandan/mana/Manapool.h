@@ -17,9 +17,9 @@ namespace dandan::mana
     public:
         Manapool() = default;
         Manapool(const Manapool &) = delete;
-        Manapool(Manapool &&) = default;
+        Manapool(Manapool &&) = delete;
         Manapool &operator=(const Manapool &) = delete;
-        Manapool &operator=(Manapool &&) = default;
+        Manapool &operator=(Manapool &&) = delete;
         virtual ~Manapool() = default;
 
         /** Adds mana to the resource pool.
@@ -27,6 +27,9 @@ namespace dandan::mana
          */
         void add(const ManaBag &mana);
 
+        /** Gets the mana currently in the pool.
+         * @return A const reference to the mana bag.
+         */
         [[nodiscard]] const ManaBag &view() const;
 
         /** Checks if the mana can cover the cost passed in.
@@ -35,10 +38,10 @@ namespace dandan::mana
          */
         [[nodiscard]] bool canPay(const ManaPrice &price) const;
 
-        /** Pays the cost of the mana passed in.
+        /** Tries to pay the cost of the mana passed in.
          * @param price The price to pay.
+         * @return True if the price was paid, false otherwise.
          */
-
         bool pay(const ManaPrice &price);
 
         /** Empties the mana pool.
