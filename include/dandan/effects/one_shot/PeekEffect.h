@@ -14,13 +14,15 @@ namespace dandan::effects
      * library
      * @class PeekEffect
      *
-     * @implements @IOneShotEffect
+     * @implements IOneShotEffect
      */
     class PeekEffect final : public IOneShotEffect
     {
     public:
         /** Constructor
          *@param peek_amount the amount of cards to peek.
+         * @param player_id Player whose library is peeked at.
+         * @param context Effect execution context.
          */
         explicit PeekEffect(int peek_amount, core::PlayerID player_id,
                             EffectContext context);
@@ -35,18 +37,31 @@ namespace dandan::effects
         core::PlayerID m_player_id;
     };
 
+    /** @brief Definition of an effect that peeks at the top of a library.
+     * @class PeekEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class PeekEffectDefinition : public IOneShotEffectDefinition
     {
     public:
         PeekEffectDefinition() = default;
+
+        /** @brief Constructs a peek effect definition.
+         * @param peek_amount Number of cards to peek at.
+         */
         explicit PeekEffectDefinition(int peek_amount);
+
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
-            [[maybe_unused]] core::ExecutionContext exex_ctx,
+            [[maybe_unused]] core::ExecutionContext exec_ctx,
             EffectContext context) const override;
 
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Gets the number of cards to peek at.
+         * @return Number of cards to peek at.
+         */
         [[nodiscard]] int getPeekAmount() const;
 
     private:

@@ -17,8 +17,9 @@ namespace dandan::effects
     class AddManaEffect : public IOneShotEffect
     {
     public:
-        /** Constructor
-         * @param mana the mana that this effect will add.
+        /** @brief Constructs an effect that adds mana to a player.
+         * @param mana Mana to add.
+         * @param context Effect execution context.
          */
         explicit AddManaEffect(mana::ManaBag mana, EffectContext context);
 
@@ -27,6 +28,9 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
+        /** @brief Gets the mana bag this effect adds.
+         * @return Mana to add.
+         */
         [[nodiscard]] const mana::ManaBag &getMana() const;
 
     private:

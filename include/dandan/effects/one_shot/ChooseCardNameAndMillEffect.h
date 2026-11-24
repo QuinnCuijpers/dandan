@@ -13,10 +13,21 @@
 
 namespace dandan::effects
 {
+    /** @brief One-shot effect that chooses a card name and mills matching cards.
+     * @class ChooseCardNameAndMillEffect
+     *
+     * @implements IOneShotEffect
+     */
     class ChooseCardNameAndMillEffect : public IOneShotEffect
     {
 
     public:
+        /** @brief Constructs a choose-name-and-mill effect.
+         * @param amount Number of cards to mill.
+         * @param card_id Source card identifier.
+         * @param target Target whose library is affected.
+         * @param effect_context Effect execution context.
+         */
         ChooseCardNameAndMillEffect(int amount, core::CardID card_id,
                                     core::Target target,
                                     EffectContext effect_context);
@@ -32,13 +43,25 @@ namespace dandan::effects
         core::Target m_target;
     };
 
+    /** @brief Definition for creating choose-name-and-mill effects.
+     * @class ChooseCardNameAndMillEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class ChooseCardNameAndMillEffectDefinition
         : public IOneShotEffectDefinition
     {
 
     public:
+        /** @brief Constructs a definition with default amount.
+         * @param target_reqs Target selection requirements.
+         */
         explicit ChooseCardNameAndMillEffectDefinition(
             core::TargetRequirement target_reqs);
+        /** @brief Constructs a definition with a mill amount.
+         * @param amount Number of cards to mill.
+         * @param target_reqs Target selection requirements.
+         */
         ChooseCardNameAndMillEffectDefinition(
             int amount, core::TargetRequirement target_reqs);
 
@@ -49,6 +72,9 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Gets the configured mill amount.
+         * @return Number of cards to mill.
+         */
         [[nodiscard]] int getAmount() const;
 
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()

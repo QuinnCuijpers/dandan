@@ -13,10 +13,20 @@
 
 namespace dandan::effects
 {
+    /** @brief Counterspell effect that returns a countered card to a zone.
+     * @class MemoryLapseEffect
+     *
+     * @implements IOneShotEffect
+     */
     class MemoryLapseEffect : public IOneShotEffect
     {
 
     public:
+        /** @brief Constructs a memory lapse effect.
+         * @param target Card to counter.
+         * @param context Effect execution context.
+         * @param target_zone Zone to move the card to when countered.
+         */
         explicit MemoryLapseEffect(
             core::Target target, EffectContext context,
             core::Zone target_zone = core::Zone::LIBRARY);
@@ -31,10 +41,18 @@ namespace dandan::effects
         core::Zone m_target_zone{core::Zone::LIBRARY};
     };
 
+    /** @brief Definition of a memory lapse effect.
+     * @class MemoryLapseEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class MemoryLapseEffectDefinition : public IOneShotEffectDefinition
     {
 
     public:
+        /** @brief Constructs a memory lapse effect definition.
+         * @param target_requirements Requirements for the card to counter.
+         */
         explicit MemoryLapseEffectDefinition(
             core::TargetRequirement target_requirements);
 

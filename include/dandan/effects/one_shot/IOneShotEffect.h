@@ -22,6 +22,9 @@ namespace dandan::effects
     class IOneShotEffect
     {
     public:
+        /** @brief Construct a one-shot effect with the given context.
+         * @param effect_context The context associated with the effect.
+         */
         explicit IOneShotEffect(EffectContext effect_context);
 
         IOneShotEffect(const IOneShotEffect &) = delete;
@@ -58,6 +61,9 @@ namespace dandan::effects
         [[nodiscard]] virtual std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const = 0;
 
+        /** @brief Get the context associated with this effect.
+         * @return The effect context.
+         */
         [[nodiscard]] virtual EffectContext getEffectContext() const;
 
     private:

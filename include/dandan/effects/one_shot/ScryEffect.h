@@ -9,7 +9,7 @@
 
 namespace dandan::effects
 {
-    /** @brief Reprents the effect of scrying
+    /** @brief Represents the effect of scrying cards.
      * @struct ScryEffect
      *
      * @implements IOneShotEffect
@@ -17,9 +17,10 @@ namespace dandan::effects
     class ScryEffect final : public IOneShotEffect
     {
     public:
-        /** Constructor
-         * @param scry_amount the amount of cards to scry
-         * @param player the player who will scry
+        /** @brief Creates a scry effect.
+         * @param scry_amount The number of cards to scry.
+         * @param player The player who will scry.
+         * @param context Effect execution context.
          */
         explicit ScryEffect(int scry_amount, core::PlayerID player,
                             EffectContext context);
@@ -28,6 +29,9 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
             core::ExecutionContext exec_ctx) const override;
 
+        /** @brief Gets the number of cards to scry.
+         * @return The number of cards to scry.
+         */
         [[nodiscard]] int getScryAmount() const;
 
     private:
@@ -35,11 +39,20 @@ namespace dandan::effects
         core::PlayerID m_player;
     };
 
+    /** @brief Effect definition for scrying a configurable number of cards.
+     * @class ScryEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class ScryEffectDefinition : public IOneShotEffectDefinition
     {
     public:
         ScryEffectDefinition() = default;
+
+        /** @brief Creates a scry effect definition.
+         * @param scry_amount The number of cards to scry.
+         */
         explicit ScryEffectDefinition(int scry_amount);
+
         [[nodiscard]] std::unique_ptr<IOneShotEffect> bind(
             [[maybe_unused]] core::ExecutionContext exec_ctx,
             EffectContext context) const override;
@@ -47,6 +60,9 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Gets the number of cards to scry.
+         * @return The number of cards to scry.
+         */
         [[nodiscard]] int getScryAmount() const;
 
     private:

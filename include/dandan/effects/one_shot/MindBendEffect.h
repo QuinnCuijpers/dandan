@@ -13,12 +13,27 @@
 
 namespace dandan::effects
 {
+    /** @brief Effect that changes text on a target permanent.
+     * @class MindBendEffect
+     *
+     * @implements IOneShotEffect
+     */
     class MindBendEffect : public IOneShotEffect
     {
 
     public:
+        /** @brief Constructs a mind bend effect that prompts for replacements.
+         * @param target Permanent whose text is changed.
+         * @param context Effect execution context.
+         */
         explicit MindBendEffect(core::Target target, EffectContext context);
 
+        /** @brief Constructs a mind bend effect with fixed replacements.
+         * @param target Permanent whose text is changed.
+         * @param to_replace Text to replace.
+         * @param replace_with Replacement text.
+         * @param context Effect execution context.
+         */
         MindBendEffect(core::Target target, core::ReplacementType to_replace,
                        core::ReplacementType replace_with,
                        EffectContext context);
@@ -36,9 +51,17 @@ namespace dandan::effects
         std::optional<core::ReplacementType> m_replace_with;
     };
 
+    /** @brief Definition of an effect that changes text on a permanent.
+     * @class MindBendEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class MindBendEffectDefinition : public IOneShotEffectDefinition
     {
     public:
+        /** @brief Constructs a mind bend effect definition.
+         * @param target_requirements Requirements for the target permanent.
+         */
         explicit MindBendEffectDefinition(
             core::TargetRequirement target_requirements);
 

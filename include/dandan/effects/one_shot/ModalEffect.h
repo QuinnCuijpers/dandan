@@ -11,11 +11,18 @@
 
 namespace dandan::effects
 {
-
+    /** @brief Definition of an effect that offers a choice of modes.
+     * @class ModalEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class ModalEffectDefinition : public IOneShotEffectDefinition
     {
 
     public:
+        /** @brief Constructs a modal effect definition.
+         * @param options Effect definitions for the available modes.
+         */
         explicit ModalEffectDefinition(
             std::vector<std::unique_ptr<IOneShotEffectDefinition>> options);
 
@@ -28,6 +35,9 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Gets the available modes.
+         * @return Effect definitions for the available modes.
+         */
         [[nodiscard]] const std::vector<
             std::unique_ptr<IOneShotEffectDefinition>> &
         getOptions() const;

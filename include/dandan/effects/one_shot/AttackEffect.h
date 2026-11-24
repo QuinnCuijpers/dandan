@@ -17,8 +17,9 @@ namespace dandan::effects
     class AttackEffect : public IOneShotEffect
     {
     public:
-        /** Constructor
-         * @param creature The creature to apply the effect to.
+        /** @brief Constructs an effect that marks a creature as attacking.
+         * @param creature Creature to mark as attacking.
+         * @param context Effect execution context.
          */
         explicit AttackEffect(core::Card &creature, EffectContext context);
 

@@ -36,17 +36,17 @@ namespace dandan::effects
             core::ExecutionContext exec_ctx);
     } // namespace impl
 
-    /** @brief Represents the effect of playing a card.
-     * @class PlayCardEffect
+    /** @brief Represents the effect of casting a card.
+     * @class CastEffect
      *
      * @implements IOneShotEffect
      */
     class CastEffect : public IOneShotEffect
     {
     public:
-        /** Constructor
-         * @param cast_ctx The context of the cast.
-         * @param context The effect context.
+        /** @brief Constructs a cast effect.
+         * @param cast_ctx Context describing the cast operation.
+         * @param context Effect execution context.
          */
         explicit CastEffect(core::CastContext cast_ctx, EffectContext context);
 

@@ -12,10 +12,20 @@
 
 namespace dandan::effects
 {
+    /** @brief One-shot effect that changes a target card's characteristics.
+     * @class ChangeCharacteristicsEffect
+     *
+     * @implements IOneShotEffect
+     */
     class ChangeCharacteristicsEffect : public IOneShotEffect
     {
 
     public:
+        /** @brief Constructs a characteristics-change effect.
+         * @param target Target whose characteristics change.
+         * @param characteristics New characteristics to apply.
+         * @param context Effect execution context.
+         */
         ChangeCharacteristicsEffect(core::Target target,
                                     core::CardCharacteristics characteristics,
                                     EffectContext context);
@@ -30,11 +40,20 @@ namespace dandan::effects
         core::CardCharacteristics m_card_characteristics;
     };
 
+    /** @brief Definition for creating characteristics-change effects.
+     * @class ChangeCharacteristicsEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class ChangeCharacteristicsEffectDefinition
         : public IOneShotEffectDefinition
     {
 
     public:
+        /** @brief Constructs a characteristics-change effect definition.
+         * @param target_reqs Target selection requirements.
+         * @param characteristics Characteristics to apply when bound.
+         */
         explicit ChangeCharacteristicsEffectDefinition(
             core::TargetRequirement target_reqs,
             core::CardCharacteristics characteristics);
@@ -49,6 +68,9 @@ namespace dandan::effects
         [[nodiscard]] const core::TargetRequirement *getTargetRequirement()
             const override;
 
+        /** @brief Gets the characteristics applied by this definition.
+         * @return Configured card characteristics.
+         */
         [[nodiscard]] const core::CardCharacteristics &getCharacteristics()
             const;
 

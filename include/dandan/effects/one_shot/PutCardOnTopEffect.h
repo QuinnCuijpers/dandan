@@ -21,6 +21,7 @@ namespace dandan::effects
         /** @brief Create a PutCardOnTopEffect.
          * @param amount The number of cards to put on top.
          * @param playerID The ID of the player who will use this effect.
+         * @param context Effect execution context.
          */
         PutCardOnTopEffect(int amount, core::PlayerID playerID,
                            EffectContext context);
@@ -42,10 +43,15 @@ namespace dandan::effects
         core::PlayerID m_playerID;
     };
 
+    /** @brief Effect definition for putting cards from a player's hand on top
+     * of their library.
+     * @class PutCardOnTopEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class PutCardOnTopEffectDefinition : public IOneShotEffectDefinition
     {
     public:
-        /** @brief Create a PutCardOnTopEffect.
+        /** @brief Create a PutCardOnTopEffectDefinition.
          * @param amount The number of cards to put on top.
          */
         explicit PutCardOnTopEffectDefinition(int amount);

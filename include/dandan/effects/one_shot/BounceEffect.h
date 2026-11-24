@@ -14,10 +14,19 @@
 
 namespace dandan::effects
 {
+    /** @brief One-shot effect that returns a targeted permanent to its owner's hand.
+     * @class BounceEffect
+     *
+     * @implements IOneShotEffect
+     */
     class BounceEffect : public IOneShotEffect
     {
 
     public:
+        /** @brief Constructs a bounce effect for a resolved target.
+         * @param target Target to bounce.
+         * @param context Effect execution context.
+         */
         explicit BounceEffect(core::Target target, EffectContext context);
 
         [[nodiscard]] std::unique_ptr<IOneShotEffect> copy() const override;
@@ -31,9 +40,17 @@ namespace dandan::effects
         core::Target m_target;
     };
 
+    /** @brief Definition for creating bounce effects from a target requirement.
+     * @class BounceEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class BounceEffectDefinition : public IOneShotEffectDefinition
     {
     public:
+        /** @brief Constructs a bounce effect definition.
+         * @param target_requirements Target selection requirements.
+         */
         explicit BounceEffectDefinition(
             core::TargetRequirement target_requirements);
 

@@ -12,9 +12,18 @@
 
 namespace dandan::effects
 {
+    /** @brief One-shot effect that draws cards.
+     * @class DrawEffect
+     *
+     * @implements IOneShotEffect
+     */
     class DrawEffect : public IOneShotEffect
     {
     public:
+        /** @brief Constructs a draw effect.
+         * @param amount Number of cards to draw.
+         * @param context Effect execution context.
+         */
         DrawEffect(std::unique_ptr<numbers::INumber> amount,
                    EffectContext context);
 
@@ -27,16 +36,27 @@ namespace dandan::effects
         std::unique_ptr<numbers::INumber> m_amount;
     };
 
+    /** @brief Definition for creating draw effects.
+     * @class DrawEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class DrawEffectDefinition final : public IOneShotEffectDefinition
     {
     public:
         DrawEffectDefinition() = default;
-        /** Constructor
-         * @param amount the amount of cards this effect would draw
+        /** @brief Constructs a draw definition with an exact amount.
+         * @param amount Number of cards to draw.
          */
         explicit DrawEffectDefinition(int amount);
+        /** @brief Constructs a draw definition with a computed amount.
+         * @param amount Number expression for cards to draw.
+         */
         explicit DrawEffectDefinition(std::unique_ptr<numbers::INumber> amount);
 
+        /** @brief Gets the configured draw amount.
+         * @return Number expression for cards to draw.
+         */
         [[nodiscard]] const std::unique_ptr<numbers::INumber> &getNumber()
             const;
 

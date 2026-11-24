@@ -9,9 +9,19 @@
 
 namespace dandan::effects
 {
+    /** @brief Effect that exiles cards from the top of a player's library.
+     * @class ExileTopEffect
+     *
+     * @implements IOneShotEffect
+     */
     class ExileTopEffect : public IOneShotEffect
     {
     public:
+        /** @brief Constructs an exile-top effect.
+         * @param amount Number of cards to exile.
+         * @param player Player whose library is exiled.
+         * @param context Effect execution context.
+         */
         ExileTopEffect(int amount, core::PlayerID player,
                        EffectContext context);
 
@@ -25,6 +35,12 @@ namespace dandan::effects
         core::PlayerID m_player;
     };
 
+    /** @brief Definition of an effect that exiles cards from the top of a
+     * player's library.
+     * @class ExileTopEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class ExileTopEffectDefinition : public IOneShotEffectDefinition
     {
     public:
@@ -35,8 +51,14 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Constructs an exile-top effect definition.
+         * @param amount Number of cards to exile.
+         */
         explicit ExileTopEffectDefinition(int amount);
 
+        /** @brief Gets the number of cards to exile.
+         * @return Number of cards to exile.
+         */
         [[nodiscard]] int getAmount() const;
 
     private:

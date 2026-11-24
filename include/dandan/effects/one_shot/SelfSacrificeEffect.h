@@ -9,14 +9,18 @@
 namespace dandan::effects
 {
     /**
-     * @brief Represents an effect that sacrifices the underlying card
-     *@class SelfSacrificeEffect
+     * @brief Represents an effect that sacrifices the underlying card.
+     * @class SelfSacrificeEffect
      *
-     *@implements IOneShotEffect
+     * @implements IOneShotEffect
      */
     class SelfSacrificeEffect : public IOneShotEffect
     {
     public:
+        /** @brief Creates a self-sacrifice effect.
+         * @param card_id The ID of the card to sacrifice.
+         * @param context Effect execution context.
+         */
         explicit SelfSacrificeEffect(core::CardID card_id,
                                      EffectContext context);
 
@@ -29,6 +33,10 @@ namespace dandan::effects
         core::CardID m_card_id;
     };
 
+    /** @brief Effect definition for sacrificing the source card.
+     * @class SelfSacrificeEffectDefinition
+     * @implements IOneShotEffectDefinition
+     */
     class SelfSacrificeEffectDefinition : public IOneShotEffectDefinition
     {
     public:

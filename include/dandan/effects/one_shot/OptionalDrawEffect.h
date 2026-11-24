@@ -9,9 +9,19 @@
 
 namespace dandan::effects
 {
+    /** @brief Effect that lets a player choose whether to draw cards.
+     * @class OptionalDrawEffect
+     *
+     * @implements IOneShotEffect
+     */
     class OptionalDrawEffect : public IOneShotEffect
     {
     public:
+        /** @brief Constructs an optional draw effect.
+         * @param amount Maximum number of cards a player may draw.
+         * @param each_player Whether every player chooses to draw.
+         * @param context Effect execution context.
+         */
         OptionalDrawEffect(int amount, bool each_player, EffectContext context);
 
         [[nodiscard]] std::unique_ptr<events::IEvent> apply_impl(
@@ -24,6 +34,11 @@ namespace dandan::effects
         bool m_each_player{false};
     };
 
+    /** @brief Definition of an effect that lets players optionally draw.
+     * @class OptionalDrawEffectDefinition
+     *
+     * @implements IOneShotEffectDefinition
+     */
     class OptionalDrawEffectDefinition : public IOneShotEffectDefinition
     {
     public:
@@ -34,10 +49,20 @@ namespace dandan::effects
         [[nodiscard]] std::unique_ptr<IOneShotEffectDefinition> clone()
             const override;
 
+        /** @brief Constructs an optional draw effect definition.
+         * @param amount Maximum number of cards a player may draw.
+         * @param each_player Whether every player chooses to draw.
+         */
         OptionalDrawEffectDefinition(int amount, bool each_player);
 
+        /** @brief Gets the maximum number of cards to draw.
+         * @return Number of cards a player may draw.
+         */
         [[nodiscard]] int getAmount() const;
 
+        /** @brief Checks whether every player chooses to draw.
+         * @return True if all players choose to draw, false otherwise.
+         */
         [[nodiscard]] bool isEachPlayer() const;
 
     private:
