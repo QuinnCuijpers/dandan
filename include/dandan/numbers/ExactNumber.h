@@ -6,11 +6,21 @@
 
 namespace dandan::numbers
 {
+    /** @brief A number expression with a fixed integer value.
+     * @class ExactNumber
+     * @implements INumber
+     */
     class ExactNumber : public INumber
     {
     public:
+        /** Constructs a number with the given value.
+         * @param value The integer value.
+         */
         explicit ExactNumber(int value);
 
+        /** Gets the fixed integer value.
+         * @return The integer value.
+         */
         [[nodiscard]] int getValue() const;
 
         [[nodiscard]] int getValue(

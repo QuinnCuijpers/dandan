@@ -9,14 +9,28 @@
 
 namespace dandan::numbers
 {
+    /** @brief Selects one of two number expressions based on a condition.
+     * @class ConditionalNumber
+     * @implements INumber
+     */
     class ConditionalNumber : public INumber
     {
 
     public:
+        /** Constructs a conditional number from number expressions.
+         * @param if_ The number used when the condition is satisfied.
+         * @param else_ The number used when the condition is not satisfied.
+         * @param condition The condition to evaluate.
+         */
         ConditionalNumber(std::unique_ptr<INumber> if_,
                           std::unique_ptr<INumber> else_,
                           std::unique_ptr<conditions::ICondition> condition);
 
+        /** Constructs a conditional number from exact integer values.
+         * @param if_ The value used when the condition is satisfied.
+         * @param else_ The value used when the condition is not satisfied.
+         * @param condition The condition to evaluate.
+         */
         ConditionalNumber(int if_, int else_,
                           std::unique_ptr<conditions::ICondition> condition);
 
@@ -26,10 +40,19 @@ namespace dandan::numbers
 
         [[nodiscard]] std::unique_ptr<INumber> clone() const override;
 
+        /** Gets the number used when the condition is satisfied.
+         * @return The satisfied-branch number.
+         */
         [[nodiscard]] const INumber *getIfNumber() const;
 
+        /** Gets the number used when the condition is not satisfied.
+         * @return The unsatisfied-branch number.
+         */
         [[nodiscard]] const INumber *getElseNumber() const;
 
+        /** Gets the condition being evaluated.
+         * @return The condition.
+         */
         [[nodiscard]] const conditions::ICondition *getCondition() const;
 
     private:
