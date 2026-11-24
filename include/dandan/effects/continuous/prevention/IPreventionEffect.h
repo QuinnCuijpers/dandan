@@ -35,6 +35,8 @@ namespace dandan::effects
         /** Determines if this prevention effect prevents the given action.
          * @param action The action to check.
          * @param exec_ctx The execution context.
+         * @param context The context of the effect trying to prevent the
+         * action, if any.
          * @return True if the prevention effect prevents the action, false
          * otherwise.
          */
@@ -49,9 +51,6 @@ namespace dandan::effects
         [[nodiscard]] virtual std::unique_ptr<IPreventionEffect> clone()
             const = 0;
 
-        /** Creates a copy of the underlying continuous effect.
-         * @return A unique pointer to the cloned continuous effect.
-         */
         [[nodiscard]] std::unique_ptr<IContinuousEffect> cloneContinuous()
             const override;
 

@@ -5,10 +5,18 @@
 #include <memory>
 namespace dandan::effects
 {
+    /** @brief A prevention effect that stops creatures from blocking when a
+     * condition is satisfied.
+     * @class BlockPreventionEffect
+     * @implements IPreventionEffect
+     */
     class BlockPreventionEffect : public IPreventionEffect
     {
 
     public:
+        /** @brief Construct a block prevention effect with a condition.
+         * @param condition The condition under which blocking is prevented.
+         */
         explicit BlockPreventionEffect(
             std::unique_ptr<conditions::ICondition> condition);
 
