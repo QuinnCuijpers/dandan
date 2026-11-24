@@ -8,13 +8,23 @@
 #include <optional>
 namespace dandan::conditions
 {
+    /** @brief Checks whether the defending player controls no permanents of a
+     * given basic land type.
+     * @class DefenderControlsNoBasicCondition
+     */
     class DefenderControlsNoBasicCondition final : public ICondition,
                                                    public core::IMindBendable
     {
 
     public:
+        /** Constructs the condition for a basic land type.
+         * @param type The basic land type to check.
+         */
         explicit DefenderControlsNoBasicCondition(core::SubType type);
 
+        /** Gets the basic land type being checked.
+         * @return The basic land type.
+         */
         [[nodiscard]] core::SubType type() const;
 
         [[nodiscard]] bool isSatisfied(

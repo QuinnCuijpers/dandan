@@ -9,16 +9,23 @@
 namespace dandan::conditions
 {
     /**
-     * @brief A condition that checks if the player controls no island.
-     * @class ControlsNoIslandCondition
+     * @brief A condition that checks if the player controls no permanents of a
+     * given basic land type.
+     * @class SelfControlsNoBasicCondition
      *
      * @implements ICondition
      */
     class SelfControlsNoBasicCondition : public ICondition, core::IMindBendable
     {
     public:
+        /** Constructs the condition for a basic land type.
+         * @param basic_land_type The basic land type to check.
+         */
         explicit SelfControlsNoBasicCondition(core::SubType basic_land_type);
 
+        /** Gets the basic land type being checked.
+         * @return The basic land type.
+         */
         [[nodiscard]] core::SubType type() const;
 
         [[nodiscard]] bool isSatisfied(
